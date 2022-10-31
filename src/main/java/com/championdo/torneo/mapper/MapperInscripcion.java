@@ -17,6 +17,7 @@ public class MapperInscripcion {
     private UserService userService;
 
     public InscripcionModel entity2Model(Inscripcion externObject) {
+        //TODO DAMIAN cambiar esto
         InscripcionModel localObject = new InscripcionModel();
         localObject.setId(externObject.getId());
         localObject.setFechaInscripcion(externObject.getFechaInscripcion());

@@ -40,7 +40,7 @@
 
 		<section class="text-center">
 			<a href="#" th:href="@{/formulario/propia}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button" th:disabled="${inscripcion.id != 0}">Inscripción propia</button><br>
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button" th:disabled="${inscripcion != null and inscripcion.id != 0}">Inscripción propia</button><br>
 			</a>
 
 			<div th:if="${inscripcion != null and inscripcion.id != 0}">

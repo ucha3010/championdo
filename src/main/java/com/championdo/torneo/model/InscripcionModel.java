@@ -3,6 +3,7 @@ package com.championdo.torneo.model;
 import com.championdo.torneo.entity.Categoria;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 public class InscripcionModel {
@@ -17,6 +18,9 @@ public class InscripcionModel {
     private boolean pagoRealizado;
     private String notas;
     private Date fechaPago;
+    private GimnasioModel gimnasio;
+    private PaisModel pais;
+    private CinturonModel cinturon;
 
     public int getId() {
         return id;
@@ -90,6 +94,30 @@ public class InscripcionModel {
         this.fechaPago = fechaPago;
     }
 
+    public GimnasioModel getGimnasio() {
+        return gimnasio;
+    }
+
+    public void setGimnasio(GimnasioModel gimnasio) {
+        this.gimnasio = gimnasio;
+    }
+
+    public PaisModel getPais() {
+        return pais;
+    }
+
+    public void setPais(PaisModel pais) {
+        this.pais = pais;
+    }
+
+    public CinturonModel getCinturon() {
+        return cinturon;
+    }
+
+    public void setCinturon(CinturonModel cinturon) {
+        this.cinturon = cinturon;
+    }
+
     @Override
     public String toString() {
         return "InscripcionModel{" +
@@ -102,6 +130,9 @@ public class InscripcionModel {
                 ", pagoRealizado=" + pagoRealizado +
                 ", notas='" + notas + '\'' +
                 ", fechaPago=" + fechaPago +
+                ", gimnasio=" + gimnasio +
+                ", pais=" + pais +
+                ", cinturon=" + cinturon +
                 '}';
     }
 }
