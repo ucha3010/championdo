@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8"/>
+
+    <title>Torneo - Acceso</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <!-- Custom styles for this template -->
+    <link href="#" th:href="@{/css/login.css}" rel="stylesheet" />
+    <link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-signin" th:action="@{/logincheck}" method="POST">
+      	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <h2 class="form-signin-heading">Acceso</h2>
+        <label for="username" class="sr-only">DNI</label>
+        <input type="text" class="form-control" placeholder="DNI" name="username" id="username"/>
+        <label for="password" class="sr-only">Contraseña</label>
+        <input type="password" class="form-control" placeholder="Contraseña" name="password" id="password"/>
+        <div th:if="${error != null}" class="alert alert-danger" role="alert">DNI y/o contraseña inválido</div>
+        <div th:if="${logout != null}" class="alert alert-success" role="alert">Desconexión realizada correctamente</div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+        	<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Acceder
+        </button>
+      </form>
+      <a href="http://www.championdo.es/" class="textDecoration-none">
+        <button class="form-signin btn btn-lg btn-default btn-block mt-1">Volver a página Champion Do</button>
+      </a>
+
+    </div> <!-- /container -->
+
+</body>
+</html>

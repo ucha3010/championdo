@@ -1,0 +1,56 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+
+h1 {
+	text-align: center
+}
+
+.anchoMinimo40 {
+    min-width: 40%;
+}
+
+.anchoMinimo50 {
+    min-width: 50%;
+}
+
+.item_navegacion {
+	width: 15%;
+	padding-left: 1%;
+}
+
+.margenAbajo2Porc{
+    margin: 0% 0% 2% 0%; /*arriba, derecha, abajo, izquierda*/
+}
+
+.margenArribaAbajo3Porc {
+    margin: 3% 0%; /*arriba y abajo, a los costados*/
+}
+
+.mb-1 {
+    margin-bottom: 10px;
+}
+
+.mb-3 {
+	margin-bottom: 30px;
+}
+
+.mt-1 {
+    margin-top: 10px;
+}
+
+a:link, a:visited,  a:hover, a:active
+.textDecoration-none {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.colorRed {
+    color: red;
+}
+
+.textAlignCenter {
+	text-align: center
+}
