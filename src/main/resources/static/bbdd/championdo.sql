@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-10-2022 a las 20:27:39
+-- Tiempo de generación: 01-11-2022 a las 19:50:10
 -- Versión del servidor: 10.4.13-MariaDB
 -- Versión de PHP: 7.4.8
 
@@ -183,7 +183,7 @@ CREATE TABLE `hibernate_sequence` (
 --
 
 INSERT INTO `hibernate_sequence` (`next_val`) VALUES
-(33);
+(37);
 
 -- --------------------------------------------------------
 
@@ -193,22 +193,47 @@ INSERT INTO `hibernate_sequence` (`next_val`) VALUES
 
 CREATE TABLE `inscripcion` (
   `id` int(11) NOT NULL,
-  `envio_justificante_email` bit(1) DEFAULT NULL,
+  `inscripcion_propia` bit(1) NOT NULL,
+  `inscripcion_menor` bit(1) NOT NULL,
+  `inscripcion_inclusiva` bit(1) NOT NULL,
   `fecha_inscripcion` datetime NOT NULL,
-  `fecha_pago` datetime DEFAULT NULL,
-  `id_categoria` int(11) DEFAULT NULL,
-  `notas` text DEFAULT NULL,
+  `id_categoria` int(11) NOT NULL,
+  `nombre_inscripto` varchar(60) NOT NULL,
+  `apellido1inscripto` varchar(60) NOT NULL,
+  `apellido2inscripto` varchar(60) DEFAULT NULL,
+  `dni_inscripto` varchar(45) DEFAULT NULL,
+  `fecha_nacimiento_inscripto` datetime NOT NULL,
+  `sexo_inscripto` varchar(9) NOT NULL,
+  `domicilio_calle_inscripto` varchar(100) DEFAULT NULL,
+  `domicilio_numero_inscripto` varchar(30) DEFAULT NULL,
+  `domicilio_otros_inscripto` varchar(50) DEFAULT NULL,
+  `domicilio_localidad_inscripto` varchar(50) DEFAULT NULL,
+  `domicilio_cp_inscripto` varchar(10) DEFAULT NULL,
+  `id_gimnasio` int(11) NOT NULL,
+  `id_pais` int(11) NOT NULL,
+  `id_cinturon` int(11) NOT NULL,
+  `nombre_autorizador` varchar(60) DEFAULT NULL,
+  `apellido1autorizador` varchar(60) DEFAULT NULL,
+  `apellido2autorizador` varchar(60) DEFAULT NULL,
+  `dni_autorizador` varchar(45) DEFAULT NULL,
+  `id_calidad` int(11) NOT NULL,
+  `domicilio_calle_autorizador` varchar(100) DEFAULT NULL,
+  `domicilio_numero_autorizador` varchar(30) DEFAULT NULL,
+  `domicilio_otros_autorizador` varchar(50) DEFAULT NULL,
+  `domicilio_localidad_autorizador` varchar(50) DEFAULT NULL,
+  `domicilio_cp_autorizador` varchar(10) DEFAULT NULL,
+  `envio_justificante_email` bit(1) NOT NULL,
   `pago_realizado` bit(1) NOT NULL,
-  `username` varchar(45) NOT NULL,
-  `username_inscripto` varchar(45) NOT NULL
+  `fecha_pago` datetime DEFAULT NULL,
+  `notas` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `inscripcion`
 --
 
-INSERT INTO `inscripcion` (`id`, `envio_justificante_email`, `fecha_inscripcion`, `fecha_pago`, `id_categoria`, `notas`, `pago_realizado`, `username`, `username_inscripto`) VALUES
-(13, b'0', '2022-10-12 00:53:16', NULL, 9, NULL, b'0', '11111111A', '11111111A-01');
+INSERT INTO `inscripcion` (`id`, `inscripcion_propia`, `inscripcion_menor`, `inscripcion_inclusiva`, `fecha_inscripcion`, `id_categoria`, `nombre_inscripto`, `apellido1inscripto`, `apellido2inscripto`, `dni_inscripto`, `fecha_nacimiento_inscripto`, `sexo_inscripto`, `domicilio_calle_inscripto`, `domicilio_numero_inscripto`, `domicilio_otros_inscripto`, `domicilio_localidad_inscripto`, `domicilio_cp_inscripto`, `id_gimnasio`, `id_pais`, `id_cinturon`, `nombre_autorizador`, `apellido1autorizador`, `apellido2autorizador`, `dni_autorizador`, `id_calidad`, `domicilio_calle_autorizador`, `domicilio_numero_autorizador`, `domicilio_otros_autorizador`, `domicilio_localidad_autorizador`, `domicilio_cp_autorizador`, `envio_justificante_email`, `pago_realizado`, `fecha_pago`, `notas`) VALUES
+(36, b'1', b'0', b'0', '2022-11-01 18:58:20', 43, 'Claudia', 'Suárez', 'Rodríguez', '22222222A', '1970-11-25 00:00:00', 'Femenino', 'Avenida Montes de Oca', '284', 'pasillo 23 escalera A', 'San Sebastián de los Reyes', '28456', 1, 1, 4, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, b'0', b'0', NULL, NULL);
 
 -- --------------------------------------------------------
 
