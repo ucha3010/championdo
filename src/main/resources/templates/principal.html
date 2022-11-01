@@ -3,14 +3,15 @@
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
-	<meta name="viewport"
-		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	
 	<!-- Bootstrap CSS -->
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	
-	<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+
+	<title>Página principal</title>
+
 	<script type="text/javascript">
 		function confirmDelete(id){
 			if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
@@ -21,8 +22,6 @@
 			return false;
 		}
 	</script>
-	
-	<title>Página principal</title>
 </head>
 <body>
 	<div class="container">
@@ -44,7 +43,7 @@
 			</a>
 
 			<div th:if="${inscripcion != null and inscripcion.id != 0}">
-				<a href="#" th:href="@{/formulario/inscripcionPropia?id=__${inscripcion.id}__}" class="textDecoration-none">
+				<a href="#" th:href="@{/formulario/inscripcionPropia/__${inscripcion.id}__}" class="textDecoration-none">
 					<button class="btn btn-link" type="button">Inscripción propia realizada el <span th:text="${#calendars.format(inscripcion.fecha,'dd/MM/yyyy HH:mm')}"></span></button>
 				</a>
 				<a th:attr="onclick=|return confirmDelete('${inscripcion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>

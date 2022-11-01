@@ -9,18 +9,18 @@ import java.util.Date;
 public class InscripcionModel {
 
     private int id;
+    private boolean inscripcionPropia;
+    private boolean inscripcionMenor;
+    private boolean inscripcionInclusiva;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaInscripcion;
-    private UserModel usuario;
-    private UserModel usuarioInscripto;
-    private boolean envioJustificanteEmail;
     private CategoriaModel categoria;
+    private UserModel usuarioInscripto;
+    private UserModel usuarioAutorizador;
+    private boolean envioJustificanteEmail;
     private boolean pagoRealizado;
-    private String notas;
     private Date fechaPago;
-    private GimnasioModel gimnasio;
-    private PaisModel pais;
-    private CinturonModel cinturon;
+    private String notas;
 
     public int getId() {
         return id;
@@ -28,6 +28,30 @@ public class InscripcionModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isInscripcionPropia() {
+        return inscripcionPropia;
+    }
+
+    public void setInscripcionPropia(boolean inscripcionPropia) {
+        this.inscripcionPropia = inscripcionPropia;
+    }
+
+    public boolean isInscripcionMenor() {
+        return inscripcionMenor;
+    }
+
+    public void setInscripcionMenor(boolean inscripcionMenor) {
+        this.inscripcionMenor = inscripcionMenor;
+    }
+
+    public boolean isInscripcionInclusiva() {
+        return inscripcionInclusiva;
+    }
+
+    public void setInscripcionInclusiva(boolean inscripcionInclusiva) {
+        this.inscripcionInclusiva = inscripcionInclusiva;
     }
 
     public Date getFechaInscripcion() {
@@ -38,12 +62,12 @@ public class InscripcionModel {
         this.fechaInscripcion = fechaInscripcion;
     }
 
-    public UserModel getUsuario() {
-        return usuario;
+    public CategoriaModel getCategoria() {
+        return categoria;
     }
 
-    public void setUsuario(UserModel usuario) {
-        this.usuario = usuario;
+    public void setCategoria(CategoriaModel categoria) {
+        this.categoria = categoria;
     }
 
     public UserModel getUsuarioInscripto() {
@@ -54,20 +78,20 @@ public class InscripcionModel {
         this.usuarioInscripto = usuarioInscripto;
     }
 
+    public UserModel getUsuarioAutorizador() {
+        return usuarioAutorizador;
+    }
+
+    public void setUsuarioAutorizador(UserModel usuarioAutorizador) {
+        this.usuarioAutorizador = usuarioAutorizador;
+    }
+
     public boolean isEnvioJustificanteEmail() {
         return envioJustificanteEmail;
     }
 
     public void setEnvioJustificanteEmail(boolean envioJustificanteEmail) {
         this.envioJustificanteEmail = envioJustificanteEmail;
-    }
-
-    public CategoriaModel getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaModel categoria) {
-        this.categoria = categoria;
     }
 
     public boolean isPagoRealizado() {
@@ -78,14 +102,6 @@ public class InscripcionModel {
         this.pagoRealizado = pagoRealizado;
     }
 
-    public String getNotas() {
-        return notas;
-    }
-
-    public void setNotas(String notas) {
-        this.notas = notas;
-    }
-
     public Date getFechaPago() {
         return fechaPago;
     }
@@ -94,45 +110,29 @@ public class InscripcionModel {
         this.fechaPago = fechaPago;
     }
 
-    public GimnasioModel getGimnasio() {
-        return gimnasio;
+    public String getNotas() {
+        return notas;
     }
 
-    public void setGimnasio(GimnasioModel gimnasio) {
-        this.gimnasio = gimnasio;
-    }
-
-    public PaisModel getPais() {
-        return pais;
-    }
-
-    public void setPais(PaisModel pais) {
-        this.pais = pais;
-    }
-
-    public CinturonModel getCinturon() {
-        return cinturon;
-    }
-
-    public void setCinturon(CinturonModel cinturon) {
-        this.cinturon = cinturon;
+    public void setNotas(String notas) {
+        this.notas = notas;
     }
 
     @Override
     public String toString() {
         return "InscripcionModel{" +
                 "id=" + id +
+                ", inscripcionPropia=" + inscripcionPropia +
+                ", inscripcionMenor=" + inscripcionMenor +
+                ", inscripcionInclusiva=" + inscripcionInclusiva +
                 ", fechaInscripcion=" + fechaInscripcion +
-                ", usuario=" + usuario +
-                ", usuarioInscripto=" + usuarioInscripto +
-                ", envioJustificanteEmail=" + envioJustificanteEmail +
                 ", categoria=" + categoria +
+                ", usuarioInscripto=" + usuarioInscripto +
+                ", usuarioAutorizador=" + usuarioAutorizador +
+                ", envioJustificanteEmail=" + envioJustificanteEmail +
                 ", pagoRealizado=" + pagoRealizado +
-                ", notas='" + notas + '\'' +
                 ", fechaPago=" + fechaPago +
-                ", gimnasio=" + gimnasio +
-                ", pais=" + pais +
-                ", cinturon=" + cinturon +
+                ", notas='" + notas + '\'' +
                 '}';
     }
 }

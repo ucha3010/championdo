@@ -2,8 +2,8 @@ package com.championdo.torneo.mapper;
 
 import com.championdo.torneo.entity.Inscripcion;
 import com.championdo.torneo.model.InscripcionModel;
-import com.championdo.torneo.service.CategoriaService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,37 +11,115 @@ import org.springframework.stereotype.Component;
 public class MapperInscripcion {
 
     @Autowired
-    private CategoriaService categoriaService;
-
+    private CalidadService calidadService;
     @Autowired
-    private UserService userService;
+    private CategoriaService categoriaService;
+    @Autowired
+    private CinturonService cinturonService;
+    @Autowired
+    private GimnasioService gimnasioService;
+    @Autowired
+    private PaisService paisService;
 
     public InscripcionModel entity2Model(Inscripcion externObject) {
-        //TODO DAMIAN cambiar esto
+
         InscripcionModel localObject = new InscripcionModel();
-        localObject.setId(externObject.getId());
-        localObject.setFechaInscripcion(externObject.getFechaInscripcion());
-        localObject.setUsuario(userService.findModelByUsername(externObject.getUsername()));
-        localObject.setUsuarioInscripto(userService.findModelByUsername(externObject.getUsernameInscripto()));
-        localObject.setEnvioJustificanteEmail(externObject.isEnvioJustificanteEmail());
-        localObject.setCategoria(categoriaService.findById(externObject.getIdCategoria()));
-        localObject.setPagoRealizado(externObject.isPagoRealizado());
-        localObject.setNotas(externObject.getNotas());
-        localObject.setFechaPago(externObject.getFechaPago());
+        if (externObject != null) {
+            localObject.setId(externObject.getId());
+            localObject.setInscripcionPropia(externObject.isInscripcionPropia());
+            localObject.setInscripcionMenor(externObject.isInscripcionMenor());
+            localObject.setInscripcionInclusiva(externObject.isInscripcionInclusiva());
+            localObject.setFechaInscripcion(externObject.getFechaInscripcion());
+            localObject.setCategoria(categoriaService.findById(externObject.getIdCategoria()));
+
+            UserModel usuarioInscripto = new UserModel();
+            usuarioInscripto.setName(externObject.getNombreInscripto());
+            usuarioInscripto.setLastname(externObject.getApellido1Inscripto());
+            usuarioInscripto.setSecondLastname(externObject.getApellido2Inscripto());
+            usuarioInscripto.setUsername(externObject.getDniInscripto());
+            usuarioInscripto.setFechaNacimiento(externObject.getFechaNacimientoInscripto());
+            usuarioInscripto.setSexo(externObject.getSexoInscripto());
+            usuarioInscripto.setDomicilioCalle(externObject.getDomicilioCalleInscripto());
+            usuarioInscripto.setDomicilioNumero(externObject.getDomicilioNumeroInscripto());
+            usuarioInscripto.setDomicilioOtros(externObject.getDomicilioOtrosInscripto());
+            usuarioInscripto.setDomicilioLocalidad(externObject.getDomicilioLocalidadInscripto());
+            usuarioInscripto.setDomicilioCp(externObject.getDomicilioCpInscripto());
+            usuarioInscripto.setGimnasio(gimnasioService.findById(externObject.getIdGimnasio()));
+            usuarioInscripto.setPais(paisService.findById(externObject.getIdPais()));
+            usuarioInscripto.setCinturon(cinturonService.findById(externObject.getIdCinturon()));
+            localObject.setUsuarioInscripto(usuarioInscripto);
+
+            if (externObject.isInscripcionMenor() || externObject.isInscripcionInclusiva()) {
+                UserModel usuarioAutorizador = new UserModel();
+                usuarioAutorizador.setName(externObject.getNombreAutorizador());
+                usuarioAutorizador.setLastname(externObject.getApellido1Autorizador());
+                usuarioAutorizador.setSecondLastname(externObject.getApellido2Autorizador());
+                usuarioAutorizador.setUsername(externObject.getDniAutorizador());
+                usuarioAutorizador.setCalidad(calidadService.findById(externObject.getIdCalidad()));
+                usuarioAutorizador.setDomicilioCalle(externObject.getDomicilioCalleAutorizador());
+                usuarioAutorizador.setDomicilioNumero(externObject.getDomicilioNumeroAutorizador());
+                usuarioAutorizador.setDomicilioOtros(externObject.getDomicilioOtrosAutorizador());
+                usuarioAutorizador.setDomicilioLocalidad(externObject.getDomicilioLocalidadAutorizador());
+                usuarioAutorizador.setDomicilioCp(externObject.getDomicilioCpAutorizador());
+                localObject.setUsuarioAutorizador(usuarioAutorizador);
+            }
+
+            localObject.setEnvioJustificanteEmail(externObject.isEnvioJustificanteEmail());
+            localObject.setPagoRealizado(externObject.isPagoRealizado());
+            localObject.setFechaPago(externObject.getFechaPago());
+            localObject.setNotas(externObject.getNotas());
+        }
         return localObject;
     }
 
     public Inscripcion model2Entity(InscripcionModel externObject) {
+
         Inscripcion localObject = new Inscripcion();
-        localObject.setId(externObject.getId());
-        localObject.setFechaInscripcion(externObject.getFechaInscripcion());
-        localObject.setUsername(externObject.getUsuario().getUsername());
-        localObject.setUsernameInscripto(externObject.getUsuarioInscripto().getUsername());
-        localObject.setEnvioJustificanteEmail(externObject.isEnvioJustificanteEmail());
-        localObject.setIdCategoria(externObject.getCategoria().getId());
-        localObject.setPagoRealizado(externObject.isPagoRealizado());
-        localObject.setNotas(externObject.getNotas());
-        localObject.setFechaPago(externObject.getFechaPago());
+        if (externObject != null) {
+            localObject.setId(externObject.getId());
+            localObject.setInscripcionPropia(externObject.isInscripcionPropia());
+            localObject.setInscripcionMenor(externObject.isInscripcionMenor());
+            localObject.setInscripcionInclusiva(externObject.isInscripcionInclusiva());
+            localObject.setFechaInscripcion(externObject.getFechaInscripcion());
+            localObject.setIdCategoria(externObject.getCategoria().getId());
+
+            if (externObject.getUsuarioInscripto() != null) {
+                UserModel usuarioInscripto = externObject.getUsuarioInscripto();
+                localObject.setNombreInscripto(usuarioInscripto.getName());
+                localObject.setApellido1Inscripto(usuarioInscripto.getLastname());
+                localObject.setApellido2Inscripto(usuarioInscripto.getSecondLastname());
+                localObject.setDniInscripto(usuarioInscripto.getUsername());
+                localObject.setFechaNacimientoInscripto(usuarioInscripto.getFechaNacimiento());
+                localObject.setSexoInscripto(usuarioInscripto.getSexo());
+                localObject.setDomicilioCalleInscripto(usuarioInscripto.getDomicilioCalle());
+                localObject.setDomicilioNumeroInscripto(usuarioInscripto.getDomicilioNumero());
+                localObject.setDomicilioOtrosInscripto(usuarioInscripto.getDomicilioOtros());
+                localObject.setDomicilioLocalidadInscripto(usuarioInscripto.getDomicilioLocalidad());
+                localObject.setDomicilioCpInscripto(usuarioInscripto.getDomicilioCp());
+                localObject.setIdGimnasio(usuarioInscripto.getGimnasio().getId());
+                localObject.setIdPais(usuarioInscripto.getPais().getId());
+                localObject.setIdCinturon(usuarioInscripto.getCinturon().getId());
+            }
+
+            if (externObject.getUsuarioAutorizador() != null) {
+                UserModel usuarioAutorizador = externObject.getUsuarioAutorizador();
+                localObject.setNombreAutorizador(usuarioAutorizador.getName());
+                localObject.setApellido1Autorizador(usuarioAutorizador.getLastname());
+                localObject.setApellido2Autorizador(usuarioAutorizador.getSecondLastname());
+                localObject.setDniAutorizador(usuarioAutorizador.getUsername());
+                localObject.setIdCalidad(usuarioAutorizador.getCalidad().getId());
+                localObject.setDomicilioCalleAutorizador(usuarioAutorizador.getDomicilioCalle());
+                localObject.setDomicilioNumeroAutorizador(usuarioAutorizador.getDomicilioNumero());
+                localObject.setDomicilioOtrosAutorizador(usuarioAutorizador.getDomicilioOtros());
+                localObject.setDomicilioLocalidadAutorizador(usuarioAutorizador.getDomicilioLocalidad());
+                localObject.setDomicilioCpAutorizador(usuarioAutorizador.getDomicilioCp());
+            }
+
+            localObject.setEnvioJustificanteEmail(externObject.isEnvioJustificanteEmail());
+            localObject.setPagoRealizado(externObject.isPagoRealizado());
+            localObject.setFechaPago(externObject.getFechaPago());
+            localObject.setNotas(externObject.getNotas());
+        }
         return localObject;
     }
 }

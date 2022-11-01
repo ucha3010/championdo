@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Controller
 @RequestMapping("/formulario")
@@ -49,7 +47,7 @@ public class FormularioController {
 
     @GetMapping("/propia")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ModelAndView propia(ModelAndView modelAndView, @RequestParam(name="userModel", required=false) UserModel userModel) {
+    public ModelAndView propia(ModelAndView modelAndView) {
         modelAndView.setViewName("formularioInscPropia");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
@@ -95,6 +93,16 @@ public class FormularioController {
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarPdf(pdfModel, response);
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
+    }
+
+    @GetMapping("/inscripcionPropia/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ModelAndView inscripcionPropia(ModelAndView modelAndView, @PathVariable int id) {
+        modelAndView.setViewName("vistaInscPropia");
+        userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("inscripcion", inscripcionService.findById(id));
+        LoggerMapper.log(Level.INFO, "formulario/inscripcionPropia", modelAndView, getClass());
+        return modelAndView;
     }
 
 }

@@ -27,7 +27,7 @@ public class PrincipalController {
     public ModelAndView paginaPrincipal(ModelAndView modelAndView) {
         modelAndView.setViewName("principal");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("inscripcion", principalService.findByUsername(usuario.getUsername()));
+        modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
         LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
         return modelAndView;
     }

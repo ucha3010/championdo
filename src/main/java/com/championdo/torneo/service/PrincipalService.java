@@ -5,7 +5,7 @@ import com.championdo.torneo.model.PrincipalModel;
 
 public interface PrincipalService {
 	
-	public abstract PrincipalModel findByUsername(String username);
+	public abstract PrincipalModel findByDni(String dni);
 
     public abstract void deleteInscripcion(int id);
 }

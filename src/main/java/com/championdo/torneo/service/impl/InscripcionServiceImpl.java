@@ -35,40 +35,57 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public List<InscripcionModel> findByUsername(String username) {
-        List<Inscripcion> inscripcionList = inscripcionRepository.findByUsername(username);
+    public List<InscripcionModel> findByDniAutorizador(String dniAutorizador) {
+        List<Inscripcion> inscripcionList = inscripcionRepository.findByDniAutorizador(dniAutorizador);
         List<InscripcionModel> inscripcionModelList = new ArrayList<>();
-        for (Inscripcion inscripcion: inscripcionList) {
-            inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
+        if (inscripcionList != null) {
+            for (Inscripcion inscripcion : inscripcionList) {
+                inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
+            }
         }
-        LoggerMapper.log(Level.INFO, "findByUsername", inscripcionList, getClass());
+        LoggerMapper.log(Level.INFO, "findByDniAutorizador", inscripcionList, getClass());
         return inscripcionModelList;
     }
 
     @Override
-    public InscripcionModel findByUsernameInscripto(String usernameInscripto) {
-        return mapperInscripcion.entity2Model(inscripcionRepository.findByUsernameInscripto(usernameInscripto));
+    public InscripcionModel findByDniInscripto(String dniInscripto) {
+        InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.findByDniInscripto(dniInscripto));
+        LoggerMapper.log(Level.INFO, "findByDniInscripto", inscripcion, getClass());
+        return inscripcion;
     }
 
     @Override
     public InscripcionModel add(InscripcionModel inscripcionModel) {
         inscripcionModel.setFechaInscripcion(new Date());
         inscripcionModel.setCategoria(categoriaService.calcularCategoria(inscripcionModel.getUsuarioInscripto()));
-        return mapperInscripcion.entity2Model(inscripcionRepository.save(mapperInscripcion.model2Entity(inscripcionModel)));
+        InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.save(mapperInscripcion.model2Entity(inscripcionModel)));
+        LoggerMapper.log(Level.INFO, "add", inscripcion, getClass());
+        return inscripcion;
     }
 
     @Override
     public InscripcionModel addPropia(UserModel userModel) {
         InscripcionModel inscripcionModel = new InscripcionModel();
-        inscripcionModel.setUsuario(userModel);
+        inscripcionModel.setInscripcionPropia(true);
+        inscripcionModel.setUsuarioAutorizador(null);
         inscripcionModel.setUsuarioInscripto(userModel);
         return add(inscripcionModel);
     }
 
     @Override
-    public InscripcionModel addAutorizado(UserModel usuarioMayor, UserModel usuarioInscripto) {
+    public InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto, boolean menorNoPreinfantil) {
         InscripcionModel inscripcionModel = new InscripcionModel();
-        inscripcionModel.setUsuario(usuarioMayor);
+        inscripcionModel.setInscripcionMenor(menorNoPreinfantil);
+        inscripcionModel.setUsuarioAutorizador(usuarioAutorizador);
+        inscripcionModel.setUsuarioInscripto(usuarioInscripto);
+        return add(inscripcionModel);
+    }
+
+    @Override
+    public InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
+        InscripcionModel inscripcionModel = new InscripcionModel();
+        inscripcionModel.setInscripcionInclusiva(true);
+        inscripcionModel.setUsuarioAutorizador(usuarioAutorizador);
         inscripcionModel.setUsuarioInscripto(usuarioInscripto);
         return add(inscripcionModel);
     }
@@ -84,5 +101,6 @@ public class InscripcionServiceImpl implements InscripcionService {
         if (inscripcion != null) {
             inscripcionRepository.delete(inscripcion);
         }
+        LoggerMapper.log(Level.INFO, "delete", inscripcion, getClass());
     }
 }

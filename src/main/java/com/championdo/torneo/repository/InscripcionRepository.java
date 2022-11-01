@@ -10,8 +10,8 @@ import java.util.List;
 @Repository("inscripcionRepository")
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Serializable>{
 
-    public abstract List<Inscripcion> findByUsername(String username);
+    public abstract List<Inscripcion> findByDniAutorizador(String dniAutorizador);
 
-    public abstract Inscripcion findByUsernameInscripto(String usernameInscripto);
+    public abstract Inscripcion findByDniInscripto(String dniInscripto);
 
 }

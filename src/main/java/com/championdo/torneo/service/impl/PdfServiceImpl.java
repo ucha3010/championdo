@@ -153,7 +153,7 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public void descargarPdf(PdfModel pdfModel, HttpServletResponse response) {
 
-        pdfModel.setIdInscripcion((inscripcionService.findByUsernameInscripto(pdfModel.getDni())).getId());
+        pdfModel.setIdInscripcion((inscripcionService.findByDniInscripto(pdfModel.getDni())).getId());
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename = " + nombreArchivo(pdfModel, false, true);
