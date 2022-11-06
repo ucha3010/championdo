@@ -90,6 +90,11 @@ public class PdfServiceImpl implements PdfService {
             generoParrafo(contentStream, page, parrafoList, 288 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 16, 33);
 
             parrafoList = new ArrayList<>();
+            parrafoList.add("A dicha categoría le corresponde realizar: " + pdfModel.getPoomsae());
+
+            generoParrafo(contentStream, page, parrafoList, 321 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 16, 33);
+
+            parrafoList = new ArrayList<>();
             if (pdfModel.isMayorEdad()) {
                 parrafoList.add("INFORMO QUE VOY A PARTICIPAR EN EL CAMPEONATO");
             } else {
@@ -97,12 +102,12 @@ public class PdfServiceImpl implements PdfService {
             }
             parrafoList.add("DE TRES CANTOS A CELEBRAR EL PRÓXIMO: " + pdfModel.getFechaCampeonato());
 
-            generoParrafo(contentStream, page, parrafoList, 323 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_BOLD, 14, 15);
+            generoParrafo(contentStream, page, parrafoList, 356 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_BOLD, 14, 15);
 
             parrafoList = new ArrayList<>();
             parrafoList.add("DIRECCIÓN: " + pdfModel.getDireccionCampeonato());
 
-            generoParrafo(contentStream, page, parrafoList, 353 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_BOLD, 14, 15);
+            generoParrafo(contentStream, page, parrafoList, 386 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_BOLD, 14, 15);
 
             parrafoList = new ArrayList<>();
             parrafoList.add("Por medio del presente escrito autorizo a los miembros de organización del");
@@ -111,7 +116,7 @@ public class PdfServiceImpl implements PdfService {
             parrafoList.add("De igual manera, es mi deseo establecer que esta autorización es voluntaria");
             parrafoList.add("y gratuita.");
 
-            generoParrafo(contentStream, page, parrafoList, 398 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 14, 15);
+            generoParrafo(contentStream, page, parrafoList, 431 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 14, 15);
 
             parrafoList = new ArrayList<>();
             parrafoList.add("En Cumplimento de la Ley Orgánica de Protección de Datos 15/1999, de");
@@ -121,7 +126,7 @@ public class PdfServiceImpl implements PdfService {
             parrafoList.add("Organizador a utilizar mis datos para realizar listados, sorteos,");
             parrafoList.add("publicaciones en medios u otros asuntos relacionados con el campeonato.");
 
-            generoParrafo(contentStream, page, parrafoList, 488 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 14, 15);
+            generoParrafo(contentStream, page, parrafoList, 521 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 14, 15);
 
             if (pdfModel.isCinturonBlanco()) {
                 parrafoList = new ArrayList<>();
@@ -130,7 +135,7 @@ public class PdfServiceImpl implements PdfService {
                 parrafoList.add("se produjera el competidor o la competidora durante el evento o daños");
                 parrafoList.add("que pudiera realizar a personas o material del pabellón.");
 
-                generoParrafo(contentStream, page, parrafoList, 593 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_BOLD, 14, 15);
+                generoParrafo(contentStream, page, parrafoList, 626 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_BOLD, 14, 15);
             }
 
 

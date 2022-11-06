@@ -52,5 +52,9 @@ a:link, a:visited,  a:hover, a:active
 }
 
 .textAlignCenter {
-	text-align: center
+	text-align: center;
+}
+
+.displayNone {
+    display: none;
 }

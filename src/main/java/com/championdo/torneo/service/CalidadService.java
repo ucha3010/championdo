@@ -4,9 +4,12 @@ package com.championdo.torneo.service;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CalidadModel;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CalidadService {
+
+	public abstract List<CalidadModel> findAll();
 	
 	public abstract CalidadModel findById(int id);
 	

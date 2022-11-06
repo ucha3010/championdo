@@ -19,6 +19,7 @@ public class PdfModel {
     private String cinturonActual;
     private int idInscripcion;
     private String categoria;
+    private String poomsae;
 
     public String getNombre() {
         return nombre;
@@ -156,6 +157,14 @@ public class PdfModel {
         this.categoria = categoria;
     }
 
+    public String getPoomsae() {
+        return poomsae;
+    }
+
+    public void setPoomsae(String poomsae) {
+        this.poomsae = poomsae;
+    }
+
     @Override
     public String toString() {
         return "PdfModel{" +
@@ -176,6 +185,7 @@ public class PdfModel {
                 ", cinturonActual='" + cinturonActual + '\'' +
                 ", idInscripcion=" + idInscripcion +
                 ", categoria='" + categoria + '\'' +
+                ", poomsae='" + poomsae + '\'' +
                 '}';
     }
 }

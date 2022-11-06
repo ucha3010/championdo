@@ -9,7 +9,7 @@ import com.championdo.torneo.model.UserModel;
 public interface FormularioService {
 	
 	public abstract UserModel formularioInscPropia(User user);
-	public abstract UserAutorizacionModel formularioInscMenor(User user, String menorOInclusivo);
+	public abstract UserAutorizacionModel formularioInscMenorOInclusivo(User user, boolean menorOInclusivo);
 
 	public abstract PdfModel getPdf(UserAutorizacionModel userAutorizacionModel);
 

@@ -25,6 +25,9 @@ public class FormularioController {
     private FormularioService formularioService;
 
     @Autowired
+    private CalidadService calidadService;
+
+    @Autowired
     private CinturonService cinturonService;
 
     @Autowired
@@ -51,10 +54,7 @@ public class FormularioController {
         modelAndView.setViewName("formularioInscPropia");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
-        modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
-        modelAndView.addObject("listaPaises", paisService.findAll());
-        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
-        modelAndView.addObject("listaCinturones", cinturonService.findAll());
+        cargarDesplegables(modelAndView);
         LoggerMapper.log(Level.INFO, "formulario/propia", modelAndView, getClass());
         return modelAndView;
     }
@@ -72,6 +72,7 @@ public class FormularioController {
             InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria().getNombre());
+            pdfModel.setPoomsae(inscripcionModel.getCategoria().getPoomsae().getNombre());
             pdfService.generarPdf(pdfModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
@@ -103,6 +104,31 @@ public class FormularioController {
         modelAndView.addObject("inscripcion", inscripcionService.findById(id));
         LoggerMapper.log(Level.INFO, "formulario/inscripcionPropia", modelAndView, getClass());
         return modelAndView;
+    }
+
+
+    @GetMapping("/menorOInclisivo/{menor}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
+        if (menor) {
+            modelAndView.setViewName("formularioInscMenor");
+        } else {
+            modelAndView.setViewName("formularioInscInclusivo");
+        }
+        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, menor));
+        cargarDesplegables(modelAndView);
+        LoggerMapper.log(Level.INFO, "formulario/menorOInclisivo/" + menor, modelAndView, getClass());
+        return modelAndView;
+    }
+
+    private void cargarDesplegables(ModelAndView modelAndView) {
+        modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
+        modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
+        modelAndView.addObject("listaPaises", paisService.findAll());
+        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
+        modelAndView.addObject("listaCinturones", cinturonService.findAll());
+        modelAndView.addObject("listaCalidad", calidadService.findAll());
     }
 
 }

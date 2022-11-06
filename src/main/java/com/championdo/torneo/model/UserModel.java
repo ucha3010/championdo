@@ -38,6 +38,7 @@ public class UserModel {
 	private String domicilioLocalidad;
 	private String domicilioCp;
 	private boolean inclusivo;
+	private String menorEntreCategorias;
 	private List<String> userRoles = new ArrayList<>();
 
 	public String getUsername() {
@@ -240,6 +241,14 @@ public class UserModel {
 		this.inclusivo = inclusivo;
 	}
 
+	public String getMenorEntreCategorias() {
+		return menorEntreCategorias;
+	}
+
+	public void setMenorEntreCategorias(String menorEntreCategorias) {
+		this.menorEntreCategorias = menorEntreCategorias;
+	}
+
 	public List<String> getUserRoles() {
 		return userRoles;
 	}
@@ -276,6 +285,7 @@ public class UserModel {
 				", domicilioLocalidad='" + domicilioLocalidad + '\'' +
 				", domicilioCp='" + domicilioCp + '\'' +
 				", inclusivo=" + inclusivo +
+				", menorEntreCategorias='" + menorEntreCategorias + '\'' +
 				", userRoles=" + userRoles +
 				'}';
 	}

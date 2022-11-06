@@ -38,10 +38,16 @@ public class FormularioServiceImpl implements FormularioService {
     }
 
     @Override
-    public UserAutorizacionModel formularioInscMenor(User user, String menorOInclusivo) {
+    public UserAutorizacionModel formularioInscMenorOInclusivo(User user, boolean menorOInclusivo) {
         UserAutorizacionModel userAutorizacionModel = new UserAutorizacionModel();
         userAutorizacionModel.setMayorAutorizador(mapperUser.entity2Model(user));
-        userAutorizacionModel.setAutorizado(new UserModel());
+        UserModel autorizado = new UserModel();
+        if (menorOInclusivo) {
+            autorizado.setMenor(true);
+        } else {
+            autorizado.setInclusivo(true);
+        }
+        userAutorizacionModel.setAutorizado(autorizado);
         return userAutorizacionModel;
     }
 
