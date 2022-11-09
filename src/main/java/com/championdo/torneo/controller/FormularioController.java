@@ -61,7 +61,7 @@ public class FormularioController {
 
     @PostMapping("/gaurdarPropia")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ModelAndView gaurdarPropia(@ModelAttribute("userModel") UserModel userModel, HttpServletResponse response) {
+    public ModelAndView gaurdarPropia(@ModelAttribute("userModel") UserModel userModel) {
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada");
@@ -120,6 +120,37 @@ public class FormularioController {
         cargarDesplegables(modelAndView);
         LoggerMapper.log(Level.INFO, "formulario/menorOInclisivo/" + menor, modelAndView, getClass());
         return modelAndView;
+    }
+
+    @PostMapping("/guardarMenorOInclisivo")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ModelAndView guardarMenorOInclisivo(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
+        ModelAndView modelAndView = new ModelAndView();
+        userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("formularioInscFinalizada");
+        PdfModel pdfModel = null;
+        try {
+            formularioService.fillObjects(userAutorizacionModel.getAutorizado());
+            pdfModel = formularioService.getPdf(userAutorizacionModel);
+            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel);
+            pdfModel.setIdInscripcion(inscripcionModel.getId());
+            pdfModel.setCategoria(inscripcionModel.getCategoria().getNombre());
+            pdfModel.setPoomsae(inscripcionModel.getCategoria().getPoomsae().getNombre());
+            pdfService.generarPdf(pdfModel);
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
+            pdfModel = null;
+            modelAndView.addObject("inscripcionError", "inscripcionError");
+            modelAndView.addObject("inscripcionCorrecta", "");
+        }
+        if (pdfModel != null) {
+            modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
+            modelAndView.addObject("inscripcionError", "");
+            modelAndView.addObject("pdfModel", pdfModel);
+        }
+        LoggerMapper.log(Level.INFO, "formulario/guardarMenorOInclisivo", pdfModel, getClass());
+        return modelAndView;
+
     }
 
     private void cargarDesplegables(ModelAndView modelAndView) {

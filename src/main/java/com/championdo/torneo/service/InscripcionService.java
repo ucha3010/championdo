@@ -2,6 +2,7 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UserModel;
 
 import java.util.List;
@@ -18,8 +19,7 @@ public interface InscripcionService {
 
 	public abstract InscripcionModel addPropia(UserModel userModel);
 
-	public abstract InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto, boolean menorNoPreinfantil);
-	public abstract InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto);
+	public abstract InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel);
 
 	public abstract void update(InscripcionModel inscripcionModel);
 

@@ -7,6 +7,7 @@ import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.service.CategoriaService;
 import com.championdo.torneo.util.Constantes;
+import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,10 @@ public class CategoriaServiceImpl implements CategoriaService {
             calendar.setTime(new Date());
             int anioActual = calendar.get(Calendar.YEAR);
             int edad = anioActual - anioNacimiento;
-            if ((edad <= 6) || (edad <= 8 && !usuarioInscripto.isMenor())) {
+            if ((edad <= 6) ||
+                    (edad <= 8 &&
+                            (!StringUtils.isNullOrEmpty(usuarioInscripto.getMenorEntreCategorias())
+                             && usuarioInscripto.getMenorEntreCategorias().equalsIgnoreCase("Kicho")))) {
                 categoria = categoriaRepository.findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(edad, edad);
             } else {
                 int idCinturon = usuarioInscripto.getCinturon().getId();

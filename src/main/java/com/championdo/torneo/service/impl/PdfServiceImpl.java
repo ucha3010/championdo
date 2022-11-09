@@ -4,6 +4,7 @@ import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -43,6 +44,9 @@ public class PdfServiceImpl implements PdfService {
             contentStream.newLineAtOffset( 130, page.getMediaBox().getHeight() - 80);
             if (pdfModel.isMayorEdad()) {
                 contentStream.showText("AUTORIZACIÓN DE MAYORES DE 18 AÑOS");
+            } else if (pdfModel.isInclusivo()) {
+                contentStream.showText("AUTORIZACIÓN INCLUSIVA");
+                pdfModel.setMoverPorMenorEdad(99);
             } else {
                 contentStream.showText("AUTORIZACIÓN PARA MENORES DE 18 AÑOS");
                 pdfModel.setMoverPorMenorEdad(99);
@@ -51,21 +55,20 @@ public class PdfServiceImpl implements PdfService {
 
             List<String> parrafoList = new ArrayList<>();
 
+            parrafoList.add("Yo " + pdfModel.getNombre());
+            String parrafo = "con DNI " + pdfModel.getDni();
             if (pdfModel.isMayorEdad()) {
-                parrafoList.add("Yo " + pdfModel.getNombre());
-                parrafoList.add("con DNI " + pdfModel.getDni() + ", fecha de nacimiento " + pdfModel.getFechaNacimiento());
-                parrafoList.add("y domicilio en " + pdfModel.getDomicilio());
-                parrafoList.add("en la localidad de " + pdfModel.getLocalidad());
-
-                generoParrafo(contentStream, page, parrafoList, 123, PDType1Font.TIMES_ROMAN, 16, 33);
-
+                parrafo += ", fecha de nacimiento " + pdfModel.getFechaNacimiento();
             } else {
-                parrafoList.add("Yo " + pdfModel.getNombre());
-                parrafoList.add("con DNI " + pdfModel.getDni() + ", en calidad de " + pdfModel.getCalidadDe());
-                parrafoList.add("y domicilio en " + pdfModel.getDomicilio());
-                parrafoList.add("en la localidad de " + pdfModel.getLocalidad());
+                parrafo += ", en calidad de " + pdfModel.getCalidadDe();
+            }
+            parrafoList.add(parrafo);
+            parrafoList.add("y domicilio en " + pdfModel.getDomicilio());
+            parrafoList.add("en la localidad de " + pdfModel.getLocalidad());
 
-                generoParrafo(contentStream, page, parrafoList, 123, PDType1Font.TIMES_ROMAN, 16, 33);
+            generoParrafo(contentStream, page, parrafoList, 123, PDType1Font.TIMES_ROMAN, 16, 33);
+
+            if (!pdfModel.isMayorEdad()) {
 
                 parrafoList = new ArrayList<>();
                 parrafoList.add("AUTORIZO A:");
@@ -73,8 +76,8 @@ public class PdfServiceImpl implements PdfService {
                 generoParrafo(contentStream, page, parrafoList, 255, PDType1Font.TIMES_BOLD, 16, 33);
 
                 parrafoList = new ArrayList<>();
-                parrafoList.add(pdfModel.getNombreMenor());
-                parrafoList.add("con DNI " + pdfModel.getDniMenor() + ", fecha de nacimiento " + pdfModel.getFechaNacimiento());
+                parrafoList.add(pdfModel.getNombreMenor() + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? " con DNI " + pdfModel.getDniMenor() + " y": ""));
+                parrafoList.add("con fecha de nacimiento " + pdfModel.getFechaNacimiento());
 
                 generoParrafo(contentStream, page, parrafoList, 288, PDType1Font.TIMES_ROMAN, 16, 33);
             }
@@ -90,7 +93,11 @@ public class PdfServiceImpl implements PdfService {
             generoParrafo(contentStream, page, parrafoList, 288 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 16, 33);
 
             parrafoList = new ArrayList<>();
-            parrafoList.add("A dicha categoría le corresponde realizar: " + pdfModel.getPoomsae());
+            if (!pdfModel.isInclusivo()) {
+                parrafoList.add("(a dicha categoría le corresponde realizar: " + pdfModel.getPoomsae() + ")");
+            } else {
+                parrafoList.add("(a dicha categoría le corresponde realizar el KICHO o POOMSAE que deseen)");
+            }
 
             generoParrafo(contentStream, page, parrafoList, 321 + pdfModel.getMoverPorMenorEdad(), PDType1Font.TIMES_ROMAN, 16, 33);
 
@@ -158,7 +165,6 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public void descargarPdf(PdfModel pdfModel, HttpServletResponse response) {
 
-        pdfModel.setIdInscripcion((inscripcionService.findByDniInscripto(pdfModel.getDni())).getId());
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename = " + nombreArchivo(pdfModel, false, true);
@@ -180,12 +186,12 @@ public class PdfServiceImpl implements PdfService {
         if (pdfModel.isMayorEdad()) {
             return ruta + pdfModel.getDni() + pdfModel.getFechaCampeonato() + "-" + pdfModel.getIdInscripcion() + ext;
         } else {
-            return ruta + pdfModel.getDni() + pdfModel.getFechaCampeonato() + nullOrEmpty(pdfModel.getDniMenor()) + "-" + pdfModel.getIdInscripcion() + ext;
+            return ruta + pdfModel.getDni() + pdfModel.getFechaCampeonato() + clearData(pdfModel.getDniMenor()) + "-" + pdfModel.getIdInscripcion() + ext;
         }
     }
 
-    private String nullOrEmpty(String entrada) {
-        return (entrada != null ? entrada : "");
+    private String clearData(String entrada) {
+        return (entrada != null ? entrada.trim() : "");
     }
 
     private void generoParrafo(PDPageContentStream contentStream, PDPage page, List<String> parrafoList,
@@ -194,7 +200,7 @@ public class PdfServiceImpl implements PdfService {
         for (String parrafo1: parrafoList) {
             contentStream.beginText();
             contentStream.setFont(fuente, fontSize);
-            contentStream.newLineAtOffset( 85, page.getMediaBox().getHeight() - (alturaPagina + i));
+            contentStream.newLineAtOffset( 50, page.getMediaBox().getHeight() - (alturaPagina + i));
             contentStream.showText(parrafo1);
             contentStream.endText();
             i=i+salto;

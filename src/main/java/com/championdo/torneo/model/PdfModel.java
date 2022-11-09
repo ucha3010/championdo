@@ -2,21 +2,22 @@ package com.championdo.torneo.model;
 
 public class PdfModel {
 
-    private String nombre; //Damián Usheff Vellianitis
-    private String dni; //05959715R
-    private String fechaNacimiento; //30/10/1976
-    private String domicilio; //calle Azorín 18
-    private String localidad; //Cobeña
+    private String nombre; //Nombre Autorizador Apellido1dor Apellido2dor
+    private String dni; //22222222A
+    private String fechaNacimiento; //30/10/1960
+    private String domicilio; //calle Mayor 150
+    private String localidad; //Madrid (28003) - España
     private String gimnasio; //Championdo
     private String fechaCampeonato; //20/12/2022
-    private String direccionCampeonato;
+    private String direccionCampeonato; //Polideportivo La Luz
     private String calidadDe; //padre
-    private String nombreMenor; //Ariadna Usheff Huertas
+    private String nombreMenor; //Nombre Autorizado Apellido1do Apellido2do
     private String dniMenor; //01234567A
     private boolean cinturonBlanco; //true
     private boolean mayorEdad; //false
+    private boolean inclusivo;
     private int moverPorMenorEdad; //0
-    private String cinturonActual;
+    private String cinturonActual; //Amarillo Naranja
     private int idInscripcion;
     private String categoria;
     private String poomsae;
@@ -125,6 +126,14 @@ public class PdfModel {
         this.mayorEdad = mayorEdad;
     }
 
+    public boolean isInclusivo() {
+        return inclusivo;
+    }
+
+    public void setInclusivo(boolean inclusivo) {
+        this.inclusivo = inclusivo;
+    }
+
     public int getMoverPorMenorEdad() {
         return moverPorMenorEdad;
     }
@@ -181,6 +190,7 @@ public class PdfModel {
                 ", dniMenor='" + dniMenor + '\'' +
                 ", cinturonBlanco=" + cinturonBlanco +
                 ", mayorEdad=" + mayorEdad +
+                ", inclusivo=" + inclusivo +
                 ", moverPorMenorEdad=" + moverPorMenorEdad +
                 ", cinturonActual='" + cinturonActual + '\'' +
                 ", idInscripcion=" + idInscripcion +

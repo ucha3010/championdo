@@ -1,5 +1,6 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.entity.Calidad;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.*;
@@ -57,26 +58,17 @@ public class FormularioServiceImpl implements FormularioService {
         if (userAutorizacionModel.getAutorizado() == null) { ///inscripción de mayor
             pdfModel.setMayorEdad(true);
             UserModel userModel = userAutorizacionModel.getMayorAutorizador();
-            pdfModel.setNombre(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
-            pdfModel.setDni(userModel.getUsername());
-            pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
-            if (!StringUtils.isNullOrEmpty(userModel.getDomicilioCalle())) {
-                pdfModel.setDomicilio(userModel.getDomicilioCalle() + " " + userModel.getDomicilioNumero() + " " + userModel.getDomicilioOtros());
-                pdfModel.setLocalidad(userModel.getDomicilioLocalidad() + " (" + userModel.getDomicilioCp() + ") - " + userModel.getPais().getNombre());
-            }
-            pdfModel.setGimnasio(userModel.getGimnasio().getNombre());
-            pdfModel.setCinturonActual(userModel.getCinturon().getColor());
-            if (userModel.getCinturon().getColor().equalsIgnoreCase(Constantes.BLANCO)) {
-                pdfModel.setCinturonBlanco(true);
-            }
+
+            rellenoAutorizador(userModel, pdfModel);
+            rellenoCompetidor(userModel, pdfModel);
         } else { //inscripción de menor
             pdfModel.setMayorEdad(false);
             UserModel mayor = userAutorizacionModel.getMayorAutorizador();
             UserModel menor = userAutorizacionModel.getAutorizado();
 
-            if (menor.getCinturon().getColor().equalsIgnoreCase(Constantes.BLANCO)) {
-                pdfModel.setCinturonBlanco(true);
-            }
+            rellenoAutorizador(mayor, pdfModel);
+            rellenoCompetidor(menor, pdfModel);
+            rellenoMenor(menor, pdfModel);
         }
         pdfModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO));
         pdfModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO));
@@ -89,5 +81,37 @@ public class FormularioServiceImpl implements FormularioService {
         userModel.setGimnasio(gimnasioService.findById(userModel.getGimnasio().getId()));
         userModel.setPais(paisService.findById(userModel.getPais().getId()));
         userModel.setCinturon(cinturonService.findById(userModel.getCinturon().getId()));
+    }
+
+    private void rellenoAutorizador (UserModel userModel, PdfModel pdfModel) {
+        pdfModel.setNombre(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
+        pdfModel.setDni(userModel.getUsername());
+        if (!StringUtils.isNullOrEmpty(userModel.getDomicilioCalle())) {
+            pdfModel.setDomicilio(userModel.getDomicilioCalle() + " " + userModel.getDomicilioNumero() + " " + userModel.getDomicilioOtros());
+            pdfModel.setLocalidad(userModel.getDomicilioLocalidad() + " (" + userModel.getDomicilioCp() + ")" + (userModel.getPais() != null ? " - " + userModel.getPais().getNombre() : ""));
+        }
+        if (userModel.getCalidad() != null) {
+            if (!StringUtils.isNullOrEmpty(userModel.getCalidad().getOtro())) {
+                pdfModel.setCalidadDe(userModel.getCalidad().getOtro());
+            } else {
+                CalidadModel calidad = calidadService.findById(userModel.getCalidad().getId());
+                pdfModel.setCalidadDe(calidad.getNombre());
+            }
+        }
+    }
+
+    private void rellenoCompetidor (UserModel userModel, PdfModel pdfModel) {
+
+        pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
+        pdfModel.setGimnasio(userModel.getGimnasio().getNombre());
+        pdfModel.setCinturonActual(userModel.getCinturon().getColor());
+        if (userModel.getCinturon().getColor().equalsIgnoreCase(Constantes.BLANCO)) {
+            pdfModel.setCinturonBlanco(true);
+        }
+    }
+
+    private void rellenoMenor(UserModel userModel, PdfModel pdfModel) {
+        pdfModel.setNombreMenor(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
+        pdfModel.setDniMenor(userModel.getUsername());
     }
 }

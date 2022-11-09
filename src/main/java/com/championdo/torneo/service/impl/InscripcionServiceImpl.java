@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.Inscripcion;
 import com.championdo.torneo.mapper.MapperInscripcion;
 import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.InscripcionRepository;
 import com.championdo.torneo.service.CategoriaService;
@@ -73,16 +74,27 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto, boolean menorNoPreinfantil) {
+    public InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel) {
+        UserModel usuarioAutorizador = userAutorizacionModel.getMayorAutorizador();
+        UserModel usuarioInscripto = userAutorizacionModel.getAutorizado();
+
+        if (usuarioInscripto.isInclusivo()) {
+            return addInclusivo(usuarioAutorizador, usuarioInscripto);
+        } else if (usuarioInscripto.isMenor()) {
+            return addMenor(usuarioAutorizador, usuarioInscripto);
+        }
+        return null;
+    }
+
+    private InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
         InscripcionModel inscripcionModel = new InscripcionModel();
-        inscripcionModel.setInscripcionMenor(menorNoPreinfantil);
+        inscripcionModel.setInscripcionMenor(true);
         inscripcionModel.setUsuarioAutorizador(usuarioAutorizador);
         inscripcionModel.setUsuarioInscripto(usuarioInscripto);
         return add(inscripcionModel);
     }
 
-    @Override
-    public InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
+    private InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
         InscripcionModel inscripcionModel = new InscripcionModel();
         inscripcionModel.setInscripcionInclusiva(true);
         inscripcionModel.setUsuarioAutorizador(usuarioAutorizador);
