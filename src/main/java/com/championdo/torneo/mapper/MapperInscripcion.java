@@ -30,6 +30,7 @@ public class MapperInscripcion {
             localObject.setInscripcionMenor(externObject.isInscripcionMenor());
             localObject.setInscripcionInclusiva(externObject.isInscripcionInclusiva());
             localObject.setFechaInscripcion(externObject.getFechaInscripcion());
+            localObject.setFechaCampeonato(externObject.getFechaCampeonato());
             localObject.setCategoria(categoriaService.findById(externObject.getIdCategoria()));
 
             UserModel usuarioInscripto = new UserModel();
@@ -81,6 +82,7 @@ public class MapperInscripcion {
             localObject.setInscripcionMenor(externObject.isInscripcionMenor());
             localObject.setInscripcionInclusiva(externObject.isInscripcionInclusiva());
             localObject.setFechaInscripcion(externObject.getFechaInscripcion());
+            localObject.setFechaCampeonato(externObject.getFechaCampeonato());
             localObject.setIdCategoria(externObject.getCategoria().getId());
 
             if (externObject.getUsuarioInscripto() != null) {

@@ -15,6 +15,8 @@ public class Inscripcion {
     private boolean inscripcionInclusiva;
     @Column(name = "fechaInscripcion", nullable = false)
     private Date fechaInscripcion;
+    @Column(name = "fechaCampeonato", nullable = false, length = 10)
+    private String fechaCampeonato;
     private int idCategoria;
 
     //Usuario inscripto
@@ -110,6 +112,14 @@ public class Inscripcion {
 
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public String getFechaCampeonato() {
+        return fechaCampeonato;
+    }
+
+    public void setFechaCampeonato(String fechaCampeonato) {
+        this.fechaCampeonato = fechaCampeonato;
     }
 
     public int getIdCategoria() {
@@ -352,6 +362,7 @@ public class Inscripcion {
                 ", inscripcionMenor=" + inscripcionMenor +
                 ", inscripcionInclusiva=" + inscripcionInclusiva +
                 ", fechaInscripcion=" + fechaInscripcion +
+                ", fechaCampeonato='" + fechaCampeonato + '\'' +
                 ", idCategoria=" + idCategoria +
                 ", nombreInscripto='" + nombreInscripto + '\'' +
                 ", apellido1Inscripto='" + apellido1Inscripto + '\'' +

@@ -89,20 +89,15 @@ public class FormularioController {
         return modelAndView;
     }
 
-    @PostMapping("/descargarPdf")
+    @GetMapping("/getPropia/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
-        pdfService.descargarPdf(pdfModel, response);
-        LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
-    }
-
-    @GetMapping("/inscripcionPropia/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ModelAndView inscripcionPropia(ModelAndView modelAndView, @PathVariable int id) {
+    public ModelAndView getPropia(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("vistaInscPropia");
         userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("inscripcion", inscripcionService.findById(id));
-        LoggerMapper.log(Level.INFO, "formulario/inscripcionPropia", modelAndView, getClass());
+        InscripcionModel inscripcionModel = inscripcionService.findById(id);
+        modelAndView.addObject("inscripcion", inscripcionModel);
+        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
+        LoggerMapper.log(Level.INFO, "formulario/getPropia", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -151,6 +146,25 @@ public class FormularioController {
         LoggerMapper.log(Level.INFO, "formulario/guardarMenorOInclisivo", pdfModel, getClass());
         return modelAndView;
 
+    }
+
+    @GetMapping("/getMenorOInclisivo/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {
+        modelAndView.setViewName("vistaInscMenorOInclisivo");
+        userService.cargarUsuarioCompleto(modelAndView);
+        InscripcionModel inscripcionModel = inscripcionService.findById(id);
+        modelAndView.addObject("inscripcion", inscripcionModel);
+        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
+        LoggerMapper.log(Level.INFO, "formulario/getMenorOInclisivo", modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @PostMapping("/descargarPdf")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
+        pdfService.descargarPdf(pdfModel, response);
+        LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
     private void cargarDesplegables(ModelAndView modelAndView) {

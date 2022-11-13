@@ -1,12 +1,14 @@
 package com.championdo.torneo.service.impl;
 
-import com.championdo.torneo.entity.Calidad;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.mapper.MapperUser;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.CalidadModel;
+import com.championdo.torneo.model.PdfModel;
+import com.championdo.torneo.model.UserAutorizacionModel;
+import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
-import com.championdo.torneo.util.Utils;
 import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +65,7 @@ public class FormularioServiceImpl implements FormularioService {
             rellenoCompetidor(userModel, pdfModel);
         } else { //inscripción de menor
             pdfModel.setMayorEdad(false);
+            pdfModel.setInclusivo(userAutorizacionModel.getAutorizado().isInclusivo());
             UserModel mayor = userAutorizacionModel.getMayorAutorizador();
             UserModel menor = userAutorizacionModel.getAutorizado();
 

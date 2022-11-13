@@ -15,11 +15,20 @@
 	<script type="text/javascript">
 		function confirmDelete(id){
 			if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
-				var url = "eliminarInscripcion/" + id;
-				location.href=url;
+				var relativeUrl = "principal/eliminarInscripcion/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
 				return true;
 			}
 			return false;
+		}
+		function getDomain(fullUrl) {
+      		const myArray = fullUrl.split("/");
+      		let textOut = "";
+		 	for (let i = 0; i < 3; i++) {
+				textOut += myArray[i] + "/";
+		  	}
+		  	return textOut;
 		}
 	</script>
 </head>
@@ -34,20 +43,35 @@
 				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
 			</form>
 		</nav>
-				<div th:if="${inscripcionError != null}" class="alert alert-danger" role="alert">Hubo problemas al guardar la información</div>
-				<div th:if="${inscripcionCorrecta != null}" class="alert alert-success" role="alert">Información actualizada correctamente</div>
+
+		<section class="text-center">
+			<div th:if="${inscripcionError != null}" class="alert alert-danger" role="alert">Hubo problemas al guardar la información</div>
+			<div th:if="${inscripcionCorrecta != null}" class="alert alert-success" role="alert">Información actualizada correctamente</div>
+		</section>
+
+		<section class="text-center">
+			<div th:if="${inscripcion != null and inscripcion.id != 0}">
+				<a href="#" th:href="@{/formulario/getPropia/__${inscripcion.id}__}" class="textDecoration-none">
+					<button class="btn btn-link" type="button">
+						Inscripción propia realizada el <span th:text="${#calendars.format(inscripcion.fecha,'dd/MM/yyyy HH:mm')}"></span>
+					</button>
+				</a>
+				<a th:attr="onclick=|return confirmDelete('${inscripcion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
+			</div>
+			<div th:if="${inscripcion != null}" th:each="autorizacion : ${inscripcion.autorizaciones}">
+				<a href="#" th:href="@{/formulario/getMenorOInclisivo/__${autorizacion.id}__}" class="textDecoration-none">
+					<button class="btn btn-link" type="button">
+						Inscripción de <span th:text="${autorizacion.nombre}"></span> <span th:text="${autorizacion.apellido1}"></span> <span th:text="${autorizacion.apellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fecha,'dd/MM/yyyy HH:mm')}"></span>
+					</button>
+				</a>
+				<a th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
+			</div>
+		</section>
 
 		<section class="text-center">
 			<a href="#" th:href="@{/formulario/propia}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button" th:disabled="${inscripcion != null and inscripcion.id != 0}">Inscripción propia</button><br>
 			</a>
-
-			<div th:if="${inscripcion != null and inscripcion.id != 0}">
-				<a href="#" th:href="@{/formulario/inscripcionPropia/__${inscripcion.id}__}" class="textDecoration-none">
-					<button class="btn btn-link" type="button">Inscripción propia realizada el <span th:text="${#calendars.format(inscripcion.fecha,'dd/MM/yyyy HH:mm')}"></span></button>
-				</a>
-				<a th:attr="onclick=|return confirmDelete('${inscripcion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
-			</div>
 
 			<a href="#" th:href="@{/formulario/menorOInclisivo/true}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización menor de edad</button><br>
@@ -58,16 +82,7 @@
 			</a>
 
 			<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Ajustes de usuario</button><br>
-			<button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button><br>
-			<div th:if="${inscripcion != null}">
-				<div th:each="autorizacion : ${inscripcion.autorizaciones}">
-					<a href="#" th:href="@{/formulario/inscripcionAutorizado?id=__${autorizacion.id}__}" class="textDecoration-none">
-						<button class="btn btn-link margenAbajo2Porc" type="button">
-							Inscripción de <span th:text="${autorizacion.nombre}"></span> <span th:text="${autorizacion.apellido1}"></span> <span th:text="${autorizacion.apellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fecha,'dd/MM/yyyy HH:mm')}"></span>
-						</button><br>
-					</a>
-				</div>
-			</div>
+			<button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
 		</section>
 
 		

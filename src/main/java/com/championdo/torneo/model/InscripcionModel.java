@@ -14,6 +14,7 @@ public class InscripcionModel {
     private boolean inscripcionInclusiva;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaInscripcion;
+    private String fechaCampeonato;
     private CategoriaModel categoria;
     private UserModel usuarioInscripto;
     private UserModel usuarioAutorizador;
@@ -60,6 +61,14 @@ public class InscripcionModel {
 
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public String getFechaCampeonato() {
+        return fechaCampeonato;
+    }
+
+    public void setFechaCampeonato(String fechaCampeonato) {
+        this.fechaCampeonato = fechaCampeonato;
     }
 
     public CategoriaModel getCategoria() {
@@ -126,6 +135,7 @@ public class InscripcionModel {
                 ", inscripcionMenor=" + inscripcionMenor +
                 ", inscripcionInclusiva=" + inscripcionInclusiva +
                 ", fechaInscripcion=" + fechaInscripcion +
+                ", fechaCampeonato='" + fechaCampeonato + '\'' +
                 ", categoria=" + categoria +
                 ", usuarioInscripto=" + usuarioInscripto +
                 ", usuarioAutorizador=" + usuarioAutorizador +

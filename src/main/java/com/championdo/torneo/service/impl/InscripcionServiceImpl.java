@@ -8,6 +8,8 @@ import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.InscripcionRepository;
 import com.championdo.torneo.service.CategoriaService;
 import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service()
 public class InscripcionServiceImpl implements InscripcionService {
@@ -29,6 +30,8 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Autowired
     private CategoriaService categoriaService;
+    @Autowired
+    private UtilService utilService;
 
     @Override
     public InscripcionModel findById(int id) {
@@ -58,6 +61,7 @@ public class InscripcionServiceImpl implements InscripcionService {
     @Override
     public InscripcionModel add(InscripcionModel inscripcionModel) {
         inscripcionModel.setFechaInscripcion(new Date());
+        inscripcionModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO));
         inscripcionModel.setCategoria(categoriaService.calcularCategoria(inscripcionModel.getUsuarioInscripto()));
         InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.save(mapperInscripcion.model2Entity(inscripcionModel)));
         LoggerMapper.log(Level.INFO, "add", inscripcion, getClass());

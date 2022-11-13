@@ -1,7 +1,7 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
-import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.mysql.cj.util.StringUtils;
@@ -11,7 +11,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
@@ -24,9 +23,6 @@ import java.util.List;
 
 @Service()
 public class PdfServiceImpl implements PdfService {
-
-    @Autowired
-    private InscripcionService inscripcionService;
 
     @Override
     public void generarPdf(PdfModel pdfModel) {
@@ -188,6 +184,25 @@ public class PdfServiceImpl implements PdfService {
         } else {
             return ruta + pdfModel.getDni() + pdfModel.getFechaCampeonato() + clearData(pdfModel.getDniMenor()) + "-" + pdfModel.getIdInscripcion() + ext;
         }
+    }
+
+    @Override
+    public PdfModel getImpresion(InscripcionModel inscripcionModel) {
+
+        PdfModel pdfModel = new PdfModel();
+        if (inscripcionModel != null && inscripcionModel.getUsuarioInscripto() != null){
+            if (inscripcionModel.getUsuarioAutorizador() != null) {
+                pdfModel.setMayorEdad(false);
+                pdfModel.setDni(inscripcionModel.getUsuarioAutorizador().getUsername());
+                pdfModel.setDniMenor(inscripcionModel.getUsuarioInscripto().getUsername());
+            } else {
+                pdfModel.setMayorEdad(true);
+                pdfModel.setDni(inscripcionModel.getUsuarioInscripto().getUsername());
+            }
+            pdfModel.setIdInscripcion(inscripcionModel.getId());
+            pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
+        }
+        return pdfModel;
     }
 
     private String clearData(String entrada) {
