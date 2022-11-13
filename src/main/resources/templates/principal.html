@@ -78,10 +78,9 @@
 			</a>
 
 			<a href="#" th:href="@{/formulario/menorOInclisivo/false}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción inclusiva</button><br>
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización inclusiva</button><br>
 			</a>
 
-			<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Ajustes de usuario</button><br>
 			<button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
 		</section>
 

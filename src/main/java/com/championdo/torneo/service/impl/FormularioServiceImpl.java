@@ -12,6 +12,9 @@ import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
 
 @Service()
 public class FormularioServiceImpl implements FormularioService {
@@ -84,6 +87,16 @@ public class FormularioServiceImpl implements FormularioService {
         userModel.setGimnasio(gimnasioService.findById(userModel.getGimnasio().getId()));
         userModel.setPais(paisService.findById(userModel.getPais().getId()));
         userModel.setCinturon(cinturonService.findById(userModel.getCinturon().getId()));
+    }
+
+    @Override
+    public void cargarDesplegables(ModelAndView modelAndView) {
+        modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
+        modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
+        modelAndView.addObject("listaPaises", paisService.findAll());
+        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
+        modelAndView.addObject("listaCinturones", cinturonService.findAll());
+        modelAndView.addObject("listaCalidad", calidadService.findAll());
     }
 
     private void rellenoAutorizador (UserModel userModel, PdfModel pdfModel) {

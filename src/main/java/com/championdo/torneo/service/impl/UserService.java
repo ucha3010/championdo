@@ -17,10 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service("userService")
 public class UserService implements UserDetailsService {
@@ -30,7 +27,6 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRoleRepository userRoleRepository;
-
 	@Autowired
 	private MapperUser mapperUser;
 
@@ -41,8 +37,9 @@ public class UserService implements UserDetailsService {
 		return buildUser(user, authorities);
 	}
 
-	public com.championdo.torneo.entity.User addOrUpdate(com.championdo.torneo.entity.User usuario) {
-		return userRepository.save(usuario);
+	public com.championdo.torneo.entity.User addOrUpdate(UserModel usuario) {
+		usuario.setFechaModificacion(new Date());
+		return userRepository.save(mapperUser.model2Entity(usuario));
 	}
 
 	public boolean delete(String username) {
@@ -88,6 +85,18 @@ public class UserService implements UserDetailsService {
 		modelAndView.addObject("usuario", usuario);
 		return usuario;
 	}
+
+	public UserModel cargarUserModelCompleto(ModelAndView modelAndView) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		com.championdo.torneo.entity.User usuario = findByUsername(user.getUsername());
+		UserModel userModel = mapperUser.entity2Model(usuario);
+		modelAndView.addObject("usuario", userModel);
+		return userModel;
+	}
+
+	public com.championdo.torneo.entity.User convertUser(UserModel userModel) {
+		return mapperUser.model2Entity(userModel);
+	}
 	
 	private User buildUser(com.championdo.torneo.entity.User user, List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), user.isEnabled(),
@@ -102,5 +111,4 @@ public class UserService implements UserDetailsService {
 		}
 		return new ArrayList<>(grantedAuthorities);
 	}
-
 }

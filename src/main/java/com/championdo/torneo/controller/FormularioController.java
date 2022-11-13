@@ -49,18 +49,18 @@ public class FormularioController {
     private PrincipalController principalController;
 
     @GetMapping("/propia")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView propia(ModelAndView modelAndView) {
         modelAndView.setViewName("formularioInscPropia");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
-        cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView);
         LoggerMapper.log(Level.INFO, "formulario/propia", modelAndView, getClass());
         return modelAndView;
     }
 
     @PostMapping("/gaurdarPropia")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userModel") UserModel userModel) {
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
@@ -90,7 +90,7 @@ public class FormularioController {
     }
 
     @GetMapping("/getPropia/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView getPropia(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("vistaInscPropia");
         userService.cargarUsuarioCompleto(modelAndView);
@@ -103,7 +103,7 @@ public class FormularioController {
 
 
     @GetMapping("/menorOInclisivo/{menor}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
         if (menor) {
             modelAndView.setViewName("formularioInscMenor");
@@ -112,13 +112,13 @@ public class FormularioController {
         }
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, menor));
-        cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView);
         LoggerMapper.log(Level.INFO, "formulario/menorOInclisivo/" + menor, modelAndView, getClass());
         return modelAndView;
     }
 
     @PostMapping("/guardarMenorOInclisivo")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenorOInclisivo(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
@@ -149,7 +149,7 @@ public class FormularioController {
     }
 
     @GetMapping("/getMenorOInclisivo/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("vistaInscMenorOInclisivo");
         userService.cargarUsuarioCompleto(modelAndView);
@@ -161,19 +161,10 @@ public class FormularioController {
     }
 
     @PostMapping("/descargarPdf")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarPdf(pdfModel, response);
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
-    }
-
-    private void cargarDesplegables(ModelAndView modelAndView) {
-        modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
-        modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
-        modelAndView.addObject("listaPaises", paisService.findAll());
-        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
-        modelAndView.addObject("listaCinturones", cinturonService.findAll());
-        modelAndView.addObject("listaCalidad", calidadService.findAll());
     }
 
 }

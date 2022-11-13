@@ -23,7 +23,7 @@ public class PrincipalController {
     private UserService userService;
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipal(ModelAndView modelAndView) {
         modelAndView.setViewName("principal");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
