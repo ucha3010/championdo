@@ -111,6 +111,7 @@
 		<form action="#" th:action="@{/formulario/guardarMenorOInclisivo}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
 		
 			<input type="hidden" name="mayorAutorizador.username" th:value="*{mayorAutorizador.username}"/>
+			<input type="hidden" name="mayorAutorizador.correo" th:value="*{mayorAutorizador.correo}"/>
 			<input type="hidden" name="autorizado.menor" th:value="*{autorizado.menor}"/>
 			<input type="hidden" name="autorizado.inclusivo" th:value="*{autorizado.inclusivo}"/>
 

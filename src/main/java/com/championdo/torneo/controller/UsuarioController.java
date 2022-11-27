@@ -80,7 +80,7 @@ public class UsuarioController {
 		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
 		UserModel usuario = userService.findModelByUsername(claveUsuarioModel.getUsername());
 		if (userService.comparePassword(claveUsuarioModel.getAntiguaClave(), usuario.getPassword())) {
-			usuario.setPassword(userService.generatePassword(claveUsuarioModel.getNuevaClave()));
+			usuario.setPassword(userService.encodePassword(claveUsuarioModel.getNuevaClave()));
 			userService.addOrUpdate(usuario);
 			modelAndView.addObject("claveModificada", "claveModificada");
 			LoggerMapper.log(Level.INFO, "actualizarUsuario", "Contraseña actualizada", getClass());
@@ -131,7 +131,7 @@ public class UsuarioController {
 		ModelAndView modelAndView = new ModelAndView();
 		if(usuario.getPassword().isEmpty()) {
 			if(userService.findByUsername(usuario.getUsername()) == null) {
-				usuario.setPassword(userService.generatePassword("usuario123"));
+				usuario.setPassword(userService.encodePassword("usuario123"));
 				usuarioNuevo = true;
 				userRole.setUser(userService.convertUser(usuario));
 				userRole.setRole("ROLE_USER");
@@ -180,7 +180,7 @@ public class UsuarioController {
 	public ModelAndView resetearClaveUsuario(@ModelAttribute("username") String username) {
 		ModelAndView modelAndView = new ModelAndView();
 		UserModel usuario = userService.findModelByUsername(username);
-		usuario.setPassword(userService.generatePassword(username));
+		usuario.setPassword(userService.encodePassword(username));
 		userService.addOrUpdate(usuario);
 		String mensaje = "Nueva clave de " + usuario.getName() + " " + usuario.getLastname() + ": " + username;
 		modelAndView.addObject("reseteoClaveCorrecto",mensaje);

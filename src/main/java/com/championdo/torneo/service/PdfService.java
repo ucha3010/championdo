@@ -4,10 +4,11 @@ import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
 public interface PdfService {
 
-    public void generarPdf(PdfModel pdfModel);
+    public File generarPdf(PdfModel pdfModel);
 
     public void descargarPdf(PdfModel pdfModel, HttpServletResponse response);
 

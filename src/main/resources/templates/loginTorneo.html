@@ -17,23 +17,42 @@
   <body>
 
     <div class="container">
+      <section class="text-center">
+        <h1 class="alert alert-info" role="alert">Inscripción a torneo Taekwondo</h1>
+      </section>
 
-      <form class="form-signin" th:action="@{/logincheck}" method="POST">
-      	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <h2 class="form-signin-heading">Acceso</h2>
-        <label for="username" class="sr-only">DNI</label>
-        <input type="text" class="form-control" placeholder="DNI" name="username" id="username"/>
-        <label for="password" class="sr-only">Contraseña</label>
-        <input type="password" class="form-control" placeholder="Contraseña" name="password" id="password"/>
-        <div th:if="${error != null}" class="alert alert-danger" role="alert">DNI y/o contraseña inválido</div>
-        <div th:if="${logout != null}" class="alert alert-success" role="alert">Desconexión realizada correctamente</div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">
-        	<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Acceder
-        </button>
-      </form>
-      <a href="http://www.championdo.es/" class="textDecoration-none">
-        <button class="form-signin btn btn-lg btn-default btn-block mt-1">Volver a página Champion Do</button>
-      </a>
+      <section class="text-center">
+        <div th:if="${altaUsuarioOK != null}" class="alert alert-success" role="alert"><span th:text="${altaUsuarioOK}"></span></div>
+      </section>
+
+      <section class="margenArribaAbajo3Porc">
+        <a href="#" th:href="@{/formulario/alta}" class="textDecoration-none">
+          <button class="btn btn-success pull-right" type="submit">Alta nuevo usuario</button>
+        </a>
+      </section>
+
+      <section class="mb-3">
+        <form class="form-signin" th:action="@{/logincheck}" method="POST">
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+          <h2 class="form-signin-heading">Acceso</h2>
+          <label for="username" class="sr-only">DNI</label>
+          <input type="text" class="form-control" placeholder="DNI" name="username" id="username"/>
+          <label for="password" class="sr-only">Contraseña</label>
+          <input type="password" class="form-control" placeholder="Contraseña" name="password" id="password"/>
+          <div th:if="${error != null}" class="alert alert-danger" role="alert">DNI y/o contraseña inválido</div>
+          <div th:if="${logout != null}" class="alert alert-success" role="alert">Desconexión realizada correctamente</div>
+          <button class="btn btn-lg btn-primary btn-block mb-1" type="submit">
+              <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Acceder
+          </button>
+          <a href="#" th:href="@{/olvidoClave}" class="margenArribaAbajo3Porc">¿Olvidó su contraseña?</a>
+        </form>
+      </section>
+
+      <section>
+        <a href="http://www.championdo.es/" class="textDecoration-none">
+          <button class="form-signin btn btn-lg btn-default btn-block mt-1">Volver a página Champion Do</button>
+        </a>
+      </section>
 
     </div> <!-- /container -->
 

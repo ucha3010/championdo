@@ -1,11 +1,14 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
+import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/formulario")
@@ -31,6 +37,9 @@ public class FormularioController {
     private CinturonService cinturonService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private GimnasioService gimnasioService;
 
     @Autowired
@@ -44,6 +53,9 @@ public class FormularioController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Autowired
     private PrincipalController principalController;
@@ -73,7 +85,8 @@ public class FormularioController {
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria().getNombre());
             pdfModel.setPoomsae(inscripcionModel.getCategoria().getPoomsae().getNombre());
-            pdfService.generarPdf(pdfModel);
+            File file = pdfService.generarPdf(pdfModel);
+            emailService.sendConfirmation(userModel, file);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -131,7 +144,8 @@ public class FormularioController {
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria().getNombre());
             pdfModel.setPoomsae(inscripcionModel.getCategoria().getPoomsae().getNombre());
-            pdfService.generarPdf(pdfModel);
+            File file = pdfService.generarPdf(pdfModel);
+            emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -165,6 +179,39 @@ public class FormularioController {
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarPdf(pdfModel, response);
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
+    }
+
+    @GetMapping("/alta")
+    @PreAuthorize("permitAll()")
+    public ModelAndView getAlta(ModelAndView modelAndView) {
+        modelAndView.setViewName("formularioAlta");
+        formularioService.cargarDesplegables(modelAndView);
+        if (modelAndView.getModel() == null || modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
+            modelAndView.addObject("userModel", new UserModel());
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/alta")
+    @PreAuthorize("permitAll()")
+    public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
+        if(userService.findByUsername(userModel.getUsername()) == null) {
+            try {
+                userService.altaNuevoUsuario(userModel, "ROLE_USER");
+                modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
+                modelAndView.setViewName(Constantes.LOGIN);
+                return modelAndView;
+            } catch (PersistenceException e) {
+                modelAndView.addObject("problemasAlta", "Problemas dando de alta usuario con DNI " + userModel.getUsername());
+            }
+        } else {
+            modelAndView.addObject("dniDadoDeAlta", "Ya existe un usuario dado de alta con DNI " + userModel.getUsername());
+        }
+        modelAndView.setViewName("formularioAlta");
+        modelAndView.addObject("userModel", userModel);
+        formularioService.cargarDesplegables(modelAndView);
+        return modelAndView;
+
     }
 
 }

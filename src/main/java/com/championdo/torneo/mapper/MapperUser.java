@@ -31,72 +31,75 @@ public class MapperUser {
 
     public UserModel entity2Model(User externObject) {
         UserModel localObject = new UserModel();
-        localObject.setUsername(externObject.getUsername());
-        localObject.setPassword(externObject.getPassword());
-        localObject.setEnabled(externObject.isEnabled());
-        localObject.setName(externObject.getName());
-        localObject.setLastname(externObject.getLastname());
-        localObject.setSecondLastname(externObject.getSecondLastname());
-        localObject.setSexo(externObject.getSexo());
-        localObject.setFechaNacimiento(externObject.getFechaNacimiento());
-        localObject.setGimnasio(gimnasioService.findById(externObject.getIdGimnasio()));
-        localObject.setCalidad(calidadService.findById(externObject.getIdCalidad()));
-        localObject.setPais(paisService.findById(externObject.getIdPais()));
-        localObject.setCinturon(cinturonService.findById(externObject.getIdCinturon()));
-        localObject.setFechaAlta(externObject.getFechaAlta());
-        localObject.setFechaModificacion(externObject.getFechaModificacion());
-        localObject.setUsernameModificacione(externObject.getUsernameModificacione());
-        localObject.setCorreo(externObject.getCorreo());
-        localObject.setMenor(externObject.isMenor());
-        localObject.setDniMenor(externObject.getDniMenor());
-        localObject.setUsernameACargo(externObject.getUsernameACargo());
-        localObject.setDomicilioCalle(externObject.getDomicilioCalle());
-        localObject.setDomicilioNumero(externObject.getDomicilioNumero());
-        localObject.setDomicilioOtros(externObject.getDomicilioOtros());
-        localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
-        localObject.setDomicilioCp(externObject.getDomicilioCp());
-        localObject.setInclusivo(externObject.isInclusivo());
-        localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
+        if (externObject != null) {
+            localObject.setUsername(externObject.getUsername());
+            localObject.setPassword(externObject.getPassword());
+            localObject.setEnabled(externObject.isEnabled());
+            localObject.setName(externObject.getName());
+            localObject.setLastname(externObject.getLastname());
+            localObject.setSecondLastname(externObject.getSecondLastname());
+            localObject.setSexo(externObject.getSexo());
+            localObject.setFechaNacimiento(externObject.getFechaNacimiento());
+            localObject.setGimnasio(gimnasioService.findById(externObject.getIdGimnasio()));
+            localObject.setCalidad(calidadService.findById(externObject.getIdCalidad()));
+            localObject.setPais(paisService.findById(externObject.getIdPais()));
+            localObject.setCinturon(cinturonService.findById(externObject.getIdCinturon()));
+            localObject.setFechaAlta(externObject.getFechaAlta());
+            localObject.setFechaModificacion(externObject.getFechaModificacion());
+            localObject.setUsernameModificacione(externObject.getUsernameModificacione());
+            localObject.setCorreo(externObject.getCorreo());
+            localObject.setMenor(externObject.isMenor());
+            localObject.setDniMenor(externObject.getDniMenor());
+            localObject.setUsernameACargo(externObject.getUsernameACargo());
+            localObject.setDomicilioCalle(externObject.getDomicilioCalle());
+            localObject.setDomicilioNumero(externObject.getDomicilioNumero());
+            localObject.setDomicilioOtros(externObject.getDomicilioOtros());
+            localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
+            localObject.setDomicilioCp(externObject.getDomicilioCp());
+            localObject.setInclusivo(externObject.isInclusivo());
+            localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
+        }
 
         return localObject;
     }
 
     public User model2Entity(UserModel externObject) {
         User localObject = new User();
-        localObject.setUsername(externObject.getUsername());
-        localObject.setPassword(externObject.getPassword());
-        localObject.setEnabled(externObject.isEnabled());
-        localObject.setName(externObject.getName());
-        localObject.setLastname(externObject.getLastname());
-        localObject.setSecondLastname(externObject.getSecondLastname());
-        localObject.setSexo(externObject.getSexo());
-        localObject.setFechaNacimiento(externObject.getFechaNacimiento());
-        if (externObject.getGimnasio() != null) {
-            localObject.setIdGimnasio(externObject.getGimnasio().getId());
+        if (externObject != null) {
+            localObject.setUsername(externObject.getUsername());
+            localObject.setPassword(externObject.getPassword());
+            localObject.setEnabled(externObject.isEnabled());
+            localObject.setName(externObject.getName());
+            localObject.setLastname(externObject.getLastname());
+            localObject.setSecondLastname(externObject.getSecondLastname());
+            localObject.setSexo(externObject.getSexo());
+            localObject.setFechaNacimiento(externObject.getFechaNacimiento());
+            if (externObject.getGimnasio() != null) {
+                localObject.setIdGimnasio(externObject.getGimnasio().getId());
+            }
+            if (externObject.getCalidad() != null) {
+                localObject.setIdCalidad(externObject.getCalidad().getId());
+            }
+            if (externObject.getPais() != null) {
+                localObject.setIdPais(externObject.getPais().getId());
+            }
+            if (externObject.getCinturon() != null) {
+                localObject.setIdCinturon(externObject.getCinturon().getId());
+            }
+            localObject.setFechaAlta(externObject.getFechaAlta());
+            localObject.setFechaModificacion(externObject.getFechaModificacion());
+            localObject.setUsernameModificacione(externObject.getUsernameModificacione());
+            localObject.setCorreo(externObject.getCorreo());
+            localObject.setMenor(externObject.isMenor());
+            localObject.setDniMenor(externObject.getDniMenor());
+            localObject.setUsernameACargo(externObject.getUsernameACargo());
+            localObject.setDomicilioCalle(externObject.getDomicilioCalle());
+            localObject.setDomicilioNumero(externObject.getDomicilioNumero());
+            localObject.setDomicilioOtros(externObject.getDomicilioOtros());
+            localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
+            localObject.setDomicilioCp(externObject.getDomicilioCp());
+            localObject.setInclusivo(externObject.isInclusivo());
         }
-        if (externObject.getCalidad() != null) {
-            localObject.setIdCalidad(externObject.getCalidad().getId());
-        }
-        if (externObject.getPais() != null) {
-            localObject.setIdPais(externObject.getPais().getId());
-        }
-        if (externObject.getCinturon() != null) {
-            localObject.setIdCinturon(externObject.getCinturon().getId());
-        }
-        localObject.setFechaAlta(externObject.getFechaAlta());
-        localObject.setFechaModificacion(externObject.getFechaModificacion());
-        localObject.setUsernameModificacione(externObject.getUsernameModificacione());
-        localObject.setCorreo(externObject.getCorreo());
-        localObject.setMenor(externObject.isMenor());
-        localObject.setDniMenor(externObject.getDniMenor());
-        localObject.setUsernameACargo(externObject.getUsernameACargo());
-        localObject.setDomicilioCalle(externObject.getDomicilioCalle());
-        localObject.setDomicilioNumero(externObject.getDomicilioNumero());
-        localObject.setDomicilioOtros(externObject.getDomicilioOtros());
-        localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
-        localObject.setDomicilioCp(externObject.getDomicilioCp());
-        localObject.setInclusivo(externObject.isInclusivo());
-
         return localObject;
     }
 }

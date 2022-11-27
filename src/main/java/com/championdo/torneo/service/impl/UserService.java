@@ -5,6 +5,7 @@ import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
+import com.championdo.torneo.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import java.util.*;
 
 @Service("userService")
@@ -37,9 +40,23 @@ public class UserService implements UserDetailsService {
 		return buildUser(user, authorities);
 	}
 
-	public com.championdo.torneo.entity.User addOrUpdate(UserModel usuario) {
+	public com.championdo.torneo.entity.User altaNuevoUsuario(UserModel userModel, String rol) throws PersistenceException {
+		userModel.setEnabled(true);
+		userModel.setFechaAlta(new Date());
+		userModel.setUsername(userModel.getUsername().toUpperCase());
+		userModel.setPassword(encodePassword(userModel.getPassword()));
+		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
+		userRoleRepository.save(new UserRole(user, rol));
+		return user;
+	}
+
+	public com.championdo.torneo.entity.User addOrUpdate(UserModel usuario) throws PersistenceException {
 		usuario.setFechaModificacion(new Date());
-		return userRepository.save(mapperUser.model2Entity(usuario));
+		try {
+			return userRepository.save(mapperUser.model2Entity(usuario));
+		} catch (Exception exception) {
+			throw new PersistenceException();
+		}
 	}
 
 	public boolean delete(String username) {
@@ -62,7 +79,7 @@ public class UserService implements UserDetailsService {
 		return bCryptPasswordEncoder.matches(newPass, oldPass);
 	}
 
-	public String generatePassword(String newPass) {
+	public String encodePassword(String newPass) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder.encode(newPass);
 	}
@@ -75,8 +92,12 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUsername(username);
 	}
 
-	public UserModel findModelByUsername(String username) {
-		return mapperUser.entity2Model(userRepository.findByUsername(username));
+	public UserModel findModelByUsername(String username) throws NoResultException {
+		com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new NoResultException();
+		}
+		return mapperUser.entity2Model(user);
 	}
 
 	public com.championdo.torneo.entity.User cargarUsuarioCompleto(ModelAndView modelAndView) {

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,7 +26,7 @@ import java.util.List;
 public class PdfServiceImpl implements PdfService {
 
     @Override
-    public void generarPdf(PdfModel pdfModel) {
+    public File generarPdf(PdfModel pdfModel) {
 
 
         try (PDDocument document = new PDDocument()) {
@@ -152,9 +153,11 @@ public class PdfServiceImpl implements PdfService {
             contentStream.close();
 
             document.save(nombreArchivo(pdfModel, true, true));
+            return new File(nombreArchivo(pdfModel, true, true));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdf", e.getMessage(), PdfServiceImpl.class);
         }
+        return null;
 
     }
 
