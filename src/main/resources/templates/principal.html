@@ -10,6 +10,8 @@
 
 	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
 
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+
 	<title>Página principal</title>
 
 	<script type="text/javascript">
@@ -21,14 +23,6 @@
 				return true;
 			}
 			return false;
-		}
-		function getDomain(fullUrl) {
-      		const myArray = fullUrl.split("/");
-      		let textOut = "";
-		 	for (let i = 0; i < 3; i++) {
-				textOut += myArray[i] + "/";
-		  	}
-		  	return textOut;
 		}
 	</script>
 </head>
@@ -81,9 +75,10 @@
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización inclusiva</button><br>
 			</a>
 
-			<button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
+				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
+			</a>
 		</section>
-
 		
 	</div>
 

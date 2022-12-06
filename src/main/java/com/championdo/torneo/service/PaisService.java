@@ -16,4 +16,8 @@ public interface PaisService {
 	public abstract void update(PaisModel paisModel);
 
 	public abstract void delete(int idPais);
+
+	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+
+	public abstract int findMaxPosition();
 }

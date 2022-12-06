@@ -4,6 +4,7 @@ public class PaisModel {
 
     private int id;
     private String nombre;
+    private int position;
 
     public int getId() {
         return id;
@@ -21,11 +22,20 @@ public class PaisModel {
         this.nombre = nombre;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
-        return "Pais{" +
+        return "PaisModel{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

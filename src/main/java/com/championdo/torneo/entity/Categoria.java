@@ -35,6 +35,9 @@ public class Categoria {
     @Column(name = "infantil", nullable = false)
     private boolean infantil;
 
+    @Column(name = "position")
+    private int position;
+
     public int getId() {
         return id;
     }
@@ -107,6 +110,14 @@ public class Categoria {
         this.infantil = infantil;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
         return "Categoria{" +
@@ -119,6 +130,7 @@ public class Categoria {
                 ", idPoomsae=" + idPoomsae +
                 ", inclusivo=" + inclusivo +
                 ", infantil=" + infantil +
+                ", position=" + position +
                 '}';
     }
 }

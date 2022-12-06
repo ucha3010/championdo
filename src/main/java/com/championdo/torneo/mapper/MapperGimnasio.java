@@ -12,6 +12,15 @@ public class MapperGimnasio {
         localObject.setId(externObject.getId());
         localObject.setNombre(externObject.getNombre());
         localObject.setDireccion(externObject.getDireccion());
+        localObject.setPosition(externObject.getPosition());
+        return localObject;
+    }
+    public Gimnasio model2Entity(GimnasioModel externObject) {
+        Gimnasio localObject = new Gimnasio();
+        localObject.setId(externObject.getId());
+        localObject.setNombre(externObject.getNombre());
+        localObject.setDireccion(externObject.getDireccion());
+        localObject.setPosition(externObject.getPosition());
         return localObject;
     }
 }

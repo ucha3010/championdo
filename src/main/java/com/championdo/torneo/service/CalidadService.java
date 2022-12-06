@@ -13,12 +13,14 @@ public interface CalidadService {
 	
 	public abstract CalidadModel findById(int id);
 	
-	public abstract Set<CalidadModel> findByNombre(String nombre);
-	
 	public abstract void add(CalidadModel calidadModel);
 	
 	public abstract void update(CalidadModel calidadModel);
 
 	public abstract void delete(int idCalidad);
+
+	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+
+	public abstract int findMaxPosition();
 
 }

@@ -17,6 +17,9 @@ public class Calidad {
     @Column(name = "otro", nullable = true, length = 200)
     private String otro;
 
+    @Column(name = "position")
+    private int position;
+
     public int getId() {
         return id;
     }
@@ -41,12 +44,21 @@ public class Calidad {
         this.otro = otro;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
         return "Calidad{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", otro='" + otro + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

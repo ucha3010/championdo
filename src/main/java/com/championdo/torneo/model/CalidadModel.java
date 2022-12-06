@@ -5,6 +5,7 @@ public class CalidadModel {
     private int id;
     private String nombre;
     private String otro;
+    private int position;
 
     public int getId() {
         return id;
@@ -30,12 +31,21 @@ public class CalidadModel {
         this.otro = otro;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
-        return "Calidad{" +
+        return "CalidadModel{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", otro='" + otro + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

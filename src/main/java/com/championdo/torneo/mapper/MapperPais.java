@@ -11,6 +11,14 @@ public class MapperPais {
         PaisModel localObject = new PaisModel();
         localObject.setId(externObject.getId());
         localObject.setNombre(externObject.getNombre());
+        localObject.setPosition(externObject.getPosition());
+        return localObject;
+    }
+    public Pais model2Entity(PaisModel externObject) {
+        Pais localObject = new Pais();
+        localObject.setId(externObject.getId());
+        localObject.setNombre(externObject.getNombre());
+        localObject.setPosition(externObject.getPosition());
         return localObject;
     }
 }

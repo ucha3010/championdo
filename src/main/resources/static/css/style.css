@@ -58,3 +58,15 @@ a:link, a:visited,  a:hover, a:active
 .displayNone {
     display: none;
 }
+
+.move {
+    cursor: move;
+}
+
+.addBackground {
+    background: #ddeedd;
+}
+
+.removeBackground {
+    background: #f7cac9;
+}

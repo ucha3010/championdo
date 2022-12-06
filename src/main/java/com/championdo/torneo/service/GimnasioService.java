@@ -16,4 +16,8 @@ public interface GimnasioService {
 	public abstract void update(GimnasioModel gimnasioModel);
 
 	public abstract void delete(int idGimnasio);
+
+	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+
+	public abstract int findMaxPosition();
 }

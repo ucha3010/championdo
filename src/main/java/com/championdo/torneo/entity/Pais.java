@@ -14,6 +14,9 @@ public class Pais {
     @Column(name = "nombre", nullable = false, length = 20)
     private String nombre;
 
+    @Column(name = "position")
+    private int position;
+
     public int getId() {
         return id;
     }
@@ -30,11 +33,20 @@ public class Pais {
         this.nombre = nombre;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
         return "Pais{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

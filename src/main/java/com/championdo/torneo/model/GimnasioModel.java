@@ -5,6 +5,7 @@ public class GimnasioModel {
     private int id;
     private String nombre;
     private String direccion;
+    private int position;
 
     public int getId() {
         return id;
@@ -30,12 +31,21 @@ public class GimnasioModel {
         this.direccion = direccion;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
-        return "Gimnasio{" +
+        return "GimnasioModel{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", direccion='" + direccion + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

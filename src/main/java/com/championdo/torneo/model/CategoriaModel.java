@@ -11,6 +11,7 @@ public class CategoriaModel {
     private PoomsaeModel poomsae;
     private boolean inclusivo;
     private boolean infantil;
+    private int position;
 
     public int getId() {
         return id;
@@ -84,6 +85,14 @@ public class CategoriaModel {
         this.infantil = infantil;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
         return "CategoriaModel{" +
@@ -96,6 +105,7 @@ public class CategoriaModel {
                 ", poomsae=" + poomsae +
                 ", inclusivo=" + inclusivo +
                 ", infantil=" + infantil +
+                ", position=" + position +
                 '}';
     }
 }

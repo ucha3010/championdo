@@ -5,6 +5,7 @@ public class CinturonModel {
     private int id;
     private String color;
     private String categoria;
+    private int position;
 
     public int getId() {
         return id;
@@ -30,12 +31,21 @@ public class CinturonModel {
         this.categoria = categoria;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
-        return "Cinturon{" +
+        return "CinturonModel{" +
                 "id=" + id +
                 ", color='" + color + '\'' +
                 ", categoria='" + categoria + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

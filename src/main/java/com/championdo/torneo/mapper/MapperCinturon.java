@@ -11,6 +11,15 @@ public class MapperCinturon {
         localObject.setId(externObject.getId());
         localObject.setColor((externObject.getColor()));
         localObject.setCategoria(externObject.getCategoria());
+        localObject.setPosition(externObject.getPosition());
+        return localObject;
+    }
+    public Cinturon model2Entity(CinturonModel externObject) {
+        Cinturon localObject = new Cinturon();
+        localObject.setId(externObject.getId());
+        localObject.setColor((externObject.getColor()));
+        localObject.setCategoria(externObject.getCategoria());
+        localObject.setPosition(externObject.getPosition());
         return localObject;
     }
 }

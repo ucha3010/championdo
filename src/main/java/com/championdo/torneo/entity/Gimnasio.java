@@ -17,6 +17,9 @@ public class Gimnasio {
     @Column(name = "direccion", nullable = true, length = 200)
     private String direccion;
 
+    @Column(name = "position")
+    private int position;
+
     public int getId() {
         return id;
     }
@@ -41,12 +44,21 @@ public class Gimnasio {
         this.direccion = direccion;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
         return "Gimnasio{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", direccion='" + direccion + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service()
 public class CalidadServiceImpl implements CalidadService {
@@ -24,7 +23,7 @@ public class CalidadServiceImpl implements CalidadService {
     @Override
     public List<CalidadModel> findAll() {
         List<CalidadModel> calidadModelList = new ArrayList<>();
-        for (Calidad calidad: calidadRepository.findAll()) {
+        for (Calidad calidad: calidadRepository.findAllByOrderByPositionAsc()) {
             calidadModelList.add(mapperCalidad.entity2Model(calidad));
         }
         return calidadModelList;
@@ -40,22 +39,57 @@ public class CalidadServiceImpl implements CalidadService {
     }
 
     @Override
-    public Set<CalidadModel> findByNombre(String nombre) {
-        return null;
-    }
-
-    @Override
     public void add(CalidadModel calidadModel) {
-
+        calidadRepository.save(mapperCalidad.model2Entity(calidadModel));
     }
 
     @Override
     public void update(CalidadModel calidadModel) {
-
+        calidadRepository.save(mapperCalidad.model2Entity(calidadModel));
     }
 
     @Override
     public void delete(int idCalidad) {
+        calidadRepository.deleteById(idCalidad);
+        List<Calidad> calidadList = calidadRepository.findAllByOrderByPositionAsc();
+        for (int i = 0; i < calidadList.size(); i++) {
+            if (calidadList.get(i).getPosition() != i) {
+                calidadList.get(i).setPosition(i);
+                calidadRepository.save(calidadList.get(i));
+            }
+        }
+    }
 
+    @Override
+    public void dragOfPosition(int initialPosition, int finalPosition) {
+        Calidad calidad = calidadRepository.findByPosition(initialPosition);
+        if (initialPosition > finalPosition) {
+            for (int i = initialPosition - 1; i >= finalPosition; i--) {
+                moveItem(i, true);
+            }
+        }
+        if (initialPosition < finalPosition) {
+            for (int i = initialPosition + 1; i <= finalPosition; i++) {
+                moveItem(i, false);
+            }
+        }
+        calidad.setPosition(finalPosition);
+        calidadRepository.save(calidad);
+    }
+
+    @Override
+    public int findMaxPosition() {
+        Calidad calidad = calidadRepository.findTopByOrderByPositionDesc();
+        if (calidad != null) {
+            return calidad.getPosition();
+        } else {
+            return -1;
+        }
+    }
+
+    private void moveItem(int position, boolean moveUp) {
+        Calidad calidad = calidadRepository.findByPosition(position);
+        calidad.setPosition(position + (moveUp ? 1 : -1));
+        calidadRepository.save(calidad);
     }
 }
