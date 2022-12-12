@@ -31,7 +31,7 @@
 					<label for="nombre">Nombre</label>
 				</div>
 				<div class="col-xs-7 col-md-7">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.name}" id="nombre" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.nombreAutorizador}" id="nombre" class="form-control" disabled/>
 				</div>
 				<div class="col-xs-2 col-md-1">
 					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
@@ -45,7 +45,7 @@
 					<label for="apellido1">Primer apellido</label>
 				</div>
 				<div class="col-xs-7 col-md-7">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.lastname}" id="apellido1" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.apellido1Autorizador}" id="apellido1" class="form-control" disabled/>
 				</div>
 				<div class="col-xs-2 col-md-1">
 					<form action="#" th:action="@{/formulario/descargarPdf}"th:object="${pdfModel}" method="POST">
@@ -66,7 +66,7 @@
 					<label for="apellido2">Segundo apellido</label>
 				</div>
 				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.secondLastname}" id="apellido2" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.apellido2Autorizador}" id="apellido2" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -77,7 +77,7 @@
 					<label for="dni">DNI</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.username}" id="dni" class="form-control" disabled	/>
+					<input type="text" th:field="*{inscripcion.dniAutorizador}" id="dni" class="form-control" disabled	/>
 				</div>
 				<div class="col-xs-5 col-md-5">
 				</div>
@@ -90,7 +90,7 @@
 					<label for="idCalidad">En calidad de</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.calidad.nombre}" id="idCalidad" class="form-control" disabled	/>
+					<input type="text" th:field="*{inscripcion.calidad}" id="idCalidad" class="form-control" disabled	/>
 				</div>
 				<div class="col-xs-5 col-md-5">
 				</div>
@@ -106,7 +106,7 @@
 					<label for="domicilioCalle">Tipo y nombre vía</label>
 				</div>
 				<div class="col-xs-6">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.domicilioCalle}" id="domicilioCalle" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.domicilioCalleAutorizador}" id="domicilioCalle" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -117,7 +117,7 @@
 					<label for="domicilioNumero">Número</label>
 				</div>
 				<div class="col-xs-6">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.domicilioNumero}" id="domicilioNumero" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.domicilioNumeroAutorizador}" id="domicilioNumero" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -128,7 +128,7 @@
 					<label for="domicilioOtros">Otros datos</label>
 				</div>
 				<div class="col-xs-6">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.domicilioOtros}" id="domicilioOtros" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.domicilioOtrosAutorizador}" id="domicilioOtros" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -139,7 +139,7 @@
 					<label for="domicilioLocalidad">Localidad</label>
 				</div>
 				<div class="col-xs-6">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.domicilioLocalidad}" id="domicilioLocalidad" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.domicilioLocalidadAutorizador}" id="domicilioLocalidad" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -150,7 +150,7 @@
 					<label for="domicilioCp">Código postal</label>
 				</div>
 				<div class="col-xs-6">
-					<input type="text" th:field="*{inscripcion.usuarioAutorizador.domicilioCp}" id="domicilioCp" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.domicilioCpAutorizador}" id="domicilioCp" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -162,7 +162,7 @@
 					<label for="menorNombre">Nombre</label>
 				</div>
 				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.name}" id="menorNombre" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.nombreInscripto}" id="menorNombre" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -173,7 +173,7 @@
 					<label for="menorApellido1">Primer apellido</label>
 				</div>
 				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.lastname}" id="menorApellido1" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.apellido1Inscripto}" id="menorApellido1" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -184,7 +184,7 @@
 					<label for="menorApellido2">Segundo apellido</label>
 				</div>
 				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.secondLastname}" id="menorApellido2" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.apellido2Inscripto}" id="menorApellido2" class="form-control" disabled/>
 				</div>
 			</div>
 
@@ -195,7 +195,7 @@
 					<label for="menorSexo">Sexo</label>
 				</div>
 				<div class="col-xs-3 col-md-2">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.sexo}" id="menorSexo" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.sexoInscripto}" id="menorSexo" class="form-control" disabled/>
 				</div>
 				<div class="col-xs-6">
 				</div>
@@ -208,7 +208,7 @@
 					<label for="menorDni">DNI</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.username}" id="menorDni" class="form-control" disabled/>
+					<input type="text" th:field="*{inscripcion.dniInscripto}" id="menorDni" class="form-control" disabled/>
 				</div>
 				<div class="col-xs-5 col-md-5">
 				</div>
@@ -221,7 +221,7 @@
 					<label for="fechaNacimiento">Fecha de nacimiento</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<span th:text="${#calendars.format(inscripcion.usuarioInscripto.fechaNacimiento,'dd/MM/yyyy')}" id="fechaNacimiento"></span>
+					<span th:text="${#calendars.format(inscripcion.fechaNacimientoInscripto,'dd/MM/yyyy')}" id="fechaNacimiento"></span>
 				</div>
 				<div class="col-xs-5">
 				</div>
@@ -234,7 +234,7 @@
 					<label for="idPais">País</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.pais.nombre}" id="idPais" class="form-control" disabled />
+					<input type="text" th:field="*{inscripcion.pais}" id="idPais" class="form-control" disabled />
 				</div>
 				<div class="col-xs-5">
 				</div>
@@ -247,7 +247,7 @@
 					<label for="idGimnasio">Gimnasio</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.gimnasio.nombre}" id="idGimnasio" class="form-control" disabled />
+					<input type="text" th:field="*{inscripcion.gimnasio}" id="idGimnasio" class="form-control" disabled />
 				</div>
 				<div class="col-xs-5">
 				</div>
@@ -260,7 +260,7 @@
 					<label for="idCinturon">Cinturón actual</label>
 				</div>
 				<div class="col-xs-4 col-md-3">
-					<input type="text" th:field="*{inscripcion.usuarioInscripto.cinturon.color}" id="idCinturon" class="form-control" disabled />
+					<input type="text" th:field="*{inscripcion.cinturon}" id="idCinturon" class="form-control" disabled />
 				</div>
 				<div class="col-xs-5">
 				</div>
@@ -282,13 +282,13 @@
 				<label for="idCategoria">Categoría</label>
 			</div>
 			<div class="col-xs-2 col-md-3">
-				<input type="text" th:field="*{inscripcion.categoria.nombre}" id="idCategoria" class="form-control" disabled />
+				<input type="text" th:field="*{inscripcion.categoria}" id="idCategoria" class="form-control" disabled />
 			</div>
 			<div class="col-xs-3 col-md-2 text-center">
 				<label for="idPoomsae">Poomsae</label>
 			</div>
 			<div class="col-xs-4 col-md-5">
-				<input type="text" th:field="*{inscripcion.categoria.poomsae.nombre}" id="idPoomsae" class="form-control" disabled />
+				<input type="text" th:field="*{inscripcion.poomsae}" id="idPoomsae" class="form-control" disabled />
 			</div>
 		</div>
 

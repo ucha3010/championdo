@@ -2,6 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.ClaveUsuarioModel;
+import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.model.UserRoleModel;
 import com.championdo.torneo.service.FormularioService;
@@ -15,14 +16,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/usuario")
@@ -186,6 +185,47 @@ public class UsuarioController {
 		modelAndView.addObject("reseteoClaveCorrecto",mensaje);
 		LoggerMapper.log(Level.INFO, "resetearClaveUsuario", modelAndView, getClass());
 		return listaUsuarios(modelAndView);
+	}
+
+	@GetMapping("/userList")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView userList(ModelAndView modelAndView) {
+		modelAndView.setViewName("adminUser");
+		modelAndView.addObject("userList", userService.findAllModel());
+		modelAndView.addObject("userRoleList", userRoleService.findDistinctByRole());
+		LoggerMapper.log(Level.INFO, "userList", modelAndView, this.getClass());
+		return modelAndView;
+	}
+
+	@GetMapping("/enabled/{username}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
+		UserModel usuario = userService.findModelByUsername(username);
+		usuario.setEnabled(!usuario.isEnabled());
+		com.championdo.torneo.entity.User user = userService.cargarUsuarioCompleto(modelAndView);
+		usuario.setUsernameModificacione(user.getUsername());
+		userService.addOrUpdate(usuario);
+		modelAndView.addObject("updateOK", "Habilitación de " + usuario.getName()
+				+ " " + usuario.getLastname()
+				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
+				+ " actualizada correctamente");
+		return userList(modelAndView);
+	}
+
+	@GetMapping("/rol/{username}/{rol}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView update(ModelAndView modelAndView, @PathVariable String username, @PathVariable String rol) {
+		UserRole userRole = new UserRole();
+		com.championdo.torneo.entity.User user = userService.findByUsername(username);
+		userRole.setUser(user);
+		userRole.setRole(rol);
+		userRoleService.deleteByUsername(username);
+		userRoleService.save(userRole);
+		modelAndView.addObject("updateOK", "Rol de " + user.getName()
+				+ " " + user.getLastname()
+				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(user.getSecondLastname()) ? " " + user.getSecondLastname() : "")
+				+ " actualizado correctamente");
+		return userList(modelAndView);
 	}
 
 	private ModelAndView addOrUpdateUsuario(UserModel userModel, String metodo) {

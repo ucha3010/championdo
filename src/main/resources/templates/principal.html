@@ -50,7 +50,7 @@
 						Inscripción propia realizada el <span th:text="${#calendars.format(inscripcion.fecha,'dd/MM/yyyy HH:mm')}"></span>
 					</button>
 				</a>
-				<a th:attr="onclick=|return confirmDelete('${inscripcion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
+				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${inscripcion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 			</div>
 			<div th:if="${inscripcion != null}" th:each="autorizacion : ${inscripcion.autorizaciones}">
 				<a href="#" th:href="@{/formulario/getMenorOInclisivo/__${autorizacion.id}__}" class="textDecoration-none">
@@ -58,7 +58,7 @@
 						Inscripción de <span th:text="${autorizacion.nombre}"></span> <span th:text="${autorizacion.apellido1}"></span> <span th:text="${autorizacion.apellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fecha,'dd/MM/yyyy HH:mm')}"></span>
 					</button>
 				</a>
-				<a th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
+				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 			</div>
 		</section>
 
@@ -68,7 +68,7 @@
 			</a>
 
 			<a href="#" th:href="@{/formulario/menorOInclisivo/true}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización menor de edad</button><br>
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización menor de 16 años</button><br>
 			</a>
 
 			<a href="#" th:href="@{/formulario/menorOInclisivo/false}" class="textDecoration-none">

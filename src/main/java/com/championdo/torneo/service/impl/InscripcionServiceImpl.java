@@ -2,19 +2,17 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Inscripcion;
 import com.championdo.torneo.mapper.MapperInscripcion;
-import com.championdo.torneo.model.InscripcionModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
-import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.repository.InscripcionRepository;
-import com.championdo.torneo.service.CategoriaService;
-import com.championdo.torneo.service.InscripcionService;
-import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,18 +22,37 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Autowired
     private InscripcionRepository inscripcionRepository;
-
     @Autowired
     private MapperInscripcion mapperInscripcion;
-
+    @Autowired
+    private CalidadService calidadService;
     @Autowired
     private CategoriaService categoriaService;
+    @Autowired
+    private CinturonService cinturonService;
+    @Autowired
+    private GimnasioService gimnasioService;
+    @Autowired
+    private PaisService paisService;
     @Autowired
     private UtilService utilService;
 
     @Override
+    public List<InscripcionModel> findAll() {
+        List<InscripcionModel> inscripcionModelList = new ArrayList<>();
+        for (Inscripcion inscripcion: inscripcionRepository.findAllByOrderByIdDesc()) {
+            inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
+        }
+        return inscripcionModelList;
+    }
+
+    @Override
     public InscripcionModel findById(int id) {
-        return mapperInscripcion.entity2Model(inscripcionRepository.getById(id));
+        try {
+            return mapperInscripcion.entity2Model(inscripcionRepository.getById(id));
+        } catch (EntityNotFoundException e) {
+            return new InscripcionModel();
+        }
     }
 
     @Override
@@ -60,9 +77,6 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public InscripcionModel add(InscripcionModel inscripcionModel) {
-        inscripcionModel.setFechaInscripcion(new Date());
-        inscripcionModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO));
-        inscripcionModel.setCategoria(categoriaService.calcularCategoria(inscripcionModel.getUsuarioInscripto()));
         InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.save(mapperInscripcion.model2Entity(inscripcionModel)));
         LoggerMapper.log(Level.INFO, "add", inscripcion, getClass());
         return inscripcion;
@@ -70,10 +84,8 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public InscripcionModel addPropia(UserModel userModel) {
-        InscripcionModel inscripcionModel = new InscripcionModel();
+        InscripcionModel inscripcionModel = fillInscripcionModel(userModel, null);
         inscripcionModel.setInscripcionPropia(true);
-        inscripcionModel.setUsuarioAutorizador(null);
-        inscripcionModel.setUsuarioInscripto(userModel);
         return add(inscripcionModel);
     }
 
@@ -91,24 +103,20 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     private InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
-        InscripcionModel inscripcionModel = new InscripcionModel();
+        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador);
         inscripcionModel.setInscripcionMenor(true);
-        inscripcionModel.setUsuarioAutorizador(usuarioAutorizador);
-        inscripcionModel.setUsuarioInscripto(usuarioInscripto);
         return add(inscripcionModel);
     }
 
     private InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
-        InscripcionModel inscripcionModel = new InscripcionModel();
+        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador);
         inscripcionModel.setInscripcionInclusiva(true);
-        inscripcionModel.setUsuarioAutorizador(usuarioAutorizador);
-        inscripcionModel.setUsuarioInscripto(usuarioInscripto);
         return add(inscripcionModel);
     }
 
     @Override
     public void update(InscripcionModel inscripcionModel) {
-
+        inscripcionRepository.save(mapperInscripcion.model2Entity(inscripcionModel));
     }
 
     @Override
@@ -118,5 +126,73 @@ public class InscripcionServiceImpl implements InscripcionService {
             inscripcionRepository.delete(inscripcion);
         }
         LoggerMapper.log(Level.INFO, "delete", inscripcion, getClass());
+    }
+
+    @Override
+    public void deleteAll() {
+        inscripcionRepository.deleteAll();
+    }
+
+    public UtilModel getDeleteEnable() {
+        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES);
+    }
+
+    @Override
+    public boolean changeValueDeleteEnable() {
+        UtilModel utilModel = getDeleteEnable();
+        Boolean deleteEnable = Boolean.FALSE;
+        if (!StringUtils.isNullOrEmpty(utilModel.getValor())) {
+            deleteEnable = new Boolean(utilModel.getValor());
+        }
+        deleteEnable = !deleteEnable;
+        utilModel.setValor(deleteEnable.toString());
+        utilService.update(utilModel);
+        return deleteEnable;
+    }
+
+    private InscripcionModel fillInscripcionModel(UserModel usuarioInscripto, UserModel usuarioAutorizador) {
+        InscripcionModel inscripcionModel = new InscripcionModel();
+        CategoriaModel categoriaModel = categoriaService.calcularCategoria(usuarioInscripto);
+
+        inscripcionModel.setFechaInscripcion(new Date());
+        inscripcionModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO).getValor());
+        inscripcionModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO).getValor());
+        inscripcionModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO).getValor());
+        inscripcionModel.setCategoria(categoriaModel.getNombre());
+
+        inscripcionModel.setNombreInscripto(usuarioInscripto.getName());
+        inscripcionModel.setApellido1Inscripto(usuarioInscripto.getLastname());
+        inscripcionModel.setApellido2Inscripto(usuarioInscripto.getSecondLastname());
+        inscripcionModel.setDniInscripto(usuarioInscripto.getUsername());
+        inscripcionModel.setFechaNacimientoInscripto(usuarioInscripto.getFechaNacimiento());
+        inscripcionModel.setSexoInscripto(usuarioInscripto.getSexo());
+        inscripcionModel.setDomicilioCalleInscripto(usuarioInscripto.getDomicilioCalle());
+        inscripcionModel.setDomicilioNumeroInscripto(usuarioInscripto.getDomicilioNumero());
+        inscripcionModel.setDomicilioOtrosInscripto(usuarioInscripto.getDomicilioOtros());
+        inscripcionModel.setDomicilioLocalidadInscripto(usuarioInscripto.getDomicilioLocalidad());
+        inscripcionModel.setDomicilioCpInscripto(usuarioInscripto.getDomicilioCp());
+        inscripcionModel.setGimnasio(gimnasioService.findById(usuarioInscripto.getGimnasio().getId()).getNombre());
+        inscripcionModel.setPais(paisService.findById(usuarioInscripto.getPais().getId()).getNombre());
+        inscripcionModel.setCinturon(cinturonService.findById(usuarioInscripto.getCinturon().getId()).getColor());
+        inscripcionModel.setPoomsae(categoriaModel.getPoomsae().getNombre());
+
+        if (usuarioAutorizador != null) {
+            inscripcionModel.setNombreAutorizador(usuarioAutorizador.getName());
+            inscripcionModel.setApellido1Autorizador(usuarioAutorizador.getLastname());
+            inscripcionModel.setApellido2Autorizador(usuarioAutorizador.getSecondLastname());
+            inscripcionModel.setDniAutorizador(usuarioAutorizador.getUsername());
+            if (StringUtils.isNullOrEmpty(usuarioAutorizador.getCalidad().getOtro())) {
+                inscripcionModel.setCalidad(calidadService.findById(usuarioAutorizador.getCalidad().getId()).getNombre());
+            } else {
+                inscripcionModel.setCalidad(usuarioAutorizador.getCalidad().getOtro());
+            }
+            inscripcionModel.setDomicilioCalleAutorizador(usuarioAutorizador.getDomicilioCalle());
+            inscripcionModel.setDomicilioNumeroAutorizador(usuarioAutorizador.getDomicilioNumero());
+            inscripcionModel.setDomicilioOtrosAutorizador(usuarioAutorizador.getDomicilioOtros());
+            inscripcionModel.setDomicilioLocalidadAutorizador(usuarioAutorizador.getDomicilioLocalidad());
+            inscripcionModel.setDomicilioCpAutorizador(usuarioAutorizador.getDomicilioCp());
+        }
+
+        return inscripcionModel;
     }
 }

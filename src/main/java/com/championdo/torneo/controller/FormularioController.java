@@ -1,7 +1,5 @@
 package com.championdo.torneo.controller;
 
-import com.championdo.torneo.entity.User;
-import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
@@ -20,8 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/formulario")
@@ -83,8 +79,8 @@ public class FormularioController {
             pdfModel = formularioService.getPdf(new UserAutorizacionModel(userModel));
             InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
-            pdfModel.setCategoria(inscripcionModel.getCategoria().getNombre());
-            pdfModel.setPoomsae(inscripcionModel.getCategoria().getPoomsae().getNombre());
+            pdfModel.setCategoria(inscripcionModel.getCategoria());
+            pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdf(pdfModel);
             emailService.sendConfirmation(userModel, file);
         } catch (Exception e) {
@@ -142,8 +138,8 @@ public class FormularioController {
             pdfModel = formularioService.getPdf(userAutorizacionModel);
             InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
-            pdfModel.setCategoria(inscripcionModel.getCategoria().getNombre());
-            pdfModel.setPoomsae(inscripcionModel.getCategoria().getPoomsae().getNombre());
+            pdfModel.setCategoria(inscripcionModel.getCategoria());
+            pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdf(pdfModel);
             emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
         } catch (Exception e) {

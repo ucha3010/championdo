@@ -4,6 +4,7 @@ import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.service.impl.PdfServiceImpl;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import com.sun.xml.internal.ws.client.SenderException;
@@ -122,6 +123,19 @@ class TorneoApplicationTests {
 			e.printStackTrace();
 		}
 		return file;
+	}
+
+	@Test
+	public void getAbsolutePath() {
+		String[] absolute = new String[1];
+		try {
+			File f = new File("program.txt");
+			//absolute = f.getAbsolutePath().split(f.getName());
+		}
+		catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		System.out.println("absolute[0]: " + absolute[0]);
 	}
 
 	}

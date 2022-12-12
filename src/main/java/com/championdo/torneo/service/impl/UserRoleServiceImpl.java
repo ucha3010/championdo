@@ -64,6 +64,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
+    public void deleteByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        for (UserRole userRole : user.getUserRole()) {
+            userRoleRepository.delete(userRole);
+        }
+    }
+
+    @Override
     public void actualizarRoles(UserRoleModel userRoleModel) {
         int elimino = 0;
         int mantengo = 0;
@@ -89,6 +97,20 @@ public class UserRoleServiceImpl implements UserRoleService {
             inserto++;
         }
         LoggerMapper.log(Level.INFO, "actualizarRoles", "Inserto: " + inserto + ", mantengo: " + mantengo + ", elimino: " + elimino, getClass());
+    }
+
+    @Override
+    public List<UserRole> findDistinctByRole() {
+        List<UserRole> userRoleList = userRoleRepository.findAll();
+        List<String> roles = new ArrayList<>();
+        List<UserRole> userRoleListExit = new ArrayList<>();
+        for(UserRole userRole : userRoleList) {
+            if(!roles.contains(userRole.getRole())) {
+                roles.add(userRole.getRole());
+                userRoleListExit.add(userRole);
+            }
+        }
+        return userRoleListExit;
     }
 
     private User findUserByUsername(String username) {

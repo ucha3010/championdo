@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <title>Usuarios</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
+
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+    <script type="text/javascript" th:src="@{/js/table.js}"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+    <script>
+        function changeRole(username){
+            var relativeUrl = "usuario/rol/" + username + "/" + document.getElementById("rolSelect" + username).value;
+            var domain = getDomain(location.href);
+            location.href = domain + relativeUrl;
+        }
+    </script>
+
+</head>
+<body>
+    <section>
+        <div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+            </div>
+            <div class="col-xs-8">
+            </div>
+        </div>
+    </section>
+    <section>
+        <table class="table table-hover sortable">
+            <thead>
+            <tr>
+                <th>
+                    <button>
+                        DNI
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Nombre
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Primer apellido
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Segundo apellido
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Correo
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Fecha alta
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>Habilitado</th>
+                <th>Rol</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${userList}">
+                <td><span th:text="${user.username}"></span></td>
+                <td><span th:text="${user.name}"></span></span></td>
+                <td><span th:text="${user.lastname}"></span></td>
+                <td><span th:text="${user.secondLastname}"></span></td>
+                <td><span th:text="${user.correo}"></span></td>
+                <td><span th:text="${#calendars.format(user.fechaAlta,'dd/MM/yyyy')}"></span></td>
+                <td>
+                    <label class="containercheckbox">
+                        <a href="#" th:href="@{/usuario/enabled/__${user.username}__}">
+                            <input type="checkbox" th:checked="${user.enabled}">
+                            <span class="checkmark"></span>
+                        </a>
+                    </label>
+                </td>
+                <td>
+                    <select th:attr="id=|rolSelect${user.username}|" class="form-control form-control-lg">
+                        <option th:each="unit : ${userRoleList}" th:value="${unit.role}" th:text="${unit.role}" th:selected="${unit.role==user.userRoles[0]}"/>
+                    </select>
+                </td>
+                <td><button class="btn btn-success" th:attr="onclick=|changeRole('${user.username}')|">Guardar</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+            </div>
+            <div class="col-xs-8">
+            </div>
+        </div>
+    </section>
+</body>
+</html>

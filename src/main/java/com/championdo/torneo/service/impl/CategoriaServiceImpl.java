@@ -11,6 +11,7 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +52,11 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaModel findById(int id) {
-        return mapperCategoria.entity2Model(categoriaRepository.getById(id));
+        try {
+            return mapperCategoria.entity2Model(categoriaRepository.getById(id));
+        } catch (EntityNotFoundException e) {
+            return new CategoriaModel();
+        }
     }
 
     @Override

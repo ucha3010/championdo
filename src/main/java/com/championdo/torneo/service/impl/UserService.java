@@ -88,6 +88,15 @@ public class UserService implements UserDetailsService {
 		return userRepository.findAll();
 	}
 
+	public List<UserModel> findAllModel() {
+		List<com.championdo.torneo.entity.User> userList = userRepository.findAll();
+		List<UserModel> userModelList = new ArrayList<>();
+		for(com.championdo.torneo.entity.User user : userList) {
+			userModelList.add(mapperUser.entity2Model(user));
+		}
+		return userModelList;
+	}
+
 	public com.championdo.torneo.entity.User findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}

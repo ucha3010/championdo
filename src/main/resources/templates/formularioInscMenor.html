@@ -10,6 +10,8 @@
 
 	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
 
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+
 	<title>Formulario autorización</title>
 
 	<script type="text/javascript">
@@ -25,7 +27,14 @@
 				}
 			}
 
+			if(document.getElementById('fechaNacimiento').value != '' && edadCumpleEstaAnio() >= 16){
+				document.getElementById('fechaNacimiento').style.borderColor="red";
+				document.getElementById('fechaNacimientoError').innerHTML = "El usuario debe tener menos de 16 años";
+				validado = false;
+			}
+
 			if(validarCalidad() && validado){
+				buttonBlock(document.getElementById('continueButton'));
 				return true;
 			} else {
 				document.getElementById('hayError').innerHTML = "Por favor rellenar campos obligatorios";
@@ -34,6 +43,10 @@
 		}
 
 		function restablecer(){
+			var errorSpan = document.getElementsByName('errorSpan');
+			for (var i = 0; i < errorSpan.length; i++) {
+				errorSpan[i].innerHTML='';
+			}
 			document.getElementById('hayError').innerHTML = '';
 			var campos = document.getElementsByClassName("form-control");
 			for (var i = 0; i < campos.length; i++) {
@@ -44,15 +57,20 @@
 		function evaluarEdad() {
 			if(document.getElementsByName('autorizado.menor')[0].value == 'true'){
 				if(document.getElementById('fechaNacimiento').value != ''){
-					var anioAutorizado = document.getElementById('fechaNacimiento').value.substring(0,4);
-					var today = new Date();
-					var edadAutorizado = today.getFullYear() - anioAutorizado;
+					var edadAutorizado = edadCumpleEstaAnio();
 					if(edadAutorizado == 7 || edadAutorizado == 8) {
 						return true;
 					}
 				}
 			}
 			return false;
+		}
+
+		function edadCumpleEstaAnio(){
+			var anioAutorizado = document.getElementById('fechaNacimiento').value.substring(0,4);
+			var today = new Date();
+			return today.getFullYear() - anioAutorizado;
+
 		}
 
 		function confirmarPreInfantilOMenor(){
@@ -307,10 +325,13 @@
 				<div class="col-xs-4 col-md-3">
 					<input type="date" th:field="*{autorizado.fechaNacimiento}" id="fechaNacimiento" class="form-control" placeholder="Fecha nacimiento" onchange="confirmarPreInfantilOMenor()"/>
 				</div>
-				<div class="col-xs-5">
+				<div class="col-xs-3">
 					<select th:field="*{autorizado.menorEntreCategorias}" id="menorEntreCategorias" class="form-control form-control-lg displayNone">
 						<option th:each="m : ${listaMenorConKicho}" th:value="${m}" th:text="${m}" />
 					</select>
+				</div>
+				<div class="col-xs-2">
+					<span id="fechaNacimientoError" name="errorSpan" class="colorRed"></span>
 				</div>
 			</div>
 
@@ -368,7 +389,7 @@
 				<div class="col-xs-2">
 				</div>
 				<div class="col-xs-2">
-					<button class="btn btn-success" type="submit">Continuar</button>
+					<button class="btn btn-success" id="continueButton" type="submit">Continuar</button>
 				</div>
 				<div class="col-xs-4">
 				</div>

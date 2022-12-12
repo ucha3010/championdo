@@ -8,6 +8,7 @@ import com.championdo.torneo.service.GimnasioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Override
     public GimnasioModel findById(int id) {
-        if (id != 0) {
+        try {
             return mapperGimnasio.entity2Model(gimnasioRepository.getById(id));
-        } else {
+        } catch (EntityNotFoundException e) {
             return new GimnasioModel();
         }
     }

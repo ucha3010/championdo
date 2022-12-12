@@ -8,6 +8,7 @@ public class PdfModel {
     private String domicilio; //calle Mayor 150
     private String localidad; //Madrid (28003) - España
     private String gimnasio; //Championdo
+    private String nombreCampeonato; //CAMPEONATO DE TRES CANTOS
     private String fechaCampeonato; //20/12/2022
     private String direccionCampeonato; //Polideportivo La Luz
     private String calidadDe; //padre
@@ -68,6 +69,14 @@ public class PdfModel {
 
     public void setGimnasio(String gimnasio) {
         this.gimnasio = gimnasio;
+    }
+
+    public String getNombreCampeonato() {
+        return nombreCampeonato;
+    }
+
+    public void setNombreCampeonato(String nombreCampeonato) {
+        this.nombreCampeonato = nombreCampeonato;
     }
 
     public String getFechaCampeonato() {
@@ -183,6 +192,7 @@ public class PdfModel {
                 ", domicilio='" + domicilio + '\'' +
                 ", localidad='" + localidad + '\'' +
                 ", gimnasio='" + gimnasio + '\'' +
+                ", nombreCampeonato='" + nombreCampeonato + '\'' +
                 ", fechaCampeonato='" + fechaCampeonato + '\'' +
                 ", direccionCampeonato='" + direccionCampeonato + '\'' +
                 ", calidadDe='" + calidadDe + '\'' +

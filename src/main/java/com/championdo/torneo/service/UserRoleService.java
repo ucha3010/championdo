@@ -19,7 +19,9 @@ public interface UserRoleService {
 	public abstract void save(UserRole userRole);
 	
 	public abstract void delete(int userRoleId);
+	public abstract void deleteByUsername(String username);
 
 	public abstract void actualizarRoles(UserRoleModel userRoleModel);
+	public abstract List<UserRole> findDistinctByRole();
 
 }

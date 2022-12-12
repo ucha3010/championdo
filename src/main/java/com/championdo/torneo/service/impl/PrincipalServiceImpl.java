@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PrincipalModel;
 import com.championdo.torneo.model.PrincipalUserModel;
+import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -27,7 +28,7 @@ public class PrincipalServiceImpl implements PrincipalService {
         InscripcionModel inscripcionPropia = inscripcionService.findByDniInscripto(dni);
         if (inscripcionPropia != null && inscripcionPropia.getId() != 0) {
             principalModel.setId(inscripcionPropia.getId());
-            principalModel.setUsername(inscripcionPropia.getUsuarioInscripto().getUsername());
+            principalModel.setUsername(inscripcionPropia.getDniInscripto());
             principalModel.setFecha(inscripcionPropia.getFechaInscripcion());
         }
 
@@ -38,9 +39,9 @@ public class PrincipalServiceImpl implements PrincipalService {
             for (InscripcionModel inscripcionAutorizada : inscripcionAutorizadaList) {
                 principalUserModel = new PrincipalUserModel();
                 principalUserModel.setId(inscripcionAutorizada.getId());
-                principalUserModel.setNombre(inscripcionAutorizada.getUsuarioInscripto().getName());
-                principalUserModel.setApellido1(inscripcionAutorizada.getUsuarioInscripto().getLastname());
-                principalUserModel.setApellido2(inscripcionAutorizada.getUsuarioInscripto().getSecondLastname());
+                principalUserModel.setNombre(inscripcionAutorizada.getNombreInscripto());
+                principalUserModel.setApellido1(inscripcionAutorizada.getApellido1Inscripto());
+                principalUserModel.setApellido2(inscripcionAutorizada.getApellido2Inscripto());
                 principalUserModel.setFecha(inscripcionAutorizada.getFechaInscripcion());
                 autorizaciones.add(principalUserModel);
             }
@@ -54,5 +55,10 @@ public class PrincipalServiceImpl implements PrincipalService {
     public void deleteInscripcion(int id) {
         inscripcionService.delete(id);
         LoggerMapper.log(Level.INFO, "deleteInscripcion", "id: " + id, getClass());
+    }
+
+    @Override
+    public UtilModel getDeleteEnable() {
+        return inscripcionService.getDeleteEnable();
     }
 }

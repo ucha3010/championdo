@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,9 +40,9 @@ public class CinturonServiceImpl implements CinturonService {
 
     @Override
     public CinturonModel findById(int id) {
-        if (id != 0) {
+        try {
             return mapperCinturon.entity2Model(cinturonRepository.getById(id));
-        } else {
+        } catch (EntityNotFoundException e) {
             return new CinturonModel();
         }
     }

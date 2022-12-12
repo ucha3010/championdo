@@ -1,16 +1,16 @@
 package com.championdo.torneo.service;
 
 
-import com.championdo.torneo.entity.Util;
+import com.championdo.torneo.model.UtilModel;
+
+import java.util.List;
 
 public interface UtilService {
-	
-	public abstract String findByClave(String clave);
-	
-	public abstract void add(Util util);
-	
-	public abstract void update(Util util);
 
-	public abstract void delete(String clave);
+	public abstract List<UtilModel> findAllCampeonato();
+	
+	public abstract UtilModel findByClave(String clave);
+	
+	public abstract void update(UtilModel utilModel);
 
 }

@@ -101,9 +101,9 @@ function getAge(dateString) {
     return age;
 }
 
-function mayorEdad(fechaNacimiento) {
+function mayorEdad16(fechaNacimiento) {
     var edad = getAge(fechaNacimiento);
-    if(edad >= 18) {
+    if(edad >= 16) {
         return true;
     } else {
         return false;

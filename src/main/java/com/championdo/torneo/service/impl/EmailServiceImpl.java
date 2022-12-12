@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.SendMessage;
 import com.sun.xml.internal.ws.client.SenderException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendNewPassword (UserModel userModel) throws SenderException {
         try {
-            sendMessage.sendEmail(utilService.findByClave("gimnasio.correo"), userModel.getCorreo(),
+            sendMessage.sendEmail(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null);
         } catch (Exception e) {
             throw new SenderException(e);
@@ -36,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, File file) throws SenderException {
         try {
-            sendMessage.sendEmail(utilService.findByClave("gimnasio.correo"), userModel.getCorreo(),
+            sendMessage.sendEmail(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     messageSubject, messageBody, file);
         } catch (Exception e) {
             throw new SenderException(e);

@@ -4,6 +4,7 @@ import com.championdo.torneo.entity.Categoria;
 import com.championdo.torneo.entity.Poomsae;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperPoomsae;
+import com.championdo.torneo.model.PaisModel;
 import com.championdo.torneo.model.PoomsaeModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.PoomsaeRepository;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,11 @@ public class PoomsaeServiceImpl implements PoomsaeService {
 
     @Override
     public PoomsaeModel findById(int id) {
-        return mapperPoomsae.entity2Model(poomsaeRepository.getById(id));
+        try {
+            return mapperPoomsae.entity2Model(poomsaeRepository.getById(id));
+        } catch (EntityNotFoundException e) {
+            return new PoomsaeModel();
+        }
     }
 
     @Override

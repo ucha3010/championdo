@@ -76,8 +76,9 @@ public class FormularioServiceImpl implements FormularioService {
             rellenoCompetidor(menor, pdfModel);
             rellenoMenor(menor, pdfModel);
         }
-        pdfModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO));
-        pdfModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO));
+        pdfModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO).getValor());
+        pdfModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO).getValor());
+        pdfModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO).getValor());
 
         return pdfModel;
     }

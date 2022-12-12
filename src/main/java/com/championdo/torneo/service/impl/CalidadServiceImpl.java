@@ -8,6 +8,7 @@ import com.championdo.torneo.service.CalidadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class CalidadServiceImpl implements CalidadService {
 
     @Override
     public CalidadModel findById(int id) {
-        if (id != 0) {
+        try {
             return mapperCalidad.entity2Model(calidadRepository.getById(id));
-        } else {
+        } catch (EntityNotFoundException e) {
             return new CalidadModel();
         }
     }

@@ -6,3 +6,9 @@ function getDomain(fullUrl) {
     }
     return textOut;
 }
+
+function buttonBlock(button) {
+    button.disabled = true;
+    button.style.opacity = 0.7;
+    button.textContent = 'Procesando...';
+}

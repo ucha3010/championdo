@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <title>Inscripciones</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
+
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+    <script type="text/javascript" th:src="@{/js/table.js}"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+		function confirmDelete(){
+			if(confirm("¿Seguro que desea eliminar TODAS las inscripciones?")){
+				var relativeUrl = "adminInscripcion/deleteAll";
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
+
+    </script>
+
+</head>
+<body>
+    <section>
+        <div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+            </div>
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-danger pull-right" href="#" th:href="@{/adminInscripcion/deleteEnable}"><span th:text="${deleteEnable}"></span></a>
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-danger pull-right" href="#" onclick="return confirmDelete()">Eliminar TODAS</a>
+            </div>
+        </div>
+    </section>
+    <section>
+        <table class="table table-hover sortable">
+            <thead>
+            <tr>
+                <th>
+                    <button>
+                        DNI autorización
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Categoría
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Nombre y Apellidos competidor
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Sexo
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Menor
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Poomsae
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>
+                    <button>
+                        Fecha inscripción
+                        <span aria-hidden="true"></span>
+                    </button>
+                </th>
+                <th>Pagó</th>
+                <th>Fecha de pago</th>
+                <th>Notas</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="insc : ${inscripcionList}">
+                <td>
+                    <span th:if="${insc.inscripcionPropia}" th:text="${insc.dniInscripto}"></span>
+                    <span th:unless="${insc.inscripcionPropia}" th:text="${insc.dniAutorizador}"></span>
+                </td>
+                <td><span th:text="${insc.categoria}"></span></td>
+                <td><span th:text="${insc.nombreInscripto}"></span> <span th:text="${insc.apellido1Inscripto}"></span> <span th:text="${insc.apellido2Inscripto}"></span></td>
+                <td><span th:text="${insc.sexoInscripto}"></span></td>
+                <td>
+                    <span th:if="${insc.inscripcionMenor}" class="colorOrange textAlignCenter">SI</span>
+                    <span th:unless="${insc.inscripcionMenor}"></span>
+                </td>
+                <td><span th:attr="class=${insc.inscripcionInclusiva ? 'colorGreen' : ''}" th:text="${insc.poomsae}"></span></td>
+                <td><span th:text="${#calendars.format(insc.fechaInscripcion,'dd/MM/yyyy')}"></span></td>
+                <td>
+                    <label class="containercheckbox">
+                        <a href="#" th:href="@{/adminInscripcion/pay/__${insc.id}__}">
+                        <input type="checkbox" th:checked="${insc.pagoRealizado}">
+                        <span class="checkmark"></span>
+                        </a>
+                    </label>
+                </td>
+                <form action="#" th:action="@{/adminInscripcion/update}" th:object="${inscripcionModel}" method="post" >
+                    <input type="hidden" name="id" th:value="${insc.id}"/>
+                    <td>
+                        <input th:attr="class=${insc.pagoRealizado ? 'form-control backgroundColorGreen' : 'form-control'}" type="date" th:value="${#calendars.format(insc.fechaPago,'yyyy-MM-dd')}" name="fechaPago" id="fechaPago" placeholder="Fecha de pago"/>
+                    </td>
+                    <td>
+                        <input type="text" th:value="${insc.notas}" name="notas" id="notas" class="form-control" placeholder="Notas" maxlength="1000" th:title="${insc.notas}" />
+                    </td>
+                    <td><button class="btn btn-success" type="submit">Guardar</button></td>
+                </form>
+                <form action="#" th:action="@{/adminInscripcion/descargarPdf}"th:object="${inscripcionModel}" method="POST">
+                    <input type="hidden" name="id" th:value="${insc.id}"/>
+                    <td><button class="btn btn-primary" type="submit">Descargar</button></td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+            </div>
+            <div class="col-xs-8">
+            </div>
+        </div>
+    </section>
+</body>
+</html>

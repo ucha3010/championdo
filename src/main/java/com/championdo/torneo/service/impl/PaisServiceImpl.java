@@ -2,12 +2,14 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Pais;
 import com.championdo.torneo.mapper.MapperPais;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.PaisModel;
 import com.championdo.torneo.repository.PaisRepository;
 import com.championdo.torneo.service.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +33,9 @@ public class PaisServiceImpl implements PaisService {
 
     @Override
     public PaisModel findById(int id) {
-        if (id != 0) {
+        try {
             return mapperPais.entity2Model(paisRepository.getById(id));
-        } else {
+        } catch (EntityNotFoundException e) {
             return new PaisModel();
         }
     }

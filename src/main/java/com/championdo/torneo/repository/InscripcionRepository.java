@@ -11,7 +11,7 @@ import java.util.List;
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Serializable>{
 
     public abstract List<Inscripcion> findByDniAutorizador(String dniAutorizador);
-
     public abstract Inscripcion findByDniInscripto(String dniInscripto);
+    public abstract List<Inscripcion> findAllByOrderByIdDesc();
 
 }

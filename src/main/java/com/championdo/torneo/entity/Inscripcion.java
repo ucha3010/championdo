@@ -13,65 +13,73 @@ public class Inscripcion {
     private boolean inscripcionPropia;
     private boolean inscripcionMenor;
     private boolean inscripcionInclusiva;
-    @Column(name = "fechaInscripcion", nullable = false)
     private Date fechaInscripcion;
-    @Column(name = "fechaCampeonato", nullable = false, length = 10)
+    @Column(name = "fechaCampeonato", length = 10)
     private String fechaCampeonato;
-    private int idCategoria;
+    @Column(name = "nombreCampeonato", length = 200)
+    private String nombreCampeonato;
+    @Column(name = "direccionCampeonato", length = 200)
+    private String direccionCampeonato;
+    @Column(name = "categoria", length = 45)
+    private String categoria;
 
     //Usuario inscripto
-    @Column(name = "nombreInscripto", nullable = false, length = 60)
+    @Column(name = "nombreInscripto", length = 60)
     private String nombreInscripto;
-    @Column(name = "apellido1Inscripto", nullable = false, length = 60)
+    @Column(name = "apellido1Inscripto", length = 60)
     private String apellido1Inscripto;
-    @Column(name = "apellido2Inscripto", nullable = true, length = 60)
+    @Column(name = "apellido2Inscripto", length = 60)
     private String apellido2Inscripto;
-    @Column(name = "dniInscripto", nullable = true, length = 45)
+    @Column(name = "dniInscripto", length = 45)
     private String dniInscripto;
-    @Column(name = "fechaNacimientoInscripto", nullable = false)
     private Date fechaNacimientoInscripto;
     @Column(name = "sexoInscripto", nullable = false, length = 9)
     private String sexoInscripto;
-    @Column(name = "domicilioCalleInscripto", nullable = true, length = 100)
+    @Column(name = "domicilioCalleInscripto", length = 100)
     private String domicilioCalleInscripto;
-    @Column(name = "domicilioNumeroInscripto", nullable = true, length = 30)
+    @Column(name = "domicilioNumeroInscripto", length = 30)
     private String domicilioNumeroInscripto;
-    @Column(name = "domicilioOtrosInscripto", nullable = true, length = 50)
+    @Column(name = "domicilioOtrosInscripto", length = 50)
     private String domicilioOtrosInscripto;
-    @Column(name = "domicilioLocalidadInscripto", nullable = true, length = 50)
+    @Column(name = "domicilioLocalidadInscripto", length = 50)
     private String domicilioLocalidadInscripto;
-    @Column(name = "domicilioCpInscripto", nullable = true, length = 10)
+    @Column(name = "domicilioCpInscripto", length = 10)
     private String domicilioCpInscripto;
-    private int idGimnasio;
-    private int idPais;
-    private int idCinturon;
+    @Column(name = "gimnasio", length = 100)
+    private String gimnasio;
+    @Column(name = "pais", length = 20)
+    private String pais;
+    @Column(name = "cinturon", length = 40)
+    private String cinturon;
+    @Column(name = "poomsae", length = 50)
+    private String poomsae;
 
     //Usuario autorizador
-    @Column(name = "nombreAutorizador", nullable = true, length = 60)
+    @Column(name = "nombreAutorizador", length = 60)
     private String nombreAutorizador;
-    @Column(name = "apellido1Autorizador", nullable = true, length = 60)
+    @Column(name = "apellido1Autorizador", length = 60)
     private String apellido1Autorizador;
-    @Column(name = "apellido2Autorizador", nullable = true, length = 60)
+    @Column(name = "apellido2Autorizador", length = 60)
     private String apellido2Autorizador;
-    @Column(name = "dniAutorizador", nullable = true, length = 45)
+    @Column(name = "dniAutorizador", length = 45)
     private String dniAutorizador;
-    private int idCalidad;
-    @Column(name = "domicilioCalleAutorizador", nullable = true, length = 100)
+    @Column(name = "calidad", length = 20)
+    private String calidad;
+    @Column(name = "domicilioCalleAutorizador", length = 100)
     private String domicilioCalleAutorizador;
-    @Column(name = "domicilioNumeroAutorizador", nullable = true, length = 30)
+    @Column(name = "domicilioNumeroAutorizador", length = 30)
     private String domicilioNumeroAutorizador;
-    @Column(name = "domicilioOtrosAutorizador", nullable = true, length = 50)
+    @Column(name = "domicilioOtrosAutorizador", length = 50)
     private String domicilioOtrosAutorizador;
-    @Column(name = "domicilioLocalidadAutorizador", nullable = true, length = 50)
+    @Column(name = "domicilioLocalidadAutorizador", length = 50)
     private String domicilioLocalidadAutorizador;
-    @Column(name = "domicilioCpAutorizador", nullable = true, length = 10)
+    @Column(name = "domicilioCpAutorizador", length = 10)
     private String domicilioCpAutorizador;
 
     //Datos pago
-    private boolean envioJustificanteEmail;
     private boolean pagoRealizado;
     private Date fechaPago;
-    @Column(name = "notas", columnDefinition = "TEXT", nullable = true)
+    @Column(name = "notas", columnDefinition = "TEXT")
     private String notas;
 
     public int getId() {
@@ -122,12 +130,28 @@ public class Inscripcion {
         this.fechaCampeonato = fechaCampeonato;
     }
 
-    public int getIdCategoria() {
-        return idCategoria;
+    public String getNombreCampeonato() {
+        return nombreCampeonato;
     }
 
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setNombreCampeonato(String nombreCampeonato) {
+        this.nombreCampeonato = nombreCampeonato;
+    }
+
+    public String getDireccionCampeonato() {
+        return direccionCampeonato;
+    }
+
+    public void setDireccionCampeonato(String direccionCampeonato) {
+        this.direccionCampeonato = direccionCampeonato;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getNombreInscripto() {
@@ -218,28 +242,36 @@ public class Inscripcion {
         this.domicilioCpInscripto = domicilioCpInscripto;
     }
 
-    public int getIdGimnasio() {
-        return idGimnasio;
+    public String getGimnasio() {
+        return gimnasio;
     }
 
-    public void setIdGimnasio(int idGimnasio) {
-        this.idGimnasio = idGimnasio;
+    public void setGimnasio(String gimnasio) {
+        this.gimnasio = gimnasio;
     }
 
-    public int getIdPais() {
-        return idPais;
+    public String getPais() {
+        return pais;
     }
 
-    public void setIdPais(int idPais) {
-        this.idPais = idPais;
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
-    public int getIdCinturon() {
-        return idCinturon;
+    public String getCinturon() {
+        return cinturon;
     }
 
-    public void setIdCinturon(int idCinturon) {
-        this.idCinturon = idCinturon;
+    public void setCinturon(String cinturon) {
+        this.cinturon = cinturon;
+    }
+
+    public String getPoomsae() {
+        return poomsae;
+    }
+
+    public void setPoomsae(String poomsae) {
+        this.poomsae = poomsae;
     }
 
     public String getNombreAutorizador() {
@@ -274,12 +306,12 @@ public class Inscripcion {
         this.dniAutorizador = dniAutorizador;
     }
 
-    public int getIdCalidad() {
-        return idCalidad;
+    public String getCalidad() {
+        return calidad;
     }
 
-    public void setIdCalidad(int idCalidad) {
-        this.idCalidad = idCalidad;
+    public void setCalidad(String calidad) {
+        this.calidad = calidad;
     }
 
     public String getDomicilioCalleAutorizador() {
@@ -322,14 +354,6 @@ public class Inscripcion {
         this.domicilioCpAutorizador = domicilioCpAutorizador;
     }
 
-    public boolean isEnvioJustificanteEmail() {
-        return envioJustificanteEmail;
-    }
-
-    public void setEnvioJustificanteEmail(boolean envioJustificanteEmail) {
-        this.envioJustificanteEmail = envioJustificanteEmail;
-    }
-
     public boolean isPagoRealizado() {
         return pagoRealizado;
     }
@@ -363,7 +387,9 @@ public class Inscripcion {
                 ", inscripcionInclusiva=" + inscripcionInclusiva +
                 ", fechaInscripcion=" + fechaInscripcion +
                 ", fechaCampeonato='" + fechaCampeonato + '\'' +
-                ", idCategoria=" + idCategoria +
+                ", nombreCampeonato='" + nombreCampeonato + '\'' +
+                ", direccionCampeonato='" + direccionCampeonato + '\'' +
+                ", categoria='" + categoria + '\'' +
                 ", nombreInscripto='" + nombreInscripto + '\'' +
                 ", apellido1Inscripto='" + apellido1Inscripto + '\'' +
                 ", apellido2Inscripto='" + apellido2Inscripto + '\'' +
@@ -375,20 +401,20 @@ public class Inscripcion {
                 ", domicilioOtrosInscripto='" + domicilioOtrosInscripto + '\'' +
                 ", domicilioLocalidadInscripto='" + domicilioLocalidadInscripto + '\'' +
                 ", domicilioCpInscripto='" + domicilioCpInscripto + '\'' +
-                ", idGimnasio=" + idGimnasio +
-                ", idPais=" + idPais +
-                ", idCinturon=" + idCinturon +
+                ", gimnasio='" + gimnasio + '\'' +
+                ", pais='" + pais + '\'' +
+                ", cinturon='" + cinturon + '\'' +
+                ", poomsae='" + poomsae + '\'' +
                 ", nombreAutorizador='" + nombreAutorizador + '\'' +
                 ", apellido1Autorizador='" + apellido1Autorizador + '\'' +
                 ", apellido2Autorizador='" + apellido2Autorizador + '\'' +
                 ", dniAutorizador='" + dniAutorizador + '\'' +
-                ", idCalidad=" + idCalidad +
+                ", calidad='" + calidad + '\'' +
                 ", domicilioCalleAutorizador='" + domicilioCalleAutorizador + '\'' +
                 ", domicilioNumeroAutorizador='" + domicilioNumeroAutorizador + '\'' +
                 ", domicilioOtrosAutorizador='" + domicilioOtrosAutorizador + '\'' +
                 ", domicilioLocalidadAutorizador='" + domicilioLocalidadAutorizador + '\'' +
                 ", domicilioCpAutorizador='" + domicilioCpAutorizador + '\'' +
-                ", envioJustificanteEmail=" + envioJustificanteEmail +
                 ", pagoRealizado=" + pagoRealizado +
                 ", fechaPago=" + fechaPago +
                 ", notas='" + notas + '\'' +
