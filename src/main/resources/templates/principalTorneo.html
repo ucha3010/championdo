@@ -43,7 +43,18 @@
 			<div th:if="${inscripcionCorrecta != null}" class="alert alert-success" role="alert">Información actualizada correctamente</div>
 		</section>
 
-<!--		<section class="text-center">
+		<section>
+			<div class="row">
+				<div class="col-xs-6 mb-3">
+				</div>
+
+				<div class="col-xs-6 mb-3">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="text-center">
 			<div th:if="${inscripcion != null and inscripcion.id != 0}">
 				<a href="#" th:href="@{/formulario/getPropia/__${inscripcion.id}__}" class="textDecoration-none">
 					<button class="btn btn-link" type="button">
@@ -60,24 +71,35 @@
 				</a>
 				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 			</div>
-		</section>-->
+		</section>
 
 		<section class="text-center">
-			<a href="#" th:href="@{/gimnasio/tipoInscripcion}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Taekwondo</button><br>
+			<a href="#" th:href="@{/formulario/propia}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button" th:disabled="${inscripcion != null and inscripcion.id != 0}">Inscripción propia</button><br>
 			</a>
 
-			<a href="#" th:href="@{/}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Licencia Taekwondo</button><br>
+			<a href="#" th:href="@{/formulario/menorOInclisivo/true}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización menor de 16 años</button><br>
 			</a>
 
-			<a href="#" th:href="@{/principal/principalTorneo}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Torneo</button><br>
+			<a href="#" th:href="@{/formulario/menorOInclisivo/false}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización inclusiva</button><br>
 			</a>
 
-			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/}" class="textDecoration-none">
+			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
 				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
 			</a>
+		</section>
+
+		<section>
+			<div class="row">
+				<div class="col-xs-6 mb-3">
+				</div>
+
+				<div class="col-xs-6 mb-3">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				</div>
+			</div>
 		</section>
 		
 	</div>

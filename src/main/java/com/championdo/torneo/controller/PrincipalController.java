@@ -33,11 +33,22 @@ public class PrincipalController {
         return modelAndView;
     }
 
+    @GetMapping("/principalTorneo")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView paginaPrincipalTorneo(ModelAndView modelAndView) {
+        modelAndView.setViewName("principalTorneo");
+        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
+        modelAndView.addObject("deleteEnable", new Boolean(principalService.getDeleteEnable().getValor()));
+        LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
+        return modelAndView;
+    }
+
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         principalService.deleteInscripcion(id);
-        return paginaPrincipal(modelAndView);
+        return paginaPrincipalTorneo(modelAndView);
     }
 
 }

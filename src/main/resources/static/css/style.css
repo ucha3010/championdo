@@ -87,6 +87,16 @@ a:link, a:visited,  a:hover, a:active
     background: #f7cac9;
 }
 
+.radioOption1 {
+    font-size: large;
+    background-color: aquamarine;
+}
+
+.radioOption2 {
+    font-size: large;
+    background-color: hotpink;
+}
+
 
 
 /* The container */
