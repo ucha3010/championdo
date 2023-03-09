@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
@@ -68,8 +69,15 @@ public class GimnasioController {
     @GetMapping("/formularioInscripcion/{tipo}/{licencia}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable String tipo, @PathVariable String licencia) {
-        modelAndView.setViewName("gimnasio/formularioTipoInscripcion");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        if ("infantil".equalsIgnoreCase(tipo)){
+            modelAndView.setViewName("gimnasio/formularioInscMenor");
+            modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
+        } else {
+
+        }
+        modelAndView.addObject("licencia","con licencia".equals(licencia));
+        formularioService.cargarDesplegables(modelAndView);
         LoggerMapper.log(Level.INFO, "gimnasio/formularioInscripcion/" + tipo + "/" + licencia, modelAndView, getClass());
         return modelAndView;
     }
@@ -131,11 +139,11 @@ public class GimnasioController {
         formularioService.cargarDesplegables(modelAndView);
         LoggerMapper.log(Level.INFO, "formulario/menorOInclisivo/" + menor, modelAndView, getClass());
         return modelAndView;
-    }
+    }*/
 
-    @PostMapping("/guardarMenorOInclisivo")
+    @PostMapping("/guardarMenor")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView guardarMenorOInclisivo(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
+    public ModelAndView guardarMenor(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada");
@@ -164,7 +172,7 @@ public class GimnasioController {
         return modelAndView;
 
     }
-
+/*
     @GetMapping("/getMenorOInclisivo/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {

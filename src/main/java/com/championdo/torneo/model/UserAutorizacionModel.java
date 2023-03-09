@@ -5,6 +5,8 @@ public class UserAutorizacionModel {
     private UserModel mayorAutorizador;
     private UserModel autorizado;
 
+    private CuentaBancariaModel cuentaBancaria;
+
     public UserAutorizacionModel (){
     }
 
@@ -29,11 +31,20 @@ public class UserAutorizacionModel {
         this.autorizado = autorizado;
     }
 
+    public CuentaBancariaModel getCuentaBancaria() {
+        return cuentaBancaria;
+    }
+
+    public void setCuentaBancaria(CuentaBancariaModel cuentaBancaria) {
+        this.cuentaBancaria = cuentaBancaria;
+    }
+
     @Override
     public String toString() {
         return "UserAutorizacionModel{" +
                 "mayorAutorizador=" + mayorAutorizador +
                 ", autorizado=" + autorizado +
+                ", cuentaBancaria=" + cuentaBancaria +
                 '}';
     }
 }

@@ -84,6 +84,8 @@ public class User {
 
 	@Column(name = "inclusivo", nullable = false)
 	private boolean inclusivo;
+	@Column(name = "telefono", nullable = true, length = 20)
+	private String telefono;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	private Set<UserRole> userRole = new HashSet<>();
@@ -301,6 +303,14 @@ public class User {
 		this.inclusivo = inclusivo;
 	}
 
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
 	public Set<UserRole> getUserRole() {
 		return userRole;
 	}
@@ -337,6 +347,7 @@ public class User {
 				", domicilioLocalidad='" + domicilioLocalidad + '\'' +
 				", domicilioCp='" + domicilioCp + '\'' +
 				", inclusivo=" + inclusivo +
+				", telefono='" + telefono + '\'' +
 				", userRole=" + userRole +
 				'}';
 	}

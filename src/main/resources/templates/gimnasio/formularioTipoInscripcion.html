@@ -22,11 +22,11 @@
 			$("#submit").click(function() {
 				var value1 = $("input[type=radio][name=infantilAdultoRadio]:checked").val();
 				var value2 = $("input[type=radio][name=licenciaRadio]:checked").val();
-				if (confirm("Va a realizar una inscripción de " + value1 + " " + value2 + " ¿Es correcto?")) {
+<!--				if (confirm("Va a realizar una inscripción de " + value1 + " " + value2 + " ¿Es correcto?")) {-->
 					var relativeUrl = "gimnasio/formularioInscripcion/" + value1 + "/" + value2;
 					var domain = getDomain(location.href);
 					location.href = domain + relativeUrl;
-				}
+<!--				}-->
 			})
 		});
 	</script>

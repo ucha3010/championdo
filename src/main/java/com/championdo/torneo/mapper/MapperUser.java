@@ -57,6 +57,7 @@ public class MapperUser {
             localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setInclusivo(externObject.isInclusivo());
+            localObject.setTelefono(externObject.getTelefono());
             localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
         }
 
@@ -99,6 +100,7 @@ public class MapperUser {
             localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setInclusivo(externObject.isInclusivo());
+            localObject.setTelefono(externObject.getTelefono());
         }
         return localObject;
     }

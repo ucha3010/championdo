@@ -2,10 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.mapper.MapperUser;
-import com.championdo.torneo.model.CalidadModel;
-import com.championdo.torneo.model.PdfModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
-import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.Utils;
@@ -54,6 +51,7 @@ public class FormularioServiceImpl implements FormularioService {
             autorizado.setInclusivo(true);
         }
         userAutorizacionModel.setAutorizado(autorizado);
+        userAutorizacionModel.setCuentaBancaria(new CuentaBancariaModel());
         return userAutorizacionModel;
     }
 
