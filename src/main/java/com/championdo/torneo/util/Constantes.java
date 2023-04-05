@@ -11,4 +11,5 @@ public class Constantes {
     public static String BLANCO = "Blanco";
 	public static String HABILITAR_BORRAR_INSCRIPCIONES = "inscripciones.borrar";
 	public static String CORREO_GIMNASIO = "gimnasio.correo";
+	public static String HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO = "inscripciones.taekwondo.borrar";
 }

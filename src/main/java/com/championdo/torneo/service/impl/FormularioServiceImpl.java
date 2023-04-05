@@ -8,6 +8,7 @@ import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,6 +42,14 @@ public class FormularioServiceImpl implements FormularioService {
     }
 
     @Override
+    public UserAutorizacionModel formularioInscPropiaGimnasio(User user) {
+        UserAutorizacionModel userAutorizacionModel = new UserAutorizacionModel();
+        userAutorizacionModel.setMayorAutorizador(mapperUser.entity2Model(user));
+        userAutorizacionModel.setCuentaBancaria(new CuentaBancariaModel());
+        return userAutorizacionModel;
+    }
+
+    @Override
     public UserAutorizacionModel formularioInscMenorOInclusivo(User user, boolean menorOInclusivo) {
         UserAutorizacionModel userAutorizacionModel = new UserAutorizacionModel();
         userAutorizacionModel.setMayorAutorizador(mapperUser.entity2Model(user));
@@ -50,6 +59,7 @@ public class FormularioServiceImpl implements FormularioService {
         } else {
             autorizado.setInclusivo(true);
         }
+        autorizado.setUsernameACargo(userAutorizacionModel.getMayorAutorizador().getUsername());
         userAutorizacionModel.setAutorizado(autorizado);
         userAutorizacionModel.setCuentaBancaria(new CuentaBancariaModel());
         return userAutorizacionModel;
@@ -83,9 +93,20 @@ public class FormularioServiceImpl implements FormularioService {
 
     @Override
     public void fillObjects(UserModel userModel) {
-        userModel.setGimnasio(gimnasioService.findById(userModel.getGimnasio().getId()));
-        userModel.setPais(paisService.findById(userModel.getPais().getId()));
-        userModel.setCinturon(cinturonService.findById(userModel.getCinturon().getId()));
+        if (userModel != null) {
+            if (userModel.getGimnasio() != null && userModel.getGimnasio().getId() != 0) {
+                userModel.setGimnasio(gimnasioService.findById(userModel.getGimnasio().getId()));
+            }
+            if (userModel.getPais() != null && userModel.getPais().getId() != 0) {
+                userModel.setPais(paisService.findById(userModel.getPais().getId()));
+            }
+            if (userModel.getCinturon() != null && userModel.getCinturon().getId() != 0) {
+                userModel.setCinturon(cinturonService.findById(userModel.getCinturon().getId()));
+            }
+            if (userModel.getCalidad() != null && userModel.getCalidad().getId() != 0 && userModel.getCalidad().getOtro().isEmpty()) {
+                userModel.setCalidad(calidadService.findById(userModel.getCalidad().getId()));
+            }
+        }
     }
 
     @Override
@@ -96,6 +117,16 @@ public class FormularioServiceImpl implements FormularioService {
         modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
         modelAndView.addObject("listaCinturones", cinturonService.findAll());
         modelAndView.addObject("listaCalidad", calidadService.findAll());
+    }
+
+    @Override
+    public PdfModel getPdfMandato(UserAutorizacionModel userAutorizacionModel) {
+        PdfModel pdfModel = new PdfModel();
+        rellenoAutorizador(userAutorizacionModel.getMayorAutorizador(), pdfModel);
+        if (pdfModel.getCalidadDe() != null) {
+            rellenoMenor(userAutorizacionModel.getAutorizado(), pdfModel);
+        }
+        return pdfModel;
     }
 
     private void rellenoAutorizador (UserModel userModel, PdfModel pdfModel) {

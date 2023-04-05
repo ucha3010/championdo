@@ -38,6 +38,7 @@ public class UserModel {
 	private String domicilioLocalidad;
 	private String domicilioCp;
 	private boolean inclusivo;
+	private boolean licencia;
 	private String menorEntreCategorias;
 	private String telefono;
 	private List<String> userRoles = new ArrayList<>();
@@ -242,6 +243,14 @@ public class UserModel {
 		this.inclusivo = inclusivo;
 	}
 
+	public boolean isLicencia() {
+		return licencia;
+	}
+
+	public void setLicencia(boolean licencia) {
+		this.licencia = licencia;
+	}
+
 	public String getMenorEntreCategorias() {
 		return menorEntreCategorias;
 	}
@@ -294,6 +303,7 @@ public class UserModel {
 				", domicilioLocalidad='" + domicilioLocalidad + '\'' +
 				", domicilioCp='" + domicilioCp + '\'' +
 				", inclusivo=" + inclusivo +
+				", licencia=" + licencia +
 				", menorEntreCategorias='" + menorEntreCategorias + '\'' +
 				", telefono='" + telefono + '\'' +
 				", userRoles=" + userRoles +
