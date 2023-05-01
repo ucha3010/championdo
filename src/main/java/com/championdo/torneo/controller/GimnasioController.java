@@ -94,17 +94,14 @@ public class GimnasioController {
         try {
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
 
-            // TODO DAMIAN modificar a partir de acá
-/*            UserModel userModel = userAutorizacionModel.getMayorAutorizador();
-            pdfModel = formularioService.getPdf(new UserAutorizacionModel(userModel));*/
+            // TODO DAMIAN revisar esto
+            pdfModel = formularioService.getPdfMandato(userAutorizacionModel);
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-/*            pdfModel.setIdInscripcion(inscripcionModel.getId());
-            pdfModel.setCategoria(inscripcionModel.getCategoria());
-            pdfModel.setPoomsae(inscripcionModel.getPoomsae());
-            File file = pdfService.generarPdf(pdfModel);
-            emailService.sendConfirmation(userModel, file);*/
+            pdfModel.setIdInscripcion(inscripcionTaekwondoModel.getId());
+            File file = pdfService.generarPdfMandato(pdfModel);
+            //emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
+            LoggerMapper.log(Level.ERROR,"gimnasio/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
             modelAndView.addObject("inscripcionError", "inscripcionError");
             modelAndView.addObject("inscripcionCorrecta", "");
@@ -166,11 +163,11 @@ public class GimnasioController {
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
 
             if (userAutorizacionModel.getAutorizado().isLicencia()) {
+                // TODO DAMIAN revisar esto
                 InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
                 pdfModelMandato = formularioService.getPdfMandato(userAutorizacionModel);
                 pdfModelMandato.setIdInscripcion(inscripcionTaekwondoModel.getId());
-                //TODO DAMIAN generar el documento mandato. Los datos están cargados en pdfModelMandato
-                //luego hacer lo mismo con los otros documentos
+                File file = pdfService.generarPdfMandato(pdfModelMandato);
 //            File file = pdfService.generarPdf(pdfModel);
             }
         } catch (Exception e) {

@@ -70,6 +70,8 @@ public class FormularioController {
     @PostMapping("/gaurdarPropia")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userModel") UserModel userModel) {
+
+        LoggerMapper.log(Level.INFO, "ENTRADA gaurdarPropia", userModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada");
@@ -81,7 +83,7 @@ public class FormularioController {
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
-            File file = pdfService.generarPdf(pdfModel);
+            File file = pdfService.generarPdfTorneo(pdfModel);
             emailService.sendConfirmation(userModel, file);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
@@ -140,7 +142,7 @@ public class FormularioController {
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
-            File file = pdfService.generarPdf(pdfModel);
+            File file = pdfService.generarPdfTorneo(pdfModel);
             emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());

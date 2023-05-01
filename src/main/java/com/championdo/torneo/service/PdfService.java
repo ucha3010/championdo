@@ -8,7 +8,8 @@ import java.io.File;
 
 public interface PdfService {
 
-    public File generarPdf(PdfModel pdfModel);
+    public File generarPdfTorneo(PdfModel pdfModel);
+    public File generarPdfMandato(PdfModel pdfModel);
 
     public void descargarPdf(PdfModel pdfModel, HttpServletResponse response);
 

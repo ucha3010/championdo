@@ -59,7 +59,7 @@ class TorneoApplicationTests {
 	@Test
 	File testGenerarPdf() {
 		cargarPDF();
-		File file = pdfService.generarPdf(pdfModel);
+		File file = pdfService.generarPdfTorneo(pdfModel);
 		return file;
 	}
 
