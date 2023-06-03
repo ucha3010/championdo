@@ -58,7 +58,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
                 inscripcionTaekwondoModelList.add(mapperInscripcionTaekwondo.entity2Model(inscripcion));
             }
         }
-        LoggerMapper.log(Level.INFO, "findByMayorDni", inscripcionTaekwondoList, getClass());
+        LoggerMapper.methodOut(Level.INFO, "findByMayorDni", inscripcionTaekwondoList, getClass());
         return inscripcionTaekwondoModelList;
     }
 
@@ -67,14 +67,14 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         inscripcionTaekwondoModel.setFechaInscripcion(new Date());
         InscripcionTaekwondoModel inscripcion = mapperInscripcionTaekwondo.entity2Model(inscripcionTaekwondoRepository
                 .save(mapperInscripcionTaekwondo.model2Entity(inscripcionTaekwondoModel)));
-        LoggerMapper.log(Level.INFO, "add", inscripcion, getClass());
+        LoggerMapper.methodOut(Level.INFO, "add", inscripcion, getClass());
         return inscripcion;
     }
 
     @Override
     public InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel) {
         InscripcionTaekwondoModel inscripcionTaekwondoModel = add(fillInscripcionTaekwondoModel(userAutorizacionModel));
-        LoggerMapper.log(Level.INFO, "add", inscripcionTaekwondoModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, "add", inscripcionTaekwondoModel, getClass());
         return inscripcionTaekwondoModel;
     }
 
@@ -89,7 +89,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         if (inscripcion != null) {
             inscripcionTaekwondoRepository.delete(inscripcion);
         }
-        LoggerMapper.log(Level.INFO, "delete", inscripcion, getClass());
+        LoggerMapper.methodOut(Level.INFO, "delete", inscripcion, getClass());
     }
 
     @Override
@@ -148,6 +148,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         inscripcionTaekwondoModel.setMayorDomicilioCp(mayorAutorizador.getDomicilioCp());
         inscripcionTaekwondoModel.setMayorLicencia(mayorAutorizador.isLicencia());
         inscripcionTaekwondoModel.setMayorTelefono(mayorAutorizador.getTelefono());
+        inscripcionTaekwondoModel.setMayorAutorizaWhatsApp(mayorAutorizador.isAutorizaWhatsApp());
 
         if (autorizado != null) {
             inscripcionTaekwondoModel.setAutorizadoNombre(autorizado.getName());

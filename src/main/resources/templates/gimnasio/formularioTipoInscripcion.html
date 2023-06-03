@@ -29,6 +29,15 @@
 <!--				}-->
 			})
 		});
+		function confirmDelete(id){
+			if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
+				var relativeUrl = "gimnasio/eliminarInscripcion/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
 	</script>
 </head>
 <body>
@@ -45,12 +54,27 @@
 
 		<section>
 			<div class="row">
-				<div class="col-xs-6 mb-3">
+				<div class="col-xs-2 mb-1">
 				</div>
 
-				<div class="col-xs-6 mb-3">
+				<div class="col-xs-8 mb-10 colorGreen">
+					<h1>Inscripción a Taekwondo</h1>
+				</div>
+
+				<div class="col-xs-2 mb-1">
 					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
 				</div>
+			</div>
+		</section>
+
+		<section class="text-center">
+			<div th:if="${inscripcion != null}" th:each="autorizacion : ${inscripcion}">
+				<a href="#" th:href="@{/gimnasio/getInscripcion/__${autorizacion.id}__}" class="textDecoration-none">
+					<button class="btn btn-link" type="button">
+						Inscripción de <span th:text="${autorizacion.autorizadoNombre}"></span> <span th:text="${autorizacion.autorizadoApellido1}"></span> <span th:text="${autorizacion.autorizadoApellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span>
+					</button>
+				</a>
+				<a th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 			</div>
 		</section>
 

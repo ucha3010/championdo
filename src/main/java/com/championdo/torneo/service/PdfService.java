@@ -10,11 +10,10 @@ public interface PdfService {
 
     public File generarPdfTorneo(PdfModel pdfModel);
     public File generarPdfMandato(PdfModel pdfModel);
-
-    public void descargarPdf(PdfModel pdfModel, HttpServletResponse response);
-
-    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension);
-
+    public File generarPdfAutorizacionMayor18(PdfModel pdfModel);
+    public File generarPdfAutorizacionMenor18(PdfModel pdfModel);
+    public void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion);
+    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, String seccion);
     public PdfModel getImpresion(InscripcionModel inscripcionModel);
 
 }

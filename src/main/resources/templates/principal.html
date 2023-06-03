@@ -75,7 +75,7 @@
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Torneo</button><br>
 			</a>
 
-			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/}" class="textDecoration-none">
+			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
 				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
 			</a>
 		</section>

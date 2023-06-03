@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/gimnasio")
@@ -61,7 +63,9 @@ public class GimnasioController {
     public ModelAndView tipoInscripcion(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/formularioTipoInscripcion");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        LoggerMapper.log(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
+        List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
+        modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -78,7 +82,7 @@ public class GimnasioController {
         }
         modelAndView.addObject("licencia","con licencia".equals(licencia));
         formularioService.cargarDesplegables(modelAndView);
-        LoggerMapper.log(Level.INFO, "gimnasio/formularioInscripcion/" + tipo + "/" + licencia, modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/formularioInscripcion/" + tipo + "/" + licencia, modelAndView, getClass());
         return modelAndView;
     }
 
@@ -86,49 +90,56 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
 
-        LoggerMapper.log(Level.INFO, "ENTRADA gaurdarPropia", userAutorizacionModel, getClass());
+        LoggerMapper.methodIn(Level.INFO, "ENTRADA gaurdarPropia", userAutorizacionModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("formularioInscFinalizada");
-        PdfModel pdfModel = new PdfModel();
+        modelAndView.setViewName("formularioInscFinalizada"); //TODO DAMIAN debería ir a una página de firma con una clave enviada al email y acceso a los PDFs
+        PdfModel pdfModelGeneral = null;
         try {
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-
-            // TODO DAMIAN revisar esto
-            pdfModel = formularioService.getPdfMandato(userAutorizacionModel);
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-            pdfModel.setIdInscripcion(inscripcionTaekwondoModel.getId());
-            File file = pdfService.generarPdfMandato(pdfModel);
-            //emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
+            pdfModelGeneral = formularioService.getPdfModelGeneral(userAutorizacionModel);
+            pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
+            if (userAutorizacionModel.getMayorAutorizador().isLicencia()) {
+                File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
+                //emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
+            }
+            File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
+            //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+            if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
+                //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
+            }
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gimnasio/gaurdarPropia", e.getMessage(), getClass());
-            pdfModel = null;
-            modelAndView.addObject("inscripcionError", "inscripcionError");
-            modelAndView.addObject("inscripcionCorrecta", "");
         }
-        if (pdfModel != null) {
+
+        if (pdfModelGeneral != null) {
             modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
             modelAndView.addObject("inscripcionError", "");
-            modelAndView.addObject("pdfModel", pdfModel);
+        } else {
+            pdfModelGeneral = new PdfModel();
+            modelAndView.addObject("inscripcionCorrecta", "");
+            modelAndView.addObject("inscripcionError", "inscripcionError");
         }
-        LoggerMapper.log(Level.INFO, "gimnasio/gaurdarPropia", pdfModel, getClass());
+        modelAndView.addObject("pdfModel", pdfModelGeneral);
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/gaurdarPropia", pdfModelGeneral, getClass());
         return modelAndView;
     }
 
-    /*@GetMapping("/getPropia/{id}")
+    @GetMapping("/getInscripcion/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView getPropia(ModelAndView modelAndView, @PathVariable int id) {
-        modelAndView.setViewName("vistaInscPropia");
+    public ModelAndView getInscripcion(ModelAndView modelAndView, @PathVariable int id) {
+        modelAndView.setViewName("tengoquehacer"); //TODO DAMIAN hacer html
         userService.cargarUsuarioCompleto(modelAndView);
-        InscripcionModel inscripcionModel = inscripcionService.findById(id);
-        modelAndView.addObject("inscripcion", inscripcionModel);
-        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
-        LoggerMapper.log(Level.INFO, "formulario/getPropia", modelAndView, getClass());
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+        modelAndView.addObject("inscripcion", inscripcionTaekwondoModel);
+//        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionTaekwondoModel));
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/getInscripcion", modelAndView, getClass());
         return modelAndView;
     }
 
 
-    @GetMapping("/menorOInclisivo/{menor}")
+    /*@GetMapping("/menorOInclisivo/{menor}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
         if (menor) {
@@ -147,42 +158,41 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenor(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
 
-        LoggerMapper.log(Level.INFO, "ENTRADA guardarMenor", userAutorizacionModel, getClass());
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/guardarMenor", userAutorizacionModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
-
-        //1 evaluar qué tengo que guardar HECHO
-        //2 evaluar dónde guardar la información HECHO
-        //3 evaluar documentos a generar
-
-
-        modelAndView.setViewName("formularioInscFinalizada");
-        PdfModel pdfModelMandato = null;
+        modelAndView.setViewName("formularioInscFinalizada"); //TODO DAMIAN debería ir a una página de firma con una clave enviada al email y acceso a los PDFs
+        PdfModel pdfModelGeneral = null;
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-
+            InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
+            pdfModelGeneral = formularioService.getPdfModelGeneral(userAutorizacionModel);
+            pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
             if (userAutorizacionModel.getAutorizado().isLicencia()) {
-                // TODO DAMIAN revisar esto
-                InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-                pdfModelMandato = formularioService.getPdfMandato(userAutorizacionModel);
-                pdfModelMandato.setIdInscripcion(inscripcionTaekwondoModel.getId());
-                File file = pdfService.generarPdfMandato(pdfModelMandato);
-//            File file = pdfService.generarPdf(pdfModel);
+                File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
+                //emailService.sendConfirmation(userAutorizacionModel.getAutorizado(), file);
+            }
+            File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+            //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+            if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
+                //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
-            pdfModelMandato = null;
-            modelAndView.addObject("inscripcionError", "inscripcionError");
-            modelAndView.addObject("inscripcionCorrecta", "");
+            LoggerMapper.log(Level.ERROR,"gimnasio/guardarMenor", e.getMessage(), getClass());
         }
 
-        //TODO DAMIAN estos tres pasos luego deben cambiar
-        modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
-        modelAndView.addObject("inscripcionError", "");
-        modelAndView.addObject("pdfModel", pdfModelMandato);
+        if (pdfModelGeneral != null) {
+            modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
+            modelAndView.addObject("inscripcionError", "");
+        } else {
+            pdfModelGeneral = new PdfModel();
+            modelAndView.addObject("inscripcionCorrecta", "");
+            modelAndView.addObject("inscripcionError", "inscripcionError");
+        }
+        modelAndView.addObject("pdfModel", pdfModelGeneral);
 
-        LoggerMapper.log(Level.INFO, "gimnasio/guardarMenor", pdfModelMandato, getClass());
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/guardarMenor", pdfModelGeneral, getClass());
         return modelAndView;
 
     }
@@ -238,5 +248,12 @@ public class GimnasioController {
         return modelAndView;
 
     }*/
+
+    @GetMapping("/eliminarInscripcion/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
+        inscripcionTaekwondoService.delete(id);
+        return tipoInscripcion(modelAndView);
+    }
 
 }

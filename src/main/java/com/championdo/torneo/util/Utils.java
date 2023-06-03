@@ -11,8 +11,12 @@ import java.util.Date;
 public class Utils {
 
     public static String date2String (Date date) {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        return df.format(date);
+        if (date != null) {
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            return df.format(date);
+        } else {
+            return null;
+        }
     }
 
     public static String generateSecurePassword() {

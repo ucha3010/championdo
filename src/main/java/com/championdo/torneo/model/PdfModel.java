@@ -7,6 +7,7 @@ public class PdfModel {
     private String fechaNacimiento; //30/10/1960
     private String domicilio; //calle Mayor 150
     private String localidad; //Madrid (28003) - España
+    private String telefono; //654654654
     private String gimnasio; //Championdo
     private String nombreCampeonato; //CAMPEONATO DE TRES CANTOS
     private String fechaCampeonato; //20/12/2022
@@ -14,6 +15,7 @@ public class PdfModel {
     private String calidadDe; //padre
     private String nombreMenor; //Nombre Autorizado Apellido1do Apellido2do
     private String dniMenor; //01234567A
+    private String fechaNacimientoMenor; //30/10/1960
     private boolean cinturonBlanco; //true
     private boolean mayorEdad; //false
     private boolean inclusivo;
@@ -61,6 +63,14 @@ public class PdfModel {
 
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getGimnasio() {
@@ -117,6 +127,14 @@ public class PdfModel {
 
     public void setDniMenor(String dniMenor) {
         this.dniMenor = dniMenor;
+    }
+
+    public String getFechaNacimientoMenor() {
+        return fechaNacimientoMenor;
+    }
+
+    public void setFechaNacimientoMenor(String fechaNacimientoMenor) {
+        this.fechaNacimientoMenor = fechaNacimientoMenor;
     }
 
     public boolean isCinturonBlanco() {
@@ -191,6 +209,7 @@ public class PdfModel {
                 ", fechaNacimiento='" + fechaNacimiento + '\'' +
                 ", domicilio='" + domicilio + '\'' +
                 ", localidad='" + localidad + '\'' +
+                ", telefono='" + telefono + '\'' +
                 ", gimnasio='" + gimnasio + '\'' +
                 ", nombreCampeonato='" + nombreCampeonato + '\'' +
                 ", fechaCampeonato='" + fechaCampeonato + '\'' +
@@ -198,6 +217,7 @@ public class PdfModel {
                 ", calidadDe='" + calidadDe + '\'' +
                 ", nombreMenor='" + nombreMenor + '\'' +
                 ", dniMenor='" + dniMenor + '\'' +
+                ", fechaNacimientoMenor='" + fechaNacimientoMenor + '\'' +
                 ", cinturonBlanco=" + cinturonBlanco +
                 ", mayorEdad=" + mayorEdad +
                 ", inclusivo=" + inclusivo +

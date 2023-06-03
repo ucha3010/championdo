@@ -16,12 +16,8 @@ public interface FormularioService {
 	public abstract UserModel formularioInscPropia(User user);
 	public abstract UserAutorizacionModel formularioInscPropiaGimnasio(User user);
 	public abstract UserAutorizacionModel formularioInscMenorOInclusivo(User user, boolean menorOInclusivo);
-
-	public abstract PdfModel getPdf(UserAutorizacionModel userAutorizacionModel);
-
+	public abstract PdfModel getPdfModelTorneo(UserAutorizacionModel userAutorizacionModel);
 	public abstract void fillObjects(UserModel userModel);
-
 	public abstract void cargarDesplegables(ModelAndView modelAndView);
-
-	PdfModel getPdfMandato(UserAutorizacionModel userAutorizacionModel);
+	public abstract PdfModel getPdfModelGeneral(UserAutorizacionModel userAutorizacionModel);
 }

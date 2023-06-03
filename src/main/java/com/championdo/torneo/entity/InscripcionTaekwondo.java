@@ -45,6 +45,7 @@ public class InscripcionTaekwondo {
     private boolean mayorLicencia;
     @Column(name = "mayorTelefono", length = 20)
     private String mayorTelefono;
+    private boolean mayorAutorizaWhatsApp;
 
     //Autorizado
     @Column(name = "autorizadoNombre", length = 60)
@@ -224,6 +225,14 @@ public class InscripcionTaekwondo {
         this.mayorTelefono = mayorTelefono;
     }
 
+    public boolean isMayorAutorizaWhatsApp() {
+        return mayorAutorizaWhatsApp;
+    }
+
+    public void setMayorAutorizaWhatsApp(boolean mayorAutorizaWhatsApp) {
+        this.mayorAutorizaWhatsApp = mayorAutorizaWhatsApp;
+    }
+
     public String getAutorizadoNombre() {
         return autorizadoNombre;
     }
@@ -350,6 +359,7 @@ public class InscripcionTaekwondo {
                 ", mayorDomicilioCp='" + mayorDomicilioCp + '\'' +
                 ", mayorLicencia=" + mayorLicencia +
                 ", mayorTelefono='" + mayorTelefono + '\'' +
+                ", mayorAutorizaWhatsApp=" + mayorAutorizaWhatsApp +
                 ", autorizadoNombre='" + autorizadoNombre + '\'' +
                 ", autorizadoApellido1='" + autorizadoApellido1 + '\'' +
                 ", autorizadoApellido2='" + autorizadoApellido2 + '\'' +

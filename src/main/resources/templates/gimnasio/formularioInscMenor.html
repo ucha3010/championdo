@@ -180,22 +180,6 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
-				<div class="col-md-2">
-				</div>
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="idCalidad">En calidad de*</label>
-				</div>
-				<div class="col-xs-3 col-md-2">
-					<select th:field="*{mayorAutorizador.calidad.id}" id="idCalidad" class="form-control form-control-lg" onchange="confirmarCalidad()">
-						<option th:each="c : ${listaCalidad}" th:value="${c.id}" th:text="${c.nombre}" />
-					</select>
-				</div>
-				<div class="col-xs-6">
-					<input type="text" th:field="*{mayorAutorizador.calidad.otro}" id="calidadOtro" placeholder="rellenar si selecciona 'Otro'" class="form-control displayNone" size="60"/>
-				</div>
-			</div>
-
 			<div class="row mb-1">
 				<div class="col-md-2">
 				</div>
@@ -262,6 +246,22 @@
 				</div>
 				<div class="col-xs-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.correo}" id="correo" class="form-control" placeholder="Email" size="100" disabled />
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-md-2">
+				</div>
+				<div class="col-xs-3 col-md-2 text-center">
+					<label for="idCalidad">En calidad de*</label>
+				</div>
+				<div class="col-xs-3 col-md-2">
+					<select th:field="*{mayorAutorizador.calidad.id}" id="idCalidad" class="form-control form-control-lg" onchange="confirmarCalidad()">
+						<option th:each="c : ${listaCalidad}" th:value="${c.id}" th:text="${c.nombre}" />
+					</select>
+				</div>
+				<div class="col-xs-6">
+					<input type="text" th:field="*{mayorAutorizador.calidad.otro}" id="calidadOtro" placeholder="rellenar si selecciona 'Otro'" class="form-control displayNone" size="60"/>
 				</div>
 			</div>
 

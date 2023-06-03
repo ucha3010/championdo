@@ -66,7 +66,7 @@ public class FormularioServiceImpl implements FormularioService {
     }
 
     @Override
-    public PdfModel getPdf(UserAutorizacionModel userAutorizacionModel) {
+    public PdfModel getPdfModelTorneo(UserAutorizacionModel userAutorizacionModel) {
         PdfModel pdfModel = new PdfModel();
         if (userAutorizacionModel.getAutorizado() == null) { ///inscripción de mayor
             pdfModel.setMayorEdad(true);
@@ -120,10 +120,10 @@ public class FormularioServiceImpl implements FormularioService {
     }
 
     @Override
-    public PdfModel getPdfMandato(UserAutorizacionModel userAutorizacionModel) {
+    public PdfModel getPdfModelGeneral(UserAutorizacionModel userAutorizacionModel) {
         PdfModel pdfModel = new PdfModel();
         rellenoAutorizador(userAutorizacionModel.getMayorAutorizador(), pdfModel);
-        if (pdfModel.getCalidadDe() != null) {
+        if (!StringUtils.isNullOrEmpty(pdfModel.getCalidadDe())) {
             rellenoMenor(userAutorizacionModel.getAutorizado(), pdfModel);
         }
         return pdfModel;
@@ -132,6 +132,8 @@ public class FormularioServiceImpl implements FormularioService {
     private void rellenoAutorizador (UserModel userModel, PdfModel pdfModel) {
         pdfModel.setNombre(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
         pdfModel.setDni(userModel.getUsername());
+        pdfModel.setTelefono(userModel.getTelefono());
+        pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
         if (!StringUtils.isNullOrEmpty(userModel.getDomicilioCalle())) {
             pdfModel.setDomicilio(userModel.getDomicilioCalle() + " " + userModel.getDomicilioNumero() + " " + userModel.getDomicilioOtros());
             pdfModel.setLocalidad(userModel.getDomicilioLocalidad() + " (" + userModel.getDomicilioCp() + ")" + (userModel.getPais() != null ? " - " + userModel.getPais().getNombre() : ""));
@@ -148,16 +150,27 @@ public class FormularioServiceImpl implements FormularioService {
 
     private void rellenoCompetidor (UserModel userModel, PdfModel pdfModel) {
 
-        pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
-        pdfModel.setGimnasio(userModel.getGimnasio().getNombre());
-        pdfModel.setCinturonActual(userModel.getCinturon().getColor());
-        if (userModel.getCinturon().getColor().equalsIgnoreCase(Constantes.BLANCO)) {
-            pdfModel.setCinturonBlanco(true);
+        if(userModel.getFechaNacimiento() != null) {
+            if (pdfModel.isMayorEdad()) {
+                pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
+            } else {
+                pdfModel.setFechaNacimientoMenor(Utils.date2String(userModel.getFechaNacimiento()));
+            }
+        }
+        if(userModel.getGimnasio() != null) {
+            pdfModel.setGimnasio(userModel.getGimnasio().getNombre());
+        }
+        if(userModel.getCinturon() != null) {
+            pdfModel.setCinturonActual(userModel.getCinturon().getColor());
+            if (userModel.getCinturon().getColor().equalsIgnoreCase(Constantes.BLANCO)) {
+                pdfModel.setCinturonBlanco(true);
+            }
         }
     }
 
     private void rellenoMenor(UserModel userModel, PdfModel pdfModel) {
         pdfModel.setNombreMenor(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
         pdfModel.setDniMenor(userModel.getUsername());
+        pdfModel.setFechaNacimientoMenor(Utils.date2String(userModel.getFechaNacimiento()));
     }
 }

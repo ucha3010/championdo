@@ -78,7 +78,7 @@ public class FormularioController {
         PdfModel pdfModel = null;
         try {
             formularioService.fillObjects(userModel);
-            pdfModel = formularioService.getPdf(new UserAutorizacionModel(userModel));
+            pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
             InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
@@ -137,7 +137,7 @@ public class FormularioController {
         PdfModel pdfModel = null;
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
-            pdfModel = formularioService.getPdf(userAutorizacionModel);
+            pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
             InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
@@ -175,7 +175,7 @@ public class FormularioController {
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
-        pdfService.descargarPdf(pdfModel, response);
+        pdfService.descargarPdf(pdfModel, response, "torneo");
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
     }
 

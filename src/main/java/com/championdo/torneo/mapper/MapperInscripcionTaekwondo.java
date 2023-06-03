@@ -30,6 +30,7 @@ public class MapperInscripcionTaekwondo {
             localObject.setMayorDomicilioCp(externObject.getMayorDomicilioCp());
             localObject.setMayorLicencia(externObject.isMayorLicencia());
             localObject.setMayorTelefono(externObject.getMayorTelefono());
+            localObject.setMayorAutorizaWhatsApp(externObject.isMayorAutorizaWhatsApp());
             localObject.setAutorizadoNombre(externObject.getAutorizadoNombre());
             localObject.setAutorizadoApellido1(externObject.getAutorizadoApellido1());
             localObject.setAutorizadoApellido2(externObject.getAutorizadoApellido2());
@@ -70,6 +71,7 @@ public class MapperInscripcionTaekwondo {
             localObject.setMayorDomicilioCp(externObject.getMayorDomicilioCp());
             localObject.setMayorLicencia(externObject.isMayorLicencia());
             localObject.setMayorTelefono(externObject.getMayorTelefono());
+            localObject.setMayorAutorizaWhatsApp(externObject.isMayorAutorizaWhatsApp());
             localObject.setAutorizadoNombre(externObject.getAutorizadoNombre());
             localObject.setAutorizadoApellido1(externObject.getAutorizadoApellido1());
             localObject.setAutorizadoApellido2(externObject.getAutorizadoApellido2());
