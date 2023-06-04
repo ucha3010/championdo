@@ -42,6 +42,7 @@ public class UserModel {
 	private String menorEntreCategorias;
 	private String telefono;
 	private boolean autorizaWhatsApp;
+	private boolean domiciliacion;
 	private List<String> userRoles = new ArrayList<>();
 
 	public String getUsername() {
@@ -276,6 +277,14 @@ public class UserModel {
 		this.autorizaWhatsApp = autorizaWhatsApp;
 	}
 
+	public boolean isDomiciliacion() {
+		return domiciliacion;
+	}
+
+	public void setDomiciliacion(boolean domiciliacion) {
+		this.domiciliacion = domiciliacion;
+	}
+
 	public List<String> getUserRoles() {
 		return userRoles;
 	}
@@ -316,6 +325,7 @@ public class UserModel {
 				", menorEntreCategorias='" + menorEntreCategorias + '\'' +
 				", telefono='" + telefono + '\'' +
 				", autorizaWhatsApp=" + autorizaWhatsApp +
+				", domiciliacion=" + domiciliacion +
 				", userRoles=" + userRoles +
 				'}';
 	}

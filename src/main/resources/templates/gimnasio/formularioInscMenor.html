@@ -16,7 +16,13 @@
 
 	<script type="text/javascript">
 		function validar(){
-			var campo = ['nombre','apellido1','telefono','fechaNacimiento','domicilioCalle','domicilioLocalidad','domicilioCp','menorNombre','menorApellido1','titular','iban'];
+			var isDomiciliacion = document.getElementById('domiciliacionCheck').checked;
+			var campo;
+			if (isDomiciliacion) {
+				campo = ['nombre','apellido1','telefono','fechaNacimiento','domicilioCalle','domicilioLocalidad','domicilioCp','menorNombre','menorApellido1','titular','iban'];
+			} else {
+				campo = ['nombre','apellido1','telefono','fechaNacimiento','domicilioCalle','domicilioLocalidad','domicilioCp','menorNombre','menorApellido1'];
+			}
 			restablecer();
 			var validado = true;
 			for(var i=0; i < campo.length; i++){
@@ -97,6 +103,17 @@
 				calidadOtro.className = 'form-control';
 			} else {
 				calidadOtro.className = 'form-control displayNone';
+			}
+		}
+
+		function visibilidadDomiciliacion(){
+			var domiciliacion = document.getElementById('domiciliacion');
+			if(document.getElementById('domiciliacionCheck').checked) {
+				domiciliacion.className = 'bloqueNormal';
+			} else {
+				domiciliacion.className = 'bloqueOpaco';
+				document.getElementById('titular').style.borderColor="#ced4da";
+				document.getElementById('iban').style.borderColor="#ced4da";
 			}
 		}
 	</script>
@@ -356,21 +373,6 @@
 				</div>
 			</div>
 
-<!--			<div class="row mb-1">
-				<div class="col-md-2">
-				</div>
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="idGimnasio">Gimnasio*</label>
-				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{autorizado.gimnasio.id}" id="idGimnasio" class="form-control form-control-lg">
-						<option th:each="g : ${listaGimnasios}" th:value="${g.id}" th:text="${g.nombre}" />
-					</select>
-				</div>
-				<div class="col-xs-5">
-				</div>
-			</div>-->
-
 			<div class="row mb-3">
 				<div class="col-md-2">
 				</div>
@@ -388,40 +390,43 @@
 
 			<div class="row mb-1">
 				<div class="col-xs-12 apartado">
-					<span>Cuenta domiciliación de cuota</span>
+					<input class="form-check-input" type="checkbox" id="domiciliacionCheck" onchange="visibilidadDomiciliacion()" name="mayorAutorizador.domiciliacion" checked="checked">
+					<label class="form-check-label" for="domiciliacionCheck"><span>Cuenta domiciliación de cuota</span></label>
 				</div>
 			</div>
 
-			<div class="row mb-1">
-				<div class="col-md-2">
+			<div id="domiciliacion">
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-3 col-md-2 text-center">
+						<label for="titular">Titular*</label>
+					</div>
+					<div class="col-xs-9 col-md-8">
+						<input type="text" th:field="*{cuentaBancaria.titular}" id="titular" class="form-control" placeholder="Nombre completo del titular de la cuenta" size="100"/>
+					</div>
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="titular">Titular*</label>
-				</div>
-				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{cuentaBancaria.titular}" id="titular" class="form-control" placeholder="Nombre completo del titular de la cuenta" size="100"/>
-				</div>
-			</div>
 
-			<div class="row mb-1">
-				<div class="col-md-2">
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-3 col-md-2 text-center">
+						<label for="iban">IBAN*</label>
+					</div>
+					<div class="col-xs-9 col-md-8">
+						<input type="text" th:field="*{cuentaBancaria.iban}" id="iban" class="form-control" placeholder="IBAN de la cuenta" size="34"/>
+					</div>
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="iban">IBAN*</label>
-				</div>
-				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{cuentaBancaria.iban}" id="iban" class="form-control" placeholder="IBAN de la cuenta" size="34"/>
-				</div>
-			</div>
 
-			<div class="row mb-3">
-				<div class="col-md-2">
-				</div>
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="swift">SWIFT/BIC</label>
-				</div>
-				<div class="col-xs-9 col-md-8">
-					<input type="text" th:field="*{cuentaBancaria.swift}" id="swift" class="form-control" placeholder="Código SWIFT o BIC (no necesario para cuentas españolas)" size="11"/>
+				<div class="row mb-3">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-3 col-md-2 text-center">
+						<label for="swift">SWIFT/BIC</label>
+					</div>
+					<div class="col-xs-9 col-md-8">
+						<input type="text" th:field="*{cuentaBancaria.swift}" id="swift" class="form-control" placeholder="Código SWIFT o BIC (no necesario para cuentas españolas)" size="11"/>
+					</div>
 				</div>
 			</div>
 

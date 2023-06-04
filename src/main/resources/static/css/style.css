@@ -166,3 +166,13 @@ a:link, a:visited,  a:hover, a:active
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+.bloqueOpaco {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.bloqueNormal {
+    opacity: 1;
+    pointer-events: auto;
+}

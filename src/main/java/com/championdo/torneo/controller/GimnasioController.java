@@ -105,7 +105,9 @@ public class GimnasioController {
                 //emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
             }
             File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
-            //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+            if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
+                //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+            }
             if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
                 //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
@@ -174,7 +176,9 @@ public class GimnasioController {
                 //emailService.sendConfirmation(userAutorizacionModel.getAutorizado(), file);
             }
             File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
-            //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+            if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
+                //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+            }
             if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
                 //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
