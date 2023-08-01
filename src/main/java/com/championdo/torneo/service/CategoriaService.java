@@ -8,20 +8,21 @@ import java.util.List;
 
 public interface CategoriaService {
 
-	public abstract List<CategoriaModel> findAll();
-	public abstract List<CategoriaModel> findAllNameExtended();
+    List<CategoriaModel> findAll();
 
-	public abstract CategoriaModel findById(int id);
-	
-	public abstract void add(CategoriaModel categoriaModel);
-	
-	public abstract void update(CategoriaModel categoriaModel);
+    List<CategoriaModel> findAllNameExtended();
 
-	public abstract void delete(int idCategoria);
+    CategoriaModel findById(int id);
 
-	public abstract CategoriaModel calcularCategoria(UserModel usuarioInscripto);
+    void add(CategoriaModel categoriaModel);
 
-	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+    void update(CategoriaModel categoriaModel);
 
-	public abstract int findMaxPosition();
+    void delete(int idCategoria);
+
+    CategoriaModel calcularCategoria(UserModel usuarioInscripto);
+
+    void dragOfPosition(int initialPosition, int finalPosition);
+
+    int findMaxPosition();
 }

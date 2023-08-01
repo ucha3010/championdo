@@ -8,7 +8,6 @@ import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -126,6 +125,9 @@ public class FormularioServiceImpl implements FormularioService {
         if (!StringUtils.isNullOrEmpty(pdfModel.getCalidadDe())) {
             rellenoMenor(userAutorizacionModel.getAutorizado(), pdfModel);
         }
+        if (userAutorizacionModel.getCuentaBancaria() != null && !StringUtils.isNullOrEmpty(userAutorizacionModel.getCuentaBancaria().getIban())) {
+            pdfModel.setCuentaBancaria(userAutorizacionModel.getCuentaBancaria());
+        }
         return pdfModel;
     }
 
@@ -133,6 +135,7 @@ public class FormularioServiceImpl implements FormularioService {
         pdfModel.setNombre(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
         pdfModel.setDni(userModel.getUsername());
         pdfModel.setTelefono(userModel.getTelefono());
+        pdfModel.setCorreo(userModel.getCorreo());
         pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
         if (!StringUtils.isNullOrEmpty(userModel.getDomicilioCalle())) {
             pdfModel.setDomicilio(userModel.getDomicilioCalle() + " " + userModel.getDomicilioNumero() + " " + userModel.getDomicilioOtros());
@@ -170,7 +173,7 @@ public class FormularioServiceImpl implements FormularioService {
 
     private void rellenoMenor(UserModel userModel, PdfModel pdfModel) {
         pdfModel.setNombreMenor(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
-        pdfModel.setDniMenor(userModel.getUsername());
+        pdfModel.setDniMenor(userModel.getDniMenor());
         pdfModel.setFechaNacimientoMenor(Utils.date2String(userModel.getFechaNacimiento()));
     }
 }

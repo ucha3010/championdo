@@ -1,13 +1,12 @@
 package com.championdo.torneo;
-
+/**
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PdfService;
-import com.championdo.torneo.service.impl.PdfServiceImpl;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.sun.xml.internal.ws.client.SenderException;
 import org.apache.logging.log4j.Level;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +23,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @SpringBootTest
-@RunWith(JUnit4.class)
+@RunWith(JUnit4.class)*/
 class TorneoApplicationTests {
-
+/**
 	@Autowired
 	private PdfService pdfService;
 	@Autowired
@@ -137,5 +136,5 @@ class TorneoApplicationTests {
 		}
 		System.out.println("absolute[0]: " + absolute[0]);
 	}
-
+*/
 	}

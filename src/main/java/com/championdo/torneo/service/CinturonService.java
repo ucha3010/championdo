@@ -8,17 +8,17 @@ import java.util.List;
 
 public interface CinturonService {
 
-	public abstract List<CinturonModel> findAll();
-	
-	public abstract CinturonModel findById(int id);
-	
-	public abstract void add(CinturonModel cinturonModel);
-	
-	public abstract void update(CinturonModel cinturonModel);
+    List<CinturonModel> findAll();
 
-	public abstract void delete(int idCinturon) throws RemoveException;
+    CinturonModel findById(int id);
 
-	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+    void add(CinturonModel cinturonModel);
 
-	public abstract int findMaxPosition();
+    void update(CinturonModel cinturonModel);
+
+    void delete(int idCinturon) throws RemoveException;
+
+    void dragOfPosition(int initialPosition, int finalPosition);
+
+    int findMaxPosition();
 }

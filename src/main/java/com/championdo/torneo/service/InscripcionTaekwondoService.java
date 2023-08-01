@@ -9,14 +9,23 @@ import java.util.List;
 
 public interface InscripcionTaekwondoService {
 
-	public abstract List<InscripcionTaekwondoModel> findAll();
-	public abstract InscripcionTaekwondoModel findById(int id);
-	public abstract List<InscripcionTaekwondoModel> findByMayorDni(String mayorDni);
-	public abstract InscripcionTaekwondoModel add(InscripcionTaekwondoModel inscripcionModel);
-	public abstract InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel);
-	public abstract void update(InscripcionTaekwondoModel inscripcionModel);
-	public abstract void delete(int idInscripcion);
-	public abstract void deleteAll();
-	public abstract UtilModel getDeleteEnable();
-	public abstract boolean changeValueDeleteEnable();
+    List<InscripcionTaekwondoModel> findAll();
+
+    InscripcionTaekwondoModel findById(int id);
+
+    List<InscripcionTaekwondoModel> findByMayorDni(String mayorDni);
+
+    InscripcionTaekwondoModel add(InscripcionTaekwondoModel inscripcionModel);
+
+    InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel);
+
+    void update(InscripcionTaekwondoModel inscripcionModel);
+
+    void delete(int idInscripcion);
+
+    void deleteAll();
+
+    UtilModel getDeleteEnable();
+
+    boolean changeValueDeleteEnable();
 }

@@ -9,10 +9,8 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Repository("userRoleRepository")
-public interface UserRoleRepository extends JpaRepository<UserRole, Serializable>{
-	
-	public abstract Set<UserRole> findByUser(User user);
+public interface UserRoleRepository extends JpaRepository<UserRole, Serializable> {
+    Set<UserRole> findByUser(User user);
 
-	public abstract void deleteByUserRoleId(int userRoleId);
-
+    void deleteByUserRoleId(int userRoleId);
 }

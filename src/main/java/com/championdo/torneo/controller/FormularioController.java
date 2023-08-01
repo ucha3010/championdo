@@ -27,34 +27,16 @@ public class FormularioController {
     private FormularioService formularioService;
 
     @Autowired
-    private CalidadService calidadService;
-
-    @Autowired
-    private CinturonService cinturonService;
-
-    @Autowired
     private EmailService emailService;
 
     @Autowired
-    private GimnasioService gimnasioService;
-
-    @Autowired
     private InscripcionService inscripcionService;
-
-    @Autowired
-    private PaisService paisService;
 
     @Autowired
     private PdfService pdfService;
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private PrincipalController principalController;
 
     @GetMapping("/propia")
     @PreAuthorize("isAuthenticated()")
@@ -75,7 +57,7 @@ public class FormularioController {
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada");
-        PdfModel pdfModel = null;
+        PdfModel pdfModel;
         try {
             formularioService.fillObjects(userModel);
             pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
@@ -134,7 +116,7 @@ public class FormularioController {
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada");
-        PdfModel pdfModel = null;
+        PdfModel pdfModel;
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
@@ -195,9 +177,10 @@ public class FormularioController {
     public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
-                userService.altaNuevoUsuario(userModel, "ROLE_USER");
+                com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, "ROLE_USER");
                 modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
                 modelAndView.setViewName(Constantes.LOGIN);
+                LoggerMapper.log(Level.INFO, "alta", user, this.getClass());
                 return modelAndView;
             } catch (PersistenceException e) {
                 modelAndView.addObject("problemasAlta", "Problemas dando de alta usuario con DNI " + userModel.getUsername());

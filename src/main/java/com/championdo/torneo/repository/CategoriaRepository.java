@@ -4,18 +4,21 @@ import com.championdo.torneo.entity.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Repository("categoriaRepository")
-public interface CategoriaRepository extends JpaRepository<Categoria, Serializable>{
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
+    Categoria findByNombre(String nombre);
 
-    public abstract Categoria findByNombre(String nombre);
-    public abstract Categoria findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(int edadInicio, int edadFin);
-    public abstract Categoria findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndIdCinturonInicioLessThanEqualAndIdCinturonFinGreaterThanEqualAndInfantil(int edadInicio, int edadFin, int cituronInicio, int cinturonFin, boolean infantil);
-    public abstract List<Categoria> findAllByOrderByPositionAsc();
-    public abstract Categoria findByPosition(int position);
-    public abstract Categoria findTopByOrderByPositionDesc();
-    public abstract List<Categoria> findByIdCinturonInicioOrIdCinturonFin(int idCinturonInicio, int idCinturonFin);
+    Categoria findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(int edadInicio, int edadFin);
 
+    Categoria findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndIdCinturonInicioLessThanEqualAndIdCinturonFinGreaterThanEqualAndInfantil(int edadInicio, int edadFin, int cituronInicio, int cinturonFin, boolean infantil);
+
+    List<Categoria> findAllByOrderByPositionAsc();
+
+    Categoria findByPosition(int position);
+
+    Categoria findTopByOrderByPositionDesc();
+
+    List<Categoria> findByIdCinturonInicioOrIdCinturonFin(int idCinturonInicio, int idCinturonFin);
 }

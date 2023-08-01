@@ -10,27 +10,27 @@ import java.util.List;
 
 public interface InscripcionService {
 
-	public abstract List<InscripcionModel> findAll();
+    List<InscripcionModel> findAll();
 
-	public abstract InscripcionModel findById(int id);
+    InscripcionModel findById(int id);
 
-	public abstract List<InscripcionModel> findByDniAutorizador(String dniAutorizador);
+    List<InscripcionModel> findByDniAutorizador(String dniAutorizador);
 
-	public abstract InscripcionModel findByDniInscripto(String dniInscripto);
+    InscripcionModel findByDniInscripto(String dniInscripto);
 
-	public abstract InscripcionModel add(InscripcionModel inscripcionModel);
+    InscripcionModel add(InscripcionModel inscripcionModel);
 
-	public abstract InscripcionModel addPropia(UserModel userModel);
+    InscripcionModel addPropia(UserModel userModel);
 
-	public abstract InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel);
+    InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel);
 
-	public abstract void update(InscripcionModel inscripcionModel);
+    void update(InscripcionModel inscripcionModel);
 
-	public abstract void delete(int idInscripcion);
+    void delete(int idInscripcion);
 
-	public abstract void deleteAll();
+    void deleteAll();
 
-	public abstract UtilModel getDeleteEnable();
+    UtilModel getDeleteEnable();
 
-	public abstract boolean changeValueDeleteEnable();
+    void changeValueDeleteEnable();
 }

@@ -2,7 +2,6 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Pais;
 import com.championdo.torneo.mapper.MapperPais;
-import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.PaisModel;
 import com.championdo.torneo.repository.PaisRepository;
 import com.championdo.torneo.service.PaisService;

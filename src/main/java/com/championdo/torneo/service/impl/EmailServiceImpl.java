@@ -5,7 +5,7 @@ import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.SendMessage;
-import com.sun.xml.internal.ws.client.SenderException;
+import com.championdo.torneo.exception.SenderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
             sendMessage.sendEmail(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null);
         } catch (Exception e) {
-            throw new SenderException(e);
+            throw new SenderException("1000",e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
             sendMessage.sendEmail(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     messageSubject, messageBody, file);
         } catch (Exception e) {
-            throw new SenderException(e);
+            throw new SenderException("1001",e.getMessage());
         }
     }
 
@@ -50,9 +50,9 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
-        stringBuilder.append("<h1>Hola<b>"+name+"</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
         stringBuilder.append("<p>Nos ha llegado tu solicitud de cambio de contraseña</p>");
-        stringBuilder.append("<p>Tu nueva contraseña es: " + userModel.getPassword() + "</p>");
+        stringBuilder.append("<p>Tu nueva contraseña es: ").append(userModel.getPassword()).append("</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
         stringBuilder.append("</BODY></HTML>");
@@ -66,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
-        stringBuilder.append("<h1>Hola<b>"+name+"</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te adjuntamos la confirmación de inscripción al Torneo de Tres Cantos.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");

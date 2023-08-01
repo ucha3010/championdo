@@ -1,10 +1,10 @@
 package com.championdo.torneo.controller;
 
-import com.championdo.torneo.mapper.MapperUser;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.PdfModel;
+import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
-import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.PersistenceException;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,36 +24,15 @@ public class GimnasioController {
     private FormularioService formularioService;
 
     @Autowired
-    private CalidadService calidadService;
-
-    @Autowired
-    private CinturonService cinturonService;
-
-    @Autowired
     private EmailService emailService;
-
-    @Autowired
-    private GimnasioService gimnasioService;
-
-    @Autowired
-    private InscripcionService inscripcionService;
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
-
-    @Autowired
-    private PaisService paisService;
 
     @Autowired
     private PdfService pdfService;
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private PrincipalController principalController;
 
     @GetMapping("/tipoInscripcion")
     @PreAuthorize("isAuthenticated()")
@@ -102,14 +78,13 @@ public class GimnasioController {
             pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
             if (userAutorizacionModel.getMayorAutorizador().isLicencia()) {
                 File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
-                //emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
             }
             File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
             if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
-                //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+                File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
             }
             if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
-                //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
+                //TODO DAMIAN hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gimnasio/gaurdarPropia", e.getMessage(), getClass());
@@ -177,7 +152,7 @@ public class GimnasioController {
             }
             File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
             if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
-                //TODO Damián hacer pdf mandato SEPA (habrá que hacer un control en Administración para activación de esta opción)
+                File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
             }
             if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
                 //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)

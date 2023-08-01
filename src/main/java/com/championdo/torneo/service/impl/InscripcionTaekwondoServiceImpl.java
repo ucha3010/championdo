@@ -34,7 +34,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     @Override
     public List<InscripcionTaekwondoModel> findAll() {
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = new ArrayList<>();
-        for (InscripcionTaekwondo inscripcion: inscripcionTaekwondoRepository.findAllByOrderByIdDesc()) {
+        for (InscripcionTaekwondo inscripcion : inscripcionTaekwondoRepository.findAllByOrderByIdDesc()) {
             inscripcionTaekwondoModelList.add(mapperInscripcionTaekwondo.entity2Model(inscripcion));
         }
         return inscripcionTaekwondoModelList;
@@ -85,11 +85,13 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
 
     @Override
     public void delete(int idInscripcionTaekwondo) {
-        InscripcionTaekwondo inscripcion = inscripcionTaekwondoRepository.getById(idInscripcionTaekwondo);
-        if (inscripcion != null) {
+        try {
+            InscripcionTaekwondo inscripcion = inscripcionTaekwondoRepository.getById(idInscripcionTaekwondo);
             inscripcionTaekwondoRepository.delete(inscripcion);
+            LoggerMapper.methodOut(Level.INFO, "delete", inscripcion, getClass());
+        } catch (EntityNotFoundException e) {
+            LoggerMapper.log(Level.ERROR, "delete", "id " + idInscripcionTaekwondo + " no encontrado", this.getClass());
         }
-        LoggerMapper.methodOut(Level.INFO, "delete", inscripcion, getClass());
     }
 
     @Override
@@ -104,12 +106,12 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     @Override
     public boolean changeValueDeleteEnable() {
         UtilModel utilModel = getDeleteEnable();
-        Boolean deleteEnable = Boolean.FALSE;
+        boolean deleteEnable = Boolean.FALSE;
         if (!StringUtils.isNullOrEmpty(utilModel.getValor())) {
-            deleteEnable = new Boolean(utilModel.getValor());
+            deleteEnable = Boolean.parseBoolean(utilModel.getValor());
         }
         deleteEnable = !deleteEnable;
-        utilModel.setValor(deleteEnable.toString());
+        utilModel.setValor(Boolean.toString(deleteEnable));
         utilService.update(utilModel);
         return deleteEnable;
     }

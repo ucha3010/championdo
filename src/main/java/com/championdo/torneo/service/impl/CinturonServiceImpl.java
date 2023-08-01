@@ -70,12 +70,12 @@ public class CinturonServiceImpl implements CinturonService {
                 }
             }
         } else {
-            String errorMessage = "No se puede borrar cinturón por estar en categoría";
+            StringBuilder errorMessage = new StringBuilder("No se puede borrar cinturón por estar en categoría");
             LoggerMapper.log(Level.INFO, "delete", categoriaList, getClass());
             for (Categoria categoria : categoriaList) {
-                errorMessage += " " + categoria.getNombre();
+                errorMessage.append(" ").append(categoria.getNombre());
             }
-            throw new RemoveException("100", errorMessage);
+            throw new RemoveException("100", errorMessage.toString());
         }
     }
 

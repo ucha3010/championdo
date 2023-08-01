@@ -4,6 +4,7 @@ import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.mysql.cj.util.StringUtils;
 import com.sun.istack.NotNull;
@@ -30,6 +31,7 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public File generarPdfTorneo(PdfModel pdfModel) {
 
+        LoggerMapper.methodIn(Level.INFO, "generarPdfTorneo", pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -49,11 +51,12 @@ public class PdfServiceImpl implements PdfService {
             }
             contentStream.endText();
 
-            List<String> parrafoList;
+            List<String> parrafoList = new ArrayList<>();
 
             StringBuilder parrafo = new StringBuilder();
             int alturaComienzoParrafo = 123;
             int salto = 33;
+            int tamanioFuente;
             parrafo.append("Yo ").append(pdfModel.getNombre()).append(" con DNI ").append(pdfModel.getDni());
             if (pdfModel.isMayorEdad()) {
                 parrafo.append(", fecha de nacimiento ").append(pdfModel.getFechaNacimiento());
@@ -78,12 +81,14 @@ public class PdfServiceImpl implements PdfService {
             } else {
                 parrafo.append(" (a dicha categoría le corresponde realizar el KICHO o POOMSAE que deseen).");
             }
-            parrafoList = organizaRenglones(parrafo.toString(), 16, null, false);
+            tamanioFuente = 16;
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
 
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, 16, salto);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
 
             alturaComienzoParrafo += (parrafoList.size() * salto);
             salto = 15;
+            tamanioFuente = 14;
             parrafo = new StringBuilder();
             if (pdfModel.isMayorEdad()) {
                 parrafo.append("Informo que voy a participar en el ");
@@ -92,9 +97,9 @@ public class PdfServiceImpl implements PdfService {
             }
             parrafo.append(pdfModel.getNombreCampeonato()).append(" a celebrar el próximo ").append(pdfModel.getFechaCampeonato());
             parrafo.append(", en la dirección ").append(pdfModel.getDireccionCampeonato()).append(".");
-            parrafoList = organizaRenglones(parrafo.toString(), 14, null, true);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), 14, null, true, false);
 
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, 14, salto);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
 
             alturaComienzoParrafo += (parrafoList.size() * salto + 20);
             parrafo = new StringBuilder();
@@ -102,9 +107,9 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("campeonato, la utilización de mi imagen en el país o en el extranjero por ");
             parrafo.append("cualquier medio ya sea impreso, electrónico o cualquier otro. ");
             parrafo.append("De igual manera, es mi deseo establecer que esta autorización es voluntaria y gratuita.");
-            parrafoList = organizaRenglones(parrafo.toString(), 14, null, false);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), 14, null, false, false);
 
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, 14, salto);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
 
             alturaComienzoParrafo += (parrafoList.size() * salto + 10);
             parrafo = new StringBuilder();
@@ -114,9 +119,9 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("el campeonato de taekwondo. Al facilitar mis datos, autorizo al Comité ");
             parrafo.append("Organizador a utilizar mis datos para realizar listados, sorteos, ");
             parrafo.append("publicaciones en medios u otros asuntos relacionados con el campeonato.");
-            parrafoList = organizaRenglones(parrafo.toString(), 14, null, false);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), 14, null, false, false);
 
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, 14, salto);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
 
             if (pdfModel.isCinturonBlanco()) {
                 alturaComienzoParrafo += (parrafoList.size() * salto + 10);
@@ -125,9 +130,9 @@ public class PdfServiceImpl implements PdfService {
                 parrafo.append("responsabilidad al comité organizador de cualquier lesión o daño que ");
                 parrafo.append("se produjera el competidor o la competidora durante el evento o daños ");
                 parrafo.append("que pudiera realizar a personas o material del pabellón.");
-                parrafoList = organizaRenglones(parrafo.toString(), 14, null, true);
+                parrafoList = organizaRenglones(parrafoList, parrafo.toString(), 14, null, true, false);
 
-                generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, 14, salto);
+                generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             }
 
 
@@ -143,7 +148,7 @@ public class PdfServiceImpl implements PdfService {
             document.save(nombreArchivo(pdfModel, true, true, "torneo"));
             return new File(nombreArchivo(pdfModel, true, true, "torneo"));
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "generarPdf", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, "generarPdfTorneo", e.getMessage(), PdfServiceImpl.class);
         }
         return null;
 
@@ -152,6 +157,7 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public File generarPdfMandato(PdfModel pdfModel) {
 
+        LoggerMapper.methodIn(Level.INFO, "generarPdfMandato", pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -165,7 +171,7 @@ public class PdfServiceImpl implements PdfService {
             contentStream.showText("Mandato específico para la inscripción federativa");
             contentStream.endText();
 
-            List<String> parrafoList;
+            List<String> parrafoList = new ArrayList<>();
 
             StringBuilder parrafo;
             int alturaComienzoParrafo = 90;
@@ -184,8 +190,8 @@ public class PdfServiceImpl implements PdfService {
                 parrafo = new StringBuilder();
                 parrafo.append("Para los menores, son los datos de").append(pdfModel.getCalidadDe().equalsIgnoreCase("Madre") ? " la " : "l ");
                 parrafo.append(pdfModel.getCalidadDe()).append(" y entre paréntesis el nombre del deportista.");
-                parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-                generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+                parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+                generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
                 alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
             }
 
@@ -195,80 +201,64 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("D./Dña. ").append(pdfModel.getNombre()).append(nombreMenor).append(" con DNI ").append(pdfModel.getDni()).append(", en su propio ");
             parrafo.append("nombre y representación, con domicilio a efectos de notificaciones en ").append(pdfModel.getDomicilio()).append(" ");
             parrafo.append(pdfModel.getLocalidad()).append(" en concepto de MANDANTE.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Dice y otorga");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, true);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, true, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que confiere MANDATO CON REPRESENTACIÓN a favor del representante del Club Championdo con domicilio ");
             parrafo.append("en Av Viñuelas 30, en concepto de MANDATARIO.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que el presente MANDATO, que se rige por los arts. 1709 a 1739 CC español se confiere para que se pueda llevar ");
             parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(hoy[0]);
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que el presente MANDATO se confiere para su actuación ante las dependencias federativas, personalmente o ");
             parrafo.append("a través de recursos online, en relación exclusivamente del asunto citado como objeto del MANDATO.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que este MANDATO tiene exclusiva vigencia para la inscripción federativa, finalizando la misma en el ");
             parrafo.append("momento en que se produzca la inscripción.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que conoce y acepta el tratamiento de datos que llevará a cabo la federación, la cual legitima el mismo con ");
             parrafo.append("los requisitos normativos que cumplimenta el MANDATARIO por efecto de este MANDATO.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Y para que conste dejo firmado de forma electrónica este documento ");
             parrafo.append("con fecha ").append(hoy[0]).append(" de ").append(hoy[1]).append(" de ").append(hoy[2]);
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             alturaComienzoParrafo += 85;
-
-            /*
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
-            contentStream.newLineAtOffset( 100, page.getMediaBox().getHeight() - alturaComienzoParrafo);
-            contentStream.showText("En Tres Cantos, a " + hoy[0] + " de " + hoy[1] + " de " + hoy[2]);
-            contentStream.endText();
-            alturaComienzoParrafo += 30;
-
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 16);
-            contentStream.newLineAtOffset( 180, page.getMediaBox().getHeight() - alturaComienzoParrafo);
-            contentStream.showText("EL MANDANTE");
-            contentStream.endText();
-            alturaComienzoParrafo += 85;
-             */
 
             contentStream.beginText();
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
@@ -288,8 +278,8 @@ public class PdfServiceImpl implements PdfService {
             parrafo = new StringBuilder();
             parrafo.append("Acepto el MANDATO conferido y me obligo a cumplirlo de conformidad a las instrucciones del MANDANTE, y declaro ");
             parrafo.append("bajo mi responsabilidad de la veracidad y actualización de los datos facilitados para la inscripción federativa.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, 180.0, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, 180.0, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + 20);
 
             contentStream.beginText();
@@ -309,7 +299,7 @@ public class PdfServiceImpl implements PdfService {
             document.save(nombreArchivo(pdfModel, true, true, "mandato"));
             return new File(nombreArchivo(pdfModel, true, true, "mandato"));
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "generarPdf", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, "generarPdfMandato", e.getMessage(), PdfServiceImpl.class);
         }
         return null;
 
@@ -318,6 +308,7 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public File generarPdfAutorizacionMayor18(PdfModel pdfModel) {
 
+        LoggerMapper.methodIn(Level.INFO, "generarPdfAutorizacionMayor18", pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -331,7 +322,7 @@ public class PdfServiceImpl implements PdfService {
             contentStream.showText("AUTORIZACIÓN DE MAYORES DE 18 AÑOS");
             contentStream.endText();
 
-            List<String> parrafoList;
+            List<String> parrafoList = new ArrayList<>();
 
             StringBuilder parrafo;
             int alturaComienzoParrafo = 90;
@@ -348,16 +339,16 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("Yo D./Dña. ").append(pdfModel.getNombre()).append(" con DNI ").append(pdfModel.getDni());
             parrafo.append(", fecha de nacimiento ").append(pdfModel.getFechaNacimiento()).append(" y domicilio en ").append(pdfModel.getDomicilio()).append(" ");
             parrafo.append(pdfModel.getLocalidad()).append(" perteneciente al gimnasio CHAMPIONDO");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("INFORMO QUE ENTRENO EN EL GIMNASIO CHAMPIONDO Y PARTICIPO VOLUNTARIAMENTE EN LOS CAMPEONATOS Y ");
             parrafo.append("ENTRENAMIENTOS QUE PARTICIPEN LOS ALUMNOS DEL GIMNASIO CHAMPIONDO.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, true);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, true, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -366,8 +357,8 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("de mi imagen en el país o en el extranjero por cualquier medio ya sea impreso, electrónico ");
             parrafo.append("o cualquier otro. De igual manera, es mi deseo establecer que esta autorización es voluntaria ");
             parrafo.append("y gratuita.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -377,8 +368,8 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("objeto de poder gestionar adecuadamente los datos. Al facilitar mis datos, autorizo al ");
             parrafo.append("gimnasio CHAMPIONDO a utilizar mis datos para realizar listados, sorteos, publicaciones ");
             parrafo.append("en medios y otros asuntos relacionados con el gimnasio CHAMPIONDO.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -386,16 +377,16 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("Por otra parte, eximo de toda responsabilidad al gimnasio CHAMPIONDO de cualquier lesión ");
             parrafo.append("o daño que se produjera el alumno o la alumna durante los entrenamientos y campeonatos ");
             parrafo.append("a los que acuda o daños que pudiera realizar a personas o materiales.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Y para que conste dejo firmado de forma electrónica este documento ");
             parrafo.append("con fecha ").append(hoy[0]).append(" de ").append(hoy[1]).append(" de ").append(hoy[2]);
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             //alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             /* Image
@@ -408,7 +399,7 @@ public class PdfServiceImpl implements PdfService {
             document.save(nombreArchivo(pdfModel, true, true, "autorizacionMayor18"));
             return new File(nombreArchivo(pdfModel, true, true, "autorizacionMayor18"));
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "generarPdf", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, "generarPdfAutorizacionMayor18", e.getMessage(), PdfServiceImpl.class);
         }
         return null;
     }
@@ -416,6 +407,7 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public File generarPdfAutorizacionMenor18(PdfModel pdfModel) {
 
+        LoggerMapper.methodIn(Level.INFO, "generarPdfAutorizacionMenor18", pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -429,7 +421,7 @@ public class PdfServiceImpl implements PdfService {
             contentStream.showText("AUTORIZACIÓN DE MENORES DE 18 AÑOS");
             contentStream.endText();
 
-            List<String> parrafoList;
+            List<String> parrafoList = new ArrayList<>();
 
             StringBuilder parrafo;
             int alturaComienzoParrafo = 90;
@@ -446,16 +438,16 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("Yo D./Dña. ").append(pdfModel.getNombre()).append(" con DNI ").append(pdfModel.getDni()).append(" ");
             parrafo.append("en calidad de ").append(pdfModel.getCalidadDe()).append(" y domicilio en ").append(pdfModel.getDomicilio()).append(" ");
             parrafo.append(pdfModel.getLocalidad());
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("INFORMO QUE AUTORIZO A ENTRENAR EN EL GIMNASIO CHAMPIONDO Y A PARTICIPAR EN LOS CAMPEONATOS Y ");
             parrafo.append("ENTRENAMIENTOS QUE PARTICIPEN LOS ALUMNOS DEL GIMNASIO CHAMPIONDO A:");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, true);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, true, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -463,8 +455,8 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("D./Dña. ").append(pdfModel.getNombreMenor());
             parrafo.append(!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? " con DNI " + pdfModel.getDniMenor() + " y " : " ");
             parrafo.append("con fecha de nacimiento ").append(pdfModel.getFechaNacimientoMenor());
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -473,8 +465,8 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("de la imagen de ").append(pdfModel.getNombreMenor()).append(" en el país o en el extranjero ");
             parrafo.append("por cualquier medio ya sea impreso, electrónico o cualquier otro. De igual manera, es mi ");
             parrafo.append("deseo establecer que esta autorización es voluntaria y gratuita.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -484,8 +476,8 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("objeto de poder gestionar adecuadamente los datos. Al facilitar mis datos, autorizo al ");
             parrafo.append("gimnasio CHAMPIONDO a utilizar mis datos para realizar listados, sorteos, publicaciones ");
             parrafo.append("en medios y otros asuntos relacionados con el gimnasio CHAMPIONDO.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
@@ -493,16 +485,16 @@ public class PdfServiceImpl implements PdfService {
             parrafo.append("Por otra parte, eximo de toda responsabilidad al gimnasio CHAMPIONDO de cualquier lesión ");
             parrafo.append("o daño que se produjera el alumno o la alumna durante los entrenamientos y campeonatos ");
             parrafo.append("a los que acuda o daños que pudiera realizar a personas o materiales.");
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Y para que conste dejo firmado de forma electrónica este documento ");
             parrafo.append("con fecha ").append(hoy[0]).append(" de ").append(hoy[1]).append(" de ").append(hoy[2]);
-            parrafoList = organizaRenglones(parrafo.toString(), tamanioFuente, null, false);
-            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, salto);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             //alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
 
             /* Image
@@ -515,16 +507,211 @@ public class PdfServiceImpl implements PdfService {
             document.save(nombreArchivo(pdfModel, true, true, "autorizacionMenor18"));
             return new File(nombreArchivo(pdfModel, true, true, "autorizacionMenor18"));
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "generarPdf", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, "generarPdfAutorizacionMenor18", e.getMessage(), PdfServiceImpl.class);
+        }
+        return null;
+    }
+
+    @Override
+    public File generarPdfNormativaSEPA(PdfModel pdfModel) {
+
+        LoggerMapper.methodIn(Level.INFO, "generarPdfNormativaSEPA", pdfModel, this.getClass());
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            List<String> parrafoList = new ArrayList<>();
+
+            StringBuilder parrafo;
+            int alturaComienzoParrafo = 40;
+            int salto;
+            int tamanioFuente;
+            int dejoDeMargenPosterior = 0;
+            Calendar calendar = GregorianCalendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
+            String[] hoy = sdf.format(calendar.getTime()).split("/");
+            // Definir las coordenadas y dimensiones del cuadrado
+            final float x = 45;
+            final float width = 510;
+
+            salto = 18;
+            tamanioFuente = 20;
+            parrafoList.add("GIMNASIO CHAMPIONDO");
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, 170, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            salto = 22;
+            tamanioFuente = 16;
+            parrafoList = new ArrayList<>();
+            parrafoList.add("TRATAMIENTO DE DATOS DE CLIENTES");
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, 135, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            salto = 20;
+            tamanioFuente = 20;
+            parrafoList = new ArrayList<>();
+            parrafoList.add("NORMATIVA SEPA");
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, 205, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            //salto = 20;tamanioFuente = 20;
+            dejoDeMargenPosterior = 20;
+            parrafoList = new ArrayList<>();
+            parrafoList.add("MANDATO ADEUDO DIRECTO SEPA");
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, 120, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            salto = 15;
+            tamanioFuente = 14;
+            dejoDeMargenPosterior = 10;
+            parrafoList = new ArrayList<>();
+            parrafoList.add("DATOS DEL DEPORTISTA (Quien entrena en el gimnasio)");
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            if (!StringUtils.isNullOrEmpty(pdfModel.getNombreMenor())) {
+
+                //salto = 15;tamanioFuente = 14;
+                dejoDeMargenPosterior = 20;
+                parrafoList = new ArrayList<>();
+                parrafoList.add("Nombre: " + pdfModel.getNombreMenor());
+                if(!StringUtils.isNullOrEmpty(pdfModel.getDniMenor())) {
+                    parrafoList.add("DNI: " + pdfModel.getDniMenor() + "              " + "Fecha de nacimiento: " + pdfModel.getFechaNacimientoMenor());
+                } else {
+                    parrafoList.add("Fecha de nacimiento: " + pdfModel.getFechaNacimientoMenor());
+                }
+                generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+                alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+                encuadrarParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, salto, dejoDeMargenPosterior, x, 0, width, 0);
+
+                //salto = 15;tamanioFuente = 14;
+                dejoDeMargenPosterior = 10;
+                parrafo = new StringBuilder();
+                parrafo.append("PERSONA AUTORIZADORA EN CALIDAD DE ").append(pdfModel.getCalidadDe().toUpperCase()).append(" (Para deportistas menores de edad)");
+                parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, true, false);
+                generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
+                alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            }
+
+            alturaComienzoParrafo = rellenarAdulto(pdfModel, alturaComienzoParrafo, contentStream, page, x, width);
+
+            salto = 20;
+            tamanioFuente = 20;
+            parrafo = new StringBuilder();
+            parrafo.append("DATOS BANCARIOS");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, true, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, 205, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            salto = 15;
+            tamanioFuente = 14;
+            dejoDeMargenPosterior = 20;
+            parrafoList = new ArrayList<>();
+            parrafoList.add("Titular: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getTitular() : Constantes.ERROR_DATOS_BANCARIOS));
+            parrafoList.add("IBAN: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getIban() : Constantes.ERROR_DATOS_BANCARIOS));
+            parrafoList.add("CÓDIGO SWIFT/BIC: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getSwift() : Constantes.ERROR_DATOS_BANCARIOS));
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            encuadrarParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, salto, dejoDeMargenPosterior, x, 0, width, 0);
+
+            float heightAgregado = 0;
+            salto = 12;
+            tamanioFuente = 12;
+            dejoDeMargenPosterior = 0;
+            parrafo = new StringBuilder();
+            parrafo.append("En nombre de la empresa tratamos la información que nos facilita con el fin de prestarles el servicio solicitado, ");
+            parrafo.append("realizar la facturación del mismo. Los datos proporcionados se conservarán mientras se ");
+            parrafo.append("mantenga la relación comercial o durante los años necesarios para cumplir con las obligaciones legales. ");
+            parrafo.append("Los datos no se cederán a terceros salvo en los casos en que exista una obligación legal. Usted tiene ");
+            parrafo.append("derecho a obtener confirmación sobre si en el gimnasio CHAMPIONDO estamos tratando sus datos ");
+            parrafo.append("personales por tanto tiene derecho a acceder a sus datos personales, rectificar los datos inexactos o ");
+            parrafo.append("solicitar su supresión cuando los datos ya no sean necesarios.");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+            heightAgregado += (parrafoList.size() * salto) + dejoDeMargenPosterior;
+
+            //salto = 12;tamanioFuente = 12;
+            dejoDeMargenPosterior = 15;
+            parrafo = new StringBuilder();
+            parrafo.append("Asimismo solicito su autorización para ofrecerle productos y servicios relacionados con los solicitados y ");
+            parrafo.append("fidelizarle como cliente.");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+            heightAgregado += (parrafoList.size() * salto) + dejoDeMargenPosterior;
+
+            cuadradoSeleccion(contentStream, page, alturaComienzoParrafo, x, 30, 10, 10);
+            salto = 15;
+            tamanioFuente = 14;
+            dejoDeMargenPosterior = 0;
+            parrafo = new StringBuilder();
+            parrafo.append("  SI");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+            heightAgregado += (parrafoList.size() * salto) + dejoDeMargenPosterior;
+
+            cuadradoSeleccion(contentStream, page, alturaComienzoParrafo, x, 30, 10, 10);
+            //salto = 15;tamanioFuente = 14;
+            parrafo = new StringBuilder();
+            parrafo.append("NO");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+            heightAgregado += (parrafoList.size() * salto) + dejoDeMargenPosterior;
+
+            //salto = 25;tamanioFuente = 14;
+            dejoDeMargenPosterior = 30;
+            parrafo = new StringBuilder();
+            parrafo.append("Por favor indique SI o NO");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            encuadrarParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, salto, dejoDeMargenPosterior, x, 0, width, heightAgregado);
+
+            //salto = 15;tamanioFuente = 14;
+            parrafo = new StringBuilder();
+            parrafo.append("Por la presente autorizo a los titulares del gimnasio CHAMPIONDO a enviar instrucciones a la ");
+            parrafo.append("entidad arriba indicada para efectuar los adeudos en su cuenta bancaria y me comprometo a ");
+            parrafo.append("realizar los pagos en los plazos establecidos responsabilizándome de los costes generados en ");
+            parrafo.append("caso de devolución.");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+            //salto = 35;
+            tamanioFuente = 18;
+            parrafo = new StringBuilder();
+            parrafo.append("Fecha ").append(hoy[0]).append(" de ").append(hoy[1]).append(" de ").append(hoy[2]).append("           FIRMA:");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
+            //alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
+
+            /* Image
+             PDImageXObject image = PDImageXObject.createFromFile("src/main/java/com/damian/objetivos/util/400.jpg", document);
+             contentStream.drawImage(image, 20, 20, image.getWidth() / 3, image.getHeight() / 3);
+             */
+
+            contentStream.close();
+
+            document.save(nombreArchivo(pdfModel, true, true, "normativaSEPA"));
+            return new File(nombreArchivo(pdfModel, true, true, "normativaSEPA"));
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "generarPdfNormativaSEPA", e.getMessage(), PdfServiceImpl.class);
         }
         return null;
     }
 
     /**
      *
-     * @param pdfModel
-     * @param response
-     * @param seccion valores torneo, mandato, autorizacionMayor18, autorizacionMenor18
+     * @param seccion valores torneo, mandato, autorizacionMayor18, autorizacionMenor18, normativaSEPA
      */
     @Override
     public void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion) {
@@ -582,13 +769,40 @@ public class PdfServiceImpl implements PdfService {
         return pdfModel;
     }
 
+    private int rellenarAdulto(PdfModel pdfModel, int alturaComienzoParrafo, PDPageContentStream contentStream, PDPage page,
+                               float x, float width) throws IOException, EmptyException {
+
+        int salto = 15;
+        int tamanioFuente = 14;
+        int dejoDeMargenPosterior = 20;
+        List<String> parrafoList = new ArrayList<>();
+        parrafoList.add("Nombre: " + pdfModel.getNombre());
+        if(pdfModel.getFechaNacimiento() != null) {
+            parrafoList.add("DNI: " + pdfModel.getDni() + "                 " + "Fecha de nacimiento: " + pdfModel.getFechaNacimiento());
+        } else {
+            parrafoList.add("DNI: " + pdfModel.getDni());
+        }
+        parrafoList = organizaRenglones(parrafoList, "Dirección: " + pdfModel.getDomicilio() + " - "
+                + pdfModel.getLocalidad(), tamanioFuente, null, false, true);
+        parrafoList = organizaRenglones(parrafoList, "Teléfono: " + pdfModel.getTelefono() + "          "
+                + "Email: " + pdfModel.getCorreo(), tamanioFuente, null, false, true);
+
+        generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+
+        alturaComienzoParrafo += (parrafoList.size() * salto + dejoDeMargenPosterior);
+
+        encuadrarParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, salto, dejoDeMargenPosterior, x, 0, width, 0);
+
+        return alturaComienzoParrafo;
+    }
+
     private void generoParrafo(PDPageContentStream contentStream, PDPage page, List<String> parrafoList,
-                                  int alturaPagina, PDType1Font fuente, int fontSize, int salto) throws IOException {
+                                  int alturaPagina, PDType1Font fuente, int fontSize, Integer margenDerecho, int salto) throws IOException {
         int i = 0;
         for (String parrafo1: parrafoList) {
             contentStream.beginText();
             contentStream.setFont(fuente, fontSize);
-            contentStream.newLineAtOffset( 50, page.getMediaBox().getHeight() - (alturaPagina + i));
+            contentStream.newLineAtOffset( (margenDerecho == null ? 50 : margenDerecho), page.getMediaBox().getHeight() - (alturaPagina + i));
             contentStream.showText(parrafo1);
             contentStream.endText();
             i=i+salto;
@@ -621,10 +835,15 @@ public class PdfServiceImpl implements PdfService {
     }
 
 
-    private List<String> organizaRenglones(String parrafo, int tamanioFuente, Double anchoParrafoMlimetros, boolean negrita) throws EmptyException {
+    private List<String> organizaRenglones(List<String> parrafoList, String parrafo, int tamanioFuente, 
+                                           Double anchoParrafoMlimetros, boolean negrita, boolean agrego) throws EmptyException {
 
-        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafo: " + parrafo + " - tamanioFuente: " + tamanioFuente + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros, PdfServiceImpl.class);
-        List<String> renglones = new ArrayList<>();
+        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafoList: " + parrafoList + " - parrafo: " + 
+                parrafo + " - tamanioFuente: " + tamanioFuente + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros + 
+                " - agrego: " + agrego, PdfServiceImpl.class);
+        if(!agrego) {
+            parrafoList = new ArrayList<>();
+        }
         StringBuilder renglon = new StringBuilder();
         final double puntoEnMilimetros = (negrita ? 0.33 : 0.30);
         List<String> letrasTamanio1 = Arrays.asList("i_í_I_Í_l_._-_:_\"_'_,_;_¡_!_º_ª_(_)".split("_"));
@@ -646,15 +865,15 @@ public class PdfServiceImpl implements PdfService {
                 letra = palabra.substring(i, i + 1);
                 sumoMayuscula = (letra.equals(letra.toUpperCase()) ? puntoEnMilimetros * 0.5 : 0.0);
                 if (letrasTamanio1.contains(letra)) {
-                    tamanioNuevaPalabra += tamanioFuente/4 * (puntoEnMilimetros + sumoMayuscula);
+                    tamanioNuevaPalabra += (double) tamanioFuente /4 * (puntoEnMilimetros + sumoMayuscula);
                 } else if (letrasTamanio4.contains(letra)) {
                     tamanioNuevaPalabra += tamanioFuente * (puntoEnMilimetros + sumoMayuscula);
                 } else {
-                    tamanioNuevaPalabra += tamanioFuente/2 * (puntoEnMilimetros + sumoMayuscula);
+                    tamanioNuevaPalabra += (double) tamanioFuente /2 * (puntoEnMilimetros + sumoMayuscula);
                 }
             }
             if (parrafoUtilizado + tamanioNuevaPalabra > anchoParrafoMlimetros) {
-                renglones.add(renglon.toString());
+                parrafoList.add(renglon.toString());
                 renglon = new StringBuilder();
                 parrafoUtilizado = tamanioNuevaPalabra;
             } else {
@@ -662,9 +881,30 @@ public class PdfServiceImpl implements PdfService {
             }
             renglon.append(palabra.concat(" "));
         }
-        renglones.add(renglon.toString());
-        LoggerMapper.log(Level.INFO, "organizaRenglones", "renglones: " + renglones + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros, PdfServiceImpl.class);
-        return renglones;
+        parrafoList.add(renglon.toString());
+        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafoList: " + parrafoList + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros, PdfServiceImpl.class);
+        return parrafoList;
+    }
+
+    private void encuadrarParrafo(PDPageContentStream contentStream, PDPage page, List<String> parrafoList, int alturaComienzoParrafo, int salto,
+                                  int dejoDeMargenPosterior, float x, float yAgregado, float width, float heightAgregado) throws IOException {
+
+        // Dibujar el cuadrado
+        contentStream.addRect(x, page.getMediaBox().getHeight() - alturaComienzoParrafo + dejoDeMargenPosterior + 10 + yAgregado,
+                width, parrafoList.size() * salto + 5 + heightAgregado);
+        contentStream.setLineWidth(2); // Ancho del borde
+        contentStream.setStrokingColor(0, 0, 0); // Color del borde (negro)
+        contentStream.stroke();
+    }
+
+    private void cuadradoSeleccion(PDPageContentStream contentStream, PDPage page, int alturaComienzoParrafo, float x,
+                                   float dejoDeMargenIzquierdo, float width, float height) throws IOException {
+
+        // Dibujar el cuadrado
+        contentStream.addRect(x + dejoDeMargenIzquierdo, page.getMediaBox().getHeight() - alturaComienzoParrafo, width, height);
+        contentStream.setLineWidth(1); // Ancho del borde
+        contentStream.setStrokingColor(0, 0, 0); // Color del borde (negro)
+        contentStream.stroke();
     }
 
 }

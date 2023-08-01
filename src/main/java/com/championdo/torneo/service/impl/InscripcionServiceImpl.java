@@ -121,11 +121,13 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public void delete(int idInscripcion) {
-        Inscripcion inscripcion = inscripcionRepository.getById(idInscripcion);
-        if (inscripcion != null) {
+        try {
+            Inscripcion inscripcion = inscripcionRepository.getById(idInscripcion);
             inscripcionRepository.delete(inscripcion);
+            LoggerMapper.methodOut(Level.INFO, "delete", inscripcion, getClass());
+        } catch (EntityNotFoundException e) {
+            LoggerMapper.log(Level.ERROR, "delete", "id " + idInscripcion + " no encontrado", this.getClass());
         }
-        LoggerMapper.log(Level.INFO, "delete", inscripcion, getClass());
     }
 
     @Override
@@ -138,16 +140,15 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public boolean changeValueDeleteEnable() {
+    public void changeValueDeleteEnable() {
         UtilModel utilModel = getDeleteEnable();
-        Boolean deleteEnable = Boolean.FALSE;
+        boolean deleteEnable = Boolean.FALSE;
         if (!StringUtils.isNullOrEmpty(utilModel.getValor())) {
-            deleteEnable = new Boolean(utilModel.getValor());
+            deleteEnable = Boolean.parseBoolean(utilModel.getValor());
         }
         deleteEnable = !deleteEnable;
-        utilModel.setValor(deleteEnable.toString());
+        utilModel.setValor(Boolean.toString(deleteEnable));
         utilService.update(utilModel);
-        return deleteEnable;
     }
 
     private InscripcionModel fillInscripcionModel(UserModel usuarioInscripto, UserModel usuarioAutorizador) {

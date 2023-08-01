@@ -32,7 +32,7 @@ public class AdminInscripcionController {
         modelAndView.setViewName("adminInscripcion");
         modelAndView.addObject("inscripcionList", inscripcionService.findAll());
         modelAndView.addObject("inscripcionModel", new InscripcionModel());
-        if(new Boolean(inscripcionService.getDeleteEnable().getValor())) {
+        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable().getValor())) {
             modelAndView.addObject("deleteEnable", "Deshabilitar borrar");
         } else {
             modelAndView.addObject("deleteEnable", "Habilitar borrar");

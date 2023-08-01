@@ -5,7 +5,6 @@ import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
-import com.championdo.torneo.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

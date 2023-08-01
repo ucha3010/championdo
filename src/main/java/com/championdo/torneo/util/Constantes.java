@@ -12,4 +12,5 @@ public class Constantes {
 	public static String HABILITAR_BORRAR_INSCRIPCIONES = "inscripciones.borrar";
 	public static String CORREO_GIMNASIO = "gimnasio.correo";
 	public static String HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO = "inscripciones.taekwondo.borrar";
+	public static String ERROR_DATOS_BANCARIOS = "Error en datos bancarios";
 }

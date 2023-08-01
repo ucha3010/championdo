@@ -5,10 +5,10 @@ import com.championdo.torneo.model.PrincipalModel;
 import com.championdo.torneo.model.UtilModel;
 
 public interface PrincipalService {
-	
-	public abstract PrincipalModel findByDni(String dni);
 
-    public abstract void deleteInscripcion(int id);
+    PrincipalModel findByDni(String dni);
 
-    public abstract UtilModel getDeleteEnable();
+    void deleteInscripcion(int id);
+
+    UtilModel getDeleteEnable();
 }

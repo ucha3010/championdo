@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface PaisService {
 
-	public abstract List<PaisModel> findAll();
-	
-	public abstract PaisModel findById(int id);
-	
-	public abstract void add(PaisModel paisModel);
-	
-	public abstract void update(PaisModel paisModel);
+    List<PaisModel> findAll();
 
-	public abstract void delete(int idPais);
+    PaisModel findById(int id);
 
-	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+    void add(PaisModel paisModel);
 
-	public abstract int findMaxPosition();
+    void update(PaisModel paisModel);
+
+    void delete(int idPais);
+
+    void dragOfPosition(int initialPosition, int finalPosition);
+
+    int findMaxPosition();
 }

@@ -2,7 +2,6 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.ClaveUsuarioModel;
-import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.model.UserRoleModel;
 import com.championdo.torneo.service.FormularioService;
@@ -19,9 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
-
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/usuario")
@@ -49,9 +45,9 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView formularioUsuario(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioUsuario");
-		userService.cargarUserModelCompleto(modelAndView);
+		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
 		formularioService.cargarDesplegables(modelAndView);
-		LoggerMapper.log(Level.INFO, "formularioUsuario", modelAndView, getClass());
+		LoggerMapper.log(Level.INFO, "formularioUsuario " + userModel, modelAndView, getClass());
 		return modelAndView;
 	}
 	

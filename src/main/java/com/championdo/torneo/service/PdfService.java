@@ -8,12 +8,20 @@ import java.io.File;
 
 public interface PdfService {
 
-    public File generarPdfTorneo(PdfModel pdfModel);
-    public File generarPdfMandato(PdfModel pdfModel);
-    public File generarPdfAutorizacionMayor18(PdfModel pdfModel);
-    public File generarPdfAutorizacionMenor18(PdfModel pdfModel);
-    public void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion);
-    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, String seccion);
-    public PdfModel getImpresion(InscripcionModel inscripcionModel);
+    File generarPdfTorneo(PdfModel pdfModel);
+
+    File generarPdfMandato(PdfModel pdfModel);
+
+    File generarPdfAutorizacionMayor18(PdfModel pdfModel);
+
+    File generarPdfAutorizacionMenor18(PdfModel pdfModel);
+
+    File generarPdfNormativaSEPA(PdfModel pdfModel);
+
+    void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion);
+
+    String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, String seccion);
+
+    PdfModel getImpresion(InscripcionModel inscripcionModel);
 
 }

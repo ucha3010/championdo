@@ -54,7 +54,6 @@ public class SendMessage {
      *
      * @param fromEmailAddress - Email address to appear in the from: header
      * @param toEmailAddress   - Email address of the recipient
-     * @return the sent message, {@code null} otherwise.
      * @throws MessagingException - if a wrongly formatted address is encountered.
      * @throws IOException        - if service account credentials file not found.
      */

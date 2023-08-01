@@ -4,7 +4,6 @@ import com.championdo.torneo.entity.Categoria;
 import com.championdo.torneo.entity.Poomsae;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperPoomsae;
-import com.championdo.torneo.model.PaisModel;
 import com.championdo.torneo.model.PoomsaeModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.PoomsaeRepository;
@@ -69,12 +68,12 @@ public class PoomsaeServiceImpl implements PoomsaeService {
                 }
             }
         } else {
-            String errorMessage = "No se puede borrar poomsae por estar en categoría";
+            StringBuilder errorMessage = new StringBuilder("No se puede borrar poomsae por estar en categoría");
             LoggerMapper.log(Level.INFO, "delete", categoriaList, getClass());
             for (Categoria categoria : categoriaList) {
-                errorMessage += " " + categoria.getNombre();
+                errorMessage.append(" ").append(categoria.getNombre());
             }
-            throw new RemoveException("100", errorMessage);
+            throw new RemoveException("100", errorMessage.toString());
         }
     }
 

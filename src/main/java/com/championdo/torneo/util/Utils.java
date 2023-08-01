@@ -46,9 +46,7 @@ public class Utils {
         PasswordGenerator passGen = new PasswordGenerator();
 
         // call generatePassword() method of PasswordGenerator class to get Passay generated password
-        String password = passGen.generatePassword(8, LCR, UCR, DR);
-
         // return Passay generated password to the main() method
-        return password;
+        return passGen.generatePassword(8, LCR, UCR, DR);
     }
 }

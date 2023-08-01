@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface UtilService {
 
-	public abstract List<UtilModel> findAllCampeonato();
-	
-	public abstract UtilModel findByClave(String clave);
-	
-	public abstract void update(UtilModel utilModel);
+    List<UtilModel> findAllCampeonato();
+
+    UtilModel findByClave(String clave);
+
+    void update(UtilModel utilModel);
 
 }

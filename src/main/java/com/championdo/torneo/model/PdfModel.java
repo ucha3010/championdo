@@ -8,6 +8,7 @@ public class PdfModel {
     private String domicilio; //calle Mayor 150
     private String localidad; //Madrid (28003) - España
     private String telefono; //654654654
+    private String correo; //pepe@pepe.com
     private String gimnasio; //Championdo
     private String nombreCampeonato; //CAMPEONATO DE TRES CANTOS
     private String fechaCampeonato; //20/12/2022
@@ -24,6 +25,7 @@ public class PdfModel {
     private int idInscripcion;
     private String categoria;
     private String poomsae;
+    private CuentaBancariaModel cuentaBancaria;
 
     public String getNombre() {
         return nombre;
@@ -71,6 +73,14 @@ public class PdfModel {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getGimnasio() {
@@ -201,6 +211,14 @@ public class PdfModel {
         this.poomsae = poomsae;
     }
 
+    public CuentaBancariaModel getCuentaBancaria() {
+        return cuentaBancaria;
+    }
+
+    public void setCuentaBancaria(CuentaBancariaModel cuentaBancaria) {
+        this.cuentaBancaria = cuentaBancaria;
+    }
+
     @Override
     public String toString() {
         return "PdfModel{" +
@@ -210,6 +228,7 @@ public class PdfModel {
                 ", domicilio='" + domicilio + '\'' +
                 ", localidad='" + localidad + '\'' +
                 ", telefono='" + telefono + '\'' +
+                ", correo='" + correo + '\'' +
                 ", gimnasio='" + gimnasio + '\'' +
                 ", nombreCampeonato='" + nombreCampeonato + '\'' +
                 ", fechaCampeonato='" + fechaCampeonato + '\'' +
@@ -226,6 +245,7 @@ public class PdfModel {
                 ", idInscripcion=" + idInscripcion +
                 ", categoria='" + categoria + '\'' +
                 ", poomsae='" + poomsae + '\'' +
+                ", cuentaBancaria=" + cuentaBancaria +
                 '}';
     }
 }

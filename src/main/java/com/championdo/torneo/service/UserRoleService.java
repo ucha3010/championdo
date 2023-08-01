@@ -10,18 +10,20 @@ import java.util.Set;
 
 public interface UserRoleService {
 
-	public abstract List<String> findByUsername(String username);
-	
-	public abstract UserRoleModel findByUser(User user);
-	
-	public abstract Set<UserRole> findRolesByUser(User user);
-	
-	public abstract void save(UserRole userRole);
-	
-	public abstract void delete(int userRoleId);
-	public abstract void deleteByUsername(String username);
+    List<String> findByUsername(String username);
 
-	public abstract void actualizarRoles(UserRoleModel userRoleModel);
-	public abstract List<UserRole> findDistinctByRole();
+    UserRoleModel findByUser(User user);
+
+    Set<UserRole> findRolesByUser(User user);
+
+    void save(UserRole userRole);
+
+    void delete(int userRoleId);
+
+    void deleteByUsername(String username);
+
+    void actualizarRoles(UserRoleModel userRoleModel);
+
+    List<UserRole> findDistinctByRole();
 
 }

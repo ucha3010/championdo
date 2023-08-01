@@ -8,18 +8,18 @@ import java.util.List;
 
 public interface PoomsaeService {
 
-	public abstract List<PoomsaeModel> findAll();
-	
-	public abstract PoomsaeModel findById(int id);
-	
-	public abstract void add(PoomsaeModel poomsaeModel);
-	
-	public abstract void update(PoomsaeModel poomsaeModel);
+    List<PoomsaeModel> findAll();
 
-	public abstract void delete(int idPoomsae) throws RemoveException;
+    PoomsaeModel findById(int id);
 
-	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+    void add(PoomsaeModel poomsaeModel);
 
-	public abstract int findMaxPosition();
+    void update(PoomsaeModel poomsaeModel);
+
+    void delete(int idPoomsae) throws RemoveException;
+
+    void dragOfPosition(int initialPosition, int finalPosition);
+
+    int findMaxPosition();
 
 }

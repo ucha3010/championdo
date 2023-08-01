@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface GimnasioService {
 
-	public abstract List<GimnasioModel> findAll();
-	
-	public abstract GimnasioModel findById(int id);
-	
-	public abstract void add(GimnasioModel gimnasioModel);
-	
-	public abstract void update(GimnasioModel gimnasioModel);
+    List<GimnasioModel> findAll();
 
-	public abstract void delete(int idGimnasio);
+    GimnasioModel findById(int id);
 
-	public abstract void dragOfPosition(int initialPosition, int finalPosition);
+    void add(GimnasioModel gimnasioModel);
 
-	public abstract int findMaxPosition();
+    void update(GimnasioModel gimnasioModel);
+
+    void delete(int idGimnasio);
+
+    void dragOfPosition(int initialPosition, int finalPosition);
+
+    int findMaxPosition();
 }
