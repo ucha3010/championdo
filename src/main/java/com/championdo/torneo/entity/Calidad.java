@@ -3,14 +3,16 @@ package com.championdo.torneo.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "calidad")
-@Getter //TODO DAMIAN aplicar lombok en todas las entities
+@Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Calidad {
 
     @Id
@@ -26,39 +28,7 @@ public class Calidad {
 
     @Column(name = "position")
     private int position;
-/*
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getOtro() {
-        return otro;
-    }
-
-    public void setOtro(String otro) {
-        this.otro = otro;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-*/
     @Override
     public String toString() {
         return "Calidad{" +

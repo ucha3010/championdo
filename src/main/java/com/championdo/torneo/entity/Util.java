@@ -1,9 +1,18 @@
 package com.championdo.torneo.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "util")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Util {
 
     @Id
@@ -13,27 +22,4 @@ public class Util {
     @Column(name = "valor", nullable = false, length = 200)
     private String valor;
 
-    public String getClave() {
-        return clave;
-    }
-
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    @Override
-    public String toString() {
-        return "Util{" +
-                "clave='" + clave + '\'' +
-                ", valor='" + valor + '\'' +
-                '}';
-    }
 }

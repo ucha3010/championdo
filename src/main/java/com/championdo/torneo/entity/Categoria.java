@@ -1,9 +1,18 @@
 package com.championdo.torneo.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "categoria")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Categoria {
 
     @Id
@@ -37,100 +46,4 @@ public class Categoria {
 
     @Column(name = "position")
     private int position;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getEdadInicio() {
-        return edadInicio;
-    }
-
-    public void setEdadInicio(int edadInicio) {
-        this.edadInicio = edadInicio;
-    }
-
-    public int getEdadFin() {
-        return edadFin;
-    }
-
-    public void setEdadFin(int edadFin) {
-        this.edadFin = edadFin;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getIdCinturonInicio() {
-        return idCinturonInicio;
-    }
-
-    public void setIdCinturonInicio(int idCinturonInicio) {
-        this.idCinturonInicio = idCinturonInicio;
-    }
-
-    public int getIdCinturonFin() {
-        return idCinturonFin;
-    }
-
-    public void setIdCinturonFin(int idCinturonFin) {
-        this.idCinturonFin = idCinturonFin;
-    }
-
-    public int getIdPoomsae() {
-        return idPoomsae;
-    }
-
-    public void setIdPoomsae(int idPoomsae) {
-        this.idPoomsae = idPoomsae;
-    }
-
-    public boolean isInclusivo() {
-        return inclusivo;
-    }
-
-    public void setInclusivo(boolean inclusivo) {
-        this.inclusivo = inclusivo;
-    }
-
-    public boolean isInfantil() {
-        return infantil;
-    }
-
-    public void setInfantil(boolean infantil) {
-        this.infantil = infantil;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    @Override
-    public String toString() {
-        return "Categoria{" +
-                "id=" + id +
-                ", anioInicio=" + edadInicio +
-                ", anioFin=" + edadFin +
-                ", nombre='" + nombre + '\'' +
-                ", idCinturonInicio=" + idCinturonInicio +
-                ", idCinturonFin=" + idCinturonFin +
-                ", idPoomsae=" + idPoomsae +
-                ", inclusivo=" + inclusivo +
-                ", infantil=" + infantil +
-                ", position=" + position +
-                '}';
-    }
 }
