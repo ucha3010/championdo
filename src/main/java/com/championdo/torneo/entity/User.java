@@ -28,19 +28,19 @@ public class User {
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled;
 	
-	@Column(name = "name", nullable = true, length = 60)
+	@Column(name = "name", length = 60)
 	private String name;
 	
-	@Column(name = "lastname", nullable = true, length = 60)
+	@Column(name = "lastname", length = 60)
 	private String lastname;
 	
-	@Column(name = "secondLastname", nullable = true, length = 60)
+	@Column(name = "secondLastname", length = 60)
 	private String secondLastname;
 
-	@Column(name = "sexo", nullable = true, length = 9)
+	@Column(name = "sexo", length = 9)
 	private String sexo;
 
-	@Column(name = "fechaNacimiento", nullable = true)
+	@Column(name = "fechaNacimiento")
 	private Date fechaNacimiento;
 
 	@Column(name = "idGimnasio")
@@ -55,45 +55,46 @@ public class User {
 	@Column(name = "idCinturon")
 	private int idCinturon;
 
-	@Column(name = "fechaAlta", nullable = true)
+	@Column(name = "fechaAlta")
 	private Date fechaAlta;
 
-	@Column(name = "fechaModificacion", nullable = true)
+	@Column(name = "fechaModificacion")
 	private Date fechaModificacion;
 
-	@Column(name = "usernameModificacione", nullable = true, length = 45)
+	@Column(name = "usernameModificacione", length = 45)
 	private String usernameModificacione;
 
-	@Column(name = "correo", nullable = true, length = 100)
+	@Column(name = "correo", length = 100)
 	private String correo;
 
 	@Column(name = "menor", nullable = false)
 	private boolean menor;
 
-	@Column(name = "dniMenor", nullable = true, length = 15)
+	@Column(name = "dniMenor", length = 15)
 	private String dniMenor;
 
-	@Column(name = "usernameACargo", nullable = true, length = 45)
+	@Column(name = "usernameACargo", length = 45)
 	private String usernameACargo;
 
-	@Column(name = "domicilioCalle", nullable = true, length = 100)
+	@Column(name = "domicilioCalle", length = 100)
 	private String domicilioCalle;
 
-	@Column(name = "domicilioNumero", nullable = true, length = 30)
+	@Column(name = "domicilioNumero", length = 30)
 	private String domicilioNumero;
 
-	@Column(name = "domicilioOtros", nullable = true, length = 50)
+	@Column(name = "domicilioOtros", length = 50)
 	private String domicilioOtros;
 
-	@Column(name = "domicilioLocalidad", nullable = true, length = 50)
+	@Column(name = "domicilioLocalidad", length = 50)
 	private String domicilioLocalidad;
 
-	@Column(name = "domicilioCp", nullable = true, length = 10)
+	@Column(name = "domicilioCp", length = 10)
 	private String domicilioCp;
 
 	@Column(name = "inclusivo", nullable = false)
 	private boolean inclusivo;
-	@Column(name = "telefono", nullable = true, length = 20)
+
+	@Column(name = "telefono", length = 20)
 	private String telefono;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")

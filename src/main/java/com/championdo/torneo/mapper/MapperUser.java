@@ -1,15 +1,10 @@
 package com.championdo.torneo.mapper;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Array;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class MapperUser {

@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.ClaveUsuarioModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
@@ -7,7 +8,6 @@ import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.championdo.torneo.exception.SenderException;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -50,7 +49,7 @@ public class LoginController {
 	@PreAuthorize("permitAll()")
 	public ModelAndView olvidoClave(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioOlvidoClave");
-		if (modelAndView.getModel() == null || modelAndView.isEmpty() || !modelAndView.getModel().containsKey("claveUsuarioModel")) {
+		if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("claveUsuarioModel")) {
 			modelAndView.addObject("claveUsuarioModel", new ClaveUsuarioModel());
 		}
 		return modelAndView;
@@ -67,11 +66,7 @@ public class LoginController {
 			usuario.setPassword(password);
 			emailService.sendNewPassword(usuario);
 			modelAndView.addObject("emailEnvio", usuario.getCorreo());
-		} catch (NoResultException e) {
-			mostrarExcepcion(e, claveUsuarioModel, modelAndView);
-		} catch (PersistenceException e) {
-			mostrarExcepcion(e, claveUsuarioModel, modelAndView);
-		} catch (SenderException e) {
+		} catch (PersistenceException | SenderException e) {
 			mostrarExcepcion(e, claveUsuarioModel, modelAndView);
 		}
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);

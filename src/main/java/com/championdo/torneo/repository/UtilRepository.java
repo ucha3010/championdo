@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("utilRepository")
 public interface UtilRepository extends JpaRepository<Util, String> {
-    public abstract Util findByClave(String clave);
+    Util findByClave(String clave);
 }

@@ -23,19 +23,10 @@ public class Calidad {
     @Column(name = "nombre", nullable = false, length = 20)
     private String nombre;
 
-    @Column(name = "otro", nullable = true, length = 200)
+    @Column(name = "otro", length = 200)
     private String otro;
 
     @Column(name = "position")
     private int position;
 
-    @Override
-    public String toString() {
-        return "Calidad{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", otro='" + otro + '\'' +
-                ", position=" + position +
-                '}';
-    }
 }

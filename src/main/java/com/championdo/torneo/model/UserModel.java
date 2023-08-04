@@ -1,9 +1,5 @@
 package com.championdo.torneo.model;
 
-import com.championdo.torneo.entity.Calidad;
-import com.championdo.torneo.entity.Cinturon;
-import com.championdo.torneo.entity.Gimnasio;
-import com.championdo.torneo.entity.Pais;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;

@@ -23,7 +23,7 @@ public class Gimnasio {
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "direccion", nullable = true, length = 200)
+    @Column(name = "direccion", length = 200)
     private String direccion;
 
     @Column(name = "position")

@@ -166,7 +166,7 @@ public class FormularioController {
     public ModelAndView getAlta(ModelAndView modelAndView) {
         modelAndView.setViewName("formularioAlta");
         formularioService.cargarDesplegables(modelAndView);
-        if (modelAndView.getModel() == null || modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
+        if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
             modelAndView.addObject("userModel", new UserModel());
         }
         return modelAndView;

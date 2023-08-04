@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository("poomsaeRepository")
 public interface PoomsaeRepository extends JpaRepository<Poomsae, Integer> {
-    public abstract List<Poomsae> findAllByOrderByPositionAsc();
+    List<Poomsae> findAllByOrderByPositionAsc();
 
-    public abstract Poomsae findByPosition(int position);
+    Poomsae findByPosition(int position);
 
-    public abstract Poomsae findTopByOrderByPositionDesc();
+    Poomsae findTopByOrderByPositionDesc();
 }

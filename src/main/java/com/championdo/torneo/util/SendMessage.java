@@ -52,7 +52,7 @@ public class SendMessage {
     /**
      * Send an email from the user's mailbox to its recipient.
      *
-     * @param fromEmailAddress - Email address to appear in the from: header
+     * @param fromEmailAddress - Email address to appear in the form: header
      * @param toEmailAddress   - Email address of the recipient
      * @throws MessagingException - if a wrongly formatted address is encountered.
      * @throws IOException        - if service account credentials file not found.
