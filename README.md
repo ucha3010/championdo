@@ -1,1 +1,1 @@
-Programa para la inscripción al Torneo de taekwondo de Tres Cantos organizado por el gimnasio Championdo
+Gestión completa de gimnasio con inscripción a torneos
