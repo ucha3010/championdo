@@ -130,4 +130,31 @@ public class SendMessage {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
+
+    /**primero dentro de GMAIL ir a la configuración de la cuenta
+     * apartado Seguridad
+     * en el apartado "Acceso a Google" tocar Contraseñas de aplicaciones
+     * Generar nueva contraseña con opción "Otra (nombre personalizado)"
+     * le pongo un nombre cualquiera
+     * copiar la contraseña que me genera para usarla después acá
+    */
+    public void enviarCorreo(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, File file)
+            throws MessagingException, IOException {
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.setProperty("mail.smtp.starttls.enable", "true");
+        props.setProperty("mail.smtp.port", "587");
+        props.setProperty("mail.smtp.user", fromEmailAddress);
+        props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.setProperty("mail.smtp.auth", "true");
+        //TODO DAMIAN seguir acá con indicaciones https://www.youtube.com/watch?v=ZggjlwLzrxg minuto 5:25
+
+
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage email = new MimeMessage(session);
+
+    }
+
 }
