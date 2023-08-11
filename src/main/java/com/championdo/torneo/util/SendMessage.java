@@ -1,6 +1,7 @@
 package com.championdo.torneo.util;
 
-import com.google.api.client.auth.oauth2.Credential;
+import com.championdo.torneo.service.UtilService;
+/*import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -13,41 +14,47 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;*/
 import org.apache.logging.log4j.Level;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.MessagingException;
+/*import javax.activation.DataSource;
 import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import java.io.*;
 import java.util.Arrays;
-import java.util.List;
+import java.util.List;*/
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.io.IOException;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Component
 public class SendMessage {
 
-    private static final String APPLICATION_NAME = "Torneo inscripcion" ;
+    /*private static final String APPLICATION_NAME = "Torneo inscripcion" ;
     private static final String CREDENTIALS_FILE_PATH = "/static/files/credentials.json";
-    private static final List<String> SCOPES = Arrays.asList(GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_COMPOSE);
+    private static final List<String> SCOPES = Arrays.asList(GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_COMPOSE);*/
 
-    private final Gmail service;
+    //private final Gmail service;
 
-    public SendMessage() throws Exception{
+    @Autowired
+    private UtilService utilService;
+
+/*    public SendMessage() throws Exception{
         NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
         service = new Gmail.Builder(httpTransport, gsonFactory, getCredentials(httpTransport, gsonFactory))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-    }
+    }*/
 
     /**
      * Send an email from the user's mailbox to its recipient.
@@ -57,7 +64,7 @@ public class SendMessage {
      * @throws MessagingException - if a wrongly formatted address is encountered.
      * @throws IOException        - if service account credentials file not found.
      */
-    public void sendEmail(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, File file)
+    /*public void sendEmail(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, File file)
             throws MessagingException, IOException {
 
 
@@ -102,7 +109,7 @@ public class SendMessage {
             LoggerMapper.log(Level.ERROR, "sendEmail", e.getDetails(), SendMessage.class);
             throw new MessagingException(e.getMessage());
         }
-    }
+    }*/
 
     /**
      * Creates an authorized Credential object.
@@ -111,7 +118,7 @@ public class SendMessage {
      * @return An authorized Credential object.
      * @throws IOException If the credentials.json file cannot be found.
      */
-    private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory gsonFactory)
+    /*private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory gsonFactory)
             throws IOException {
         // Load client secrets.
         InputStream in = SendMessage.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
@@ -129,17 +136,21 @@ public class SendMessage {
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-    }
+    }*/
 
+    //TODO DAMIAN importante hacer esto primero
     /**primero dentro de GMAIL ir a la configuración de la cuenta
      * apartado Seguridad
      * en el apartado "Acceso a Google" tocar Contraseñas de aplicaciones
      * Generar nueva contraseña con opción "Otra (nombre personalizado)"
      * le pongo un nombre cualquiera
-     * copiar la contraseña que me genera para usarla después acá
+     * copiar la contraseña que me genera y guardarla en tabla de utilidades
+     * bajo la llave clave.correo
+     * Indicaciones https://www.youtube.com/watch?v=ZggjlwLzrxg
+     * Indicaciones archivos adjuntos https://www.youtube.com/watch?v=o7v0EQgxP50
     */
     public void enviarCorreo(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, File file)
-            throws MessagingException, IOException {
+            throws MessagingException {
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -149,12 +160,34 @@ public class SendMessage {
         props.setProperty("mail.smtp.user", fromEmailAddress);
         props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
         props.setProperty("mail.smtp.auth", "true");
-        //TODO DAMIAN seguir acá con indicaciones https://www.youtube.com/watch?v=ZggjlwLzrxg minuto 5:25
 
-
-        Session session = Session.getDefaultInstance(props, null);
+        Session session = Session.getDefaultInstance(props);
         MimeMessage email = new MimeMessage(session);
+        email.setFrom(new InternetAddress(fromEmailAddress));
+        email.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(toEmailAddress));
+        email.setSubject(messageSubject);
+        if (file == null) {
+            email.setText(bodyText, "ISO-8859-1", "html");
+        } else {
+            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+            mimeBodyPart.setContent(bodyText, "text/html; charset=utf-8");
+            MimeMultipart multipart = new MimeMultipart();
+            multipart.addBodyPart(mimeBodyPart);
+            mimeBodyPart = new MimeBodyPart();
+            mimeBodyPart.setDataHandler(new DataHandler(new FileDataSource(file)));
+            mimeBodyPart.setFileName(file.getName());
+            multipart.addBodyPart(mimeBodyPart);
+            email.setContent(multipart);
+        }
+        LoggerMapper.log(Level.INFO, "enviarCorreo", email, SendMessage.class);
 
+        //Enviar el correo
+        Transport transport = session.getTransport("smtp");
+        transport.connect(fromEmailAddress, utilService.findByClave(Constantes.CLAVE_CORREO).getValor());
+        transport.sendMessage(email, email.getRecipients(javax.mail.Message.RecipientType.TO));
+        transport.close();
+
+        LoggerMapper.log(Level.INFO, "enviarCorreo", "Correo enviado", SendMessage.class);
     }
 
 }

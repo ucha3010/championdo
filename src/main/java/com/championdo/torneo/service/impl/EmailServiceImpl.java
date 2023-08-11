@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendNewPassword (UserModel userModel) throws SenderException {
         try {
-            sendMessage.sendEmail(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
+            sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null);
         } catch (Exception e) {
             throw new SenderException("1000",e.getMessage());
@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, File file) throws SenderException {
         try {
-            sendMessage.sendEmail(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
+            sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     messageSubject, messageBody, file);
         } catch (Exception e) {
             throw new SenderException("1001",e.getMessage());
