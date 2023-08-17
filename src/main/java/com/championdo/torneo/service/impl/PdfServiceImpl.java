@@ -731,9 +731,9 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, @NotNull String seccion) {
+    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, @NotNull String section) {
         String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
-                + "static" + File.separator + "files" + File.separator + seccion + tounamentDate(pdfModel) : "");
+                + "static" + File.separator + "files" + File.separator + section + tounamentDate(pdfModel) : "");
         String ext = (extension ? ".pdf" : "");
         if(rutaCompleta) {
             File directorio = new File(getAbsolutePath() + ruta);
