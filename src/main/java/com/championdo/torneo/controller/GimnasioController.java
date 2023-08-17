@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -66,11 +67,12 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
 
-        LoggerMapper.methodIn(Level.INFO, "ENTRADA gaurdarPropia", userAutorizacionModel, getClass());
+        LoggerMapper.methodIn(Level.INFO, "gaurdarPropia", userAutorizacionModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada"); //TODO DAMIAN debería ir a una página de firma con una clave enviada al email y acceso a los PDFs
         PdfModel pdfModelGeneral = null;
+        List<File> files = new ArrayList<>();
         try {
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
@@ -78,14 +80,18 @@ public class GimnasioController {
             pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
             if (userAutorizacionModel.getMayorAutorizador().isLicencia()) {
                 File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
+                files.add(pdfMandato);
             }
             File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
+            files.add(pdfAutorizacionMayor18);
             if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
                 File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
+                files.add(pdfNormativaSEPA);
             }
             if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
                 //TODO DAMIAN hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
+            emailService.sendGymJoining(userAutorizacionModel.getMayorAutorizador(), files);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gimnasio/gaurdarPropia", e.getMessage(), getClass());
         }
@@ -140,6 +146,7 @@ public class GimnasioController {
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("formularioInscFinalizada"); //TODO DAMIAN debería ir a una página de firma con una clave enviada al email y acceso a los PDFs
         PdfModel pdfModelGeneral = null;
+        List<File> files = new ArrayList<>();
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
@@ -148,15 +155,18 @@ public class GimnasioController {
             pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
             if (userAutorizacionModel.getAutorizado().isLicencia()) {
                 File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
-                //emailService.sendConfirmation(userAutorizacionModel.getAutorizado(), file);
+                files.add(pdfMandato);
             }
-            File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+            File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+            files.add(pdfAutorizacionMenor18);
             if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
                 File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
+                files.add(pdfNormativaSEPA);
             }
             if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
                 //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
+            emailService.sendGymJoining(userAutorizacionModel.getMayorAutorizador(), files);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gimnasio/guardarMenor", e.getMessage(), getClass());
         }

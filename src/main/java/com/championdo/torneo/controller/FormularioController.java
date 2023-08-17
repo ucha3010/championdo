@@ -66,7 +66,7 @@ public class FormularioController {
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendConfirmation(userModel, file);
+            emailService.sendTournamentRegistration(userModel, file);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -125,7 +125,7 @@ public class FormularioController {
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendConfirmation(userAutorizacionModel.getMayorAutorizador(), file);
+            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
