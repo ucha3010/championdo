@@ -40,10 +40,13 @@ public class MapperInscripcionTaekwondo {
             localObject.setAutorizadoCinturon(externObject.getAutorizadoCinturon());
             localObject.setAutorizadoDni(externObject.getAutorizadoDni());
             localObject.setAutorizadoLicencia(externObject.isAutorizadoLicencia());
+            localObject.setDomiciliacionSEPA(externObject.isDomiciliacionSEPA());
             localObject.setTitularCuenta(externObject.getTitularCuenta());
             localObject.setIban(externObject.getIban());
             localObject.setSwift(externObject.getSwift());
             localObject.setNotas(externObject.getNotas());
+            localObject.setInscripcionFirmada(externObject.isInscripcionFirmada());
+            localObject.setMandatoSEPAFirmado(externObject.isMandatoSEPAFirmado());
         }
         return localObject;
     }
@@ -81,10 +84,13 @@ public class MapperInscripcionTaekwondo {
             localObject.setAutorizadoCinturon(externObject.getAutorizadoCinturon());
             localObject.setAutorizadoDni(externObject.getAutorizadoDni());
             localObject.setAutorizadoLicencia(externObject.isAutorizadoLicencia());
+            localObject.setDomiciliacionSEPA(externObject.isDomiciliacionSEPA());
             localObject.setTitularCuenta(externObject.getTitularCuenta());
             localObject.setIban(externObject.getIban());
             localObject.setSwift(externObject.getSwift());
             localObject.setNotas(externObject.getNotas());
+            localObject.setInscripcionFirmada(externObject.isInscripcionFirmada());
+            localObject.setMandatoSEPAFirmado(externObject.isMandatoSEPAFirmado());
         }
         return localObject;
     }

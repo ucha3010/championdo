@@ -169,6 +169,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         }
 
         if (userAutorizacionModel.getCuentaBancaria() != null) {
+            inscripcionTaekwondoModel.setDomiciliacionSEPA(Boolean.TRUE);
             inscripcionTaekwondoModel.setTitularCuenta(userAutorizacionModel.getCuentaBancaria().getTitular());
             inscripcionTaekwondoModel.setIban(userAutorizacionModel.getCuentaBancaria().getIban());
             inscripcionTaekwondoModel.setSwift(userAutorizacionModel.getCuentaBancaria().getSwift());

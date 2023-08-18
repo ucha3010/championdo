@@ -73,6 +73,7 @@ public class InscripcionTaekwondo {
     @Column(name = "autorizadoDni", length = 45)
     private String autorizadoDni;
     private boolean autorizadoLicencia;
+    private boolean domiciliacionSEPA;
     @Column(name = "titularCuenta", length = 100)
     private String titularCuenta;
     @Column(name = "iban", length = 34)
@@ -81,5 +82,7 @@ public class InscripcionTaekwondo {
     private String swift;
     @Column(name = "notas", columnDefinition = "TEXT")
     private String notas;
+    private boolean inscripcionFirmada;
+    private boolean mandatoSEPAFirmado;
 
 }

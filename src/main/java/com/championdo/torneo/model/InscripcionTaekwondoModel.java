@@ -37,10 +37,13 @@ public class InscripcionTaekwondoModel {
     private String autorizadoCinturon;
     private String autorizadoDni;
     private boolean autorizadoLicencia;
+    private boolean domiciliacionSEPA;
     private String titularCuenta;
     private String iban;
     private String swift;
     private String notas;
+    private boolean inscripcionFirmada;
+    private boolean mandatoSEPAFirmado;
 
     public int getId() {
         return id;
@@ -274,6 +277,14 @@ public class InscripcionTaekwondoModel {
         this.autorizadoLicencia = autorizadoLicencia;
     }
 
+    public boolean isDomiciliacionSEPA() {
+        return domiciliacionSEPA;
+    }
+
+    public void setDomiciliacionSEPA(boolean domiciliacionSEPA) {
+        this.domiciliacionSEPA = domiciliacionSEPA;
+    }
+
     public String getTitularCuenta() {
         return titularCuenta;
     }
@@ -304,6 +315,22 @@ public class InscripcionTaekwondoModel {
 
     public void setNotas(String notas) {
         this.notas = notas;
+    }
+
+    public boolean isInscripcionFirmada() {
+        return inscripcionFirmada;
+    }
+
+    public void setInscripcionFirmada(boolean inscripcionFirmada) {
+        this.inscripcionFirmada = inscripcionFirmada;
+    }
+
+    public boolean isMandatoSEPAFirmado() {
+        return mandatoSEPAFirmado;
+    }
+
+    public void setMandatoSEPAFirmado(boolean mandatoSEPAFirmado) {
+        this.mandatoSEPAFirmado = mandatoSEPAFirmado;
     }
 
     @Override
@@ -338,10 +365,13 @@ public class InscripcionTaekwondoModel {
                 ", autorizadoCinturon='" + autorizadoCinturon + '\'' +
                 ", autorizadoDni='" + autorizadoDni + '\'' +
                 ", autorizadoLicencia=" + autorizadoLicencia +
+                ", domiciliacionSEPA=" + domiciliacionSEPA +
                 ", titularCuenta='" + titularCuenta + '\'' +
                 ", iban='" + iban + '\'' +
                 ", swift='" + swift + '\'' +
                 ", notas='" + notas + '\'' +
+                ", inscripcionFirmada=" + inscripcionFirmada +
+                ", mandatoSEPAFirmado=" + mandatoSEPAFirmado +
                 '}';
     }
 }

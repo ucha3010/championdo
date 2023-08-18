@@ -1,5 +1,5 @@
 package com.championdo.torneo;
-/**
+
 import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserModel;
@@ -9,23 +9,20 @@ import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @SpringBootTest
-@RunWith(JUnit4.class)*/
+//@RunWith(JUnit4.class)
 class TorneoApplicationTests {
-/**
+
 	@Autowired
 	private PdfService pdfService;
 	@Autowired
@@ -33,7 +30,7 @@ class TorneoApplicationTests {
 
 	private PdfModel pdfModel;
 
-	private PdfModel cargarPDF() {
+	private void cargarPDF() {
 		pdfModel = new PdfModel();
 		pdfModel.setNombre("Nombre Autorizador Apellido1dor Apellido2dor");
 		pdfModel.setDni("22222222A");
@@ -53,13 +50,11 @@ class TorneoApplicationTests {
 		pdfModel.setIdInscripcion(999999);
 		pdfModel.setCategoria("C2");
 		pdfModel.setPoomsae("5º POOMSAE");
-		return pdfModel;
 	}
 	@Test
 	File testGenerarPdf() {
 		cargarPDF();
-		File file = pdfService.generarPdfTorneo(pdfModel);
-		return file;
+		return pdfService.generarPdfTorneo(pdfModel);
 	}
 
 
@@ -90,38 +85,13 @@ class TorneoApplicationTests {
 			userModel.setName("Pedro");
 			userModel.setPassword("223344");
 			userModel.setCorreo("dusheff@hotmail.com");
-			emailService.sendAttachedFile(userModel, "Envío archivo", "Texto del mensaje", testGenerarPdf());
+			List<File> files = new ArrayList<>();
+			files.add(testGenerarPdf());
+			emailService.sendAttachedFile(userModel, "Envío archivo", "Texto del mensaje", files);
 		} catch (SenderException e) {
 			LoggerMapper.log(Level.ERROR, "testEmail", e.getMessage(), getClass());
 		}
 		assertThat("Hello world", is("Hello world"));
-	}
-
-	public File createAFile(String fileName) {
-		File file = null;
-		try {
-			String content = "Un texto dentro del archivo";
-			file = new File(fileName + ".txt");
-
-			// If file doesn't exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-
-			// Write in file
-			bw.write(content);
-
-			// Close connection
-			bw.close();
-
-		} catch (IOException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
-		return file;
 	}
 
 	@Test
@@ -129,12 +99,11 @@ class TorneoApplicationTests {
 		String[] absolute = new String[1];
 		try {
 			File f = new File("program.txt");
-			//absolute = f.getAbsolutePath().split(f.getName());
+			absolute = f.getAbsolutePath().split(f.getName());
 		}
 		catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
 		System.out.println("absolute[0]: " + absolute[0]);
 	}
-*/
-	}
+}

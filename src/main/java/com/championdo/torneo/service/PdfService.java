@@ -1,6 +1,7 @@
 package com.championdo.torneo.service;
 
 import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.PdfModel;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +21,10 @@ public interface PdfService {
 
     void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion);
 
-    String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, String seccion);
+    String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, String seccion);
 
     PdfModel getImpresion(InscripcionModel inscripcionModel);
+
+    PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel);
 
 }

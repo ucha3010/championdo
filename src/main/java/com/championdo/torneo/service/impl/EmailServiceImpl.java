@@ -1,5 +1,6 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.UtilService;
@@ -39,7 +40,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendGymJoining(UserModel userModel, List<File> files) throws SenderException {
+    public void sendGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel, List<File> files) throws SenderException {
+        UserModel userModel = new UserModel();
+        userModel.setName(inscripcionTaekwondoModel.getMayorNombre());
+        userModel.setCorreo(inscripcionTaekwondoModel.getMayorCorreo());
         sendAttachedFile(userModel, "Confirmación inscripción gimnasio", textMessageGymJoining(userModel), files);
     }
 

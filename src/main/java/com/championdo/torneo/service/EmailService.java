@@ -1,5 +1,6 @@
 package com.championdo.torneo.service;
 
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.exception.SenderException;
 
@@ -12,7 +13,7 @@ public interface EmailService {
 
     void sendTournamentRegistration(UserModel userModel, File inscripcion) throws SenderException;
 
-    void sendGymJoining(UserModel userModel, List<File> files) throws SenderException;
+    void sendGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel, List<File> files) throws SenderException;
 
     void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, List<File> files) throws SenderException;
 

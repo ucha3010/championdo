@@ -76,22 +76,23 @@ public class GimnasioController {
         try {
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-            pdfModelGeneral = formularioService.getPdfModelGeneral(userAutorizacionModel);
+            //TODO DAMIAN hasta acá en este paso
+            pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
             pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
-            if (userAutorizacionModel.getMayorAutorizador().isLicencia()) {
+            if (inscripcionTaekwondoModel.isMayorLicencia()) {
                 File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
                 files.add(pdfMandato);
             }
             File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
             files.add(pdfAutorizacionMayor18);
-            if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
+            if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
                 File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
                 files.add(pdfNormativaSEPA);
             }
-            if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
+            if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
                 //TODO DAMIAN hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
-            emailService.sendGymJoining(userAutorizacionModel.getMayorAutorizador(), files);
+            emailService.sendGymJoining(inscripcionTaekwondoModel, files);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gimnasio/gaurdarPropia", e.getMessage(), getClass());
         }
@@ -151,22 +152,23 @@ public class GimnasioController {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-            pdfModelGeneral = formularioService.getPdfModelGeneral(userAutorizacionModel);
+            //TODO DAMIAN hasta acá en este paso
+            pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
             pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
-            if (userAutorizacionModel.getAutorizado().isLicencia()) {
+            if (inscripcionTaekwondoModel.isAutorizadoLicencia()) {
                 File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
                 files.add(pdfMandato);
             }
             File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
             files.add(pdfAutorizacionMenor18);
-            if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
+            if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
                 File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
                 files.add(pdfNormativaSEPA);
             }
-            if (userAutorizacionModel.getMayorAutorizador().isAutorizaWhatsApp()) {
+            if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
                 //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
             }
-            emailService.sendGymJoining(userAutorizacionModel.getMayorAutorizador(), files);
+            emailService.sendGymJoining(inscripcionTaekwondoModel, files);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gimnasio/guardarMenor", e.getMessage(), getClass());
         }

@@ -2,6 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
@@ -145,8 +146,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, true, "torneo"));
-            return new File(nombreArchivo(pdfModel, true, true, "torneo"));
+            document.save(nombreArchivo(pdfModel, true, "torneo"));
+            return new File(nombreArchivo(pdfModel, true, "torneo"));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfTorneo", e.getMessage(), PdfServiceImpl.class);
         }
@@ -296,8 +297,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, true, "mandato"));
-            return new File(nombreArchivo(pdfModel, true, true, "mandato"));
+            document.save(nombreArchivo(pdfModel, true, "mandato"));
+            return new File(nombreArchivo(pdfModel, true, "mandato"));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfMandato", e.getMessage(), PdfServiceImpl.class);
         }
@@ -396,8 +397,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, true, "autorizacionMayor18"));
-            return new File(nombreArchivo(pdfModel, true, true, "autorizacionMayor18"));
+            document.save(nombreArchivo(pdfModel, true, "autorizacionMayor18"));
+            return new File(nombreArchivo(pdfModel, true, "autorizacionMayor18"));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfAutorizacionMayor18", e.getMessage(), PdfServiceImpl.class);
         }
@@ -504,8 +505,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, true, "autorizacionMenor18"));
-            return new File(nombreArchivo(pdfModel, true, true, "autorizacionMenor18"));
+            document.save(nombreArchivo(pdfModel, true, "autorizacionMenor18"));
+            return new File(nombreArchivo(pdfModel, true, "autorizacionMenor18"));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfAutorizacionMenor18", e.getMessage(), PdfServiceImpl.class);
         }
@@ -611,6 +612,7 @@ public class PdfServiceImpl implements PdfService {
             tamanioFuente = 14;
             dejoDeMargenPosterior = 20;
             parrafoList = new ArrayList<>();
+            //TODO DAMIAN modificar esto para no usar objeto CuentaBancaria
             parrafoList.add("Titular: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getTitular() : Constantes.ERROR_DATOS_BANCARIOS));
             parrafoList.add("IBAN: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getIban() : Constantes.ERROR_DATOS_BANCARIOS));
             parrafoList.add("CÓDIGO SWIFT/BIC: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getSwift() : Constantes.ERROR_DATOS_BANCARIOS));
@@ -701,8 +703,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, true, "normativaSEPA"));
-            return new File(nombreArchivo(pdfModel, true, true, "normativaSEPA"));
+            document.save(nombreArchivo(pdfModel, true, "normativaSEPA"));
+            return new File(nombreArchivo(pdfModel, true, "normativaSEPA"));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfNormativaSEPA", e.getMessage(), PdfServiceImpl.class);
         }
@@ -718,11 +720,11 @@ public class PdfServiceImpl implements PdfService {
 
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + nombreArchivo(pdfModel, false, true, seccion);
+        String headerValue = "attachment; filename = " + nombreArchivo(pdfModel, false, seccion);
         response.setHeader(headerKey, headerValue);
         try {
             ServletOutputStream outputStream = response.getOutputStream();
-            byte[] file = Files.readAllBytes(Paths.get(nombreArchivo(pdfModel, true, true, seccion)));
+            byte[] file = Files.readAllBytes(Paths.get(nombreArchivo(pdfModel, true, seccion)));
             outputStream.write(file, 0, file.length);
             outputStream.close();
         } catch (IOException e) {
@@ -731,10 +733,10 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, boolean extension, @NotNull String section) {
+    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, @NotNull String section) {
+
         String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
                 + "static" + File.separator + "files" + File.separator + section + tounamentDate(pdfModel) : "");
-        String ext = (extension ? ".pdf" : "");
         if(rutaCompleta) {
             File directorio = new File(getAbsolutePath() + ruta);
             if (!directorio.exists()) {
@@ -742,11 +744,11 @@ public class PdfServiceImpl implements PdfService {
             }
         }
         if (pdfModel.isMayorEdad()) {
-            return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + ext;
+            return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + ".pdf";
         } else {
             return ruta + pdfModel.getDni()
                     + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? "-" + pdfModel.getDniMenor().trim() : "")
-                    + "-" + pdfModel.getIdInscripcion() + ext;
+                    + "-" + pdfModel.getIdInscripcion() + ".pdf";
         }
     }
 
@@ -767,6 +769,11 @@ public class PdfServiceImpl implements PdfService {
             pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
         }
         return pdfModel;
+    }
+
+    public PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel) {
+        //TODO DAMIAN hacer
+        return null;
     }
 
     private int rellenarAdulto(PdfModel pdfModel, int alturaComienzoParrafo, PDPageContentStream contentStream, PDPage page,
@@ -813,7 +820,6 @@ public class PdfServiceImpl implements PdfService {
         StringBuilder dateFolder = new StringBuilder();
         if(pdfModel != null && !StringUtils.isNullOrEmpty(pdfModel.getFechaCampeonato())) {
             String[] folderNameArray = pdfModel.getFechaCampeonato().split("-");
-            dateFolder.append(File.separator);
             for(int i=folderNameArray.length; i>0; i--) {
                 dateFolder.append(folderNameArray[i - 1]);
             }
