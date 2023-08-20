@@ -1,10 +1,10 @@
 package com.championdo.torneo.controller;
 
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.model.PdfModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
+import com.championdo.torneo.entity.User;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,16 @@ public class GimnasioController {
 
     @Autowired
     private FormularioService formularioService;
-
     @Autowired
     private EmailService emailService;
     @Autowired
+    private FirmaCodigoService firmaCodigoService;
+    @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
-
     @Autowired
     private PdfService pdfService;
-
+    @Autowired
+    private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
 
@@ -50,14 +51,14 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable String tipo, @PathVariable String licencia) {
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        if ("infantil".equalsIgnoreCase(tipo)){
+        if ("infantil".equalsIgnoreCase(tipo)) {
             modelAndView.setViewName("gimnasio/formularioInscMenor");
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
         } else {
             modelAndView.setViewName("gimnasio/formularioInscPropia");
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(usuario));
         }
-        modelAndView.addObject("licencia","con licencia".equals(licencia));
+        modelAndView.addObject("licencia", "con licencia".equals(licencia));
         formularioService.cargarDesplegables(modelAndView);
         LoggerMapper.methodOut(Level.INFO, "gimnasio/formularioInscripcion/" + tipo + "/" + licencia, modelAndView, getClass());
         return modelAndView;
@@ -69,44 +70,22 @@ public class GimnasioController {
 
         LoggerMapper.methodIn(Level.INFO, "gaurdarPropia", userAutorizacionModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
-        userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("formularioInscFinalizada"); //TODO DAMIAN debería ir a una página de firma con una clave enviada al email y acceso a los PDFs
-        PdfModel pdfModelGeneral = null;
-        List<File> files = new ArrayList<>();
+        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("firma/envioCodigo");
+        FirmaCodigoModel firmaCodigoModel = null;
         try {
             formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-            //TODO DAMIAN hasta acá en este paso
-            pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
-            pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
-            if (inscripcionTaekwondoModel.isMayorLicencia()) {
-                File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
-                files.add(pdfMandato);
-            }
-            File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
-            files.add(pdfAutorizacionMayor18);
-            if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
-                File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
-                files.add(pdfNormativaSEPA);
-            }
-            if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
-                //TODO DAMIAN hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
-            }
-            emailService.sendGymJoining(inscripcionTaekwondoModel, files);
+            firmaCodigoModel = firmaCodigoService.add(new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
+                    seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
+                    "formularioInscFinalizada", Constantes.INSCRIPCION_GIMNASIO));
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR,"gimnasio/gaurdarPropia", e.getMessage(), getClass());
+            LoggerMapper.log(Level.ERROR, "gimnasio/gaurdarPropia", e.getMessage(), getClass());
         }
 
-        if (pdfModelGeneral != null) {
-            modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
-            modelAndView.addObject("inscripcionError", "");
-        } else {
-            pdfModelGeneral = new PdfModel();
-            modelAndView.addObject("inscripcionCorrecta", "");
-            modelAndView.addObject("inscripcionError", "inscripcionError");
-        }
-        modelAndView.addObject("pdfModel", pdfModelGeneral);
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/gaurdarPropia", pdfModelGeneral, getClass());
+        modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(), null, null, null, null));
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/gaurdarPropia", firmaCodigoModel, getClass());
         return modelAndView;
     }
 
@@ -170,7 +149,7 @@ public class GimnasioController {
             }
             emailService.sendGymJoining(inscripcionTaekwondoModel, files);
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR,"gimnasio/guardarMenor", e.getMessage(), getClass());
+            LoggerMapper.log(Level.ERROR, "gimnasio/guardarMenor", e.getMessage(), getClass());
         }
 
         if (pdfModelGeneral != null) {

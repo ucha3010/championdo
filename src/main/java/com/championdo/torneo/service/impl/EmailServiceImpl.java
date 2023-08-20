@@ -1,5 +1,6 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
@@ -28,7 +29,7 @@ public class EmailServiceImpl implements EmailService {
             sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null);
         } catch (Exception e) {
-            throw new SenderException("1000",e.getMessage());
+            throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
     }
 
@@ -48,12 +49,23 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendCodeValidation(User user, String code) throws SenderException {
+        try {
+            sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), user.getCorreo(),
+                    "Código de validación", textMessageCodeValidation(user, code), null);
+        } catch (Exception e) {
+            throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
+        }
+
+    }
+
+    @Override
     public void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, List<File> files) throws SenderException {
         try {
             sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO).getValor(), userModel.getCorreo(),
                     messageSubject, messageBody, files);
         } catch (Exception e) {
-            throw new SenderException("1001",e.getMessage());
+            throw new SenderException(Constantes.AVISO_EMAIL_ARCHIVO_ADJUNTO,e.getMessage());
         }
     }
 
@@ -95,6 +107,24 @@ public class EmailServiceImpl implements EmailService {
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
         stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te adjuntamos la confirmación de inscripción al Gimnasio.</p>");
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>¡Que pases un buen día!</p>");
+        stringBuilder.append("</BODY></HTML>");
+        return stringBuilder.toString();
+    }
+
+    private String textMessageCodeValidation(User user, String code) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>");
+        stringBuilder.append("<HTML><BODY>");
+        String name = user.getName() != null ? " " + user.getName() : "";
+        stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
+        stringBuilder.append("<p>El código de validación que debes utilizar es el siguiente</p>");
+        stringBuilder.append("<br>");
+        stringBuilder.append("<h2>").append(code).append("</h2>");
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>Este código tiene una validez de 15 minutos.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
         stringBuilder.append("</BODY></HTML>");

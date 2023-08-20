@@ -1,8 +1,9 @@
 package com.championdo.torneo.service;
 
+import com.championdo.torneo.entity.User;
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.UserModel;
-import com.championdo.torneo.exception.SenderException;
 
 import java.io.File;
 import java.util.List;
@@ -14,6 +15,8 @@ public interface EmailService {
     void sendTournamentRegistration(UserModel userModel, File inscripcion) throws SenderException;
 
     void sendGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel, List<File> files) throws SenderException;
+
+    void sendCodeValidation(User userModel, String code) throws SenderException;
 
     void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, List<File> files) throws SenderException;
 

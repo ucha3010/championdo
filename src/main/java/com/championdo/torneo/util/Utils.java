@@ -49,4 +49,9 @@ public class Utils {
         // return Passay generated password to the main() method
         return passGen.generatePassword(8, LCR, UCR, DR);
     }
+
+
+    public static long milisegEntreDosFechas(Date fechaMayor, Date fechaMenor) {
+        return (fechaMayor.getTime() - fechaMenor.getTime());
+    }
 }

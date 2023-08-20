@@ -5,8 +5,10 @@ import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import junit.framework.Assert;
 import org.apache.logging.log4j.Level;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ class TorneoApplicationTests {
 	private PdfService pdfService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private SeguridadService seguridadService;
 
 	private PdfModel pdfModel;
 
@@ -105,5 +109,12 @@ class TorneoApplicationTests {
 			System.err.println(e.getMessage());
 		}
 		System.out.println("absolute[0]: " + absolute[0]);
+	}
+
+	@Test
+	public void generarCodigoTest() {
+		String codigo = seguridadService.obtenerCodigo();
+		System.out.println(codigo);
+		Assert.assertNotNull(codigo);
 	}
 }
