@@ -1,7 +1,9 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.FirmaCodigoModel;
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
@@ -13,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,8 +29,6 @@ public class GimnasioController {
     private FirmaCodigoService firmaCodigoService;
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
-    @Autowired
-    private PdfService pdfService;
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
@@ -67,26 +65,13 @@ public class GimnasioController {
     @PostMapping("/gaurdarPropia")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
+        return logicaComunGuardar(userAutorizacionModel, Boolean.FALSE);
+    }
 
-        LoggerMapper.methodIn(Level.INFO, "gaurdarPropia", userAutorizacionModel, getClass());
-        ModelAndView modelAndView = new ModelAndView();
-        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("firma/envioCodigo");
-        FirmaCodigoModel firmaCodigoModel = null;
-        try {
-            formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-            InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-            firmaCodigoModel = firmaCodigoService.add(new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
-                    seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                    "formularioInscFinalizada", Constantes.INSCRIPCION_GIMNASIO));
-            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
-        } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "gimnasio/gaurdarPropia", e.getMessage(), getClass());
-        }
-
-        modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(), null, null, null, null));
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/gaurdarPropia", firmaCodigoModel, getClass());
-        return modelAndView;
+    @PostMapping("/guardarMenor")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView guardarMenor(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
+        return logicaComunGuardar(userAutorizacionModel, Boolean.TRUE);
     }
 
     @GetMapping("/getInscripcion/{id}")
@@ -101,71 +86,6 @@ public class GimnasioController {
         return modelAndView;
     }
 
-
-    /*@GetMapping("/menorOInclisivo/{menor}")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
-        if (menor) {
-            modelAndView.setViewName("formularioInscMenor");
-        } else {
-            modelAndView.setViewName("formularioInscInclusivo");
-        }
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, menor));
-        formularioService.cargarDesplegables(modelAndView);
-        LoggerMapper.log(Level.INFO, "formulario/menorOInclisivo/" + menor, modelAndView, getClass());
-        return modelAndView;
-    }*/
-
-    @PostMapping("/guardarMenor")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView guardarMenor(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
-
-        LoggerMapper.methodIn(Level.INFO, "gimnasio/guardarMenor", userAutorizacionModel, getClass());
-        ModelAndView modelAndView = new ModelAndView();
-        userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("formularioInscFinalizada"); //TODO DAMIAN debería ir a una página de firma con una clave enviada al email y acceso a los PDFs
-        PdfModel pdfModelGeneral = null;
-        List<File> files = new ArrayList<>();
-        try {
-            formularioService.fillObjects(userAutorizacionModel.getAutorizado());
-            formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-            InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
-            //TODO DAMIAN hasta acá en este paso
-            pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
-            pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
-            if (inscripcionTaekwondoModel.isAutorizadoLicencia()) {
-                File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
-                files.add(pdfMandato);
-            }
-            File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
-            files.add(pdfAutorizacionMenor18);
-            if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
-                File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
-                files.add(pdfNormativaSEPA);
-            }
-            if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
-                //TODO Damián hacer pdf WhatsApp (habrá que hacer un checkbox en formularioInscPropia)
-            }
-            emailService.sendGymJoining(inscripcionTaekwondoModel, files);
-        } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "gimnasio/guardarMenor", e.getMessage(), getClass());
-        }
-
-        if (pdfModelGeneral != null) {
-            modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
-            modelAndView.addObject("inscripcionError", "");
-        } else {
-            pdfModelGeneral = new PdfModel();
-            modelAndView.addObject("inscripcionCorrecta", "");
-            modelAndView.addObject("inscripcionError", "inscripcionError");
-        }
-        modelAndView.addObject("pdfModel", pdfModelGeneral);
-
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/guardarMenor", pdfModelGeneral, getClass());
-        return modelAndView;
-
-    }
 /*
     @GetMapping("/getMenorOInclisivo/{id}")
     @PreAuthorize("isAuthenticated()")
@@ -184,39 +104,6 @@ public class GimnasioController {
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarPdf(pdfModel, response);
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
-    }
-
-    @GetMapping("/alta")
-    @PreAuthorize("permitAll()")
-    public ModelAndView getAlta(ModelAndView modelAndView) {
-        modelAndView.setViewName("formularioAlta");
-        formularioService.cargarDesplegables(modelAndView);
-        if (modelAndView.getModel() == null || modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
-            modelAndView.addObject("userModel", new UserModel());
-        }
-        return modelAndView;
-    }
-
-    @PostMapping("/alta")
-    @PreAuthorize("permitAll()")
-    public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
-        if(userService.findByUsername(userModel.getUsername()) == null) {
-            try {
-                userService.altaNuevoUsuario(userModel, "ROLE_USER");
-                modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
-                modelAndView.setViewName(Constantes.LOGIN);
-                return modelAndView;
-            } catch (PersistenceException e) {
-                modelAndView.addObject("problemasAlta", "Problemas dando de alta usuario con DNI " + userModel.getUsername());
-            }
-        } else {
-            modelAndView.addObject("dniDadoDeAlta", "Ya existe un usuario dado de alta con DNI " + userModel.getUsername());
-        }
-        modelAndView.setViewName("formularioAlta");
-        modelAndView.addObject("userModel", userModel);
-        formularioService.cargarDesplegables(modelAndView);
-        return modelAndView;
-
     }*/
 
     @GetMapping("/eliminarInscripcion/{id}")
@@ -224,6 +111,36 @@ public class GimnasioController {
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         inscripcionTaekwondoService.delete(id);
         return tipoInscripcion(modelAndView);
+    }
+
+    private ModelAndView logicaComunGuardar (UserAutorizacionModel userAutorizacionModel, boolean menor) {
+
+        String recurso = (menor ? "guardarMenor" : "gaurdarPropia");
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/" + recurso, userAutorizacionModel, getClass());
+
+        ModelAndView modelAndView = new ModelAndView();
+        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("firma/envioCodigo");
+        FirmaCodigoModel firmaCodigoModel = null;
+        try {
+            if (menor) {
+                formularioService.fillObjects(userAutorizacionModel.getAutorizado());
+            }
+            formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
+            InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
+            firmaCodigoModel = firmaCodigoService.add(new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
+                    seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
+                    "formularioInscFinalizada", Constantes.INSCRIPCION_GIMNASIO));
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "gimnasio/" + recurso, e.getMessage(), getClass());
+        }
+
+        modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
+                null, null, null, Constantes.INSCRIPCION_GIMNASIO));
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/" + recurso, firmaCodigoModel, getClass());
+        return modelAndView;
+
     }
 
 }

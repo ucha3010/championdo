@@ -28,6 +28,7 @@ public class InscripcionTaekwondoModel {
     private boolean mayorAutorizaWhatsApp;
 
     //Autorizado
+    private boolean autorizadoMenor;
     private String autorizadoNombre;
     private String autorizadoApellido1;
     private String autorizadoApellido2;
@@ -205,6 +206,14 @@ public class InscripcionTaekwondoModel {
         this.mayorAutorizaWhatsApp = mayorAutorizaWhatsApp;
     }
 
+    public boolean isAutorizadoMenor() {
+        return autorizadoMenor;
+    }
+
+    public void setAutorizadoMenor(boolean autorizadoMenor) {
+        this.autorizadoMenor = autorizadoMenor;
+    }
+
     public String getAutorizadoNombre() {
         return autorizadoNombre;
     }
@@ -356,6 +365,7 @@ public class InscripcionTaekwondoModel {
                 ", mayorLicencia=" + mayorLicencia +
                 ", mayorTelefono='" + mayorTelefono + '\'' +
                 ", mayorAutorizaWhatsApp=" + mayorAutorizaWhatsApp +
+                ", autorizadoMenor=" + autorizadoMenor +
                 ", autorizadoNombre='" + autorizadoNombre + '\'' +
                 ", autorizadoApellido1='" + autorizadoApellido1 + '\'' +
                 ", autorizadoApellido2='" + autorizadoApellido2 + '\'' +

@@ -1,13 +1,13 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.InscripcionTaekwondo;
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.mapper.MapperInscripcionTaekwondo;
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
-import com.championdo.torneo.model.UserModel;
-import com.championdo.torneo.model.UtilModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.repository.InscripcionTaekwondoRepository;
+import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
+import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,9 +26,13 @@ import java.util.List;
 public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoService {
 
     @Autowired
+    private EmailService emailService;
+    @Autowired
     private InscripcionTaekwondoRepository inscripcionTaekwondoRepository;
     @Autowired
     private MapperInscripcionTaekwondo mapperInscripcionTaekwondo;
+    @Autowired
+    private PdfService pdfService;
     @Autowired
     private UtilService utilService;
 
@@ -116,6 +121,36 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         return deleteEnable;
     }
 
+    @Override
+    public void crearEnviarArchivosInscripcionTaekwondo(FirmaCodigoModel firmaCodigoModel) throws SenderException {
+        List<File> files = new ArrayList<>();
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
+        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
+        pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
+        if (inscripcionTaekwondoModel.isMayorLicencia()) {
+            File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
+            files.add(pdfMandato);
+        }
+        if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
+            File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+            files.add(pdfAutorizacionMenor18);
+        } else {
+            File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
+            files.add(pdfAutorizacionMayor18);
+        }
+        if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
+            File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
+            files.add(pdfNormativaSEPA);
+        }
+        if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
+            File pdfAutorizaWhatsApp = pdfService.generarPdfAutorizaWhatsApp(pdfModelGeneral);
+            files.add(pdfAutorizaWhatsApp);
+        }
+        inscripcionTaekwondoModel.setInscripcionFirmada(Boolean.TRUE);
+        update(inscripcionTaekwondoModel);
+        emailService.sendGymJoining(inscripcionTaekwondoModel, files);
+    }
+
     private InscripcionTaekwondoModel fillInscripcionTaekwondoModel(UserAutorizacionModel userAutorizacionModel) {
 
         InscripcionTaekwondoModel inscripcionTaekwondoModel = new InscripcionTaekwondoModel();
@@ -153,6 +188,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         inscripcionTaekwondoModel.setMayorAutorizaWhatsApp(mayorAutorizador.isAutorizaWhatsApp());
 
         if (autorizado != null) {
+            inscripcionTaekwondoModel.setAutorizadoMenor(Boolean.TRUE);
             inscripcionTaekwondoModel.setAutorizadoNombre(autorizado.getName());
             inscripcionTaekwondoModel.setAutorizadoApellido1(autorizado.getLastname());
             inscripcionTaekwondoModel.setAutorizadoApellido2(autorizado.getSecondLastname());

@@ -61,6 +61,7 @@
 
       <form action="#" th:action="@{/seguridad/validarCodigo}" th:object="${firmaCodigoModel}" method="post" onsubmit="return validar()">
         <input type="hidden" name="idOperacion" th:value="*{idOperacion}"/>
+        <input type="hidden" name="operativaOriginal" th:value="*{operativaOriginal}"/>
 
         <div class="row mb-1">
           <div class="col-md-2 apartado">

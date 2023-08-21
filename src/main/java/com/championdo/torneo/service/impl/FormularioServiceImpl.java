@@ -118,19 +118,6 @@ public class FormularioServiceImpl implements FormularioService {
         modelAndView.addObject("listaCalidad", calidadService.findAll());
     }
 
-    @Override
-    public PdfModel getPdfModelGeneral(UserAutorizacionModel userAutorizacionModel) {
-        PdfModel pdfModel = new PdfModel();
-        rellenoAutorizador(userAutorizacionModel.getMayorAutorizador(), pdfModel);
-        if (!StringUtils.isNullOrEmpty(pdfModel.getCalidadDe())) {
-            rellenoMenor(userAutorizacionModel.getAutorizado(), pdfModel);
-        }
-        if (userAutorizacionModel.getCuentaBancaria() != null && !StringUtils.isNullOrEmpty(userAutorizacionModel.getCuentaBancaria().getIban())) {
-            pdfModel.setCuentaBancaria(userAutorizacionModel.getCuentaBancaria());
-        }
-        return pdfModel;
-    }
-
     private void rellenoAutorizador (UserModel userModel, PdfModel pdfModel) {
         pdfModel.setNombre(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
         pdfModel.setDni(userModel.getUsername());

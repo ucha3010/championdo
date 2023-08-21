@@ -1,12 +1,11 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.exception.EmptyException;
-import com.championdo.torneo.model.InscripcionModel;
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.model.PdfModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import com.sun.istack.NotNull;
 import org.apache.logging.log4j.Level;
@@ -772,7 +771,41 @@ public class PdfServiceImpl implements PdfService {
     }
 
     public PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel) {
-        //TODO DAMIAN hacer
+
+        PdfModel pdfModel = new PdfModel();
+        pdfModel.setNombre(inscripcionTaekwondoModel.getMayorNombre() + " " + inscripcionTaekwondoModel.getMayorApellido1()
+                + (inscripcionTaekwondoModel.getMayorApellido2() != null ? " " + inscripcionTaekwondoModel.getMayorApellido2() : ""));
+        pdfModel.setDni(inscripcionTaekwondoModel.getMayorDni());
+        pdfModel.setTelefono(inscripcionTaekwondoModel.getMayorTelefono());
+        pdfModel.setCorreo(inscripcionTaekwondoModel.getMayorCorreo());
+        pdfModel.setFechaNacimiento(Utils.date2String(inscripcionTaekwondoModel.getMayorFechaNacimiento()));
+        if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorDomicilioCalle())) {
+            pdfModel.setDomicilio(inscripcionTaekwondoModel.getMayorDomicilioCalle() + " " + inscripcionTaekwondoModel.getMayorDomicilioNumero()
+                    + " " + inscripcionTaekwondoModel.getMayorDomicilioOtros());
+            pdfModel.setLocalidad(inscripcionTaekwondoModel.getMayorDomicilioLocalidad() + " (" + inscripcionTaekwondoModel.getMayorDomicilioCp()
+                    + ")" + (inscripcionTaekwondoModel.getMayorPais() != null ? " - " + inscripcionTaekwondoModel.getMayorPais() : ""));
+        }
+        if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorCalidad())) {
+            pdfModel.setCalidadDe(inscripcionTaekwondoModel.getMayorCalidad());
+            pdfModel.setNombreMenor(inscripcionTaekwondoModel.getAutorizadoNombre() + " " + inscripcionTaekwondoModel.getAutorizadoApellido1()
+                    + (inscripcionTaekwondoModel.getAutorizadoApellido2() != null ? " " + inscripcionTaekwondoModel.getAutorizadoApellido2() : ""));
+            pdfModel.setDniMenor(inscripcionTaekwondoModel.getAutorizadoDni());
+            pdfModel.setFechaNacimientoMenor(Utils.date2String(inscripcionTaekwondoModel.getAutorizadoFechaNacimiento()));
+        }
+        if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getIban())) {
+            CuentaBancariaModel cuentaBancaria = new CuentaBancariaModel();
+            cuentaBancaria.setTitular(inscripcionTaekwondoModel.getTitularCuenta());
+            cuentaBancaria.setIban(inscripcionTaekwondoModel.getIban());
+            cuentaBancaria.setSwift(inscripcionTaekwondoModel.getSwift());
+            pdfModel.setCuentaBancaria(cuentaBancaria);
+        }
+
+        return pdfModel;
+    }
+
+    @Override
+    public File generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral) {
+        //TODO DAMIAN hacer PDF autorización WhatsApp
         return null;
     }
 

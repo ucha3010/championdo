@@ -1,6 +1,9 @@
 package com.championdo.torneo.service;
 
 
+import com.championdo.torneo.exception.SenderException;
+import com.championdo.torneo.exception.ValidationException;
+import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UtilModel;
@@ -28,4 +31,6 @@ public interface InscripcionTaekwondoService {
     UtilModel getDeleteEnable();
 
     boolean changeValueDeleteEnable();
+
+    void crearEnviarArchivosInscripcionTaekwondo(FirmaCodigoModel firmaCodigoModel) throws SenderException;
 }

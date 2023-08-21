@@ -20,6 +20,4 @@ public interface FormularioService {
     void fillObjects(UserModel userModel);
 
     void cargarDesplegables(ModelAndView modelAndView);
-
-    PdfModel getPdfModelGeneral(UserAutorizacionModel userAutorizacionModel);
 }

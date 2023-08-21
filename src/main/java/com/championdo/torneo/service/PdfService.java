@@ -27,4 +27,5 @@ public interface PdfService {
 
     PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel);
 
+    File generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral);
 }

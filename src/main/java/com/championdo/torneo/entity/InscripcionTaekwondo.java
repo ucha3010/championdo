@@ -57,6 +57,7 @@ public class InscripcionTaekwondo {
     private boolean mayorAutorizaWhatsApp;
 
     //Autorizado
+    private boolean autorizadoMenor;
     @Column(name = "autorizadoNombre", length = 60)
     private String autorizadoNombre;
     @Column(name = "autorizadoApellido1", length = 60)
