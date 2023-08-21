@@ -8,14 +8,18 @@ import org.springframework.stereotype.Component;
 public class MapperUtil {
     public UtilModel entity2Model(Util externObject) {
         UtilModel localObject = new UtilModel();
-        localObject.setClave(externObject.getClave());
-        localObject.setValor(externObject.getValor());
+        if (externObject != null) {
+            localObject.setClave(externObject.getClave());
+            localObject.setValor(externObject.getValor());
+        }
         return localObject;
     }
     public Util model2Entity(UtilModel externObject) {
         Util localObject = new Util();
-        localObject.setClave(externObject.getClave());
-        localObject.setValor(externObject.getValor());
+        if (externObject != null) {
+            localObject.setClave(externObject.getClave());
+            localObject.setValor(externObject.getValor());
+        }
         return localObject;
     }
 }

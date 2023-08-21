@@ -51,6 +51,7 @@ public class SeguridadController {
                 inscripcionTaekwondoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
             }
 
+            modelAndView.addObject("inscripcionCorrecta", "¡La inscripción se realizó con éxito!");
             modelAndView.setViewName(firmaCodigoModel.getPaginaFirmaOk());
         } catch (ValidationException ve) {
             LoggerMapper.log(Level.ERROR, "seguridad/validarCodigo", ve.getMessage(), getClass());

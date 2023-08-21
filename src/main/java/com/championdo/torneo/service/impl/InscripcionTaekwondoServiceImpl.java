@@ -127,7 +127,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
         pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
-        if (inscripcionTaekwondoModel.isMayorLicencia()) {
+        if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
             File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
             files.add(pdfMandato);
         }
@@ -204,7 +204,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
             inscripcionTaekwondoModel.setAutorizadoLicencia(autorizado.isLicencia());
         }
 
-        if (userAutorizacionModel.getCuentaBancaria() != null) {
+        if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
             inscripcionTaekwondoModel.setDomiciliacionSEPA(Boolean.TRUE);
             inscripcionTaekwondoModel.setTitularCuenta(userAutorizacionModel.getCuentaBancaria().getTitular());
             inscripcionTaekwondoModel.setIban(userAutorizacionModel.getCuentaBancaria().getIban());

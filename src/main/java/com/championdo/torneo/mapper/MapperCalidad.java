@@ -9,18 +9,22 @@ public class MapperCalidad {
 
     public CalidadModel entity2Model(Calidad externObject) {
         CalidadModel localObject = new CalidadModel();
-        localObject.setId(externObject.getId());
-        localObject.setNombre(externObject.getNombre());
-        localObject.setOtro(externObject.getOtro());
-        localObject.setPosition(externObject.getPosition());
+        if (externObject != null) {
+            localObject.setId(externObject.getId());
+            localObject.setNombre(externObject.getNombre());
+            localObject.setOtro(externObject.getOtro());
+            localObject.setPosition(externObject.getPosition());
+        }
         return localObject;
     }
     public Calidad model2Entity(CalidadModel externObject) {
         Calidad localObject = new Calidad();
-        localObject.setId(externObject.getId());
-        localObject.setNombre(externObject.getNombre());
-        localObject.setOtro(externObject.getOtro());
-        localObject.setPosition(externObject.getPosition());
+        if (externObject != null) {
+            localObject.setId(externObject.getId());
+            localObject.setNombre(externObject.getNombre());
+            localObject.setOtro(externObject.getOtro());
+            localObject.setPosition(externObject.getPosition());
+        }
         return localObject;
     }
 }

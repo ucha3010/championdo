@@ -12,6 +12,8 @@
     <link href="#" th:href="@{/css/login.css}" rel="stylesheet" />
     <link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
 
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+
     <script type="text/javascript">
 		function validar(){
 			var campo = ['codigo'];
@@ -26,6 +28,8 @@
 			}
 
 			if(validado){
+				buttonBlock(document.getElementById('continueButton'));
+				buttonBlock(document.getElementById('cancelButton'));
 				return true;
 			} else {
 				document.getElementById('hayError').innerHTML = "Por favor rellenar campos obligatorios";
@@ -59,6 +63,8 @@
         </form>
       </nav>
 
+      <div th:if="${inscripcionError != null}" class="alert alert-danger" role="alert"><span th:text="${inscripcionError}"></span></div>
+
       <form action="#" th:action="@{/seguridad/validarCodigo}" th:object="${firmaCodigoModel}" method="post" onsubmit="return validar()">
         <input type="hidden" name="idOperacion" th:value="*{idOperacion}"/>
         <input type="hidden" name="operativaOriginal" th:value="*{operativaOriginal}"/>
@@ -88,7 +94,7 @@
           <div class="col-xs-2">
           </div>
           <div class="col-xs-2">
-            <a class="btn btn-default pull-right" href="#" th:href="@{/principal/principalTorneo}">Cancelar</a>
+            <a class="btn btn-default pull-right" id="cancelButton" href="#" th:href="@{/principal/}">Cancelar</a>
           </div>
           <div class="col-xs-2">
           </div>

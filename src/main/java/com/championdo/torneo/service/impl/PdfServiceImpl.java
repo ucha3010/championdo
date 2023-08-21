@@ -742,6 +742,7 @@ public class PdfServiceImpl implements PdfService {
                 directorio.mkdirs();
             }
         }
+        ruta += section;
         if (pdfModel.isMayorEdad()) {
             return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + ".pdf";
         } else {

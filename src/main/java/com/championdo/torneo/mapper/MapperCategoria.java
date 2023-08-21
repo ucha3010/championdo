@@ -18,36 +18,40 @@ public class MapperCategoria {
 
     public CategoriaModel entity2Model(Categoria externObject) {
         CategoriaModel localObject = new CategoriaModel();
-        localObject.setId(externObject.getId());
-        localObject.setEdadInicio(externObject.getEdadInicio());
-        localObject.setEdadFin(externObject.getEdadFin());
-        localObject.setNombre(externObject.getNombre());
-        localObject.setCinturonInicio(cinturonService.findById(externObject.getIdCinturonInicio()));
-        localObject.setCinturonFin(cinturonService.findById(externObject.getIdCinturonFin()));
-        localObject.setPoomsae(poomsaeService.findById(externObject.getIdPoomsae()));
-        localObject.setInclusivo(externObject.isInclusivo());
-        localObject.setInfantil(externObject.isInfantil());
-        localObject.setPosition(externObject.getPosition());
+        if (externObject != null) {
+            localObject.setId(externObject.getId());
+            localObject.setEdadInicio(externObject.getEdadInicio());
+            localObject.setEdadFin(externObject.getEdadFin());
+            localObject.setNombre(externObject.getNombre());
+            localObject.setCinturonInicio(cinturonService.findById(externObject.getIdCinturonInicio()));
+            localObject.setCinturonFin(cinturonService.findById(externObject.getIdCinturonFin()));
+            localObject.setPoomsae(poomsaeService.findById(externObject.getIdPoomsae()));
+            localObject.setInclusivo(externObject.isInclusivo());
+            localObject.setInfantil(externObject.isInfantil());
+            localObject.setPosition(externObject.getPosition());
+        }
         return localObject;
     }
     public Categoria model2Entity(CategoriaModel externObject) {
         Categoria localObject = new Categoria();
-        localObject.setId(externObject.getId());
-        localObject.setEdadInicio(externObject.getEdadInicio());
-        localObject.setEdadFin(externObject.getEdadFin());
-        localObject.setNombre(externObject.getNombre());
-        if (externObject.getCinturonInicio() != null) {
-            localObject.setIdCinturonInicio(externObject.getCinturonInicio().getId());
+        if (externObject != null) {
+            localObject.setId(externObject.getId());
+            localObject.setEdadInicio(externObject.getEdadInicio());
+            localObject.setEdadFin(externObject.getEdadFin());
+            localObject.setNombre(externObject.getNombre());
+            if (externObject.getCinturonInicio() != null) {
+                localObject.setIdCinturonInicio(externObject.getCinturonInicio().getId());
+            }
+            if (externObject.getCinturonFin() != null) {
+                localObject.setIdCinturonFin(externObject.getCinturonFin().getId());
+            }
+            if (externObject.getPoomsae() != null) {
+                localObject.setIdPoomsae(externObject.getPoomsae().getId());
+            }
+            localObject.setInclusivo(externObject.isInclusivo());
+            localObject.setInfantil(externObject.isInfantil());
+            localObject.setPosition(externObject.getPosition());
         }
-        if (externObject.getCinturonFin() != null) {
-            localObject.setIdCinturonFin(externObject.getCinturonFin().getId());
-        }
-        if (externObject.getPoomsae() != null) {
-            localObject.setIdPoomsae(externObject.getPoomsae().getId());
-        }
-        localObject.setInclusivo(externObject.isInclusivo());
-        localObject.setInfantil(externObject.isInfantil());
-        localObject.setPosition(externObject.getPosition());
         return localObject;
     }
 }
