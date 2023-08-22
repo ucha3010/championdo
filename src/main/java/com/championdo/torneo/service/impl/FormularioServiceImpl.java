@@ -160,7 +160,7 @@ public class FormularioServiceImpl implements FormularioService {
 
     private void rellenoMenor(UserModel userModel, PdfModel pdfModel) {
         pdfModel.setNombreMenor(userModel.getName() + " " + userModel.getLastname() + (userModel.getSecondLastname() != null ? " " + userModel.getSecondLastname() : ""));
-        pdfModel.setDniMenor(userModel.getDniMenor());
+        pdfModel.setDniMenor(userModel.getUsername());
         pdfModel.setFechaNacimientoMenor(Utils.date2String(userModel.getFechaNacimiento()));
     }
 }

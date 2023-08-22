@@ -50,8 +50,25 @@ public class Utils {
         return passGen.generatePassword(8, LCR, UCR, DR);
     }
 
-
     public static long milisegEntreDosFechas(Date fechaMayor, Date fechaMenor) {
         return (fechaMayor.getTime() - fechaMenor.getTime());
+    }
+
+    public static String ofuscar(String entrada) {
+        StringBuilder sb = new StringBuilder();
+        if(entrada != null) {
+            int tamanio = entrada.length();
+            int visible = tamanio/3;
+            if (tamanio > 3) {
+                sb.append(entrada, 0, visible);
+                for(int j=visible;j<(tamanio-visible);j++) {
+                    sb.append("*");
+                }
+                sb.append(entrada, tamanio-visible, tamanio);
+            } else {
+                sb.append("***");
+            }
+        }
+        return sb.toString();
     }
 }

@@ -65,7 +65,7 @@ public class LoginController {
 			userService.addOrUpdate(usuario);
 			usuario.setPassword(password);
 			emailService.sendNewPassword(usuario);
-			modelAndView.addObject("emailEnvio", usuario.getCorreo());
+			modelAndView.addObject("emailEnvio", Utils.ofuscar(usuario.getCorreo()));
 		} catch (PersistenceException | SenderException e) {
 			mostrarExcepcion(e, claveUsuarioModel, modelAndView);
 		}

@@ -8,6 +8,7 @@ import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -136,8 +137,13 @@ public class GimnasioController {
             LoggerMapper.log(Level.ERROR, "gimnasio/" + recurso, e.getMessage(), getClass());
         }
 
-        modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
-                null, null, null, Constantes.INSCRIPCION_GIMNASIO));
+        if (firmaCodigoModel != null) {
+            modelAndView.addObject("direccionCorreo", Utils.ofuscar(userLogged.getCorreo()));
+            modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
+                    null, null, null, Constantes.INSCRIPCION_GIMNASIO));
+        } else {
+            modelAndView.addObject("inscripcionError", "Ha ocurrido un error. Por favor contacte con el soporte técnico.");
+        }
         LoggerMapper.methodOut(Level.INFO, "gimnasio/" + recurso, firmaCodigoModel, getClass());
         return modelAndView;
 
