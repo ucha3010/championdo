@@ -2,6 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/adminUtil")
 public class AdminUtilController {
 
+
+    @Autowired
+    private UserService userService;
     @Autowired
     private UtilService utilService;
 
@@ -25,6 +29,7 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("adminUtil");
+        userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("utilModel", new UtilModel());
         modelAndView.addObject("utilListCampeonato", utilService.findAllStarsWith("campeonato"));
         modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones"));
@@ -40,5 +45,5 @@ public class AdminUtilController {
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         return utilList(modelAndView);
     }
-
+    //TODO DAMIAN en adminUtil.html los combos SI/NO que actualicen automático
 }
