@@ -20,7 +20,6 @@ public class PdfModel {
     private boolean cinturonBlanco; //true
     private boolean mayorEdad; //false
     private boolean inclusivo;
-    private int moverPorMenorEdad; //0
     private String cinturonActual; //Amarillo Naranja
     private int idInscripcion;
     private String categoria;
@@ -171,14 +170,6 @@ public class PdfModel {
         this.inclusivo = inclusivo;
     }
 
-    public int getMoverPorMenorEdad() {
-        return moverPorMenorEdad;
-    }
-
-    public void setMoverPorMenorEdad(int moverPorMenorEdad) {
-        this.moverPorMenorEdad = moverPorMenorEdad;
-    }
-
     public String getCinturonActual() {
         return cinturonActual;
     }
@@ -240,7 +231,6 @@ public class PdfModel {
                 ", cinturonBlanco=" + cinturonBlanco +
                 ", mayorEdad=" + mayorEdad +
                 ", inclusivo=" + inclusivo +
-                ", moverPorMenorEdad=" + moverPorMenorEdad +
                 ", cinturonActual='" + cinturonActual + '\'' +
                 ", idInscripcion=" + idInscripcion +
                 ", categoria='" + categoria + '\'' +

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UtilService {
 
-    List<UtilModel> findAllCampeonato();
+    List<UtilModel> findAllStarsWith(String startWord);
 
     UtilModel findByClave(String clave);
 

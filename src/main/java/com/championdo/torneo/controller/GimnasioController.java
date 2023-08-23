@@ -38,7 +38,7 @@ public class GimnasioController {
     @GetMapping("/tipoInscripcion")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView tipoInscripcion(ModelAndView modelAndView) {
-        modelAndView.setViewName("gimnasio/formularioTipoInscripcion");
+        modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
@@ -50,11 +50,12 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable String tipo, @PathVariable String licencia) {
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable().getValor()));
         if ("infantil".equalsIgnoreCase(tipo)) {
-            modelAndView.setViewName("gimnasio/formularioInscMenor");
+            modelAndView.setViewName("gimnasio/formularioInscMenorGimnasio");
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
         } else {
-            modelAndView.setViewName("gimnasio/formularioInscPropia");
+            modelAndView.setViewName("gimnasio/formularioInscPropiaGimnasio");
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(usuario));
         }
         modelAndView.addObject("licencia", "con licencia".equals(licencia));
@@ -131,7 +132,7 @@ public class GimnasioController {
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
             firmaCodigoModel = firmaCodigoService.add(new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                     seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                    "gimnasio/formularioInscFinalizada", Constantes.INSCRIPCION_GIMNASIO));
+                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_GIMNASIO));
             emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "gimnasio/" + recurso, e.getMessage(), getClass());

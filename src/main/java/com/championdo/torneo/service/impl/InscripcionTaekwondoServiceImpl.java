@@ -151,6 +151,11 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         emailService.sendGymJoining(inscripcionTaekwondoModel, files);
     }
 
+    @Override
+    public UtilModel getAccountBoxEnable() {
+        return utilService.findByClave(Constantes.HABILITAR_CUENTA_BANCARIA);
+    }
+
     private InscripcionTaekwondoModel fillInscripcionTaekwondoModel(UserAutorizacionModel userAutorizacionModel) {
 
         InscripcionTaekwondoModel inscripcionTaekwondoModel = new InscripcionTaekwondoModel();
@@ -204,7 +209,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
             inscripcionTaekwondoModel.setAutorizadoLicencia(autorizado.isLicencia());
         }
 
-        if (userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
+        if (userAutorizacionModel.getCuentaBancaria() != null && userAutorizacionModel.getMayorAutorizador().isDomiciliacion()) {
             inscripcionTaekwondoModel.setDomiciliacionSEPA(Boolean.TRUE);
             inscripcionTaekwondoModel.setTitularCuenta(userAutorizacionModel.getCuentaBancaria().getTitular());
             inscripcionTaekwondoModel.setIban(userAutorizacionModel.getCuentaBancaria().getIban());

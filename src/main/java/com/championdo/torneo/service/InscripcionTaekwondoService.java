@@ -33,4 +33,6 @@ public interface InscripcionTaekwondoService {
     boolean changeValueDeleteEnable();
 
     void crearEnviarArchivosInscripcionTaekwondo(FirmaCodigoModel firmaCodigoModel) throws SenderException;
+
+    UtilModel getAccountBoxEnable();
 }

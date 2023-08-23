@@ -611,7 +611,6 @@ public class PdfServiceImpl implements PdfService {
             tamanioFuente = 14;
             dejoDeMargenPosterior = 20;
             parrafoList = new ArrayList<>();
-            //TODO DAMIAN modificar esto para no usar objeto CuentaBancaria
             parrafoList.add("Titular: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getTitular() : Constantes.ERROR_DATOS_BANCARIOS));
             parrafoList.add("IBAN: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getIban() : Constantes.ERROR_DATOS_BANCARIOS));
             parrafoList.add("CÓDIGO SWIFT/BIC: " + (pdfModel.getCuentaBancaria() != null ? pdfModel.getCuentaBancaria().getSwift() : Constantes.ERROR_DATOS_BANCARIOS));

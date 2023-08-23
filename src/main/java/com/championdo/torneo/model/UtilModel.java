@@ -5,6 +5,14 @@ public class UtilModel {
     private String clave;
     private String valor;
 
+    public UtilModel() {
+    }
+
+    public UtilModel(String clave, String valor) {
+        this.clave = clave;
+        this.valor = valor;
+    }
+
     public String getClave() {
         return clave;
     }

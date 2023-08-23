@@ -40,7 +40,7 @@
 			</div>
 		</section>
 
-		<div class="row mb-3" th:each="unit : ${utilList}">
+		<div class="row mb-3" th:each="unit : ${utilListCampeonato}">
 			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
 
 				<input type="hidden" name="clave" th:value="${unit.clave}"/>
@@ -51,6 +51,28 @@
 
 				<div class="col-xs-8">
 					<input type="text" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" th:attr="placeholder=${unit.clave == 'campeonato.fecha' ? 'fecha en formato DD-MM-AAAA' : unit.clave}"/>
+				</div>
+
+				<div class="col-xs-2">
+					<button class="btn btn-primary" type="submit">Actualizar</button>
+				</div>
+
+			</form>
+		</div>
+
+		<div class="row mb-3" th:each="unitInscripciones : ${utilListInscripciones}">
+			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
+
+				<input type="hidden" name="clave" th:value="${unitInscripciones.clave}"/>
+
+				<div class="col-xs-2">
+					<label th:for="${unitInscripciones.clave}"><span th:text="${unitInscripciones.clave}"></span></label>
+				</div>
+
+				<div class="col-xs-8">
+					<select th:field="*{unitInscripciones.valor}" id="valorElegido" class="form-control form-control-lg">
+						<option th:each="l : ${listaSiNo}" th:value="${l.valor}" th:text="${l.clave}" />
+					</select>
 				</div>
 
 				<div class="col-xs-2">

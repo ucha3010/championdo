@@ -1,12 +1,15 @@
 package com.championdo.torneo.util;
 
+import com.championdo.torneo.model.UtilModel;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Utils {
 
@@ -70,5 +73,12 @@ public class Utils {
             }
         }
         return sb.toString();
+    }
+
+    public static List<UtilModel> cargarListaSiNo() {
+        List<UtilModel> listaSiNo = new ArrayList<>();
+        listaSiNo.add(new UtilModel("Si", "true"));
+        listaSiNo.add(new UtilModel("No", "false"));
+        return listaSiNo;
     }
 }

@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +26,9 @@ public class AdminUtilController {
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("adminUtil");
         modelAndView.addObject("utilModel", new UtilModel());
-        modelAndView.addObject("utilList", utilService.findAllCampeonato());
+        modelAndView.addObject("utilListCampeonato", utilService.findAllStarsWith("campeonato"));
+        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones"));
+        modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
         LoggerMapper.log(Level.INFO, "utilList", modelAndView, this.getClass());
         return modelAndView;
     }

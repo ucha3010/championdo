@@ -21,10 +21,10 @@ public class UtilServiceImpl implements UtilService {
     private MapperUtil mapperUtil;
 
     @Override
-    public List<UtilModel> findAllCampeonato() {
+    public List<UtilModel> findAllStarsWith(String startWord) {
         List<UtilModel> utilModelList = new ArrayList<>();
         for (Util util: utilRepository.findAll()) {
-            if(util.getClave().startsWith("campeonato")) {
+            if(util.getClave().startsWith(startWord)) {
                 utilModelList.add(mapperUtil.entity2Model(util));
             }
         }

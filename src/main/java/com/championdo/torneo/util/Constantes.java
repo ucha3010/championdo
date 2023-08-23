@@ -10,8 +10,9 @@ public class Constantes {
     public static final String INCLUSIVO = "INCLUSIVO";
     public static final String BLANCO = "Blanco";
 	public static final String HABILITAR_BORRAR_INSCRIPCIONES = "inscripciones.borrar";
-	public static final String CORREO_GIMNASIO = "gimnasio.correo";
 	public static final String HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO = "inscripciones.taekwondo.borrar";
+	public static final String HABILITAR_CUENTA_BANCARIA = "inscripciones.cuenta.bancaria"; //TODO DAMIAN insertar esta clave en BBDD
+	public static final String CORREO_GIMNASIO = "gimnasio.correo";
 	public static final String CLAVE_CORREO = "clave.correo";
 	public static final String ERROR_DATOS_BANCARIOS = "Error en datos bancarios";
     public static final String AVISO_EMAIL = "1000";
