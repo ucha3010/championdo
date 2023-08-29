@@ -9,7 +9,7 @@ public class Constantes {
 	public static final String NOMBRE_CAMPEONATO = "campeonato.nombre";
     public static final String INCLUSIVO = "INCLUSIVO";
     public static final String BLANCO = "Blanco";
-	public static final String HABILITAR_BORRAR_INSCRIPCIONES = "inscripciones.borrar";
+	public static final String HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO = "inscripciones.campeonato.borrar";
 	public static final String HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO = "inscripciones.taekwondo.borrar";
 	public static final String HABILITAR_CUENTA_BANCARIA = "inscripciones.cuenta.bancaria";
 	public static final String CORREO_GIMNASIO = "gimnasio.correo";

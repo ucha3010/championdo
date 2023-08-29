@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Util {
 
     @Id
-    @Column(name = "clave", unique = true, nullable = false, length = 30)
+    @Column(name = "clave", unique = true, nullable = false, length = 100)
     private String clave;
 
     @Column(name = "valor", nullable = false, length = 200)

@@ -45,5 +45,4 @@ public class AdminUtilController {
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         return utilList(modelAndView);
     }
-    //TODO DAMIAN en adminUtil.html los combos SI/NO que actualicen automático
 }

@@ -74,7 +74,7 @@
 						Inscripción de <span th:text="${autorizacion.autorizadoNombre}"></span> <span th:text="${autorizacion.autorizadoApellido1}"></span> <span th:text="${autorizacion.autorizadoApellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span>
 					</button>
 				</a>
-				<a th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
+				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 			</div>
 		</section>
 

@@ -136,7 +136,7 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     public UtilModel getDeleteEnable() {
-        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES);
+        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO);
     }
 
     @Override

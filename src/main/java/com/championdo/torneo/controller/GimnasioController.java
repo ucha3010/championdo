@@ -42,6 +42,7 @@ public class GimnasioController {
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable().getValor()));
         LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
         return modelAndView;
     }
