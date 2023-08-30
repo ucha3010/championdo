@@ -48,7 +48,7 @@ public class GimnasioController {
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable().getValor()));
         LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
-        return modelAndView;
+        return modelAndView;//TODO DAMIAN permitir subir mandato SEPA escaneado
     }
 
     @GetMapping("/formularioInscripcion/{tipo}/{licencia}")
@@ -113,11 +113,7 @@ public class GimnasioController {
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
-        if (pdfModel.isMayorEdad()) {
-            pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_AUTORIZACION_MAYOR_18);
-        } else {
-            pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_AUTORIZACION_MENOR_18);
-        }
+        pdfService.descargarPdf(pdfModel, response, pdfModel.getSeccion());
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
     }
 

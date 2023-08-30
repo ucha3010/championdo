@@ -53,7 +53,8 @@
 					<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
 					<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
 					<input type="hidden" name="mayorEdad" th:value="!${inscripcion.autorizadoMenor}"/>
-					<button class="btn btn-success pull-right" type="submit">Descargar</button>
+					<input type="hidden" name="seccion" th:value="autorizacionMenor18"/>
+					<button class="btn btn-success pull-right" type="submit">Autorización</button>
 				</form>
 			</div>
 		</div>
@@ -64,8 +65,18 @@
 			<div class="col-xs-3 col-md-2 text-center">
 				<label for="apellido2">Segundo apellido</label>
 			</div>
-			<div class="col-xs-9 col-md-8">
+			<div class="col-xs-7 col-md-6">
 				<input type="text" th:field="*{inscripcion.mayorApellido2}" id="apellido2" class="form-control" disabled/>
+			</div>
+			<div th:if="${inscripcion.autorizadoLicencia}" class="col-md-2">
+				<form action="#" th:action="@{/gimnasio/descargarPdf}"th:object="${pdfModel}" method="POST">
+					<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
+					<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
+					<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
+					<input type="hidden" name="mayorEdad" th:value="!${inscripcion.autorizadoMenor}"/>
+					<input type="hidden" name="seccion" th:value="mandato"/>
+					<button class="btn btn-success pull-right" type="submit">Mandato Licencia</button>
+				</form>
 			</div>
 		</div>
 
@@ -78,7 +89,17 @@
 			<div class="col-xs-4 col-md-3">
 				<input type="text" th:field="*{inscripcion.mayorDni}" id="dni" class="form-control" disabled	/>
 			</div>
-			<div class="col-xs-5 col-md-5">
+			<div class="col-md-3">
+			</div>
+			<div th:if="${inscripcion.mayorAutorizaWhatsApp}" class="col-md-2">
+				<form action="#" th:action="@{/gimnasio/descargarPdf}"th:object="${pdfModel}" method="POST">
+					<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
+					<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
+					<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
+					<input type="hidden" name="mayorEdad" th:value="!${inscripcion.autorizadoMenor}"/>
+					<input type="hidden" name="seccion" th:value="whatsapp"/>
+					<button class="btn btn-success pull-right" type="submit">Grupo WhatsApp</button>
+				</form>
 			</div>
 		</div>
 

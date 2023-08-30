@@ -24,6 +24,7 @@ public class PdfModel {
     private int idInscripcion;
     private String categoria;
     private String poomsae;
+    private String seccion;
     private CuentaBancariaModel cuentaBancaria;
 
     public String getNombre() {
@@ -202,6 +203,14 @@ public class PdfModel {
         this.poomsae = poomsae;
     }
 
+    public String getSeccion() {
+        return seccion;
+    }
+
+    public void setSeccion(String seccion) {
+        this.seccion = seccion;
+    }
+
     public CuentaBancariaModel getCuentaBancaria() {
         return cuentaBancaria;
     }
@@ -235,6 +244,7 @@ public class PdfModel {
                 ", idInscripcion=" + idInscripcion +
                 ", categoria='" + categoria + '\'' +
                 ", poomsae='" + poomsae + '\'' +
+                ", seccion='" + seccion + '\'' +
                 ", cuentaBancaria=" + cuentaBancaria +
                 '}';
     }

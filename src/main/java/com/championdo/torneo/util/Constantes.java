@@ -41,6 +41,7 @@ public class Constantes {
 	public static final String SECCION_MANDATO = "mandato";
 	public static final String SECCION_NORMATIVA_SEPA = "normativaSEPA";
 	public static final String SECCION_TORNEO = "torneo";
+	public static String SECCION_WHATSAPP = "whatsapp";
 
 	// FIRMAS - operativa original
 	public static final String INSCRIPCION_GIMNASIO = "inscripcionGimnasio";

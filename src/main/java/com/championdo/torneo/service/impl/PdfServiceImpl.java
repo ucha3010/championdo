@@ -1,7 +1,10 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.exception.EmptyException;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.CuentaBancariaModel;
+import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
@@ -223,7 +226,7 @@ public class PdfServiceImpl implements PdfService {
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que el presente MANDATO, que se rige por los arts. 1709 a 1739 CC español se confiere para que se pueda llevar ");
-            parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(hoy[0]);
+            parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(hoy[2]);
             parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
             generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
@@ -709,6 +712,81 @@ public class PdfServiceImpl implements PdfService {
         return null;
     }
 
+    @Override
+    public File generarPdfAutorizaWhatsApp(PdfModel pdfModel) {
+
+        LoggerMapper.methodIn(Level.INFO, "generarPdfAutorizaWhatsApp", pdfModel, this.getClass());
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            // Text
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_BOLD, 16);
+            contentStream.newLineAtOffset( 130, page.getMediaBox().getHeight() - 50);
+            contentStream.showText("AUTORIZACIÓN GRUPO DE WHATSAPP");
+            contentStream.endText();
+
+            List<String> parrafoList = new ArrayList<>();
+
+            StringBuilder parrafo;
+            int alturaComienzoParrafo = 90;
+            int salto;
+            int tamanioFuente;
+            int saltoParrafo = 20;
+            Calendar calendar = GregorianCalendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
+            String[] hoy = sdf.format(calendar.getTime()).split("/");
+
+            salto = 15;
+            tamanioFuente = 14;
+            parrafo = new StringBuilder();
+            parrafo.append("Yo D./Dña. ").append(pdfModel.getNombre()).append(" con DNI ").append(pdfModel.getDni()).append(" y domicilio en ");
+            parrafo.append(pdfModel.getDomicilio()).append(" ").append(pdfModel.getLocalidad());
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
+
+            //salto = 15;tamanioFuente = 14;
+            parrafo = new StringBuilder();
+            parrafo.append("Por medio del presente escrito autorizo a los miembros del GIMNASIO CHAMPIONDO, a incluirme y ");
+            parrafo.append("pertenecer al GRUPO DE WHATSAPP del gimnasio, para recibir las informaciones y publicaciones que envíen.");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
+
+            //salto = 15;tamanioFuente = 14;
+            parrafo = new StringBuilder();
+            parrafo.append("De igual manera, es mi deseo establecer que esta autorización es voluntaria y gratuita.");
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
+            alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
+
+            //salto = 15;tamanioFuente = 14;
+            parrafo = new StringBuilder();
+            parrafo.append("Y para que conste dejo firmado de forma electrónica este documento ");
+            parrafo.append("con fecha ").append(hoy[0]).append(" de ").append(hoy[1]).append(" de ").append(hoy[2]);
+            parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
+            generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
+
+
+            /* Image
+             PDImageXObject image = PDImageXObject.createFromFile("src/main/java/com/damian/objetivos/util/400.jpg", document);
+             contentStream.drawImage(image, 20, 20, image.getWidth() / 3, image.getHeight() / 3);
+             */
+
+            contentStream.close();
+
+            document.save(nombreArchivo(pdfModel, true, Constantes.SECCION_WHATSAPP));
+            return new File(nombreArchivo(pdfModel, true, Constantes.SECCION_WHATSAPP));
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "generarPdfAutorizaWhatsApp", e.getMessage(), PdfServiceImpl.class);
+        }
+        return null;
+    }
+
     /**
      *
      * @param seccion
@@ -809,12 +887,6 @@ public class PdfServiceImpl implements PdfService {
         }
 
         return pdfModel;
-    }
-
-    @Override
-    public File generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral) {
-        //TODO DAMIAN hacer PDF autorización WhatsApp
-        return null;
     }
 
     private int rellenarAdulto(PdfModel pdfModel, int alturaComienzoParrafo, PDPageContentStream contentStream, PDPage page,
