@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -30,6 +32,8 @@ public class GimnasioController {
     private FirmaCodigoService firmaCodigoService;
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
+    @Autowired
+    private PdfService pdfService;
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
@@ -80,11 +84,15 @@ public class GimnasioController {
     @GetMapping("/getInscripcion/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getInscripcion(ModelAndView modelAndView, @PathVariable int id) {
-        modelAndView.setViewName("tengoquehacer"); //TODO DAMIAN hacer html
         userService.cargarUsuarioCompleto(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+        if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
+            modelAndView.setViewName("gimnasio/vistaInscPropiaGimnasio");
+        } else {
+            modelAndView.setViewName("gimnasio/vistaInscMenorGimnasio");
+        }
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModel);
-//        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionTaekwondoModel));
+        modelAndView.addObject("pdfModel", new PdfModel());
         LoggerMapper.methodOut(Level.INFO, "gimnasio/getInscripcion", modelAndView, getClass());
         return modelAndView;
     }
@@ -100,14 +108,18 @@ public class GimnasioController {
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
         LoggerMapper.log(Level.INFO, "formulario/getMenorOInclisivo", modelAndView, getClass());
         return modelAndView;
-    }
+    }*/
 
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
-        pdfService.descargarPdf(pdfModel, response);
+        if (pdfModel.isMayorEdad()) {
+            pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_AUTORIZACION_MAYOR_18);
+        } else {
+            pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_AUTORIZACION_MENOR_18);
+        }
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
-    }*/
+    }
 
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")

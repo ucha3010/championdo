@@ -30,7 +30,8 @@ public class UsuarioController {
 	private UserRoleService userRoleService;
 	@Autowired
 	private FormularioService formularioService;
-	
+
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@GetMapping("/listaUsuarios")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView listaUsuarios(ModelAndView modelAndView) {
@@ -89,6 +90,7 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@GetMapping("/eliminarUsuario")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView eliminarUsuario(@ModelAttribute("username") String username) {
@@ -102,6 +104,7 @@ public class UsuarioController {
 		return listaUsuarios(modelAndView);
 	}
 
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@GetMapping("/formularioUsuarioAltaModif")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView formularioUsuarioAltaModif(ModelAndView modelAndView, @ModelAttribute("username") String username) {
@@ -117,6 +120,7 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@PostMapping("/altaModifUsuario")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView altaModifUsuario(@ModelAttribute("user") UserModel usuario) {
@@ -148,7 +152,7 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
-
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@GetMapping("/formularioUsuarioRoles")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView formularioUsuarioRoles(ModelAndView modelAndView, @ModelAttribute("username") String username) {
@@ -160,6 +164,7 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@PostMapping("/modifUsuarioRoles")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView modifUsuarioRoles(@ModelAttribute("userRoleModel") UserRoleModel userRoleModel) {
@@ -170,6 +175,7 @@ public class UsuarioController {
 		return listaUsuarios(modelAndView);
 	}
 
+	//TODO DAMIAN este recurso no se utiliza, mirar por qué
 	@GetMapping("/resetearClaveUsuario")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView resetearClaveUsuario(@ModelAttribute("username") String username) {

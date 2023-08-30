@@ -4,6 +4,7 @@ import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -82,7 +83,7 @@ public class AdminInscripcionController {
         }
         pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
         pdfModel.setIdInscripcion(inscripcionModel.getId());
-        pdfService.descargarPdf(pdfModel, response, "torneo");
+        pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_TORNEO);
         LoggerMapper.log(Level.INFO, "adminInscripcion/descargarPdf", "Descarga de documento correcta", getClass());
     }
 

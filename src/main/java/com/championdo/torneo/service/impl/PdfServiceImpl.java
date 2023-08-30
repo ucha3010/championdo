@@ -145,8 +145,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, "torneo"));
-            return new File(nombreArchivo(pdfModel, true, "torneo"));
+            document.save(nombreArchivo(pdfModel, true, Constantes.SECCION_TORNEO));
+            return new File(nombreArchivo(pdfModel, true, Constantes.SECCION_TORNEO));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfTorneo", e.getMessage(), PdfServiceImpl.class);
         }
@@ -296,8 +296,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, "mandato"));
-            return new File(nombreArchivo(pdfModel, true, "mandato"));
+            document.save(nombreArchivo(pdfModel, true, Constantes.SECCION_MANDATO));
+            return new File(nombreArchivo(pdfModel, true, Constantes.SECCION_MANDATO));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfMandato", e.getMessage(), PdfServiceImpl.class);
         }
@@ -396,8 +396,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, "autorizacionMayor18"));
-            return new File(nombreArchivo(pdfModel, true, "autorizacionMayor18"));
+            document.save(nombreArchivo(pdfModel, true, Constantes.SECCION_AUTORIZACION_MAYOR_18));
+            return new File(nombreArchivo(pdfModel, true, Constantes.SECCION_AUTORIZACION_MAYOR_18));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfAutorizacionMayor18", e.getMessage(), PdfServiceImpl.class);
         }
@@ -504,8 +504,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, "autorizacionMenor18"));
-            return new File(nombreArchivo(pdfModel, true, "autorizacionMenor18"));
+            document.save(nombreArchivo(pdfModel, true, Constantes.SECCION_AUTORIZACION_MENOR_18));
+            return new File(nombreArchivo(pdfModel, true, Constantes.SECCION_AUTORIZACION_MENOR_18));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfAutorizacionMenor18", e.getMessage(), PdfServiceImpl.class);
         }
@@ -701,8 +701,8 @@ public class PdfServiceImpl implements PdfService {
 
             contentStream.close();
 
-            document.save(nombreArchivo(pdfModel, true, "normativaSEPA"));
-            return new File(nombreArchivo(pdfModel, true, "normativaSEPA"));
+            document.save(nombreArchivo(pdfModel, true, Constantes.SECCION_NORMATIVA_SEPA));
+            return new File(nombreArchivo(pdfModel, true, Constantes.SECCION_NORMATIVA_SEPA));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "generarPdfNormativaSEPA", e.getMessage(), PdfServiceImpl.class);
         }
@@ -711,7 +711,15 @@ public class PdfServiceImpl implements PdfService {
 
     /**
      *
-     * @param seccion valores torneo, mandato, autorizacionMayor18, autorizacionMenor18, normativaSEPA
+     * @param seccion
+     *
+     * valores:
+     *
+     * Constantes.SECCION_TORNEO
+     * Constantes.SECCION_MANDATO
+     * Constantes.SECCION_AUTORIZACION_MAYOR_18
+     * Constantes.SECCION_AUTORIZACION_MENOR_18
+     * Constantes.SECCION_NORMATIVA_SEPA
      */
     @Override
     public void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion) {

@@ -157,7 +157,7 @@ public class FormularioController {
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
-        pdfService.descargarPdf(pdfModel, response, "torneo");
+        pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_TORNEO);
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
