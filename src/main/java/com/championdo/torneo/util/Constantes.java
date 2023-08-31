@@ -40,9 +40,13 @@ public class Constantes {
 	public static final String SECCION_AUTORIZACION_MENOR_18 = "autorizacionMenor18";
 	public static final String SECCION_MANDATO = "mandato";
 	public static final String SECCION_NORMATIVA_SEPA = "normativaSEPA";
+	public static final String SECCION_NORMATIVA_SEPA_FIRMADO = "normativaSEPAFirmado";
 	public static final String SECCION_TORNEO = "torneo";
 	public static String SECCION_WHATSAPP = "whatsapp";
 
 	// FIRMAS - operativa original
 	public static final String INSCRIPCION_GIMNASIO = "inscripcionGimnasio";
+
+	// extensiones de archivos
+    public static final String EXTENSION_PDF = ".pdf";
 }

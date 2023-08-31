@@ -25,6 +25,7 @@ public class PdfModel {
     private String categoria;
     private String poomsae;
     private String seccion;
+    private String extension;
     private CuentaBancariaModel cuentaBancaria;
 
     public String getNombre() {
@@ -211,6 +212,14 @@ public class PdfModel {
         this.seccion = seccion;
     }
 
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
     public CuentaBancariaModel getCuentaBancaria() {
         return cuentaBancaria;
     }
@@ -245,6 +254,7 @@ public class PdfModel {
                 ", categoria='" + categoria + '\'' +
                 ", poomsae='" + poomsae + '\'' +
                 ", seccion='" + seccion + '\'' +
+                ", extension='" + extension + '\'' +
                 ", cuentaBancaria=" + cuentaBancaria +
                 '}';
     }

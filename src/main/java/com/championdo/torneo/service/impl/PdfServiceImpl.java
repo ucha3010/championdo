@@ -18,12 +18,14 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -800,7 +802,7 @@ public class PdfServiceImpl implements PdfService {
      * Constantes.SECCION_NORMATIVA_SEPA
      */
     @Override
-    public void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion) {
+    public void descargarArchivo(PdfModel pdfModel, HttpServletResponse response, String seccion) {
 
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
@@ -815,10 +817,29 @@ public class PdfServiceImpl implements PdfService {
             LoggerMapper.log(Level.ERROR, "descargarPdf", e.getMessage(), PdfServiceImpl.class);
         }
     }
+    @Override
+    public boolean subirArchivo(PdfModel pdfModel, MultipartFile file, String seccion) {
+        boolean answer = false;
+        if (!file.isEmpty()) {
+            try {
+                pdfModel.setExtension(getFileExtension(file));
+                String rutaYNombreArchivo = nombreArchivo(pdfModel, true, seccion);
+                String basePath = System.getProperty("user.dir");
+                file.transferTo(new File(basePath + File.separator + rutaYNombreArchivo));
+                answer = true;
+            } catch (IOException e) {
+                LoggerMapper.log(Level.ERROR, "subirArchivo", e.getMessage(), PdfServiceImpl.class);
+            }
+        }
+        return answer;
+    }
 
     @Override
     public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, @NotNull String section) {
 
+        if (StringUtils.isNullOrEmpty(pdfModel.getExtension())) {
+            pdfModel.setExtension(Constantes.EXTENSION_PDF);
+        }
         String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
                 + "static" + File.separator + "files" + File.separator + section + tounamentDate(pdfModel) : "");
         if(rutaCompleta) {
@@ -829,11 +850,11 @@ public class PdfServiceImpl implements PdfService {
         }
         ruta += section;
         if (pdfModel.isMayorEdad()) {
-            return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + ".pdf";
+            return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + pdfModel.getExtension();
         } else {
             return ruta + pdfModel.getDni()
                     + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? "-" + pdfModel.getDniMenor().trim() : "")
-                    + "-" + pdfModel.getIdInscripcion() + ".pdf";
+                    + "-" + pdfModel.getIdInscripcion() + pdfModel.getExtension();
         }
     }
 
@@ -859,6 +880,7 @@ public class PdfServiceImpl implements PdfService {
     public PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel) {
 
         PdfModel pdfModel = new PdfModel();
+        pdfModel.setIdInscripcion(inscripcionTaekwondoModel.getId());
         pdfModel.setNombre(inscripcionTaekwondoModel.getMayorNombre() + " " + inscripcionTaekwondoModel.getMayorApellido1()
                 + (inscripcionTaekwondoModel.getMayorApellido2() != null ? " " + inscripcionTaekwondoModel.getMayorApellido2() : ""));
         pdfModel.setDni(inscripcionTaekwondoModel.getMayorDni());
@@ -887,6 +909,16 @@ public class PdfServiceImpl implements PdfService {
         }
 
         return pdfModel;
+    }
+
+    @Override
+    public String getFileExtension(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex);
+        }
+        return "";
     }
 
     private int rellenarAdulto(PdfModel pdfModel, int alturaComienzoParrafo, PDPageContentStream contentStream, PDPage page,

@@ -85,5 +85,7 @@ public class InscripcionTaekwondo {
     private String notas;
     private boolean inscripcionFirmada;
     private boolean mandatoSEPAFirmado;
+    @Column(name = "extensionSEPAFirmado", length = 10)
+    private String extensionSEPAFirmado;
 
 }

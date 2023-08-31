@@ -45,6 +45,7 @@ public class InscripcionTaekwondoModel {
     private String notas;
     private boolean inscripcionFirmada;
     private boolean mandatoSEPAFirmado;
+    private String extensionSEPAFirmado;
 
     public int getId() {
         return id;
@@ -342,6 +343,14 @@ public class InscripcionTaekwondoModel {
         this.mandatoSEPAFirmado = mandatoSEPAFirmado;
     }
 
+    public String getExtensionSEPAFirmado() {
+        return extensionSEPAFirmado;
+    }
+
+    public void setExtensionSEPAFirmado(String extensionSEPAFirmado) {
+        this.extensionSEPAFirmado = extensionSEPAFirmado;
+    }
+
     @Override
     public String toString() {
         return "InscripcionTaekwondoModel{" +
@@ -382,6 +391,7 @@ public class InscripcionTaekwondoModel {
                 ", notas='" + notas + '\'' +
                 ", inscripcionFirmada=" + inscripcionFirmada +
                 ", mandatoSEPAFirmado=" + mandatoSEPAFirmado +
+                ", extensionSEPAFirmado='" + extensionSEPAFirmado + '\'' +
                 '}';
     }
 }

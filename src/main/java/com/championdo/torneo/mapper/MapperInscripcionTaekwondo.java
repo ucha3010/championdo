@@ -48,6 +48,7 @@ public class MapperInscripcionTaekwondo {
             localObject.setNotas(externObject.getNotas());
             localObject.setInscripcionFirmada(externObject.isInscripcionFirmada());
             localObject.setMandatoSEPAFirmado(externObject.isMandatoSEPAFirmado());
+            localObject.setExtensionSEPAFirmado(externObject.getExtensionSEPAFirmado());
         }
         return localObject;
     }
@@ -93,6 +94,7 @@ public class MapperInscripcionTaekwondo {
             localObject.setNotas(externObject.getNotas());
             localObject.setInscripcionFirmada(externObject.isInscripcionFirmada());
             localObject.setMandatoSEPAFirmado(externObject.isMandatoSEPAFirmado());
+            localObject.setExtensionSEPAFirmado(externObject.getExtensionSEPAFirmado());
         }
         return localObject;
     }

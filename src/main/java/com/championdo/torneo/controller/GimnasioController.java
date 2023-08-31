@@ -10,11 +10,13 @@ import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -97,23 +99,10 @@ public class GimnasioController {
         return modelAndView;
     }
 
-/*
-    @GetMapping("/getMenorOInclisivo/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {
-        modelAndView.setViewName("vistaInscMenorOInclisivo");
-        userService.cargarUsuarioCompleto(modelAndView);
-        InscripcionModel inscripcionModel = inscripcionService.findById(id);
-        modelAndView.addObject("inscripcion", inscripcionModel);
-        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
-        LoggerMapper.log(Level.INFO, "formulario/getMenorOInclisivo", modelAndView, getClass());
-        return modelAndView;
-    }*/
-
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
-        pdfService.descargarPdf(pdfModel, response, pdfModel.getSeccion());
+        pdfService.descargarArchivo(pdfModel, response, pdfModel.getSeccion());
         LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
@@ -122,6 +111,37 @@ public class GimnasioController {
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         inscripcionTaekwondoService.delete(id);
         return tipoInscripcion(modelAndView);
+    }
+
+    @GetMapping("/normativa-sepa/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView normativaSepa(ModelAndView modelAndView, @PathVariable int id) {
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", id, getClass());
+        modelAndView.setViewName("gimnasio/normativaSepaGimnasio");
+        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        InscripcionTaekwondoModel inscripcion = inscripcionTaekwondoService.findById(id);
+        modelAndView.addObject("inscripcion", inscripcion);
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @PostMapping("/normativa-sepa-firmado")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView normativaSepaFirmado(ModelAndView modelAndView, @RequestParam("idInscripcion") Integer idInscripcion, @RequestParam("file") MultipartFile file) {
+
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", idInscripcion, getClass());
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(idInscripcion);
+        if(pdfService.subirArchivo(pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel), file, Constantes.SECCION_NORMATIVA_SEPA_FIRMADO)) {
+            inscripcionTaekwondoModel.setMandatoSEPAFirmado(Boolean.TRUE);
+            inscripcionTaekwondoModel.setExtensionSEPAFirmado(pdfService.getFileExtension(file));
+            inscripcionTaekwondoService.update(inscripcionTaekwondoModel);
+            LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
+            return tipoInscripcion(modelAndView);
+        } else {
+            modelAndView.addObject("subidaError", "Error en la subida del archivo");
+            LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
+            return normativaSepa(modelAndView, idInscripcion);
+        }
     }
 
     private ModelAndView logicaComunGuardar (UserAutorizacionModel userAutorizacionModel, boolean menor) {

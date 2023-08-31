@@ -126,7 +126,6 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         List<File> files = new ArrayList<>();
         InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
-        pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
         if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
             File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
             files.add(pdfMandato);

@@ -80,6 +80,22 @@
 			</div>
 		</div>
 
+		<div th:if="${inscripcion.domiciliacionSEPA and inscripcion.mandatoSEPAFirmado}" class="row mb-1">
+			<div class="col-md-10">
+			</div>
+			<div class="col-md-2">
+				<form action="#" th:action="@{/gimnasio/descargarPdf}"th:object="${pdfModel}" method="POST">
+					<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
+					<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
+					<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
+					<input type="hidden" name="mayorEdad" th:value="!${inscripcion.autorizadoMenor}"/>
+					<input type="hidden" name="seccion" th:value="normativaSEPAFirmado"/>
+					<input type="hidden" name="extension" th:value="${inscripcion.extensionSEPAFirmado}"/>
+					<button class="btn btn-success pull-right" type="submit">Domiciliación</button>
+				</form>
+			</div>
+		</div>
+
 		<div class="row mb-1">
 			<div class="col-md-2">
 			</div>

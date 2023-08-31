@@ -3,6 +3,7 @@ package com.championdo.torneo.service;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.PdfModel;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -19,7 +20,9 @@ public interface PdfService {
 
     File generarPdfNormativaSEPA(PdfModel pdfModel);
 
-    void descargarPdf(PdfModel pdfModel, HttpServletResponse response, String seccion);
+    void descargarArchivo(PdfModel pdfModel, HttpServletResponse response, String seccion);
+
+    boolean subirArchivo(PdfModel pdfModel, MultipartFile file, String seccion);
 
     String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, String seccion);
 
@@ -28,4 +31,6 @@ public interface PdfService {
     PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel);
 
     File generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral);
+
+    String getFileExtension(MultipartFile file);
 }

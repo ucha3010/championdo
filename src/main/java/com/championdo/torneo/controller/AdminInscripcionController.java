@@ -83,7 +83,7 @@ public class AdminInscripcionController {
         }
         pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
         pdfModel.setIdInscripcion(inscripcionModel.getId());
-        pdfService.descargarPdf(pdfModel, response, Constantes.SECCION_TORNEO);
+        pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_TORNEO);
         LoggerMapper.log(Level.INFO, "adminInscripcion/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
