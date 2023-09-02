@@ -8,14 +8,18 @@ import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import junit.framework.Assert;
 import org.apache.logging.log4j.Level;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -99,7 +103,7 @@ class TorneoApplicationTests {
 	}
 
 	@Test
-	public void getAbsolutePath() {
+	public String getAbsolutePath() {
 		String[] absolute = new String[1];
 		try {
 			File f = new File("program.txt");
@@ -109,12 +113,56 @@ class TorneoApplicationTests {
 			System.err.println(e.getMessage());
 		}
 		System.out.println("absolute[0]: " + absolute[0]);
+		return absolute[0];
 	}
 
 	@Test
 	public void generarCodigoTest() {
 		String codigo = seguridadService.obtenerCodigo();
 		System.out.println(codigo);
-		Assert.assertNotNull(codigo);
+		Assertions.assertNotNull(codigo);
+	}
+
+	@Test
+	public void eliminarTodoLosArchivos() {
+		// CUIDADO QUE ESTE TEST ELIMINA TODOS LOS ARCHIVOS!!!!!!!!
+		String ruta = getAbsolutePath() + "src" + File.separator + "main" + File.separator + "resources" + File.separator
+				+ "static" + File.separator + "files" ;
+		Path directorioAEliminar = Paths.get(ruta);
+
+		try {
+			eliminarDirectorioRecursivamente(directorioAEliminar);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void eliminarDirectorioRecursivamente(Path directorio) throws IOException {
+		if (Files.exists(directorio)) {
+			Files.walkFileTree(directorio, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult visitFileFailed(Path file, IOException exc) {
+					// Manejar el error al eliminar un archivo, si es necesario
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+					if (exc == null && !directorio.equals(dir)) {
+						Files.delete(dir);
+						return FileVisitResult.CONTINUE;
+					} else {
+						// Manejar el error al eliminar un directorio, si es necesario
+						return FileVisitResult.CONTINUE;
+					}
+				}
+			});
+		}
 	}
 }

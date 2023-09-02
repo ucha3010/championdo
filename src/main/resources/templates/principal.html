@@ -14,17 +14,6 @@
 
 	<title>Página principal</title>
 
-	<script type="text/javascript">
-		function confirmDelete(id){
-			if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
-				var relativeUrl = "principal/eliminarInscripcion/" + id;
-				var domain = getDomain(location.href);
-				location.href = domain + relativeUrl;
-				return true;
-			}
-			return false;
-		}
-	</script>
 </head>
 <body>
 	<div class="container">
@@ -43,36 +32,18 @@
 			<div th:if="${inscripcionCorrecta != null}" class="alert alert-success" role="alert">Información actualizada correctamente</div>
 		</section>
 
-<!--		<section class="text-center">
-			<div th:if="${inscripcion != null and inscripcion.id != 0}">
-				<a href="#" th:href="@{/formulario/getPropia/__${inscripcion.id}__}" class="textDecoration-none">
-					<button class="btn btn-link" type="button">
-						Inscripción propia realizada el <span th:text="${#calendars.format(inscripcion.fecha,'dd/MM/yyyy HH:mm')}"></span>
-					</button>
-				</a>
-				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${inscripcion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
-			</div>
-			<div th:if="${inscripcion != null}" th:each="autorizacion : ${inscripcion.autorizaciones}">
-				<a href="#" th:href="@{/formulario/getMenorOInclisivo/__${autorizacion.id}__}" class="textDecoration-none">
-					<button class="btn btn-link" type="button">
-						Inscripción de <span th:text="${autorizacion.nombre}"></span> <span th:text="${autorizacion.apellido1}"></span> <span th:text="${autorizacion.apellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fecha,'dd/MM/yyyy HH:mm')}"></span>
-					</button>
-				</a>
-				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
-			</div>
-		</section>-->
 
 		<section class="text-center">
 			<a href="#" th:href="@{/gimnasio/tipoInscripcion}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Taekwondo</button><br>
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Taekwondo <span th:if="${inscripcionTaekwondo != null}" class="badge" th:text="${inscripcionTaekwondo}"></span></button><br>
 			</a>
 
 			<a href="#" th:href="@{/}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Licencia Taekwondo</button><br>
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Licencia Taekwondo <span th:if="${licenciaTaekwondo != null}" class="badge" th:text="${licenciaTaekwondo}"></span></button><br>
 			</a>
 
 			<a href="#" th:href="@{/principal/principalTorneo}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Torneo</button><br>
+				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Torneo <span th:if="${inscripcionTorneo != null}" class="badge" th:text="${inscripcionTorneo}"></span></button><br>
 			</a>
 
 			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/admin/adminList}" class="textDecoration-none">

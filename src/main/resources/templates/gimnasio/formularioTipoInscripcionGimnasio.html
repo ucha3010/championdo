@@ -74,7 +74,8 @@
 				</a>
 				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 
-				<a th:if="${autorizacion.domiciliacionSEPA and not autorizacion.mandatoSEPAFirmado}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
+				<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.mandatoSEPAFirmado}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
+				<a th:if="${!autorizacion.inscripcionFirmada}" class="colorRed" href="#" th:href="@{/gimnasio/nuevoEnvioCodigo/__${autorizacion.id}__}">¡Inscripción no firmada! Toque aquí para firmar</a>
 			</div>
 		</section>
 
@@ -86,7 +87,7 @@
 					Infantil (hasta 13 años)
 				</label>
 			</div>
-			<div class="form-check">
+			<div th:if="${ocultarAdulto == null}" class="form-check">
 				<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="adulto" value="adulto">
 				<label class="form-check-label" for="adulto">
 					Adulto (14 años o más)

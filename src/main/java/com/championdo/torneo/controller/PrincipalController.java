@@ -1,5 +1,7 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -12,12 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/principal")
 public class PrincipalController {
 
     @Autowired
     private PrincipalService principalService;
+
+    @Autowired
+    private InscripcionTaekwondoService inscripcionTaekwondoService;
 
     @Autowired
     private UserService userService;
@@ -27,6 +34,12 @@ public class PrincipalController {
     public ModelAndView paginaPrincipal(ModelAndView modelAndView) {
         modelAndView.setViewName("principal");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
+        for (InscripcionTaekwondoModel inscripcionTaekwondoModel: inscripcionTaekwondoModelList) {
+            if (!inscripcionTaekwondoModel.isInscripcionFirmada() || (inscripcionTaekwondoModel.isDomiciliacionSEPA() && !inscripcionTaekwondoModel.isMandatoSEPAFirmado())) {
+                modelAndView.addObject("inscripcionTaekwondo", "Documentación pendiente de firma");
+            }
+        }
         modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable().getValor()));
         LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());

@@ -1,11 +1,12 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.FirmaCodigo;
-import com.championdo.torneo.entity.InscripcionTaekwondo;
 import com.championdo.torneo.mapper.MapperFirmaCodigo;
 import com.championdo.torneo.model.FirmaCodigoModel;
+import com.championdo.torneo.model.FirmaModel;
 import com.championdo.torneo.repository.FirmaCodigoRepository;
 import com.championdo.torneo.service.FirmaCodigoService;
+import com.championdo.torneo.service.FirmaService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +26,8 @@ public class FirmaCodigoServiceImpl implements FirmaCodigoService {
 
     @Autowired
     private MapperFirmaCodigo mapperFirmaCodigo;
+    @Autowired
+    private FirmaService firmaService;
 
     @Override
     public List<FirmaCodigoModel> findAll() {
@@ -48,11 +50,19 @@ public class FirmaCodigoServiceImpl implements FirmaCodigoService {
     @Override
     public FirmaCodigoModel add(FirmaCodigoModel firmaCodigoModel) {
         Date ahora = new Date();
-        Calendar caducidad = Calendar.getInstance();
-        caducidad.setTime(ahora);
-        caducidad.add(Calendar.MINUTE, 15);
         firmaCodigoModel.setFechaCreacion(ahora);
-        firmaCodigoModel.setFechaCaducidad(caducidad.getTime());
+        firmaCodigoModel.setFechaCaducidad(Utils.sumaRestaMinutos(15));
+        List<FirmaCodigo> firmaCodigoList = firmaCodigoRepository.findByIdOperacion(firmaCodigoModel.getIdOperacion());
+        if (firmaCodigoList != null && !firmaCodigoList.isEmpty()) {
+            for (FirmaCodigo firmaCodigo: firmaCodigoList) {
+                firmaCodigoRepository.delete(firmaCodigo);
+            }
+        }
+        FirmaModel firmaModel = firmaService.findByIdOperacion(firmaCodigoModel.getIdOperacion());
+        if (firmaModel.getNumeroIntentos() > 0) {
+            firmaModel.setNumeroIntentos(0);
+            firmaService.update(firmaModel);
+        }
         FirmaCodigoModel firmaCodigoModel1 = mapperFirmaCodigo.entity2Model(firmaCodigoRepository.save(mapperFirmaCodigo.model2Entity(firmaCodigoModel)));
         LoggerMapper.methodOut(Level.INFO, "add", firmaCodigoModel1, getClass());
         return firmaCodigoModel1;
@@ -76,10 +86,11 @@ public class FirmaCodigoServiceImpl implements FirmaCodigoService {
 
     @Override
     public FirmaCodigoModel findByIdOperacion(int idOperacion) {
-        try {
-            return mapperFirmaCodigo.entity2Model(firmaCodigoRepository.findByIdOperacion(idOperacion));
-        } catch (EntityNotFoundException e) {
+        List<FirmaCodigo> firmaCodigoList = firmaCodigoRepository.findByIdOperacion(idOperacion);
+        if (firmaCodigoList == null || firmaCodigoList.isEmpty()) {
             return new FirmaCodigoModel();
+        } else {
+            return mapperFirmaCodigo.entity2Model(firmaCodigoList.get(0));
         }
     }
 

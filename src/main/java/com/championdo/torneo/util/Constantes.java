@@ -34,6 +34,7 @@ public class Constantes {
 	public static final String AVISO_VALIDACION_DATOS_NO_VALIDOS = "5001";
 	public static final String AVISO_VALIDACION_NUMERO_INTENTOS_SUPERADO = "5002";
 	public static final String AVISO_VALIDACION_OPERACION_FIRMADA_ANTES = "5003";
+	public static final String AVISO_VALIDACION_TIEMPO_EXCEDIDO = "5004";
 
 	// secciones donde se guardan los archivos
 	public static final String SECCION_AUTORIZACION_MAYOR_18 = "autorizacionMayor18";

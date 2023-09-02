@@ -47,6 +47,11 @@ public class GimnasioController {
         modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
+        for (InscripcionTaekwondoModel inscripcionTaekwondoModel: inscripcionTaekwondoModelList) {
+            if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
+                modelAndView.addObject("ocultarAdulto", "ocultarAdulto");
+            }
+        }
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable().getValor()));
         LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
@@ -81,6 +86,33 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenor(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
         return logicaComunGuardar(userAutorizacionModel, Boolean.TRUE);
+    }
+
+    @GetMapping("/nuevoEnvioCodigo/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView nuevoEnvioCodigo(ModelAndView modelAndView, @PathVariable int id) {
+        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("firma/envioCodigo");
+        FirmaCodigoModel firmaCodigoModel = null;
+        try {
+            InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+            firmaCodigoModel = firmaCodigoService.add(new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
+                    seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
+                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_GIMNASIO));
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "gimnasio/nuevoEnvioCodigo", e.getMessage(), getClass());
+        }
+
+        if (firmaCodigoModel != null) {
+            modelAndView.addObject("direccionCorreo", Utils.ofuscar(userLogged.getCorreo()));
+            modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
+                    null, null, null, Constantes.INSCRIPCION_GIMNASIO));
+        } else {
+            modelAndView.addObject("inscripcionError", "Ha ocurrido un error. Por favor contacte con el soporte técnico.");
+        }
+        LoggerMapper.methodOut(Level.INFO, "gimnasio/nuevoEnvioCodigo", firmaCodigoModel, getClass());
+        return modelAndView;
     }
 
     @GetMapping("/getInscripcion/{id}")

@@ -6,7 +6,6 @@ import com.championdo.torneo.model.FirmaModel;
 import com.championdo.torneo.service.FirmaService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.util.Constantes;
-import com.championdo.torneo.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +36,9 @@ public class SeguridadServiceImpl implements SeguridadService {
             throw new ValidationException(Constantes.AVISO_VALIDACION_ERROR_DATOS_ENTRADA, "No existen datos a validar");
         } else {
             FirmaModel firmaModel = firmaService.findByIdOperacion(firmaCodigoModel.getIdOperacion());
+            if (firmaModel.getId() == 0) {
+                throw new ValidationException(Constantes.AVISO_VALIDACION_TIEMPO_EXCEDIDO, "Tiempo de validación de código excedido");
+            }
             firmaModel.setNumeroIntentos(firmaModel.getNumeroIntentos() + 1);
             if (!codigoEnviadoPorUsuario.equals(firmaCodigoModel.getCodigo()) || !dni.equals(firmaCodigoModel.getDni())) {
                 firmaService.update(firmaModel);
@@ -56,6 +58,9 @@ public class SeguridadServiceImpl implements SeguridadService {
         } else if (firmaModel.isFirmado()) {
             throw new ValidationException(Constantes.AVISO_VALIDACION_OPERACION_FIRMADA_ANTES, "La operación ha sido firmada con anterioridad");
         } else if (firmaModel.getNumeroIntentos() == 0) {
+            if (firmaModel.getId() != 0) {
+                firmaService.delete(firmaModel.getId());
+            }
             firmaService.add(new FirmaModel(idOperacion));
         }
     }

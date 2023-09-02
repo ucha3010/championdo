@@ -9,7 +9,7 @@ import java.util.List;
 @Repository("firmaCodigoRepository")
 public interface FirmaCodigoRepository extends JpaRepository<FirmaCodigo, Integer> {
 
-    FirmaCodigo findByIdOperacion(int idOperacion);
+    List<FirmaCodigo> findByIdOperacion(int idOperacion);
 
     List<FirmaCodigo> findAllByOrderByFechaCaducidadDesc();
 

@@ -8,6 +8,7 @@ import org.passay.PasswordGenerator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +56,13 @@ public class Utils {
 
     public static long milisegEntreDosFechas(Date fechaMayor, Date fechaMenor) {
         return (fechaMayor.getTime() - fechaMenor.getTime());
+    }
+    public static Date sumaRestaMinutos (int minutos) {
+        Date ahora = new Date();
+        Calendar caducidad = Calendar.getInstance();
+        caducidad.setTime(ahora);
+        caducidad.add(Calendar.MINUTE, 15);
+        return caducidad.getTime();
     }
 
     public static String ofuscar(String entrada) {
