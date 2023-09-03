@@ -46,4 +46,6 @@ public class Categoria {
 
     @Column(name = "position")
     private int position;
+
+    private int codigoGimnasio;
 }

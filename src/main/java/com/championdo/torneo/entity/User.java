@@ -96,6 +96,8 @@ public class User {
 
 	@Column(name = "telefono", length = 20)
 	private String telefono;
+
+	private int codigoGimnasio;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	private Set<UserRole> userRole = new HashSet<>();

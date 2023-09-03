@@ -30,5 +30,6 @@ public class FirmaCodigo {
     private String paginaFirmaOk;
     @Column(name = "operativaOriginal", nullable = false, length = 50)
     private String operativaOriginal;
+    private int codigoGimnasio;
 
 }

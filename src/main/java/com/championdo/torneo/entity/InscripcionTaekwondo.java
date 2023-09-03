@@ -20,6 +20,7 @@ public class InscripcionTaekwondo {
     @GeneratedValue
     private int id;
     private Date fechaInscripcion;
+    private int codigoGimnasio;
 
     //Mayor
     @Column(name = "mayorDni", nullable = false, length = 45)

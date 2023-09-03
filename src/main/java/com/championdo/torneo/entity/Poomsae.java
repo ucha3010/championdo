@@ -26,4 +26,6 @@ public class Poomsae {
     @Column(name = "position")
     private int position;
 
+    private int codigoGimnasio;
+
 }

@@ -22,4 +22,6 @@ public class Util {
     @Column(name = "valor", nullable = false, length = 200)
     private String valor;
 
+    private int codigoGimnasio;
+
 }

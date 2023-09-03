@@ -29,4 +29,6 @@ public class Cinturon {
     @Column(name = "position")
     private int position;
 
+    private int codigoGimnasio;
+
 }
