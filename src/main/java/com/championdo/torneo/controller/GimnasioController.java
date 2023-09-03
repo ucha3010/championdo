@@ -55,7 +55,7 @@ public class GimnasioController {
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable().getValor()));
         LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
-        return modelAndView;//TODO DAMIAN permitir subir mandato SEPA escaneado
+        return modelAndView;
     }
 
     @GetMapping("/formularioInscripcion/{tipo}/{licencia}")
@@ -167,6 +167,11 @@ public class GimnasioController {
             inscripcionTaekwondoModel.setMandatoSEPAFirmado(Boolean.TRUE);
             inscripcionTaekwondoModel.setExtensionSEPAFirmado(pdfService.getFileExtension(file));
             inscripcionTaekwondoService.update(inscripcionTaekwondoModel);
+            try {
+                emailService.confirmAdminSepaSigned(inscripcionTaekwondoModel);
+            } catch (Exception e) {
+                LoggerMapper.log(Level.ERROR, "gimnasio/normativa-sepa", e.getMessage(), getClass());
+            }
             LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
             return tipoInscripcion(modelAndView);
         } else {

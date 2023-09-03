@@ -67,6 +67,7 @@ public class FormularioController {
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
             emailService.sendTournamentRegistration(userModel, file);
+            emailService.confirmAdminTournamentRegistration(new UserAutorizacionModel(userModel));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -93,7 +94,6 @@ public class FormularioController {
         LoggerMapper.log(Level.INFO, "formulario/getPropia", modelAndView, getClass());
         return modelAndView;
     }
-
 
     @GetMapping("/menorOInclisivo/{menor}")
     @PreAuthorize("isAuthenticated()")
@@ -126,6 +126,7 @@ public class FormularioController {
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
             emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file);
+            emailService.confirmAdminTournamentRegistration(userAutorizacionModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"formulario/gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;

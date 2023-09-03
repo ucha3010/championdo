@@ -148,6 +148,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         inscripcionTaekwondoModel.setInscripcionFirmada(Boolean.TRUE);
         update(inscripcionTaekwondoModel);
         emailService.sendGymJoining(inscripcionTaekwondoModel, files);
+        emailService.confirmAdminGymJoining(inscripcionTaekwondoModel);
     }
 
     @Override
