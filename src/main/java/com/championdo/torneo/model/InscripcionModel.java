@@ -16,6 +16,7 @@ public class InscripcionModel {
     private String nombreCampeonato;
     private String direccionCampeonato;
     private String categoria;
+    private int codigoGimnasio;
 
     //Usuario inscripto
     private String nombreInscripto;
@@ -123,6 +124,14 @@ public class InscripcionModel {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
     }
 
     public String getNombreInscripto() {
@@ -361,6 +370,7 @@ public class InscripcionModel {
                 ", nombreCampeonato='" + nombreCampeonato + '\'' +
                 ", direccionCampeonato='" + direccionCampeonato + '\'' +
                 ", categoria='" + categoria + '\'' +
+                ", codigoGimnasio=" + codigoGimnasio +
                 ", nombreInscripto='" + nombreInscripto + '\'' +
                 ", apellido1Inscripto='" + apellido1Inscripto + '\'' +
                 ", apellido2Inscripto='" + apellido2Inscripto + '\'' +

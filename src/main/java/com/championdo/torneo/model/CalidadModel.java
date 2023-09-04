@@ -6,6 +6,7 @@ public class CalidadModel {
     private String nombre;
     private String otro;
     private int position;
+    private int codigoGimnasio;
 
     public int getId() {
         return id;
@@ -39,6 +40,14 @@ public class CalidadModel {
         this.position = position;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "CalidadModel{" +
@@ -46,6 +55,7 @@ public class CalidadModel {
                 ", nombre='" + nombre + '\'' +
                 ", otro='" + otro + '\'' +
                 ", position=" + position +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

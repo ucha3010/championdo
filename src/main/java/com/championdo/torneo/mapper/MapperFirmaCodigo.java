@@ -18,6 +18,7 @@ public class MapperFirmaCodigo {
             localObject.setDni(externObject.getDni());
             localObject.setPaginaFirmaOk(externObject.getPaginaFirmaOk());
             localObject.setOperativaOriginal(externObject.getOperativaOriginal());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -32,6 +33,7 @@ public class MapperFirmaCodigo {
             localObject.setDni(externObject.getDni());
             localObject.setPaginaFirmaOk(externObject.getPaginaFirmaOk());
             localObject.setOperativaOriginal(externObject.getOperativaOriginal());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

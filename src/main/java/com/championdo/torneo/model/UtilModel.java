@@ -4,6 +4,7 @@ public class UtilModel {
 
     private String clave;
     private String valor;
+    private int codigoGimnasio;
 
     public UtilModel() {
     }
@@ -29,11 +30,20 @@ public class UtilModel {
         this.valor = valor;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "UtilModel{" +
                 "clave='" + clave + '\'' +
                 ", valor='" + valor + '\'' +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

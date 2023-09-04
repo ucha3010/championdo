@@ -24,6 +24,7 @@ public class FirmaCodigoModel {
     private String dni;
     private String paginaFirmaOk;
     private String operativaOriginal;
+    private int codigoGimnasio;
 
     public int getId() {
         return id;
@@ -89,6 +90,14 @@ public class FirmaCodigoModel {
         this.operativaOriginal = operativaOriginal;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "FirmaCodigoModel{" +
@@ -100,6 +109,7 @@ public class FirmaCodigoModel {
                 ", dni='" + dni + '\'' +
                 ", paginaFirmaOk='" + paginaFirmaOk + '\'' +
                 ", operativaOriginal='" + operativaOriginal + '\'' +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

@@ -11,6 +11,7 @@ public class MapperUtil {
         if (externObject != null) {
             localObject.setClave(externObject.getClave());
             localObject.setValor(externObject.getValor());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -19,6 +20,7 @@ public class MapperUtil {
         if (externObject != null) {
             localObject.setClave(externObject.getClave());
             localObject.setValor(externObject.getValor());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

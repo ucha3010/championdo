@@ -12,6 +12,7 @@ public class CategoriaModel {
     private boolean inclusivo;
     private boolean infantil;
     private int position;
+    private int codigoGimnasio;
 
     public int getId() {
         return id;
@@ -93,12 +94,20 @@ public class CategoriaModel {
         this.position = position;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "CategoriaModel{" +
                 "id=" + id +
-                ", anioInicio=" + edadInicio +
-                ", anioFin=" + edadFin +
+                ", edadInicio=" + edadInicio +
+                ", edadFin=" + edadFin +
                 ", nombre='" + nombre + '\'' +
                 ", cinturonInicio=" + cinturonInicio +
                 ", cinturonFin=" + cinturonFin +
@@ -106,6 +115,7 @@ public class CategoriaModel {
                 ", inclusivo=" + inclusivo +
                 ", infantil=" + infantil +
                 ", position=" + position +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

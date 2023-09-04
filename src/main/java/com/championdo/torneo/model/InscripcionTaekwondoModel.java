@@ -6,6 +6,7 @@ public class InscripcionTaekwondoModel {
 
     private int id;
     private Date fechaInscripcion;
+    private int codigoGimnasio;
 
     //Mayor
     private String mayorDni;
@@ -61,6 +62,14 @@ public class InscripcionTaekwondoModel {
 
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
     }
 
     public String getMayorDni() {
@@ -356,6 +365,7 @@ public class InscripcionTaekwondoModel {
         return "InscripcionTaekwondoModel{" +
                 "id=" + id +
                 ", fechaInscripcion=" + fechaInscripcion +
+                ", codigoGimnasio=" + codigoGimnasio +
                 ", mayorDni='" + mayorDni + '\'' +
                 ", mayorNombre='" + mayorNombre + '\'' +
                 ", mayorApellido1='" + mayorApellido1 + '\'' +

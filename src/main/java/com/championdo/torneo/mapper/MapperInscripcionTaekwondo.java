@@ -13,6 +13,7 @@ public class MapperInscripcionTaekwondo {
         if (externObject != null) {
             localObject.setId(externObject.getId());
             localObject.setFechaInscripcion(externObject.getFechaInscripcion());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             localObject.setMayorDni(externObject.getMayorDni());
             localObject.setMayorNombre(externObject.getMayorNombre());
             localObject.setMayorApellido1(externObject.getMayorApellido1());
@@ -59,6 +60,7 @@ public class MapperInscripcionTaekwondo {
         if (externObject != null) {
             localObject.setId(externObject.getId());
             localObject.setFechaInscripcion(externObject.getFechaInscripcion());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             localObject.setMayorDni(externObject.getMayorDni());
             localObject.setMayorNombre(externObject.getMayorNombre());
             localObject.setMayorApellido1(externObject.getMayorApellido1());

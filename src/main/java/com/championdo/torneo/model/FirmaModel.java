@@ -7,6 +7,7 @@ public class FirmaModel {
     private int idOperacion;
     private int numeroIntentos;
     private boolean firmado;
+    private int codigoGimnasio;
 
     public FirmaModel(){
 
@@ -48,6 +49,14 @@ public class FirmaModel {
         this.firmado = firmado;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "FirmaModel{" +
@@ -55,6 +64,7 @@ public class FirmaModel {
                 ", idOperacion=" + idOperacion +
                 ", numeroIntentos=" + numeroIntentos +
                 ", firmado=" + firmado +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

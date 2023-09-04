@@ -13,6 +13,7 @@ public class MapperPoomsae {
             localObject.setId(externObject.getId());
             localObject.setNombre(externObject.getNombre());
             localObject.setPosition(externObject.getPosition());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -22,6 +23,7 @@ public class MapperPoomsae {
             localObject.setId(externObject.getId());
             localObject.setNombre(externObject.getNombre());
             localObject.setPosition(externObject.getPosition());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

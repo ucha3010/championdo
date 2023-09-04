@@ -6,6 +6,7 @@ public class GimnasioModel {
     private String nombre;
     private String direccion;
     private int position;
+    private int codigoGimnasio;
 
     public int getId() {
         return id;
@@ -39,6 +40,14 @@ public class GimnasioModel {
         this.position = position;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "GimnasioModel{" +
@@ -46,6 +55,7 @@ public class GimnasioModel {
                 ", nombre='" + nombre + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", position=" + position +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

@@ -29,4 +29,6 @@ public class Gimnasio {
     @Column(name = "position")
     private int position;
 
+    private int codigoGimnasio;
+
 }

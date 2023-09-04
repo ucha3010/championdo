@@ -6,6 +6,7 @@ public class CinturonModel {
     private String color;
     private String categoria;
     private int position;
+    private int codigoGimnasio;
 
     public int getId() {
         return id;
@@ -39,6 +40,14 @@ public class CinturonModel {
         this.position = position;
     }
 
+    public int getCodigoGimnasio() {
+        return codigoGimnasio;
+    }
+
+    public void setCodigoGimnasio(int codigoGimnasio) {
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
     @Override
     public String toString() {
         return "CinturonModel{" +
@@ -46,6 +55,7 @@ public class CinturonModel {
                 ", color='" + color + '\'' +
                 ", categoria='" + categoria + '\'' +
                 ", position=" + position +
+                ", codigoGimnasio=" + codigoGimnasio +
                 '}';
     }
 }

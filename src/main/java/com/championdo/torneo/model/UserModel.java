@@ -39,6 +39,7 @@ public class UserModel {
 	private String telefono;
 	private boolean autorizaWhatsApp;
 	private boolean domiciliacion;
+	private int codigoGimnasio;
 	private List<String> userRoles = new ArrayList<>();
 
 	public String getUsername() {
@@ -281,6 +282,14 @@ public class UserModel {
 		this.domiciliacion = domiciliacion;
 	}
 
+	public int getCodigoGimnasio() {
+		return codigoGimnasio;
+	}
+
+	public void setCodigoGimnasio(int codigoGimnasio) {
+		this.codigoGimnasio = codigoGimnasio;
+	}
+
 	public List<String> getUserRoles() {
 		return userRoles;
 	}
@@ -322,6 +331,7 @@ public class UserModel {
 				", telefono='" + telefono + '\'' +
 				", autorizaWhatsApp=" + autorizaWhatsApp +
 				", domiciliacion=" + domiciliacion +
+				", codigoGimnasio=" + codigoGimnasio +
 				", userRoles=" + userRoles +
 				'}';
 	}

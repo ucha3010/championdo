@@ -14,6 +14,7 @@ public class MapperFirma {
             localObject.setIdOperacion(externObject.getIdOperacion());
             localObject.setNumeroIntentos(externObject.getNumeroIntentos());
             localObject.setFirmado(externObject.isFirmado());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -24,6 +25,7 @@ public class MapperFirma {
             localObject.setIdOperacion(externObject.getIdOperacion());
             localObject.setNumeroIntentos(externObject.getNumeroIntentos());
             localObject.setFirmado(externObject.isFirmado());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

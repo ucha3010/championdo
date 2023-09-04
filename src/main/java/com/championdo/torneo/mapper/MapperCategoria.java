@@ -29,6 +29,7 @@ public class MapperCategoria {
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setInfantil(externObject.isInfantil());
             localObject.setPosition(externObject.getPosition());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -51,6 +52,7 @@ public class MapperCategoria {
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setInfantil(externObject.isInfantil());
             localObject.setPosition(externObject.getPosition());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
