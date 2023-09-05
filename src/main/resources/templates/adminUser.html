@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -51,7 +51,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section sec:authorize="hasRole('ROLE_ADMIN')">
         <table class="table table-hover sortable">
             <thead>
             <tr>

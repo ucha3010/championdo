@@ -26,13 +26,4 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping("/rootList")
-    @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView rootList(ModelAndView modelAndView) {
-        modelAndView.setViewName("adminList"); //TODO DAMIAN cambiar vista y crearla. Acá manejaré(como ROOT) los gimnasios-clientes
-        userService.cargarUsuarioCompleto(modelAndView);
-        LoggerMapper.log(Level.INFO, "rootList", modelAndView, this.getClass());
-        return modelAndView;
-    }
-
 }

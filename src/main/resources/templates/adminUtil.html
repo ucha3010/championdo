@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -86,44 +86,44 @@
 			</div>
 		</section>
 
-		<div class="row mb-3" th:each="unit : ${utilListCampeonato}">
-			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
+		<section  sec:authorize="hasRole('ROLE_ADMIN')">
+			<div class="row mb-3" th:each="unit : ${utilListCampeonato}">
+				<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
 
-				<input type="hidden" name="clave" th:value="${unit.clave}"/>
+					<input type="hidden" name="clave" th:value="${unit.clave}"/>
 
-				<div class="col-xs-4">
-					<label th:for="${unit.clave}"><span th:text="${unit.clave}"></span></label>
-				</div>
+					<div class="col-xs-4">
+						<label th:for="${unit.clave}"><span th:text="${unit.clave}"></span></label>
+					</div>
 
-				<div class="col-xs-6">
-					<input type="text" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" th:attr="placeholder=${unit.clave == 'campeonato.fecha' ? 'fecha en formato DD-MM-AAAA' : unit.clave}"/>
-				</div>
+					<div class="col-xs-6">
+						<input type="text" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" th:attr="placeholder=${unit.clave == 'campeonato.fecha' ? 'fecha en formato DD-MM-AAAA' : unit.clave}"/>
+					</div>
 
-				<div class="col-xs-2">
-					<button class="btn btn-primary" type="submit">Actualizar</button>
-				</div>
+					<div class="col-xs-2">
+						<button class="btn btn-primary" type="submit">Actualizar</button>
+					</div>
 
-			</form>
-		</div>
+				</form>
+			</div>
 
-		<div class="row mb-3" th:each="unitInscripciones, iterStat : ${utilListInscripciones}">
-			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
-<!--			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post" th:onsubmit="'mifuncion(' + ${utilModel.clave} + ',' + ${utilModel.valor} + ')'">-->
+			<div class="row mb-3" th:each="unitInscripciones, iterStat : ${utilListInscripciones}">
+				<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
 
-				<input type="hidden" name="clave" th:value="${unitInscripciones.clave}"/>
+					<input type="hidden" name="clave" th:value="${unitInscripciones.clave}"/>
 
-				<div class="col-xs-6">
-					<label th:for="${unitInscripciones.clave}"><span th:text="${unitInscripciones.clave}"></span></label>
-				</div>
+					<div class="col-xs-6">
+						<label th:for="${unitInscripciones.clave}"><span th:text="${unitInscripciones.clave}"></span></label>
+					</div>
 
-				<div class="col-xs-4">
-<!--					<select class="form-control form-control-lg" th:onchange="'miFuncion(' + ${iterStat.index} + ',' + this.value + ')'">-->
-					<select name="valor" class="form-control form-control-lg" onchange="this.form.submit()">
-						<option th:each="lsn : ${listaSiNo}" th:value="${lsn.valor}" th:text="${lsn.clave}" th:selected="${lsn.valor == unitInscripciones.valor}"></option>
-					</select>
-				</div>
-			</form>
-		</div>
+					<div class="col-xs-4">
+						<select name="valor" class="form-control form-control-lg" onchange="this.form.submit()">
+							<option th:each="lsn : ${listaSiNo}" th:value="${lsn.valor}" th:text="${lsn.clave}" th:selected="${lsn.valor == unitInscripciones.valor}"></option>
+						</select>
+					</div>
+				</form>
+			</div>
+		</section>
 
 		<div class="row">
 			<div class="col-xs-2">

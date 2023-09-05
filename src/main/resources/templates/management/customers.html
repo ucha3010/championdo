@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <title>Clientes</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
+
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+    <script type="text/javascript" th:src="@{/js/table.js}"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+    <script>
+        function viewDetail(id){
+            var relativeUrl = "gimnasioRoot/customers/" + id;
+            var domain = getDomain(location.href);
+            location.href = domain + relativeUrl;
+        }
+    </script>
+
+</head>
+<body>
+    <section>
+        <div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
+    </section>
+
+    <section>
+        <div class="colorGreen">
+            <h1>Clientes</h1>
+        </div>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+            </div>
+            <div class="col-xs-8">
+            </div>
+        </div>
+    </section>
+    <section sec:authorize="hasRole('ROLE_ROOT')">
+        <table class="table table-hover sortable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre Gimnasio</th>
+                <th>Nombre Responsable</th>
+                <th>Primer apellido Responsable</th>
+                <th>Segundo apellido Responsable</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Habilitado</th>
+                <th>Visib. contratada</th>
+                <th>Reg. contratados</th>
+                <th>Fecha alta</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customerList}" th:attr="onclick=|viewDetail('${customer.id}')|">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.nombreGimnasio}"></td>
+                <td th:text="${customer.nombreResponsable}"></td>
+                <td th:text="${customer.apellido1Responsable}"></td>
+                <td th:text="${customer.apellido2Responsable}"></td>
+                <td th:text="${customer.correo}"></td>
+                <td th:text="${customer.telefono}"></td>
+                <td th:text="${customer.enabled}"></td>
+                <td th:text="${customer.visibilidadContratada}"></td>
+                <td th:text="${customer.cantidadRegistrosContratados}"></td>
+                <td th:text="${#calendars.format(customer.fechaAlta,'dd/MM/yyyy')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+            </div>
+            <div class="col-xs-8">
+            </div>
+        </div>
+    </section>
+</body>
+</html>

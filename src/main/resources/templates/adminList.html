@@ -41,6 +41,12 @@
 			</div>
 		</section>
 
+		<section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+			<a href="#" th:href="@{/gimnasioRoot/customers}" class="textDecoration-none">
+				<button class="btn btn-outline-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Listado de clientes</button>
+			</a>
+		</section>
+
 		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
 			<a href="#" th:href="@{/adminInscripcion/inscripcionList}" class="textDecoration-none">
 				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Inscripciones</button>
