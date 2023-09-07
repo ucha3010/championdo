@@ -12,3 +12,7 @@ function buttonBlock(button) {
     button.style.opacity = 0.7;
     button.textContent = 'Procesando...';
 }
+
+function nullOrEmpty(myStr){
+    return (myStr === null || myStr.trim() === "");
+}

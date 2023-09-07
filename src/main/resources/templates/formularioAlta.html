@@ -32,7 +32,7 @@
 				validado = false;
 			}
 
-			if(!mayorEdad16(document.getElementById('fechaNacimiento').value)){
+			if(!mayorEdad(document.getElementById('fechaNacimiento').value, 16)){
 				document.getElementById('fechaNacimientoError').innerHTML = "El usuario debe ser mayor de edad";
 				validado = false;
 			}
