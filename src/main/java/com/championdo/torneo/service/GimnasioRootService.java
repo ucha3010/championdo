@@ -15,7 +15,7 @@ public interface GimnasioRootService {
 
     void add(GimnasioRootModel gimnasioModel);
 
-    void update(GimnasioRootModel gimnasioModel);
+    void update(GimnasioRootModel gimnasioModel) throws Exception;
 
     void delete(int idGimnasio);
 

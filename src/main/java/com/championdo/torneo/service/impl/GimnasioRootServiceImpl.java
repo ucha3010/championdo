@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service()
@@ -54,7 +55,8 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
     }
 
     @Override
-    public void update(GimnasioRootModel gimnasioRootModel) {
+    public void update(GimnasioRootModel gimnasioRootModel) throws Exception {
+        gimnasioRootModel.setFechaModificacion(new Date());
         gimnasioRootRepository.save(mapperGimnasioRoot.model2Entity(gimnasioRootModel));
     }
 

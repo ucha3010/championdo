@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.service.GimnasioRootService;
@@ -25,30 +26,41 @@ public class GimnasioRootController {
     @GetMapping("/customers")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView customers(ModelAndView modelAndView) {
+        LoggerMapper.methodIn(Level.INFO, "customers", "", this.getClass());
         modelAndView.setViewName("management/customers");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("customerList", gimnasioRootService.findAllOrderByNombreGimnasioAsc());
-        LoggerMapper.log(Level.INFO, "customers", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "customers", modelAndView, this.getClass());
         return modelAndView;
     }
 
     @GetMapping("/customers/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView customersId(ModelAndView modelAndView, int id) {
+        LoggerMapper.methodIn(Level.INFO, "customersId", "id: " + id, this.getClass());
         modelAndView.setViewName("management/customer");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("customer", gimnasioRootService.findById(id));
-        LoggerMapper.log(Level.INFO, "customersId", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "customersId", modelAndView, this.getClass());
         return modelAndView;
     }
 
     @PutMapping("/customers")
     @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView save(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
+    public ModelAndView update(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
+        LoggerMapper.methodIn(Level.INFO, "update", customer, this.getClass());
         modelAndView.setViewName("management/customer");
-        //TODO DAMIAN actualizar cliente
-        //updateOk
-        //updateProblem
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        customer.setUsuarioModificacion(user.getUsername());
+        try {
+            gimnasioRootService.update(customer);
+            modelAndView.addObject("updateOk", "Actualización correcta");
+        } catch (Exception e) {
+            modelAndView.addObject("updateProblem", "Hubo un problema con la actualización");
+            LoggerMapper.log(Level.ERROR, "update", e.getMessage(), this.getClass());
+        }
+        modelAndView.addObject("customer", customer);
+        LoggerMapper.methodOut(Level.INFO, "update", modelAndView, this.getClass());
         return modelAndView;
     }
 
