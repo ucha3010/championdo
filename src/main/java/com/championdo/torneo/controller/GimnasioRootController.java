@@ -2,8 +2,8 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioRootModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -21,6 +21,9 @@ public class GimnasioRootController {
     private GimnasioRootService gimnasioRootService;
 
     @Autowired
+    private GimnasioService gimnasioService;
+
+    @Autowired
     private UserService userService;
 
     @GetMapping("/customers")
@@ -36,20 +39,20 @@ public class GimnasioRootController {
 
     @GetMapping("/customers/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView customersId(ModelAndView modelAndView, int id) {
+    public ModelAndView customersId(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "customersId", "id: " + id, this.getClass());
-        modelAndView.setViewName("management/customer");
+        modelAndView.setViewName("management/updateCustomer");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("customer", gimnasioRootService.findById(id));
         LoggerMapper.methodOut(Level.INFO, "customersId", modelAndView, this.getClass());
         return modelAndView;
     }
 
-    @PutMapping("/customers")
+    @PostMapping("/updateCustomer")
     @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView update(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
-        LoggerMapper.methodIn(Level.INFO, "update", customer, this.getClass());
-        modelAndView.setViewName("management/customer");
+    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
+        LoggerMapper.methodIn(Level.INFO, "updateCustomer", customer, this.getClass());
+        modelAndView.setViewName("management/updateCustomer");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         customer.setUsuarioModificacion(user.getUsername());
         try {
@@ -57,11 +60,53 @@ public class GimnasioRootController {
             modelAndView.addObject("updateOk", "Actualización correcta");
         } catch (Exception e) {
             modelAndView.addObject("updateProblem", "Hubo un problema con la actualización");
-            LoggerMapper.log(Level.ERROR, "update", e.getMessage(), this.getClass());
+            LoggerMapper.log(Level.ERROR, "updateCustomer", e.getMessage(), this.getClass());
         }
         modelAndView.addObject("customer", customer);
-        LoggerMapper.methodOut(Level.INFO, "update", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "updateCustomer", modelAndView, this.getClass());
         return modelAndView;
+    }
+
+    @GetMapping("/formNewCustomer")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView formNewCustomer(ModelAndView modelAndView) {
+        LoggerMapper.methodIn(Level.INFO, "formNewCustomer", "", this.getClass());
+        modelAndView.setViewName("management/addCustomer");
+        userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("customer", new GimnasioRootModel());
+        LoggerMapper.methodOut(Level.INFO, "formNewCustomer", modelAndView, this.getClass());
+        return modelAndView;
+    }
+
+    @PostMapping("/customers")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView addCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
+        LoggerMapper.methodIn(Level.INFO, "addCustomer", customer, this.getClass());
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        customer.setUsuarioModificacion(user.getUsername());
+        try {
+            gimnasioRootService.add(customer);
+            gimnasioService.addFromRoot(customer);
+            userService.addFromRoot(customer);
+            return customers(modelAndView);
+        } catch (Exception e) {
+            modelAndView.setViewName("management/addCustomer");
+            modelAndView.addObject("customer", customer);
+            modelAndView.addObject("addProblem", "Hubo un problema con la actualización");
+            LoggerMapper.log(Level.ERROR, "addCustomer", e.getMessage(), this.getClass());
+        }
+        LoggerMapper.methodOut(Level.INFO, "addCustomer", modelAndView, this.getClass());
+        return modelAndView;
+    }
+
+    @GetMapping("/deleteCustomer/{id}")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView deleteCustomer(ModelAndView modelAndView,@PathVariable int id) {
+        LoggerMapper.methodIn(Level.INFO, "deleteCustomer", "id: " + id, this.getClass());
+        userService.cargarUsuarioCompleto(modelAndView);
+        gimnasioRootService.delete(id);
+        LoggerMapper.methodOut(Level.INFO, "deleteCustomer", modelAndView, this.getClass());
+        return customers(modelAndView);
     }
 
 }

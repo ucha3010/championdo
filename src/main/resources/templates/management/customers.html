@@ -41,13 +41,18 @@
     </section>
 
     <section>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-xs-2">
             </div>
             <div class="col-xs-2">
                 <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-5">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-success" href="#" th:href="@{/gimnasioRoot/formNewCustomer}">Alta cliente</a>
+            </div>
+            <div class="col-xs-1">
             </div>
         </div>
     </section>
@@ -56,38 +61,40 @@
             <thead>
             <tr>
                 <th>ID</th>
+                <th>Habilitado</th>
                 <th>Nombre Gimnasio</th>
                 <th>Nombre Responsable</th>
                 <th>Primer apellido Responsable</th>
                 <th>Segundo apellido Responsable</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
-                <th>Habilitado</th>
                 <th>Visib. contratada</th>
                 <th>Reg. contratados</th>
                 <th>Fecha alta</th>
+                <th>Fecha Modificación</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="customer : ${customerList}" th:attr="onclick=|viewDetail('${customer.id}')|">
                 <td th:text="${customer.id}"></td>
+                <td th:text="${customer.enabled}"></td>
                 <td th:text="${customer.nombreGimnasio}"></td>
                 <td th:text="${customer.nombreResponsable}"></td>
                 <td th:text="${customer.apellido1Responsable}"></td>
                 <td th:text="${customer.apellido2Responsable}"></td>
                 <td th:text="${customer.correo}"></td>
                 <td th:text="${customer.telefono}"></td>
-                <td th:text="${customer.enabled}"></td>
                 <td th:text="${customer.visibilidadContratada}"></td>
                 <td th:text="${customer.cantidadRegistrosContratados}"></td>
                 <td th:text="${#calendars.format(customer.fechaAlta,'dd/MM/yyyy')}"></td>
+                <td th:text="${#calendars.format(customer.fechaModificacion,'dd/MM/yyyy HH:mm:ss')}"></td>
             </tr>
             </tbody>
         </table>
     </section>
 
     <section>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-xs-2">
             </div>
             <div class="col-xs-2">

@@ -16,6 +16,7 @@ public class MapperGimnasioRoot {
             localObject.setNombreResponsable(externObject.getNombreResponsable());
             localObject.setApellido1Responsable(externObject.getApellido1Responsable());
             localObject.setApellido2Responsable(externObject.getApellido2Responsable());
+            localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
             localObject.setDomicilioOtros(externObject.getDomicilioOtros());
@@ -41,6 +42,7 @@ public class MapperGimnasioRoot {
             localObject.setNombreResponsable(externObject.getNombreResponsable());
             localObject.setApellido1Responsable(externObject.getApellido1Responsable());
             localObject.setApellido2Responsable(externObject.getApellido2Responsable());
+            localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
             localObject.setDomicilioOtros(externObject.getDomicilioOtros());

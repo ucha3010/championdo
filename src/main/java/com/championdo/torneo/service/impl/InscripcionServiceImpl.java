@@ -160,6 +160,7 @@ public class InscripcionServiceImpl implements InscripcionService {
         inscripcionModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO).getValor());
         inscripcionModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO).getValor());
         inscripcionModel.setCategoria(categoriaModel.getNombre());
+        inscripcionModel.setCodigoGimnasio(usuarioInscripto.getCodigoGimnasio());
 
         inscripcionModel.setNombreInscripto(usuarioInscripto.getName());
         inscripcionModel.setApellido1Inscripto(usuarioInscripto.getLastname());

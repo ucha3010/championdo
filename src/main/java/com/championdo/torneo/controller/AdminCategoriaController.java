@@ -1,9 +1,11 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CategoriaModel;
 import com.championdo.torneo.service.CategoriaService;
 import com.championdo.torneo.service.CinturonService;
 import com.championdo.torneo.service.PoomsaeService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class AdminCategoriaController {
     private CinturonService cinturonService;
     @Autowired
     private PoomsaeService poomsaeService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/categoriaList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -45,6 +50,8 @@ public class AdminCategoriaController {
     @PostMapping("/addCategoria")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addCategoria(ModelAndView modelAndView, @ModelAttribute("categoriaModel") CategoriaModel categoriaModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        categoriaModel.setCodigoGimnasio(user.getCodigoGimnasio());
         categoriaModel.setPosition(categoriaService.findMaxPosition() + 1);
         categoriaService.add(categoriaModel);
         return categoriaList(modelAndView);

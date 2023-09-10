@@ -1,7 +1,9 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CalidadModel;
 import com.championdo.torneo.service.CalidadService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class AdminCalidadController {
 
     @Autowired
     private CalidadService calidadService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/calidadList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -38,6 +43,8 @@ public class AdminCalidadController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addCalidad(ModelAndView modelAndView, @ModelAttribute("calidadModel") CalidadModel calidadModel) {
         calidadModel.setPosition(calidadService.findMaxPosition() + 1);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        calidadModel.setCodigoGimnasio(user.getCodigoGimnasio());
         calidadService.add(calidadModel);
         return calidadList(modelAndView);
     }

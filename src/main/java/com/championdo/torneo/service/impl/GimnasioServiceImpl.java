@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.Gimnasio;
 import com.championdo.torneo.mapper.MapperGimnasio;
 import com.championdo.torneo.model.GimnasioModel;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.repository.GimnasioRepository;
 import com.championdo.torneo.service.GimnasioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,23 @@ public class GimnasioServiceImpl implements GimnasioService {
         } else {
           return -1;
         }
+    }
+
+    @Override
+    public void addFromRoot (GimnasioRootModel gimnasioRootModel) {
+        GimnasioModel gimnasioModel = new GimnasioModel();
+        gimnasioModel.setCodigoGimnasio(gimnasioRootModel.getId());
+        gimnasioModel.setNombre(gimnasioRootModel.getNombreGimnasio());
+        StringBuilder address = new StringBuilder(gimnasioRootModel.getDomicilioCalle());
+        if(!gimnasioRootModel.getDomicilioNumero().isEmpty()){
+            address.append(" ").append(gimnasioRootModel.getDomicilioNumero());
+        }
+        if(!gimnasioRootModel.getDomicilioOtros().isEmpty()){
+            address.append(" ").append(gimnasioRootModel.getDomicilioOtros());
+        }
+        address.append(" (").append(gimnasioRootModel.getDomicilioCp()).append(") ").append(gimnasioRootModel.getDomicilioLocalidad());
+        gimnasioModel.setDireccion(address.toString());
+        add(gimnasioModel);
     }
 
     private void moveItem(int position, boolean moveUp) {

@@ -1,7 +1,9 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class AdminGimnasioController {
 
     @Autowired
     private GimnasioService gimnasioService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/gimnasioList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -37,6 +42,8 @@ public class AdminGimnasioController {
     @PostMapping("/addGimnasio")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        gimnasioModel.setCodigoGimnasio(user.getCodigoGimnasio());
         gimnasioModel.setPosition(gimnasioService.findMaxPosition() + 1);
         gimnasioService.add(gimnasioModel);
         return gimnasioList(modelAndView);

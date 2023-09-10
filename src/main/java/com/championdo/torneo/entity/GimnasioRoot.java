@@ -28,6 +28,7 @@ public class GimnasioRoot {
     private String apellido1Responsable;
     @Column(name = "apellido2Responsable", length = 60)
     private String apellido2Responsable;
+    private Date fechaNacimiento;
     @Column(name = "domicilioCalle", length = 100)
     private String domicilioCalle;
     @Column(name = "domicilioNumero", length = 30)

@@ -1,6 +1,7 @@
 package com.championdo.torneo.mapper;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class MapperUser {
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setTelefono(externObject.getTelefono());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setCodigoGimnasio(localObject.getGimnasio().getCodigoGimnasio());
             localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
         }
 
@@ -73,6 +74,8 @@ public class MapperUser {
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             if (externObject.getGimnasio() != null) {
                 localObject.setIdGimnasio(externObject.getGimnasio().getId());
+                GimnasioModel gimnasioModel = gimnasioService.findById(externObject.getGimnasio().getId());
+                localObject.setCodigoGimnasio(gimnasioModel.getCodigoGimnasio());
             }
             if (externObject.getCalidad() != null) {
                 localObject.setIdCalidad(externObject.getCalidad().getId());
@@ -97,7 +100,6 @@ public class MapperUser {
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setTelefono(externObject.getTelefono());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

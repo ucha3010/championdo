@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.service.impl.UserService;
@@ -41,6 +42,8 @@ public class AdminUtilController {
     @PostMapping("/updateUtil")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         return utilList(modelAndView);

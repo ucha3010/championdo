@@ -10,7 +10,6 @@ import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -188,6 +187,7 @@ public class GimnasioController {
 
         ModelAndView modelAndView = new ModelAndView();
         User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        userAutorizacionModel.getMayorAutorizador().setCodigoGimnasio(userLogged.getCodigoGimnasio());
         modelAndView.setViewName("firma/envioCodigo");
         FirmaCodigoModel firmaCodigoModel = null;
         try {

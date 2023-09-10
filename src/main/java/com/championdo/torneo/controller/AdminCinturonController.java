@@ -1,8 +1,10 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.CinturonModel;
 import com.championdo.torneo.service.CinturonService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class AdminCinturonController {
 
     @Autowired
     private CinturonService cinturonService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/cinturonList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -38,6 +43,8 @@ public class AdminCinturonController {
     @PostMapping("/addCinturon")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addCinturon(ModelAndView modelAndView, @ModelAttribute("cinturonModel") CinturonModel cinturonModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        cinturonModel.setCodigoGimnasio(user.getCodigoGimnasio());
         cinturonModel.setPosition(cinturonService.findMaxPosition() + 1);
         cinturonService.add(cinturonModel);
         return cinturonList(modelAndView);

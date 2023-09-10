@@ -1,8 +1,10 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.PoomsaeModel;
 import com.championdo.torneo.service.PoomsaeService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class AdminPoomsaeController {
 
     @Autowired
     private PoomsaeService poomsaeService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/poomsaeList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -38,6 +43,8 @@ public class AdminPoomsaeController {
     @PostMapping("/addPoomsae")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addPoomsae(ModelAndView modelAndView, @ModelAttribute("poomsaeModel") PoomsaeModel poomsaeModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        poomsaeModel.setCodigoGimnasio(user.getCodigoGimnasio());
         poomsaeModel.setPosition(poomsaeService.findMaxPosition() + 1);
         poomsaeService.add(poomsaeModel);
         return poomsaeList(modelAndView);

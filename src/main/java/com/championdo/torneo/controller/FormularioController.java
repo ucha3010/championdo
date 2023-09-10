@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
@@ -55,7 +56,8 @@ public class FormularioController {
 
         LoggerMapper.log(Level.INFO, "ENTRADA gaurdarPropia", userModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
-        userService.cargarUsuarioCompleto(modelAndView);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        userModel.setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {
@@ -114,7 +116,8 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenorOInclisivo(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
         ModelAndView modelAndView = new ModelAndView();
-        userService.cargarUsuarioCompleto(modelAndView);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        userAutorizacionModel.getAutorizado().setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {
@@ -178,7 +181,7 @@ public class FormularioController {
     public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
-                com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, "ROLE_USER");
+                com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
                 modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
                 modelAndView.setViewName(Constantes.LOGIN);
                 LoggerMapper.log(Level.INFO, "alta", user, this.getClass());

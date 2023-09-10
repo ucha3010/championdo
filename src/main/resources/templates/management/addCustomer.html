@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+	<title>Cliente</title>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
+
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+	<script type="text/javascript" th:src="@{/js/table.js}"></script>
+	<script type="text/javascript" th:src="@{/js/validaciones.js}"></script>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+		function validar(){
+			var campo = ['nombreGimnasio','nombreResponsable','apellido1Responsable','fechaNacimiento','domicilioCalle','domicilioLocalidad','domicilioCp','cifNif','visibilidadContratada','cantidadRegistrosContratados','telefono','correo'];
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+				if(nombreRol.value==''){
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+			var documento = document.getElementById('cifNif').value
+			if(!nullOrEmpty(documento) && !validarCif(documento) && !validarNifNie(documento)){
+				document.getElementById('cifNifError').innerHTML = "Error en formato del CIF/NIF/NIE";
+				validado = false;
+			}
+
+			if(!validarEmail(document.getElementById('correo').value)){
+				document.getElementById('correoError').innerHTML = "Error en formato del correo electrónico";
+				validado = false;
+			}
+
+			if(!mayorEdad(document.getElementById('fechaNacimiento').value, 18)){
+				document.getElementById('correoError').innerHTML = "El responsable debe ser mayor de edad";
+				validado = false;
+			}
+
+			if(validado){
+				return true;
+			} else {
+				document.getElementById('hayError').innerHTML = "Por favor verifique errores (formatos y campos obligatorios)";
+				return false;
+			}
+		}
+
+		function restablecer(){
+			var errorSpan = document.getElementsByName('errorSpan');
+			for (var i = 0; i < errorSpan.length; i++) {
+				errorSpan[i].innerHTML='';
+			}
+
+			var campos = document.getElementsByClassName("form-control");
+			for (var i = 0; i < campos.length; i++) {
+				campos[i].style.borderColor="#ced4da";
+			}
+		}
+	</script>
+
+</head>
+<body>
+	<div class="container">
+
+		<div th:if="${updateOk != null}" class="alert alert-success" role="alert"><span th:text="${updateOk}"></span></div>
+		<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
+
+		<section>
+			<h1 th:text="${customer.nombreGimnasio}"></h1>
+		</section>
+
+		<section>
+			<div class="row mb-3">
+				<div class="col-xs-2">
+				</div>
+				<div class="col-xs-2">
+					<a class="btn btn-primary pull-right" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
+				</div>
+				<div class="col-xs-8">
+				</div>
+			</div>
+		</section>
+		<section sec:authorize="hasRole('ROLE_ROOT')">
+
+			<form action="#" th:action="@{/gimnasioRoot/customers}" th:object="${customer}" method="post" onsubmit="return validar()">
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="nombreGimnasio">Nombre gimnasio*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{nombreGimnasio}" id="nombreGimnasio" class="form-control" placeholder="Nombre gimnasio"/>
+					</div>
+					<div class="col-md-2">
+						<span id="nombreGimnasioError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="nombreResponsable">Nombre responsable*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{nombreResponsable}" id="nombreResponsable" class="form-control" placeholder="Nombre responsable"/>
+					</div>
+					<div class="col-md-2">
+						<span id="nombreResponsableError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="apellido1Responsable">Primer apellido responsable*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{apellido1Responsable}" id="apellido1Responsable" class="form-control" placeholder="Primer apellido responsable" />
+					</div>
+					<div class="col-md-2">
+						<span id="apellido1ResponsableError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="apellido2Responsable">Segundo apellido responsable</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{apellido2Responsable}" id="apellido2Responsable" class="form-control" placeholder="Segundo apellido responsable" />
+					</div>
+					<div class="col-md-2">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="fechaNacimiento">Fecha de nacimiento responsable*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="date" th:field="*{fechaNacimiento}" id="fechaNacimiento" class="form-control" placeholder="Fecha de nacimiento" />
+					</div>
+					<div class="col-md-2">
+						<span id="fechaNacimientoError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="telefono">Teléfono*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{telefono}" id="telefono" class="form-control" placeholder="Teléfono" />
+					</div>
+					<div class="col-md-2">
+						<span id="telefonoError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="correo">Correo*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{correo}" id="correo" class="form-control" placeholder="Correo" />
+					</div>
+					<div class="col-md-2">
+						<span id="correoError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="domicilioCalle">Calle gimnasio*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{domicilioCalle}" id="domicilioCalle" class="form-control" placeholder="Calle" />
+					</div>
+					<div class="col-md-2">
+						<span id="domicilioCalleError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="domicilioNumero">Número</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{domicilioNumero}" id="domicilioNumero" class="form-control" placeholder="Número" />
+					</div>
+					<div class="col-md-2">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="domicilioOtros">Más datos</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{domicilioOtros}" id="domicilioOtros" class="form-control" placeholder="Más datos" />
+					</div>
+					<div class="col-md-2">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="domicilioLocalidad">Localidad*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{domicilioLocalidad}" id="domicilioLocalidad" class="form-control" placeholder="Localidad" />
+					</div>
+					<div class="col-md-2">
+						<span id="domicilioLocalidadError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="domicilioCp">Código postal*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" />
+					</div>
+					<div class="col-md-2">
+						<span id="domicilioCpError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="cifNif">CIF / NIF*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{cifNif}" id="cifNif" class="form-control" placeholder="CIF NIF" />
+					</div>
+					<div class="col-md-2">
+						<span id="cifNifError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-md-2">
+					</div>
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="visibilidadContratada">Visibilidad contratada*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{visibilidadContratada}" id="visibilidadContratada" class="form-control" placeholder="Visibilidad contratada" />
+					</div>
+					<div class="col-md-2">
+						<span id="visibilidadContratadaError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-xs-4 col-md-4 text-center">
+						<label for="cantidadRegistrosContratados">Cantidad registros contratados*</label>
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<input type="text" th:field="*{cantidadRegistrosContratados}" id="cantidadRegistrosContratados" class="form-control" placeholder="Cantidad registros contratados" />
+					</div>
+					<div class="col-md-2">
+						<span id="cantidadRegistrosContratadosError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-md-1">
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<a class="btn btn-primary pull-right" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
+					</div>
+					<div class="col-xs-8 col-md-4">
+					</div>
+					<div class="col-xs-8 col-md-4">
+						<button class="btn btn-success pull-right" id="continueButton" type="submit">Dar de alta</button>
+					</div>
+					<div class="col-md-2">
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-xs-6 mb-3">
+					</div>
+					<div class="col-xs-6 mb-3">
+						<span id="hayError" name="errorSpan" class="colorRed"></span>
+					</div>
+				</div>
+
+			</form>
+		</section>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+</html>

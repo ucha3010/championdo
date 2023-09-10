@@ -2,9 +2,12 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.mapper.MapperUser;
+import com.championdo.torneo.model.GimnasioModel;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
+import com.championdo.torneo.util.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -125,6 +128,22 @@ public class UserService implements UserDetailsService {
 
 	public com.championdo.torneo.entity.User convertUser(UserModel userModel) {
 		return mapperUser.model2Entity(userModel);
+	}
+
+	public void addFromRoot (GimnasioRootModel gimnasioRootModel) {
+		UserModel userModel = new UserModel();
+		userModel.setUsername(gimnasioRootModel.getCifNif());
+		userModel.setPassword(gimnasioRootModel.getCifNif());
+		userModel.setName(gimnasioRootModel.getNombreResponsable());
+		userModel.setLastname(gimnasioRootModel.getApellido1Responsable());
+		userModel.setSecondLastname(gimnasioRootModel.getApellido2Responsable());
+		userModel.setCorreo(gimnasioRootModel.getCorreo());
+		userModel.setTelefono(gimnasioRootModel.getTelefono());
+		userModel.setFechaNacimiento(gimnasioRootModel.getFechaNacimiento());
+		GimnasioModel gimnasioModel = new GimnasioModel();
+		gimnasioModel.setId(gimnasioRootModel.getId());
+		userModel.setGimnasio(gimnasioModel);
+		altaNuevoUsuario(userModel, Constantes.ROLE_ADMIN);
 	}
 	
 	private User buildUser(com.championdo.torneo.entity.User user, List<GrantedAuthority> authorities) {

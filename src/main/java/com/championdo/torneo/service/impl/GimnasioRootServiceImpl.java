@@ -51,6 +51,10 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
 
     @Override
     public void add(GimnasioRootModel gimnasioRootModel) {
+        Date now = new Date();
+        gimnasioRootModel.setFechaAlta(now);
+        gimnasioRootModel.setFechaModificacion(now);
+        gimnasioRootModel.setEnabled(Boolean.TRUE);
         gimnasioRootRepository.save(mapperGimnasioRoot.model2Entity(gimnasioRootModel));
     }
 
