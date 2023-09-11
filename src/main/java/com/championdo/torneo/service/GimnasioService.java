@@ -12,7 +12,7 @@ public interface GimnasioService {
 
     GimnasioModel findById(int id);
 
-    void add(GimnasioModel gimnasioModel);
+    GimnasioModel add(GimnasioModel gimnasioModel);
 
     void update(GimnasioModel gimnasioModel);
 
@@ -22,5 +22,5 @@ public interface GimnasioService {
 
     int findMaxPosition();
 
-    void addFromRoot (GimnasioRootModel gimnasioRootModel);
+    GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel);
 }

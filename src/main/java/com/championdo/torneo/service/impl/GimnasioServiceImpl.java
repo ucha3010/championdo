@@ -41,8 +41,8 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public void add(GimnasioModel gimnasioModel) {
-        gimnasioRepository.save(mapperGimnasio.model2Entity(gimnasioModel));
+    public GimnasioModel add(GimnasioModel gimnasioModel) {
+        return mapperGimnasio.entity2Model(gimnasioRepository.save(mapperGimnasio.model2Entity(gimnasioModel)));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public void addFromRoot (GimnasioRootModel gimnasioRootModel) {
+    public GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel) {
         GimnasioModel gimnasioModel = new GimnasioModel();
         gimnasioModel.setCodigoGimnasio(gimnasioRootModel.getId());
         gimnasioModel.setNombre(gimnasioRootModel.getNombreGimnasio());
@@ -103,7 +103,7 @@ public class GimnasioServiceImpl implements GimnasioService {
         }
         address.append(" (").append(gimnasioRootModel.getDomicilioCp()).append(") ").append(gimnasioRootModel.getDomicilioLocalidad());
         gimnasioModel.setDireccion(address.toString());
-        add(gimnasioModel);
+        return add(gimnasioModel);
     }
 
     private void moveItem(int position, boolean moveUp) {

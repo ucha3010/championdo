@@ -130,7 +130,7 @@ public class UserService implements UserDetailsService {
 		return mapperUser.model2Entity(userModel);
 	}
 
-	public void addFromRoot (GimnasioRootModel gimnasioRootModel) {
+	public void addFromRoot (GimnasioRootModel gimnasioRootModel, GimnasioModel gimnasioModel) {
 		UserModel userModel = new UserModel();
 		userModel.setUsername(gimnasioRootModel.getCifNif());
 		userModel.setPassword(gimnasioRootModel.getCifNif());
@@ -140,8 +140,6 @@ public class UserService implements UserDetailsService {
 		userModel.setCorreo(gimnasioRootModel.getCorreo());
 		userModel.setTelefono(gimnasioRootModel.getTelefono());
 		userModel.setFechaNacimiento(gimnasioRootModel.getFechaNacimiento());
-		GimnasioModel gimnasioModel = new GimnasioModel();
-		gimnasioModel.setId(gimnasioRootModel.getId());
 		userModel.setGimnasio(gimnasioModel);
 		altaNuevoUsuario(userModel, Constantes.ROLE_ADMIN);
 	}

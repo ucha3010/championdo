@@ -13,7 +13,7 @@ public interface GimnasioRootService {
 
     GimnasioRootModel findById(int id);
 
-    void add(GimnasioRootModel gimnasioModel);
+    GimnasioRootModel add(GimnasioRootModel gimnasioModel);
 
     void update(GimnasioRootModel gimnasioModel) throws Exception;
 

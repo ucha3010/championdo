@@ -75,8 +75,7 @@
 <body>
 	<div class="container">
 
-		<div th:if="${updateOk != null}" class="alert alert-success" role="alert"><span th:text="${updateOk}"></span></div>
-		<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
+		<div th:if="${addProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
 
 		<section>
 			<h1 th:text="${customer.nombreGimnasio}"></h1>
@@ -291,6 +290,8 @@
 				</div>
 
 				<div class="row mb-3">
+					<div class="col-md-2">
+					</div>
 					<div class="col-xs-4 col-md-4 text-center">
 						<label for="cantidadRegistrosContratados">Cantidad registros contratados*</label>
 					</div>

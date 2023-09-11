@@ -1,6 +1,7 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.GimnasioService;
@@ -85,9 +86,9 @@ public class GimnasioRootController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         customer.setUsuarioModificacion(user.getUsername());
         try {
-            gimnasioRootService.add(customer);
-            gimnasioService.addFromRoot(customer);
-            userService.addFromRoot(customer);
+            customer = gimnasioRootService.add(customer);
+            GimnasioModel gimnasioModel = gimnasioService.addFromRoot(customer);
+            userService.addFromRoot(customer, gimnasioModel);
             return customers(modelAndView);
         } catch (Exception e) {
             modelAndView.setViewName("management/addCustomer");
