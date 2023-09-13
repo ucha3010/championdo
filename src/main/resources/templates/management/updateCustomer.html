@@ -69,6 +69,16 @@
 				campos[i].style.borderColor="#ced4da";
 			}
 		}
+
+		function confirmDelete(id){
+			if(confirm("¿Seguro que desea eliminar el cliente?")){
+				var relativeUrl = "gimnasioRoot/deleteCustomer/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
 	</script>
 
 </head>
@@ -379,7 +389,7 @@
 						<a class="btn btn-primary" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
 					</div>
 					<div class="col-xs-4 col-md-3">
-						<a class="btn btn-danger" href="#" th:href="@{/gimnasioRoot/deleteCustomer/__${customer.id}__}">Borrar</a>
+						<a class="btn btn-danger" href="#"  th:attr="onclick=|return confirmDelete('${customer.id}')|">Borrar</a>
 					</div>
 					<div class="col-xs-4 col-md-3">
 						<button class="btn btn-success" id="continueButton" type="submit">Actualizar</button>
