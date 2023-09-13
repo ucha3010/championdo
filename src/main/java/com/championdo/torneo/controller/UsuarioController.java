@@ -40,6 +40,7 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
 		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("formularioUsuario");
 		try {
 			userService.addOrUpdate(usuario);
 			modelAndView.addObject("actualizacionCorrecta", "actualizacionCorrecta");

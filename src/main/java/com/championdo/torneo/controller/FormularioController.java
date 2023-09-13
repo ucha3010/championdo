@@ -182,6 +182,7 @@ public class FormularioController {
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
                 com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
+                //TODO DAMIAN enviar email a usuario con confirmación de alta
                 modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
                 modelAndView.setViewName(Constantes.LOGIN);
                 LoggerMapper.log(Level.INFO, "alta", user, this.getClass());

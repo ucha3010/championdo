@@ -91,6 +91,7 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Override
     public GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel) {
+        int lastPosition = gimnasioRepository.findTopByOrderByPositionDesc().getPosition();
         GimnasioModel gimnasioModel = new GimnasioModel();
         gimnasioModel.setCodigoGimnasio(gimnasioRootModel.getId());
         gimnasioModel.setNombre(gimnasioRootModel.getNombreGimnasio());
@@ -103,6 +104,7 @@ public class GimnasioServiceImpl implements GimnasioService {
         }
         address.append(" (").append(gimnasioRootModel.getDomicilioCp()).append(") ").append(gimnasioRootModel.getDomicilioLocalidad());
         gimnasioModel.setDireccion(address.toString());
+        gimnasioModel.setPosition(lastPosition + 1);
         return add(gimnasioModel);
     }
 
