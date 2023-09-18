@@ -3,8 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
-import com.championdo.torneo.service.GimnasioRootService;
-import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -22,7 +21,16 @@ public class GimnasioRootController {
     private GimnasioRootService gimnasioRootService;
 
     @Autowired
+    private CategoriaService categoriaService;
+
+    @Autowired
+    private CinturonService cinturonService;
+
+    @Autowired
     private GimnasioService gimnasioService;
+
+    @Autowired
+    private PoomsaeService poomsaeService;
 
     @Autowired
     private UserService userService;
@@ -105,6 +113,10 @@ public class GimnasioRootController {
     public ModelAndView deleteCustomer(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "deleteCustomer", "id: " + id, this.getClass());
         userService.cargarUsuarioCompleto(modelAndView);
+        categoriaService.deleteFromRoot(id);
+        cinturonService.deleteFromRoot(id);
+        poomsaeService.deleteFromRoot(id);
+        gimnasioService.deleteFromRoot(id);
         gimnasioRootService.delete(id);
         LoggerMapper.methodOut(Level.INFO, "deleteCustomer", modelAndView, this.getClass());
         return customers(modelAndView);

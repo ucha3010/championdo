@@ -23,9 +23,9 @@ public class GimnasioServiceImpl implements GimnasioService {
     private MapperGimnasio mapperGimnasio;
 
     @Override
-    public List<GimnasioModel> findAll() {
+    public List<GimnasioModel> findAll(int codigoGimnasio) {
         List<GimnasioModel> gimnasioModelList = new ArrayList<>();
-        for (Gimnasio gimnasio: gimnasioRepository.findAllByOrderByPositionAsc()) {
+        for (Gimnasio gimnasio: gimnasioRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio)) {
             gimnasioModelList.add(mapperGimnasio.entity2Model(gimnasio));
         }
         return gimnasioModelList;
@@ -52,8 +52,9 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Override
     public void delete(int idGimnasio) {
+        GimnasioModel gimnasioModel = findById(idGimnasio);
         gimnasioRepository.deleteById(idGimnasio);
-        List<Gimnasio> gimnasioList = gimnasioRepository.findAllByOrderByPositionAsc();
+        List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasioOrderByPositionAsc(gimnasioModel.getCodigoGimnasio());
         for (int i = 0; i < gimnasioList.size(); i++) {
             if (gimnasioList.get(i).getPosition() != i) {
                 gimnasioList.get(i).setPosition(i);
@@ -63,16 +64,16 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public void dragOfPosition(int initialPosition, int finalPosition) {
-        Gimnasio gimnasio = gimnasioRepository.findByPosition(initialPosition);
+    public void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition) {
+        Gimnasio gimnasio = gimnasioRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, initialPosition);
         if (initialPosition > finalPosition) {
             for (int i = initialPosition - 1; i >= finalPosition; i--) {
-                moveItem(i, true);
+                moveItem(codigoGimnasio, i, true);
             }
         }
         if (initialPosition < finalPosition) {
             for (int i = initialPosition + 1; i <= finalPosition; i++) {
-                moveItem(i, false);
+                moveItem(codigoGimnasio, i, false);
             }
         }
         gimnasio.setPosition(finalPosition);
@@ -80,8 +81,8 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public int findMaxPosition() {
-        Gimnasio gimnasio = gimnasioRepository.findTopByOrderByPositionDesc();
+    public int findMaxPosition(int codigoGimnasio) {
+        Gimnasio gimnasio = gimnasioRepository.findTopByCodigoGimnasioOrderByPositionDesc(codigoGimnasio);
         if (gimnasio != null) {
             return gimnasio.getPosition();
         } else {
@@ -91,7 +92,7 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Override
     public GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel) {
-        int lastPosition = gimnasioRepository.findTopByOrderByPositionDesc().getPosition();
+        int lastPosition = gimnasioRepository.findTopByCodigoGimnasioOrderByPositionDesc(gimnasioRootModel.getId()).getPosition();
         GimnasioModel gimnasioModel = new GimnasioModel();
         gimnasioModel.setCodigoGimnasio(gimnasioRootModel.getId());
         gimnasioModel.setNombre(gimnasioRootModel.getNombreGimnasio());
@@ -108,8 +109,16 @@ public class GimnasioServiceImpl implements GimnasioService {
         return add(gimnasioModel);
     }
 
-    private void moveItem(int position, boolean moveUp) {
-        Gimnasio gimnasio = gimnasioRepository.findByPosition(position);
+    @Override
+    public void deleteFromRoot (int idGimnasioRootModel) {
+        List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasio(idGimnasioRootModel);
+        for (Gimnasio gimnasio: gimnasioList) {
+            delete(gimnasio.getId());
+        }
+    }
+
+    private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
+        Gimnasio gimnasio = gimnasioRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
         gimnasio.setPosition(position + (moveUp ? 1 : -1));
         gimnasioRepository.save(gimnasio);
     }

@@ -26,9 +26,10 @@ public class AdminCinturonController {
     @GetMapping("/cinturonList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView cinturonList(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("adminCinturon");
         modelAndView.addObject("cinturonModel", new CinturonModel());
-        modelAndView.addObject("cinturonList", cinturonService.findAll());
+        modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "cinturonList", modelAndView, this.getClass());
         return modelAndView;
     }
@@ -36,7 +37,8 @@ public class AdminCinturonController {
     @GetMapping("/cinturon/{oldIndex}/{newIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragCinturon(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
-        cinturonService.dragOfPosition(oldIndex, newIndex);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        cinturonService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         return cinturonList(modelAndView);
     }
 
@@ -45,7 +47,7 @@ public class AdminCinturonController {
     public ModelAndView addCinturon(ModelAndView modelAndView, @ModelAttribute("cinturonModel") CinturonModel cinturonModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         cinturonModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        cinturonModel.setPosition(cinturonService.findMaxPosition() + 1);
+        cinturonModel.setPosition(cinturonService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         cinturonService.add(cinturonModel);
         return cinturonList(modelAndView);
     }

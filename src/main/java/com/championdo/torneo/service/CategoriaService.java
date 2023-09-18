@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface CategoriaService {
 
-    List<CategoriaModel> findAll();
+    List<CategoriaModel> findAll(int codigoGimnasio);
 
-    List<CategoriaModel> findAllNameExtended();
+    List<CategoriaModel> findAllNameExtended(int codigoGimnasio);
 
     CategoriaModel findById(int id);
 
@@ -22,7 +22,9 @@ public interface CategoriaService {
 
     CategoriaModel calcularCategoria(UserModel usuarioInscripto);
 
-    void dragOfPosition(int initialPosition, int finalPosition);
+    void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 
-    int findMaxPosition();
+    int findMaxPosition(int codigoGimnasio);
+
+    void deleteFromRoot (int idGimnasioRootModel);
 }

@@ -109,12 +109,12 @@ public class FormularioServiceImpl implements FormularioService {
     }
 
     @Override
-    public void cargarDesplegables(ModelAndView modelAndView) {
+    public void cargarDesplegables(ModelAndView modelAndView, int codigoGimnasio) {
         modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
         modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
         modelAndView.addObject("listaPaises", paisService.findAll());
-        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
-        modelAndView.addObject("listaCinturones", cinturonService.findAll());
+        modelAndView.addObject("listaGimnasios", gimnasioService.findAll(codigoGimnasio));
+        modelAndView.addObject("listaCinturones", cinturonService.findAll(codigoGimnasio));
         modelAndView.addObject("listaCalidad", calidadService.findAll());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
     }

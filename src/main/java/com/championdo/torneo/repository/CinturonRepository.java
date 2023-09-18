@@ -8,9 +8,11 @@ import java.util.List;
 
 @Repository("cinturonRepository")
 public interface CinturonRepository extends JpaRepository<Cinturon, Integer> {
-    List<Cinturon> findAllByOrderByPositionAsc();
+    List<Cinturon> findByCodigoGimnasioOrderByPositionAsc(int codigoGimnasio);
 
-    Cinturon findByPosition(int position);
+    Cinturon findByCodigoGimnasioAndPosition(int codigoGimnasio, int position);
 
-    Cinturon findTopByOrderByPositionDesc();
+    Cinturon findTopByCodigoGimnasioOrderByPositionDesc(int codigoGimnasio);
+
+    List<Cinturon> findByCodigoGimnasio(int codigoGimnasio);
 }

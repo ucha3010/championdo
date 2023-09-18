@@ -30,9 +30,9 @@ public class CinturonServiceImpl implements CinturonService {
     private MapperCinturon mapperCinturon;
 
     @Override
-    public List<CinturonModel> findAll() {
+    public List<CinturonModel> findAll(int codigoGimnasio) {
         List<CinturonModel> cinturonModelList = new ArrayList<>();
-        for (Cinturon cinturon: cinturonRepository.findAllByOrderByPositionAsc()) {
+        for (Cinturon cinturon: cinturonRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio)) {
             cinturonModelList.add(mapperCinturon.entity2Model(cinturon));
         }
         return cinturonModelList;
@@ -59,10 +59,11 @@ public class CinturonServiceImpl implements CinturonService {
 
     @Override
     public void delete(int idCinturon) throws RemoveException {
-        List<Categoria> categoriaList = categoriaRepository.findByIdCinturonInicioOrIdCinturonFin(idCinturon, idCinturon);
+        int codigoGimnasio = findById(idCinturon).getCodigoGimnasio();
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(codigoGimnasio, idCinturon, idCinturon);
         if (categoriaList == null || categoriaList.isEmpty()) {
             cinturonRepository.deleteById(idCinturon);
-            List<Cinturon> cinturonList = cinturonRepository.findAllByOrderByPositionAsc();
+            List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio);
             for (int i = 0; i < cinturonList.size(); i++) {
                 if (cinturonList.get(i).getPosition() != i) {
                     cinturonList.get(i).setPosition(i);
@@ -80,16 +81,16 @@ public class CinturonServiceImpl implements CinturonService {
     }
 
     @Override
-    public void dragOfPosition(int initialPosition, int finalPosition) {
-        Cinturon cinturon = cinturonRepository.findByPosition(initialPosition);
+    public void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition) {
+        Cinturon cinturon = cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, initialPosition);
         if (initialPosition > finalPosition) {
             for (int i = initialPosition - 1; i >= finalPosition; i--) {
-                moveItem(i, true);
+                moveItem(codigoGimnasio, i, true);
             }
         }
         if (initialPosition < finalPosition) {
             for (int i = initialPosition + 1; i <= finalPosition; i++) {
-                moveItem(i, false);
+                moveItem(codigoGimnasio, i, false);
             }
         }
         cinturon.setPosition(finalPosition);
@@ -97,8 +98,8 @@ public class CinturonServiceImpl implements CinturonService {
     }
 
     @Override
-    public int findMaxPosition() {
-        Cinturon cinturon = cinturonRepository.findTopByOrderByPositionDesc();
+    public int findMaxPosition(int codigoGimnasio) {
+        Cinturon cinturon = cinturonRepository.findTopByCodigoGimnasioOrderByPositionDesc(codigoGimnasio);
         if (cinturon != null) {
             return cinturon.getPosition();
         } else {
@@ -106,8 +107,20 @@ public class CinturonServiceImpl implements CinturonService {
         }
     }
 
-    private void moveItem(int position, boolean moveUp) {
-        Cinturon cinturonAux = cinturonRepository.findByPosition(position);
+    @Override
+    public void deleteFromRoot(int idGimnasioRootModel){
+        List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasio(idGimnasioRootModel);
+        for (Cinturon cinturon: cinturonList) {
+            try {
+                delete(cinturon.getId());
+            } catch (RemoveException e) {
+                LoggerMapper.log(Level.ERROR, "deleteFromRoot", e.getMessage(), getClass());
+            }
+        }
+    }
+
+    private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
+        Cinturon cinturonAux = cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
         cinturonAux.setPosition(position + (moveUp ? 1 : -1));
         cinturonRepository.save(cinturonAux);
     }

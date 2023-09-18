@@ -19,5 +19,5 @@ public interface FormularioService {
 
     void fillObjects(UserModel userModel);
 
-    void cargarDesplegables(ModelAndView modelAndView);
+    void cargarDesplegables(ModelAndView modelAndView, int codigoGimnasio);
 }

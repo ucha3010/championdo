@@ -44,7 +44,6 @@ public class AdminCalidadController {
     public ModelAndView addCalidad(ModelAndView modelAndView, @ModelAttribute("calidadModel") CalidadModel calidadModel) {
         calidadModel.setPosition(calidadService.findMaxPosition() + 1);
         User user = userService.cargarUsuarioCompleto(modelAndView);
-        calidadModel.setCodigoGimnasio(user.getCodigoGimnasio());
         calidadService.add(calidadModel);
         return calidadList(modelAndView);
     }

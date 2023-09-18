@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GimnasioService {
 
-    List<GimnasioModel> findAll();
+    List<GimnasioModel> findAll(int codigoGimnasio);
 
     GimnasioModel findById(int id);
 
@@ -18,9 +18,11 @@ public interface GimnasioService {
 
     void delete(int idGimnasio);
 
-    void dragOfPosition(int initialPosition, int finalPosition);
+    void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 
-    int findMaxPosition();
+    int findMaxPosition(int codigoGimnasio);
 
     GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel);
+
+    void deleteFromRoot (int idGimnasioRootModel);
 }

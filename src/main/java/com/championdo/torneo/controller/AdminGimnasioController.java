@@ -25,9 +25,10 @@ public class AdminGimnasioController {
     @GetMapping("/gimnasioList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gimnasioList(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("adminGimnasio");
         modelAndView.addObject("gimnasioModel", new GimnasioModel());
-        modelAndView.addObject("gimnasioList", gimnasioService.findAll());
+        modelAndView.addObject("gimnasioList", gimnasioService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "gimnasioList", modelAndView, this.getClass());
         return modelAndView;
     }
@@ -35,7 +36,8 @@ public class AdminGimnasioController {
     @GetMapping("/gimnasio/{oldIndex}/{newIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragGimnasio(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
-        gimnasioService.dragOfPosition(oldIndex, newIndex);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        gimnasioService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         return gimnasioList(modelAndView);
     }
 
@@ -44,7 +46,7 @@ public class AdminGimnasioController {
     public ModelAndView addGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         gimnasioModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        gimnasioModel.setPosition(gimnasioService.findMaxPosition() + 1);
+        gimnasioModel.setPosition(gimnasioService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         gimnasioService.add(gimnasioModel);
         return gimnasioList(modelAndView);
     }

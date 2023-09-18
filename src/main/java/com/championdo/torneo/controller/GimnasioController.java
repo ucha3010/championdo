@@ -70,7 +70,7 @@ public class GimnasioController {
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(usuario));
         }
         modelAndView.addObject("licencia", "con licencia".equals(licencia));
-        formularioService.cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         LoggerMapper.methodOut(Level.INFO, "gimnasio/formularioInscripcion/" + tipo + "/" + licencia, modelAndView, getClass());
         return modelAndView;
     }

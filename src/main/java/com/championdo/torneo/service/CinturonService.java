@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CinturonService {
 
-    List<CinturonModel> findAll();
+    List<CinturonModel> findAll(int codigoGimnasio);
 
     CinturonModel findById(int id);
 
@@ -18,7 +18,9 @@ public interface CinturonService {
 
     void delete(int idCinturon) throws RemoveException;
 
-    void dragOfPosition(int initialPosition, int finalPosition);
+    void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 
-    int findMaxPosition();
+    int findMaxPosition(int codigoGimnasio);
+
+    void deleteFromRoot (int idGimnasioRootModel);
 }

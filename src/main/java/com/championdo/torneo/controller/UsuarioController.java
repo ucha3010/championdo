@@ -31,7 +31,7 @@ public class UsuarioController {
 	public ModelAndView formularioUsuario(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioUsuario");
 		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
-		formularioService.cargarDesplegables(modelAndView);
+		formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
 		LoggerMapper.log(Level.INFO, "formularioUsuario " + userModel, modelAndView, getClass());
 		return modelAndView;
 	}

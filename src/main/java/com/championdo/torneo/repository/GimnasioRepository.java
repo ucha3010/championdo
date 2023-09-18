@@ -8,9 +8,12 @@ import java.util.List;
 
 @Repository("gimnasioRepository")
 public interface GimnasioRepository extends JpaRepository<Gimnasio, Integer> {
-    List<Gimnasio> findAllByOrderByPositionAsc();
 
-    Gimnasio findByPosition(int position);
+    List<Gimnasio> findByCodigoGimnasioOrderByPositionAsc(int codigoGimnasio);
 
-    Gimnasio findTopByOrderByPositionDesc();
+    Gimnasio findByCodigoGimnasioAndPosition(int codigoGimnasio, int position);
+
+    Gimnasio findTopByCodigoGimnasioOrderByPositionDesc(int codigoGimnasio);
+
+    List<Gimnasio> findByCodigoGimnasio(int codigoGimnasio);
 }

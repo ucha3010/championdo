@@ -26,9 +26,10 @@ public class AdminPoomsaeController {
     @GetMapping("/poomsaeList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView poomsaeList(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("adminPoomsae");
         modelAndView.addObject("poomsaeModel", new PoomsaeModel());
-        modelAndView.addObject("poomsaeList", poomsaeService.findAll());
+        modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "poomsaeList", modelAndView, this.getClass());
         return modelAndView;
     }
@@ -36,7 +37,8 @@ public class AdminPoomsaeController {
     @GetMapping("/poomsae/{oldIndex}/{newIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragPoomsae(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
-        poomsaeService.dragOfPosition(oldIndex, newIndex);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        poomsaeService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         return poomsaeList(modelAndView);
     }
 
@@ -45,7 +47,7 @@ public class AdminPoomsaeController {
     public ModelAndView addPoomsae(ModelAndView modelAndView, @ModelAttribute("poomsaeModel") PoomsaeModel poomsaeModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         poomsaeModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        poomsaeModel.setPosition(poomsaeService.findMaxPosition() + 1);
+        poomsaeModel.setPosition(poomsaeService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         poomsaeService.add(poomsaeModel);
         return poomsaeList(modelAndView);
     }

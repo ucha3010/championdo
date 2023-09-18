@@ -27,25 +27,22 @@ public class CategoriaServiceImpl implements CategoriaService {
     private MapperCategoria mapperCategoria;
 
     @Override
-    public List<CategoriaModel> findAll() {
+    public List<CategoriaModel> findAll(int codigoGimnasio) {
         List<CategoriaModel> categoriaModelList = new ArrayList<>();
-        for (Categoria categoria: categoriaRepository.findAllByOrderByPositionAsc()) {
+        for (Categoria categoria: categoriaRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio)) {
             categoriaModelList.add(mapperCategoria.entity2Model(categoria));
         }
         return categoriaModelList;
     }
 
     @Override
-    public List<CategoriaModel> findAllNameExtended() {
-        List<CategoriaModel> categoriaModelList = new ArrayList<>();
-        CategoriaModel categoriaModel;
-        for (Categoria categoria: categoriaRepository.findAllByOrderByPositionAsc()) {
-            categoriaModel = mapperCategoria.entity2Model(categoria);
-            categoriaModel.setNombre(categoria.getNombre() + (categoria.isInfantil() ? " INFANTIL" : "")
-                    + ", edad de " + categoria.getEdadInicio() + " a " + categoria.getEdadFin()
+    public List<CategoriaModel> findAllNameExtended(int codigoGimnasio) {
+        List<CategoriaModel> categoriaModelList = findAll(codigoGimnasio);
+        for (CategoriaModel categoriaModel: categoriaModelList) {
+            categoriaModel.setNombre(categoriaModel.getNombre() + (categoriaModel.isInfantil() ? " INFANTIL" : "")
+                    + ", edad de " + categoriaModel.getEdadInicio() + " a " + categoriaModel.getEdadFin()
                     + ", cinturón de " + categoriaModel.getCinturonInicio().getColor() + " a " + categoriaModel.getCinturonFin().getColor()
                     + ", poomsae " + categoriaModel.getPoomsae().getNombre());
-            categoriaModelList.add(categoriaModel);
         }
         return categoriaModelList;
     }
@@ -71,8 +68,9 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public void delete(int idCategoria) {
+        CategoriaModel categoriaModel = findById(idCategoria);
         categoriaRepository.deleteById(idCategoria);
-        List<Categoria> categoriaList = categoriaRepository.findAllByOrderByPositionAsc();
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioOrderByPositionAsc(categoriaModel.getCodigoGimnasio());
         for (int i = 0; i < categoriaList.size(); i++) {
             if (categoriaList.get(i).getPosition() != i) {
                 categoriaList.get(i).setPosition(i);
@@ -85,7 +83,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     public CategoriaModel calcularCategoria(UserModel usuarioInscripto) {
         Categoria categoria;
         if(usuarioInscripto.isInclusivo()) {
-            categoria = categoriaRepository.findByNombre(Constantes.INCLUSIVO);
+            //TODO DAMIAN al crear un cliente, en la tabla categoria debe aparecer una categoría con nombre INCLUSIVO
+            categoria = categoriaRepository.findByCodigoGimnasioAndNombre(usuarioInscripto.getCodigoGimnasio(), Constantes.INCLUSIVO);
         } else {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(usuarioInscripto.getFechaNacimiento());
@@ -97,26 +96,27 @@ public class CategoriaServiceImpl implements CategoriaService {
                     (edad <= 8 &&
                             (!StringUtils.isNullOrEmpty(usuarioInscripto.getMenorEntreCategorias())
                              && usuarioInscripto.getMenorEntreCategorias().equalsIgnoreCase("Kicho")))) {
-                categoria = categoriaRepository.findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(edad, edad);
+                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(usuarioInscripto.getCodigoGimnasio(), edad, edad);
             } else {
                 int idCinturon = usuarioInscripto.getCinturon().getId();
-                categoria = categoriaRepository.findByEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndIdCinturonInicioLessThanEqualAndIdCinturonFinGreaterThanEqualAndInfantil(edad, edad, idCinturon, idCinturon, usuarioInscripto.isMenor());
+                //TODO DAMIAN verificar si lo que tengo que mirar es el id del cinturón o la posición del mismo
+                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndIdCinturonInicioLessThanEqualAndIdCinturonFinGreaterThanEqualAndInfantil(usuarioInscripto.getCodigoGimnasio(), edad, edad, idCinturon, idCinturon, usuarioInscripto.isMenor());
             }
         }
         return mapperCategoria.entity2Model(categoria);
     }
 
     @Override
-    public void dragOfPosition(int initialPosition, int finalPosition) {
-        Categoria categoria = categoriaRepository.findByPosition(initialPosition);
+    public void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition) {
+        Categoria categoria = categoriaRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, initialPosition);
         if (initialPosition > finalPosition) {
             for (int i = initialPosition - 1; i >= finalPosition; i--) {
-                moveItem(i, true);
+                moveItem(codigoGimnasio, i, true);
             }
         }
         if (initialPosition < finalPosition) {
             for (int i = initialPosition + 1; i <= finalPosition; i++) {
-                moveItem(i, false);
+                moveItem(codigoGimnasio, i, false);
             }
         }
         categoria.setPosition(finalPosition);
@@ -124,8 +124,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public int findMaxPosition() {
-        Categoria categoria = categoriaRepository.findTopByOrderByPositionDesc();
+    public int findMaxPosition(int codigoGimnasio) {
+        Categoria categoria = categoriaRepository.findTopByCodigoGimnasioOrderByPositionDesc(codigoGimnasio);
         if (categoria != null) {
             return categoria.getPosition();
         } else {
@@ -133,8 +133,16 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
     }
 
-    private void moveItem(int position, boolean moveUp) {
-        Categoria categoria = categoriaRepository.findByPosition(position);
+    @Override
+    public void deleteFromRoot (int idGimnasioRootModel) {
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasio(idGimnasioRootModel);
+        for (Categoria categoria: categoriaList) {
+            delete(categoria.getId());
+        }
+    }
+
+    private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
+        Categoria categoria = categoriaRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
         categoria.setPosition(position + (moveUp ? 1 : -1));
         categoriaRepository.save(categoria);
     }

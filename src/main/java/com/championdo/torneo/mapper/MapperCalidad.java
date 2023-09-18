@@ -14,7 +14,6 @@ public class MapperCalidad {
             localObject.setNombre(externObject.getNombre());
             localObject.setOtro(externObject.getOtro());
             localObject.setPosition(externObject.getPosition());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -25,7 +24,6 @@ public class MapperCalidad {
             localObject.setNombre(externObject.getNombre());
             localObject.setOtro(externObject.getOtro());
             localObject.setPosition(externObject.getPosition());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

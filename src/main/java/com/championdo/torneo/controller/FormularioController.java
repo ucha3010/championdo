@@ -45,7 +45,7 @@ public class FormularioController {
         modelAndView.setViewName("formularioInscPropia");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
-        formularioService.cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         LoggerMapper.log(Level.INFO, "formulario/propia", modelAndView, getClass());
         return modelAndView;
     }
@@ -107,7 +107,7 @@ public class FormularioController {
         }
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, menor));
-        formularioService.cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         LoggerMapper.log(Level.INFO, "formulario/menorOInclisivo/" + menor, modelAndView, getClass());
         return modelAndView;
     }
@@ -168,8 +168,9 @@ public class FormularioController {
     @GetMapping("/alta")
     @PreAuthorize("permitAll()")
     public ModelAndView getAlta(ModelAndView modelAndView) {
+        //TODO DAMIAN debo recibir el código del gimnasioRoot para pasar a los desplegables
         modelAndView.setViewName("formularioAlta");
-        formularioService.cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView, 0);
         if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
             modelAndView.addObject("userModel", new UserModel());
         }
@@ -179,6 +180,7 @@ public class FormularioController {
     @PostMapping("/alta")
     @PreAuthorize("permitAll()")
     public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
+        //TODO DAMIAN en el usuario debe venir cargado el codigoGimnasio
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
                 com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
@@ -195,7 +197,7 @@ public class FormularioController {
         }
         modelAndView.setViewName("formularioAlta");
         modelAndView.addObject("userModel", userModel);
-        formularioService.cargarDesplegables(modelAndView);
+        formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
         return modelAndView;
 
     }

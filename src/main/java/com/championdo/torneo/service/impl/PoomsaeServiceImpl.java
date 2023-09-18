@@ -28,9 +28,9 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     private MapperPoomsae mapperPoomsae;
 
     @Override
-    public List<PoomsaeModel> findAll() {
+    public List<PoomsaeModel> findAll(int codigoGimnasio) {
         List<PoomsaeModel> poomsaeModelList = new ArrayList<>();
-        for (Poomsae poomsae: poomsaeRepository.findAllByOrderByPositionAsc()) {
+        for (Poomsae poomsae: poomsaeRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio)) {
             poomsaeModelList.add(mapperPoomsae.entity2Model(poomsae));
         }
         return poomsaeModelList;
@@ -57,10 +57,11 @@ public class PoomsaeServiceImpl implements PoomsaeService {
 
     @Override
     public void delete(int idPoomsae) throws RemoveException {
-        List<Categoria> categoriaList = categoriaRepository.findByIdCinturonInicioOrIdCinturonFin(idPoomsae, idPoomsae);
+        int codigoGimnasio = findById(idPoomsae).getCodigoGimnasio();
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(codigoGimnasio, idPoomsae, idPoomsae);
         if (categoriaList == null || categoriaList.isEmpty()) {
             poomsaeRepository.deleteById(idPoomsae);
-            List<Poomsae> poomsaeList = poomsaeRepository.findAllByOrderByPositionAsc();
+            List<Poomsae> poomsaeList = poomsaeRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio);
             for (int i = 0; i < poomsaeList.size(); i++) {
                 if (poomsaeList.get(i).getPosition() != i) {
                     poomsaeList.get(i).setPosition(i);
@@ -78,16 +79,16 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     }
 
     @Override
-    public void dragOfPosition(int initialPosition, int finalPosition) {
-        Poomsae poomsae = poomsaeRepository.findByPosition(initialPosition);
+    public void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition) {
+        Poomsae poomsae = poomsaeRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, initialPosition);
         if (initialPosition > finalPosition) {
             for (int i = initialPosition - 1; i >= finalPosition; i--) {
-                moveItem(i, true);
+                moveItem(codigoGimnasio, i, true);
             }
         }
         if (initialPosition < finalPosition) {
             for (int i = initialPosition + 1; i <= finalPosition; i++) {
-                moveItem(i, false);
+                moveItem(codigoGimnasio, i, false);
             }
         }
         poomsae.setPosition(finalPosition);
@@ -95,8 +96,8 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     }
 
     @Override
-    public int findMaxPosition() {
-        Poomsae poomsae = poomsaeRepository.findTopByOrderByPositionDesc();
+    public int findMaxPosition(int codigoGimnasio) {
+        Poomsae poomsae = poomsaeRepository.findTopByCodigoGimnasioOrderByPositionDesc(codigoGimnasio);
         if (poomsae != null) {
             return poomsae.getPosition();
         } else {
@@ -104,8 +105,21 @@ public class PoomsaeServiceImpl implements PoomsaeService {
         }
     }
 
-    private void moveItem(int position, boolean moveUp) {
-        Poomsae poomsae = poomsaeRepository.findByPosition(position);
+    @Override
+    public void deleteFromRoot(int idGimnasioRootModel) {
+        List<Poomsae> poomsaeList = poomsaeRepository.findByCodigoGimnasio(idGimnasioRootModel);
+        for (Poomsae poomsae: poomsaeList) {
+            try {
+                delete(poomsae.getId());
+            } catch (RemoveException e) {
+                LoggerMapper.log(Level.ERROR, "deleteFromRoot", e.getMessage(), getClass());
+            }
+        }
+
+    }
+
+    private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
+        Poomsae poomsae = poomsaeRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
         poomsae.setPosition(position + (moveUp ? 1 : -1));
         poomsaeRepository.save(poomsae);
     }

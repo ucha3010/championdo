@@ -8,9 +8,11 @@ import java.util.List;
 
 @Repository("poomsaeRepository")
 public interface PoomsaeRepository extends JpaRepository<Poomsae, Integer> {
-    List<Poomsae> findAllByOrderByPositionAsc();
+    List<Poomsae> findByCodigoGimnasioOrderByPositionAsc(int codigoGimnasio);
 
-    Poomsae findByPosition(int position);
+    Poomsae findByCodigoGimnasioAndPosition(int codigoGimnasio, int position);
 
-    Poomsae findTopByOrderByPositionDesc();
+    Poomsae findTopByCodigoGimnasioOrderByPositionDesc(int codigoGimnasio);
+
+    List<Poomsae> findByCodigoGimnasio(int codigoGimnasio);
 }

@@ -31,11 +31,12 @@ public class AdminCategoriaController {
     @GetMapping("/categoriaList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView categoriaList(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("adminCategoria");
         modelAndView.addObject("categoriaModel", new CategoriaModel());
-        modelAndView.addObject("categoriaList", categoriaService.findAllNameExtended());
-        modelAndView.addObject("cinturonList", cinturonService.findAll());
-        modelAndView.addObject("poomsaeList", poomsaeService.findAll());
+        modelAndView.addObject("categoriaList", categoriaService.findAllNameExtended(user.getCodigoGimnasio()));
+        modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));
+        modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "categoriaList", modelAndView, this.getClass());
         return modelAndView;
     }
@@ -43,7 +44,8 @@ public class AdminCategoriaController {
     @GetMapping("/categoria/{oldIndex}/{newIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragCategoria(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
-        categoriaService.dragOfPosition(oldIndex, newIndex);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        categoriaService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         return categoriaList(modelAndView);
     }
 
@@ -52,7 +54,7 @@ public class AdminCategoriaController {
     public ModelAndView addCategoria(ModelAndView modelAndView, @ModelAttribute("categoriaModel") CategoriaModel categoriaModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         categoriaModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        categoriaModel.setPosition(categoriaService.findMaxPosition() + 1);
+        categoriaModel.setPosition(categoriaService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         categoriaService.add(categoriaModel);
         return categoriaList(modelAndView);
     }

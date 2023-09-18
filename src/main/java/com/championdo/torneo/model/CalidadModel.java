@@ -13,5 +13,4 @@ public class CalidadModel {
     private String nombre;
     private String otro;
     private int position;
-    private int codigoGimnasio;
 }

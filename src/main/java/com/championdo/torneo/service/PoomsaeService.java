@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PoomsaeService {
 
-    List<PoomsaeModel> findAll();
+    List<PoomsaeModel> findAll(int codigoGimnasio);
 
     PoomsaeModel findById(int id);
 
@@ -18,8 +18,10 @@ public interface PoomsaeService {
 
     void delete(int idPoomsae) throws RemoveException;
 
-    void dragOfPosition(int initialPosition, int finalPosition);
+    void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 
-    int findMaxPosition();
+    int findMaxPosition(int codigoGimnasio);
+
+    void deleteFromRoot (int idGimnasioRootModel);
 
 }
