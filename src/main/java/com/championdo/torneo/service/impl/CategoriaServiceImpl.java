@@ -3,9 +3,12 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.Categoria;
 import com.championdo.torneo.mapper.MapperCategoria;
 import com.championdo.torneo.model.CategoriaModel;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.service.CategoriaService;
+import com.championdo.torneo.service.CinturonService;
+import com.championdo.torneo.service.PoomsaeService;
 import com.championdo.torneo.util.Constantes;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,12 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Autowired
     private MapperCategoria mapperCategoria;
+
+    @Autowired
+    private CinturonService cinturonService;
+
+    @Autowired
+    private PoomsaeService poomsaeService;
 
     @Override
     public List<CategoriaModel> findAll(int codigoGimnasio) {
@@ -83,7 +92,6 @@ public class CategoriaServiceImpl implements CategoriaService {
     public CategoriaModel calcularCategoria(UserModel usuarioInscripto) {
         Categoria categoria;
         if(usuarioInscripto.isInclusivo()) {
-            //TODO DAMIAN al crear un cliente, en la tabla categoria debe aparecer una categoría con nombre INCLUSIVO
             categoria = categoriaRepository.findByCodigoGimnasioAndNombre(usuarioInscripto.getCodigoGimnasio(), Constantes.INCLUSIVO);
         } else {
             Calendar calendar = Calendar.getInstance();
@@ -98,9 +106,8 @@ public class CategoriaServiceImpl implements CategoriaService {
                              && usuarioInscripto.getMenorEntreCategorias().equalsIgnoreCase("Kicho")))) {
                 categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(usuarioInscripto.getCodigoGimnasio(), edad, edad);
             } else {
-                int idCinturon = usuarioInscripto.getCinturon().getId();
-                //TODO DAMIAN verificar si lo que tengo que mirar es el id del cinturón o la posición del mismo
-                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndIdCinturonInicioLessThanEqualAndIdCinturonFinGreaterThanEqualAndInfantil(usuarioInscripto.getCodigoGimnasio(), edad, edad, idCinturon, idCinturon, usuarioInscripto.isMenor());
+                int positionCinturon = usuarioInscripto.getCinturon().getPosition();
+                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPositionCinturonInicioLessThanEqualAndPositionCinturonFinGreaterThanEqualAndInfantil(usuarioInscripto.getCodigoGimnasio(), edad, edad, positionCinturon, positionCinturon, usuarioInscripto.isMenor());
             }
         }
         return mapperCategoria.entity2Model(categoria);
@@ -139,6 +146,20 @@ public class CategoriaServiceImpl implements CategoriaService {
         for (Categoria categoria: categoriaList) {
             delete(categoria.getId());
         }
+    }
+
+    @Override
+    public void addFromRoot(GimnasioRootModel customer) {
+        Categoria categoria = new Categoria();
+        categoria.setEdadInicio(0);
+        categoria.setEdadFin(0);
+        categoria.setPositionCinturonInicio(0);
+        categoria.setPositionCinturonFin(cinturonService.findMaxPosition(customer.getId()));
+        categoria.setInclusivo(Boolean.TRUE);
+        categoria.setIdPoomsae(poomsaeService.findByCodigoGimnasioAndNombre(customer.getId(), Constantes.INCLUSIVO).getId());
+        categoria.setNombre(Constantes.INCLUSIVO);
+        categoria.setCodigoGimnasio(customer.getId());
+        categoriaRepository.save(categoria);
     }
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {

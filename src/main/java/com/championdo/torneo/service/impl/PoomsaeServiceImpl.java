@@ -4,10 +4,12 @@ import com.championdo.torneo.entity.Categoria;
 import com.championdo.torneo.entity.Poomsae;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperPoomsae;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.PoomsaeModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.PoomsaeRepository;
 import com.championdo.torneo.service.PoomsaeService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,15 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     }
 
     @Override
+    public PoomsaeModel findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre) {
+        try {
+            return mapperPoomsae.entity2Model(poomsaeRepository.findByCodigoGimnasioAndNombre(codigoGimnasio, nombre));
+        } catch (EntityNotFoundException e) {
+            return new PoomsaeModel();
+        }
+    }
+
+    @Override
     public void add(PoomsaeModel poomsaeModel) {
         poomsaeRepository.save(mapperPoomsae.model2Entity(poomsaeModel));
     }
@@ -58,7 +69,7 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     @Override
     public void delete(int idPoomsae) throws RemoveException {
         int codigoGimnasio = findById(idPoomsae).getCodigoGimnasio();
-        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(codigoGimnasio, idPoomsae, idPoomsae);
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndIdPoomsae(codigoGimnasio, idPoomsae);
         if (categoriaList == null || categoriaList.isEmpty()) {
             poomsaeRepository.deleteById(idPoomsae);
             List<Poomsae> poomsaeList = poomsaeRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio);
@@ -116,6 +127,25 @@ public class PoomsaeServiceImpl implements PoomsaeService {
             }
         }
 
+    }
+
+    @Override
+    public void addFromRoot(GimnasioRootModel customer) {
+        List<Poomsae> poomsaeList = new ArrayList<>();
+        poomsaeList.add(new Poomsae("1º KICHO",0,customer.getId()));
+        poomsaeList.add(new Poomsae("1º POOMSAE",1,customer.getId()));
+        poomsaeList.add(new Poomsae("2º POOMSAE",2,customer.getId()));
+        poomsaeList.add(new Poomsae("3º POOMSAE",3,customer.getId()));
+        poomsaeList.add(new Poomsae("4º POOMSAE",4,customer.getId()));
+        poomsaeList.add(new Poomsae("5º POOMSAE",5,customer.getId()));
+        poomsaeList.add(new Poomsae("6º POOMSAE",6,customer.getId()));
+        poomsaeList.add(new Poomsae("7º POOMSAE",7,customer.getId()));
+        poomsaeList.add(new Poomsae("8º POOMSAE",8,customer.getId()));
+        poomsaeList.add(new Poomsae("KORYO",9,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.INCLUSIVO,10,customer.getId()));
+        for (Poomsae poomsae: poomsaeList) {
+            poomsaeRepository.save(poomsae);
+        }
     }
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {

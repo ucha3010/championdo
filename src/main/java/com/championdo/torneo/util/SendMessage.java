@@ -34,7 +34,7 @@ public class SendMessage {
      * Indicaciones www.youtube.com/watch?v=ZggjlwLzrxg
      * Indicaciones archivos adjuntos www.youtube.com/watch?v=o7v0EQgxP50
     */
-    public void enviarCorreo(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, List<File> files)
+    public void enviarCorreo(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, List<File> files, int codigoGimnasio)
             throws MessagingException {
 
         LoggerMapper.methodIn(Level.INFO, "enviarCorreo", "fromEmailAddress: " + fromEmailAddress + ", toEmailAddress: " + toEmailAddress, getClass());
@@ -72,7 +72,7 @@ public class SendMessage {
 
         //Enviar el correo
         Transport transport = session.getTransport("smtp");
-        transport.connect(fromEmailAddress, utilService.findByClave(Constantes.CLAVE_CORREO).getValor());
+        transport.connect(fromEmailAddress, utilService.findByClave(Constantes.CLAVE_CORREO, codigoGimnasio).getValor());
         transport.sendMessage(email, email.getRecipients(javax.mail.Message.RecipientType.TO));
         transport.close();
 

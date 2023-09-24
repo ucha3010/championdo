@@ -276,7 +276,7 @@
 				</div>
 				<div class="col-xs-3 col-md-2">
 					<select th:field="*{mayorAutorizador.calidad.id}" id="idCalidad" class="form-control form-control-lg" onchange="confirmarCalidad()">
-						<option th:each="c : ${listaCalidad}" th:value="${c.id}" th:text="${c.nombre}" />
+						<option th:each="c : ${listaCalidad}" th:value="${c.id}" th:text="${c.nombre}"></option>
 					</select>
 				</div>
 				<div class="col-xs-6">
@@ -326,7 +326,7 @@
 				</div>
 				<div class="col-xs-3 col-md-2">
 					<select th:field="*{autorizado.sexo}" id="menorSexo" class="form-control form-control-lg">
-						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}" />
+						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}"></option>
 					</select>
 				</div>
 				<div class="col-xs-6">
@@ -368,7 +368,7 @@
 				</div>
 				<div class="col-xs-4 col-md-3">
 					<select th:field="*{autorizado.pais.id}" id="idPais" class="form-control form-control-lg">
-						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}" />
+						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}"></option>
 					</select>
 				</div>
 				<div class="col-xs-5">
@@ -383,14 +383,14 @@
 				</div>
 				<div class="col-xs-4 col-md-3">
 					<select th:field="*{autorizado.cinturon.id}" id="idCinturon" class="form-control form-control-lg">
-						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}" />
+						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}"></option>
 					</select>
 				</div>
 				<div class="col-xs-5">
 				</div>
 			</div>
 
-			<div class="row mb-1">
+			<div th:if="${accountBoxEnable}" class="row mb-1">
 				<div class="col-xs-12 apartado">
 					<input class="form-check-input" type="checkbox" id="domiciliacionCheck" onchange="visibilidadDomiciliacion()" name="mayorAutorizador.domiciliacion" checked="checked">
 					<label class="form-check-label" for="domiciliacionCheck"><span>Cuenta domiciliación de cuota</span></label>

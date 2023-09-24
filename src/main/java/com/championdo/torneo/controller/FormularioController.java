@@ -168,9 +168,8 @@ public class FormularioController {
     @GetMapping("/alta")
     @PreAuthorize("permitAll()")
     public ModelAndView getAlta(ModelAndView modelAndView) {
-        //TODO DAMIAN debo recibir el código del gimnasioRoot para pasar a los desplegables
         modelAndView.setViewName("formularioAlta");
-        formularioService.cargarDesplegables(modelAndView, 0);
+        formularioService.cargarDesplegablesAltaUsuario(modelAndView);
         if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
             modelAndView.addObject("userModel", new UserModel());
         }
@@ -180,7 +179,6 @@ public class FormularioController {
     @PostMapping("/alta")
     @PreAuthorize("permitAll()")
     public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
-        //TODO DAMIAN en el usuario debe venir cargado el codigoGimnasio
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
                 com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);

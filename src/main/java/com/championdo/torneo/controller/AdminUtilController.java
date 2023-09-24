@@ -30,10 +30,10 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("adminUtil");
-        userService.cargarUsuarioCompleto(modelAndView);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("utilModel", new UtilModel());
-        modelAndView.addObject("utilListCampeonato", utilService.findAllStarsWith("campeonato"));
-        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones"));
+        modelAndView.addObject("utilListCampeonato", utilService.findAllStarsWith("campeonato", user.getCodigoGimnasio()));
+        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", user.getCodigoGimnasio()));
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
         LoggerMapper.log(Level.INFO, "utilList", modelAndView, this.getClass());
         return modelAndView;

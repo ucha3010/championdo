@@ -23,8 +23,8 @@ public class MapperCategoria {
             localObject.setEdadInicio(externObject.getEdadInicio());
             localObject.setEdadFin(externObject.getEdadFin());
             localObject.setNombre(externObject.getNombre());
-            localObject.setCinturonInicio(cinturonService.findById(externObject.getIdCinturonInicio()));
-            localObject.setCinturonFin(cinturonService.findById(externObject.getIdCinturonFin()));
+            localObject.setCinturonInicio(cinturonService.findByCodigoGimnasioAndPosition(externObject.getCodigoGimnasio(), externObject.getPositionCinturonInicio()));
+            localObject.setCinturonFin(cinturonService.findByCodigoGimnasioAndPosition(externObject.getCodigoGimnasio(), externObject.getPositionCinturonFin()));
             localObject.setPoomsae(poomsaeService.findById(externObject.getIdPoomsae()));
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setInfantil(externObject.isInfantil());
@@ -41,10 +41,10 @@ public class MapperCategoria {
             localObject.setEdadFin(externObject.getEdadFin());
             localObject.setNombre(externObject.getNombre());
             if (externObject.getCinturonInicio() != null) {
-                localObject.setIdCinturonInicio(externObject.getCinturonInicio().getId());
+                localObject.setPositionCinturonInicio(externObject.getCinturonInicio().getPosition());
             }
             if (externObject.getCinturonFin() != null) {
-                localObject.setIdCinturonFin(externObject.getCinturonFin().getId());
+                localObject.setPositionCinturonFin(externObject.getCinturonFin().getPosition());
             }
             if (externObject.getPoomsae() != null) {
                 localObject.setIdPoomsae(externObject.getPoomsae().getId());

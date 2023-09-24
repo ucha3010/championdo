@@ -30,7 +30,7 @@ public interface InscripcionService {
 
     void deleteAll();
 
-    UtilModel getDeleteEnable();
+    UtilModel getDeleteEnable(int codigoGimnasio);
 
-    void changeValueDeleteEnable();
+    void changeValueDeleteEnable(int codigoGimnasio);
 }

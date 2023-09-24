@@ -104,13 +104,14 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         inscripcionTaekwondoRepository.deleteAll();
     }
 
-    public UtilModel getDeleteEnable() {
-        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO);
+    @Override
+    public UtilModel getDeleteEnable(int codigoGimnasio) {
+        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO, codigoGimnasio);
     }
 
     @Override
-    public boolean changeValueDeleteEnable() {
-        UtilModel utilModel = getDeleteEnable();
+    public boolean changeValueDeleteEnable(int codigoGimnasio) {
+        UtilModel utilModel = getDeleteEnable(codigoGimnasio);
         boolean deleteEnable = Boolean.FALSE;
         if (!StringUtils.isNullOrEmpty(utilModel.getValor())) {
             deleteEnable = Boolean.parseBoolean(utilModel.getValor());
@@ -152,8 +153,8 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     }
 
     @Override
-    public UtilModel getAccountBoxEnable() {
-        return utilService.findByClave(Constantes.HABILITAR_CUENTA_BANCARIA);
+    public UtilModel getAccountBoxEnable(int codigoGimnasio) {
+        return utilService.findByClave(Constantes.HABILITAR_CUENTA_BANCARIA, codigoGimnasio);
     }
 
     private InscripcionTaekwondoModel fillInscripcionTaekwondoModel(UserAutorizacionModel userAutorizacionModel) {

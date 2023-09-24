@@ -2,6 +2,7 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.model.CategoriaModel;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserModel;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface CategoriaService {
     int findMaxPosition(int codigoGimnasio);
 
     void deleteFromRoot (int idGimnasioRootModel);
+
+    void addFromRoot(GimnasioRootModel customer);
 }

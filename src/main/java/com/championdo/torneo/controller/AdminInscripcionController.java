@@ -1,9 +1,11 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.mysql.cj.util.StringUtils;
@@ -27,13 +29,17 @@ public class AdminInscripcionController {
     @Autowired
     private PdfService pdfService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/inscripcionList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView inscripcionList(ModelAndView modelAndView) {
         modelAndView.setViewName("adminInscripcion");
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("inscripcionList", inscripcionService.findAll());
         modelAndView.addObject("inscripcionModel", new InscripcionModel());
-        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable().getValor())) {
+        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor())) {
             modelAndView.addObject("deleteEnable", "Deshabilitar borrar");
         } else {
             modelAndView.addObject("deleteEnable", "Habilitar borrar");
@@ -90,7 +96,8 @@ public class AdminInscripcionController {
     @GetMapping("/deleteEnable")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteEnable(ModelAndView modelAndView) {
-        inscripcionService.changeValueDeleteEnable();
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        inscripcionService.changeValueDeleteEnable(usuario.getCodigoGimnasio());
         return inscripcionList(modelAndView);
     }
 

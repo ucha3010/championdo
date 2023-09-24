@@ -2,14 +2,18 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Util;
 import com.championdo.torneo.mapper.MapperUtil;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.repository.UtilRepository;
 import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service()
@@ -21,9 +25,9 @@ public class UtilServiceImpl implements UtilService {
     private MapperUtil mapperUtil;
 
     @Override
-    public List<UtilModel> findAllStarsWith(String startWord) {
+    public List<UtilModel> findAllStarsWith(String startWord, int codigoGimnasio) {
         List<UtilModel> utilModelList = new ArrayList<>();
-        for (Util util: utilRepository.findAll()) {
+        for (Util util: utilRepository.findByCodigoGimnasio(codigoGimnasio)) {
             if(util.getClave().startsWith(startWord)) {
                 utilModelList.add(mapperUtil.entity2Model(util));
             }
@@ -32,9 +36,9 @@ public class UtilServiceImpl implements UtilService {
     }
 
     @Override
-    public UtilModel findByClave(String clave) {
+    public UtilModel findByClave(String clave, int codigoGimnasio) {
         if (!StringUtils.isNullOrEmpty(clave)) {
-            return mapperUtil.entity2Model(utilRepository.findByClave(clave));
+            return mapperUtil.entity2Model(utilRepository.findByClaveAndCodigoGimnasio(clave, codigoGimnasio));
         } else {
             return new UtilModel();
         }
@@ -43,5 +47,21 @@ public class UtilServiceImpl implements UtilService {
     @Override
     public void update(UtilModel utilModel) {
         utilRepository.save(mapperUtil.model2Entity(utilModel));
+    }
+
+    @Override
+    public void addFromRoot(GimnasioRootModel customer) {
+        List<Util> utilList = new ArrayList<>();
+        utilList.add(new Util(Constantes.DIRECCION_CAMPEONATO,"",customer.getId()));
+        utilList.add(new Util(Constantes.FECHA_CAMPEONATO, Utils.date2String(new Date()),customer.getId()));
+        utilList.add(new Util(Constantes.NOMBRE_CAMPEONATO,"",customer.getId()));
+        utilList.add(new Util(Constantes.CLAVE_CORREO,"",customer.getId()));
+        utilList.add(new Util(Constantes.CORREO_GIMNASIO, customer.getCorreo(),customer.getId()));
+        utilList.add(new Util(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO,Constantes.TRUE,customer.getId()));
+        utilList.add(new Util(Constantes.HABILITAR_CUENTA_BANCARIA,Constantes.TRUE,customer.getId()));
+        utilList.add(new Util(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO,Constantes.TRUE,customer.getId()));
+        for (Util util: utilList) {
+            utilRepository.save(util);
+        }
     }
 }

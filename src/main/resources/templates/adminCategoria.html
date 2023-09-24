@@ -134,16 +134,16 @@
                             <label for="cinturonInicio">Cinturón:</label>
                         </div>
                         <div class="col-xs-4 col-md-3">
-                            <select th:field="*{cinturonInicio.id}" id="cinturonInicio" class="form-control form-control-lg">
-                                <option th:each="unit : ${cinturonList}" th:value="${unit.id}" th:text="${unit.color}" />
+                            <select th:field="*{cinturonInicio.position}" id="cinturonInicio" class="form-control form-control-lg">
+                                <option th:each="unit : ${cinturonList}" th:value="${unit.position}" th:text="${unit.color}"></option>
                             </select>
                         </div>
                         <div class="col-xs-1 col-md-1">
                             <label for="cinturonFin">a</label>
                         </div>
                         <div class="col-xs-4 col-md-3">
-                            <select th:field="*{cinturonFin.id}" id="cinturonFin" class="form-control form-control-lg">
-                                <option th:each="unit : ${cinturonList}" th:value="${unit.id}" th:text="${unit.color}" />
+                            <select th:field="*{cinturonFin.position}" id="cinturonFin" class="form-control form-control-lg">
+                                <option th:each="unit : ${cinturonList}" th:value="${unit.position}" th:text="${unit.color}"></option>
                             </select>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                         </div>
                         <div class="col-xs-4 col-md-3">
                             <select th:field="*{poomsae.id}" id="poomsae" class="form-control form-control-lg">
-                                <option th:each="unit : ${poomsaeList}" th:value="${unit.id}" th:text="${unit.nombre}" />
+                                <option th:each="unit : ${poomsaeList}" th:value="${unit.id}" th:text="${unit.nombre}"></option>
                             </select>
                         </div>
                         <div class="col-xs-10 col-md-3">
@@ -176,7 +176,7 @@
                     <div class="row mb-1">
                         <div class="col-xs-10 col-md-8">
                             <select id="idCategoria" class="form-control form-control-lg">
-                                <option th:each="unit : ${categoriaList}" th:value="${unit.id}" th:text="${unit.nombre}" />
+                                <option th:each="unit : ${categoriaList}" th:value="${unit.id}" th:text="${unit.nombre}"></option>
                             </select>
                         </div>
                         <div class="col-xs-2 col-md-1">

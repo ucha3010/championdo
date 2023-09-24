@@ -23,12 +23,15 @@ public class Cinturon {
     @Column(name = "color", nullable = false, length = 40)
     private String color;
 
-    @Column(name = "categoria", nullable = false, length = 50)
-    private String categoria;
-
     @Column(name = "position")
     private int position;
 
     private int codigoGimnasio;
+
+    public Cinturon(String color, int position, int codigoGimnasio) {
+        this.color = color;
+        this.position = position;
+        this.codigoGimnasio = codigoGimnasio;
+    }
 
 }

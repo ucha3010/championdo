@@ -16,4 +16,6 @@ public interface GimnasioRepository extends JpaRepository<Gimnasio, Integer> {
     Gimnasio findTopByCodigoGimnasioOrderByPositionDesc(int codigoGimnasio);
 
     List<Gimnasio> findByCodigoGimnasio(int codigoGimnasio);
+
+    List<Gimnasio> findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre);
 }

@@ -41,7 +41,7 @@ public class PrincipalController {
             }
         }
         modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable().getValor()));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
         return modelAndView;
     }
@@ -52,7 +52,7 @@ public class PrincipalController {
         modelAndView.setViewName("principalTorneo");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable().getValor()));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
         return modelAndView;
     }

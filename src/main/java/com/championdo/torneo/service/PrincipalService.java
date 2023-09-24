@@ -10,5 +10,5 @@ public interface PrincipalService {
 
     void deleteInscripcion(int id);
 
-    UtilModel getDeleteEnable();
+    UtilModel getDeleteEnable(int codigoGimnasio);
 }

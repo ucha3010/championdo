@@ -74,8 +74,6 @@ public class MapperUser {
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             if (externObject.getGimnasio() != null) {
                 localObject.setIdGimnasio(externObject.getGimnasio().getId());
-                GimnasioModel gimnasioModel = gimnasioService.findById(externObject.getGimnasio().getId());
-                localObject.setCodigoGimnasio(gimnasioModel.getCodigoGimnasio());
             }
             if (externObject.getCalidad() != null) {
                 localObject.setIdCalidad(externObject.getCalidad().getId());

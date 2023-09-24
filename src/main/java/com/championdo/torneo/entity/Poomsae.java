@@ -28,4 +28,10 @@ public class Poomsae {
 
     private int codigoGimnasio;
 
+    public Poomsae (String nombre, int position, int codigoGimnasio) {
+        this.nombre = nombre;
+        this.position = position;
+        this.codigoGimnasio = codigoGimnasio;
+    }
+
 }

@@ -41,6 +41,16 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
+    public GimnasioModel findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre) {
+        List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasioAndNombre(codigoGimnasio, nombre);
+        GimnasioModel gimnasioModel = new GimnasioModel();
+        if (gimnasioList != null && !gimnasioList.isEmpty()) {
+            gimnasioModel = mapperGimnasio.entity2Model(gimnasioList.get(0));
+        }
+        return gimnasioModel;
+    }
+
+    @Override
     public GimnasioModel add(GimnasioModel gimnasioModel) {
         return mapperGimnasio.entity2Model(gimnasioRepository.save(mapperGimnasio.model2Entity(gimnasioModel)));
     }
@@ -91,21 +101,20 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel) {
-        int lastPosition = gimnasioRepository.findTopByCodigoGimnasioOrderByPositionDesc(gimnasioRootModel.getId()).getPosition();
+    public GimnasioModel addFromRoot (GimnasioRootModel customer) {
         GimnasioModel gimnasioModel = new GimnasioModel();
-        gimnasioModel.setCodigoGimnasio(gimnasioRootModel.getId());
-        gimnasioModel.setNombre(gimnasioRootModel.getNombreGimnasio());
-        StringBuilder address = new StringBuilder(gimnasioRootModel.getDomicilioCalle());
-        if(!gimnasioRootModel.getDomicilioNumero().isEmpty()){
-            address.append(" ").append(gimnasioRootModel.getDomicilioNumero());
+        gimnasioModel.setCodigoGimnasio(customer.getId());
+        gimnasioModel.setNombre(customer.getNombreGimnasio());
+        StringBuilder address = new StringBuilder(customer.getDomicilioCalle());
+        if(!customer.getDomicilioNumero().isEmpty()){
+            address.append(" ").append(customer.getDomicilioNumero());
         }
-        if(!gimnasioRootModel.getDomicilioOtros().isEmpty()){
-            address.append(" ").append(gimnasioRootModel.getDomicilioOtros());
+        if(!customer.getDomicilioOtros().isEmpty()){
+            address.append(" ").append(customer.getDomicilioOtros());
         }
-        address.append(" (").append(gimnasioRootModel.getDomicilioCp()).append(") ").append(gimnasioRootModel.getDomicilioLocalidad());
+        address.append(" (").append(customer.getDomicilioCp()).append(") ").append(customer.getDomicilioLocalidad());
         gimnasioModel.setDireccion(address.toString());
-        gimnasioModel.setPosition(lastPosition + 1);
+        gimnasioModel.setPosition(0);
         return add(gimnasioModel);
     }
 

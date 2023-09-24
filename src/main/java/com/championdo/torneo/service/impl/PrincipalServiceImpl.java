@@ -58,7 +58,7 @@ public class PrincipalServiceImpl implements PrincipalService {
     }
 
     @Override
-    public UtilModel getDeleteEnable() {
-        return inscripcionService.getDeleteEnable();
+    public UtilModel getDeleteEnable(int codigoGimnasio) {
+        return inscripcionService.getDeleteEnable(codigoGimnasio);
     }
 }

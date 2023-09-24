@@ -12,7 +12,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     Categoria findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(int codigoGimnasio, int edadInicio, int edadFin);
 
-    Categoria findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndIdCinturonInicioLessThanEqualAndIdCinturonFinGreaterThanEqualAndInfantil(int codigoGimnasio, int edadInicio, int edadFin, int cituronInicio, int cinturonFin, boolean infantil);
+    Categoria findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPositionCinturonInicioLessThanEqualAndPositionCinturonFinGreaterThanEqualAndInfantil(int codigoGimnasio, int edadInicio, int edadFin, int cituronInicio, int cinturonFin, boolean infantil);
 
     List<Categoria> findByCodigoGimnasioOrderByPositionAsc(int codigoGimnasio);
 
@@ -22,6 +22,8 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     List<Categoria> findByCodigoGimnasio(int codigoGimnasio);
 
-    List<Categoria> findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(int codigoGimnasio, int idCinturonInicio, int idCinturonFin);
+    List<Categoria> findByCodigoGimnasioAndPositionCinturonInicioOrPositionCinturonFin(int codigoGimnasio, int cituronInicio, int cinturonFin);
+
+    List<Categoria> findByCodigoGimnasioAndIdPoomsae(int codigoGimnasio, int idPoomsae);
 
 }

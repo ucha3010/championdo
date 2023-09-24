@@ -135,13 +135,14 @@ public class InscripcionServiceImpl implements InscripcionService {
         inscripcionRepository.deleteAll();
     }
 
-    public UtilModel getDeleteEnable() {
-        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO);
+    @Override
+    public UtilModel getDeleteEnable(int codigoGimnasio) {
+        return utilService.findByClave(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO, codigoGimnasio);
     }
 
     @Override
-    public void changeValueDeleteEnable() {
-        UtilModel utilModel = getDeleteEnable();
+    public void changeValueDeleteEnable(int codigoGimnasio) {
+        UtilModel utilModel = getDeleteEnable(codigoGimnasio);
         boolean deleteEnable = Boolean.FALSE;
         if (!StringUtils.isNullOrEmpty(utilModel.getValor())) {
             deleteEnable = Boolean.parseBoolean(utilModel.getValor());
@@ -156,9 +157,6 @@ public class InscripcionServiceImpl implements InscripcionService {
         CategoriaModel categoriaModel = categoriaService.calcularCategoria(usuarioInscripto);
 
         inscripcionModel.setFechaInscripcion(new Date());
-        inscripcionModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO).getValor());
-        inscripcionModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO).getValor());
-        inscripcionModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO).getValor());
         inscripcionModel.setCategoria(categoriaModel.getNombre());
         inscripcionModel.setCodigoGimnasio(usuarioInscripto.getCodigoGimnasio());
 
@@ -178,6 +176,7 @@ public class InscripcionServiceImpl implements InscripcionService {
         inscripcionModel.setCinturon(cinturonService.findById(usuarioInscripto.getCinturon().getId()).getColor());
         inscripcionModel.setPoomsae(categoriaModel.getPoomsae().getNombre());
 
+        int codigoGimnasio;
         if (usuarioAutorizador != null) {
             inscripcionModel.setNombreAutorizador(usuarioAutorizador.getName());
             inscripcionModel.setApellido1Autorizador(usuarioAutorizador.getLastname());
@@ -193,7 +192,14 @@ public class InscripcionServiceImpl implements InscripcionService {
             inscripcionModel.setDomicilioOtrosAutorizador(usuarioAutorizador.getDomicilioOtros());
             inscripcionModel.setDomicilioLocalidadAutorizador(usuarioAutorizador.getDomicilioLocalidad());
             inscripcionModel.setDomicilioCpAutorizador(usuarioAutorizador.getDomicilioCp());
+            codigoGimnasio = usuarioAutorizador.getCodigoGimnasio();
+        } else {
+            codigoGimnasio = usuarioInscripto.getCodigoGimnasio();
         }
+
+        inscripcionModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO, codigoGimnasio).getValor());
+        inscripcionModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO, codigoGimnasio).getValor());
+        inscripcionModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO, codigoGimnasio).getValor());
 
         return inscripcionModel;
     }

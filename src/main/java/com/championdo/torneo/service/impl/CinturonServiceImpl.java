@@ -5,9 +5,11 @@ import com.championdo.torneo.entity.Cinturon;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperCinturon;
 import com.championdo.torneo.model.CinturonModel;
+import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.CinturonRepository;
 import com.championdo.torneo.service.CinturonService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,15 @@ public class CinturonServiceImpl implements CinturonService {
     }
 
     @Override
+    public CinturonModel findByCodigoGimnasioAndPosition(int codigoGimnasio, int position) {
+        try {
+            return mapperCinturon.entity2Model(cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position));
+        } catch (EntityNotFoundException e) {
+            return new CinturonModel();
+        }
+    }
+
+    @Override
     public void add(CinturonModel cinturonModel) {
         cinturonRepository.save(mapperCinturon.model2Entity(cinturonModel));
     }
@@ -59,11 +70,11 @@ public class CinturonServiceImpl implements CinturonService {
 
     @Override
     public void delete(int idCinturon) throws RemoveException {
-        int codigoGimnasio = findById(idCinturon).getCodigoGimnasio();
-        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(codigoGimnasio, idCinturon, idCinturon);
+        CinturonModel cinturonModel = findById(idCinturon);
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndPositionCinturonInicioOrPositionCinturonFin(cinturonModel.getCodigoGimnasio(), cinturonModel.getPosition(), cinturonModel.getPosition());
         if (categoriaList == null || categoriaList.isEmpty()) {
             cinturonRepository.deleteById(idCinturon);
-            List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio);
+            List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasioOrderByPositionAsc(cinturonModel.getCodigoGimnasio());
             for (int i = 0; i < cinturonList.size(); i++) {
                 if (cinturonList.get(i).getPosition() != i) {
                     cinturonList.get(i).setPosition(i);
@@ -117,6 +128,29 @@ public class CinturonServiceImpl implements CinturonService {
                 LoggerMapper.log(Level.ERROR, "deleteFromRoot", e.getMessage(), getClass());
             }
         }
+    }
+
+    @Override
+    public void addFromRoot(GimnasioRootModel customer) {
+        List<Cinturon> cinturonList = new ArrayList<>();
+        cinturonList.add(new Cinturon(Constantes.BLANCO, 0, customer.getId()));
+        cinturonList.add(new Cinturon("Amarillo", 1, customer.getId()));
+        cinturonList.add(new Cinturon("Naranja", 2, customer.getId()));
+        cinturonList.add(new Cinturon("Verde", 3, customer.getId()));
+        cinturonList.add(new Cinturon("Azul", 4, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo", 5, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 1º DAN", 6, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 2º DAN", 7, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 3º DAN", 8, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 4º DAN", 9, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 5º DAN", 10, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 6º DAN", 11, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 7º DAN", 12, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 8º DAN", 13, customer.getId()));
+        for(Cinturon cinturon: cinturonList) {
+            cinturonRepository.save(cinturon);
+        }
+
     }
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {

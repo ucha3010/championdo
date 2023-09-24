@@ -29,6 +29,9 @@ public class FormularioServiceImpl implements FormularioService {
     private GimnasioService gimnasioService;
 
     @Autowired
+    private GimnasioRootService gimnasioRootService;
+
+    @Autowired
     private PaisService paisService;
 
     @Autowired
@@ -83,9 +86,9 @@ public class FormularioServiceImpl implements FormularioService {
             rellenoCompetidor(menor, pdfModel);
             rellenoMenor(menor, pdfModel);
         }
-        pdfModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO).getValor());
-        pdfModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO).getValor());
-        pdfModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO).getValor());
+        pdfModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor());
+        pdfModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor());
+        pdfModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor());
 
         return pdfModel;
     }
@@ -115,6 +118,16 @@ public class FormularioServiceImpl implements FormularioService {
         modelAndView.addObject("listaPaises", paisService.findAll());
         modelAndView.addObject("listaGimnasios", gimnasioService.findAll(codigoGimnasio));
         modelAndView.addObject("listaCinturones", cinturonService.findAll(codigoGimnasio));
+        modelAndView.addObject("listaCalidad", calidadService.findAll());
+        modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
+    }
+
+    @Override
+    public void cargarDesplegablesAltaUsuario(ModelAndView modelAndView) {
+        modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
+        modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
+        modelAndView.addObject("listaPaises", paisService.findAll());
+        modelAndView.addObject("listaGimnasios", gimnasioRootService.findAll());
         modelAndView.addObject("listaCalidad", calidadService.findAll());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
     }

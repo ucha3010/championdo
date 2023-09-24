@@ -11,7 +11,6 @@ public class MapperCinturon {
         if (externObject != null) {
             localObject.setId(externObject.getId());
             localObject.setColor((externObject.getColor()));
-            localObject.setCategoria(externObject.getCategoria());
             localObject.setPosition(externObject.getPosition());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
@@ -22,7 +21,6 @@ public class MapperCinturon {
         if (externObject != null) {
             localObject.setId(externObject.getId());
             localObject.setColor((externObject.getColor()));
-            localObject.setCategoria(externObject.getCategoria());
             localObject.setPosition(externObject.getPosition());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }

@@ -29,11 +29,11 @@ public class Categoria {
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
 
-    @Column(name = "idCinturonInicio")
-    private int idCinturonInicio;
+    @Column(name = "positionCinturonInicio")
+    private int positionCinturonInicio;
 
-    @Column(name = "idCinturonFin")
-    private int idCinturonFin;
+    @Column(name = "positionCinturonFin")
+    private int positionCinturonFin;
 
     @Column(name = "idPoomsae")
     private int idPoomsae;

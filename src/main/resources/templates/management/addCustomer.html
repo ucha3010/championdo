@@ -75,7 +75,8 @@
 <body>
 	<div class="container">
 
-		<div th:if="${addProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
+		<div th:if="${addProblem != null}" class="alert alert-danger" role="alert"><span th:text="${addProblem}"></span></div>
+		<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
 
 		<section>
 			<h1 th:text="${customer.nombreGimnasio}"></h1>

@@ -11,6 +11,7 @@ public interface PoomsaeRepository extends JpaRepository<Poomsae, Integer> {
     List<Poomsae> findByCodigoGimnasioOrderByPositionAsc(int codigoGimnasio);
 
     Poomsae findByCodigoGimnasioAndPosition(int codigoGimnasio, int position);
+    Poomsae findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre);
 
     Poomsae findTopByCodigoGimnasioOrderByPositionDesc(int codigoGimnasio);
 

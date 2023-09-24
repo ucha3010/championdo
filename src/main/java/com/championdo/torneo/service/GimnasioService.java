@@ -12,6 +12,8 @@ public interface GimnasioService {
 
     GimnasioModel findById(int id);
 
+    GimnasioModel findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre);
+
     GimnasioModel add(GimnasioModel gimnasioModel);
 
     void update(GimnasioModel gimnasioModel);

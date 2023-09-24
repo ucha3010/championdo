@@ -52,4 +52,8 @@ public class Constantes {
 
 	// extensiones de archivos
     public static final String EXTENSION_PDF = ".pdf";
+
+	// generales
+	public static final String TRUE = "true";
+	public static final String FALSE = "false";
 }

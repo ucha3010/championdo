@@ -3,6 +3,7 @@ package com.championdo.torneo.service;
 
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.CinturonModel;
+import com.championdo.torneo.model.GimnasioRootModel;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ public interface CinturonService {
     List<CinturonModel> findAll(int codigoGimnasio);
 
     CinturonModel findById(int id);
+
+    CinturonModel findByCodigoGimnasioAndPosition(int codigoGimnasio, int position);
 
     void add(CinturonModel cinturonModel);
 
@@ -23,4 +26,6 @@ public interface CinturonService {
     int findMaxPosition(int codigoGimnasio);
 
     void deleteFromRoot (int idGimnasioRootModel);
+
+    void addFromRoot(GimnasioRootModel customer);
 }

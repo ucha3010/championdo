@@ -85,8 +85,8 @@ public class Utils {
 
     public static List<UtilModel> cargarListaSiNo() {
         List<UtilModel> listaSiNo = new ArrayList<>();
-        listaSiNo.add(new UtilModel("Si", "true"));
-        listaSiNo.add(new UtilModel("No", "false"));
+        listaSiNo.add(new UtilModel("Si", Constantes.TRUE));
+        listaSiNo.add(new UtilModel("No", Constantes.FALSE));
         return listaSiNo;
     }
 }

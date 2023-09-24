@@ -52,7 +52,7 @@ public class GimnasioController {
             }
         }
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable().getValor()));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
         return modelAndView;
     }
@@ -61,7 +61,7 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable String tipo, @PathVariable String licencia) {
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable().getValor()));
+        modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(usuario.getCodigoGimnasio()).getValor()));
         if ("infantil".equalsIgnoreCase(tipo)) {
             modelAndView.setViewName("gimnasio/formularioInscMenorGimnasio");
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));

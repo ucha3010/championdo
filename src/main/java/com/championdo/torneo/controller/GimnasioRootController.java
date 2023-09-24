@@ -35,6 +35,9 @@ public class GimnasioRootController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UtilService utilService;
+
     @GetMapping("/customers")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView customers(ModelAndView modelAndView) {
@@ -97,11 +100,15 @@ public class GimnasioRootController {
             customer = gimnasioRootService.add(customer);
             GimnasioModel gimnasioModel = gimnasioService.addFromRoot(customer);
             userService.addFromRoot(customer, gimnasioModel);
+            utilService.addFromRoot(customer);
+            cinturonService.addFromRoot(customer);
+            poomsaeService.addFromRoot(customer);
+            categoriaService.addFromRoot(customer);
             return customers(modelAndView);
         } catch (Exception e) {
             modelAndView.setViewName("management/addCustomer");
             modelAndView.addObject("customer", customer);
-            modelAndView.addObject("addProblem", "Hubo un problema con la actualización");
+            modelAndView.addObject("addProblem", "Hubo un problema con la inserción - " + e.getMessage());
             LoggerMapper.log(Level.ERROR, "addCustomer", e.getMessage(), this.getClass());
         }
         LoggerMapper.methodOut(Level.INFO, "addCustomer", modelAndView, this.getClass());
