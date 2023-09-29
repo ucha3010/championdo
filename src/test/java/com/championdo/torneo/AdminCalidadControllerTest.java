@@ -29,9 +29,9 @@ public class AdminCalidadControllerTest {
     public void greetingShouldReturnMessageFromService() throws Exception {
 
         //simulo respuesta de llamada el servicio que hay en el método /calidadList del controlador
-        when(calidadService.findAll()).thenReturn(Arrays.asList(new CalidadModel(1,"Padre",null,0,30),
-                new CalidadModel(2,"Madre",null,1,30),
-                new CalidadModel(3,"Tutor",null,2,30)));
+        when(calidadService.findAll()).thenReturn(Arrays.asList(new CalidadModel(1,"Padre",null,0),
+                new CalidadModel(2,"Madre",null,1),
+                new CalidadModel(3,"Tutor",null,2)));
 
         //llamo al método /calidadList del controlador
         this.mockMvc.perform(get("/calidadList")).andDo(print()).andExpect(status().isOk());

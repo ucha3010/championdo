@@ -1,7 +1,6 @@
 package com.championdo.torneo.mapper;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
