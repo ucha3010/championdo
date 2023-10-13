@@ -29,7 +29,7 @@ public class AdminUtilController {
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
-        modelAndView.setViewName("adminUtil");
+        modelAndView.setViewName("gimnasio/adminUtil");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("utilModel", new UtilModel());
         modelAndView.addObject("utilListCampeonato", utilService.findAllStarsWith("campeonato", user.getCodigoGimnasio()));

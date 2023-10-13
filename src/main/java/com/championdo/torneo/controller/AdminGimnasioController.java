@@ -22,6 +22,15 @@ public class AdminGimnasioController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView gymAdministration(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("gimnasio/adminGimnasio");
+        LoggerMapper.log(Level.INFO, "gymAdministration", modelAndView, this.getClass());
+        return modelAndView;
+    }
+
     @GetMapping("/gimnasioList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gimnasioList(ModelAndView modelAndView) {

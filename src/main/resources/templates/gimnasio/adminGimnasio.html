@@ -12,7 +12,7 @@
 
 	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
 
-	<title>Administración</title>
+	<title>Administración de gimnasio</title>
 </head>
 <body>
 	<div class="container">
@@ -32,28 +32,28 @@
 				</div>
 
 				<div class="col-xs-8 mb-10 colorGreen">
-					<h1>Administración</h1>
+					<h1>Administración de gimnasio</h1>
 				</div>
 
 				<div class="col-xs-2 mb-1">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+					<a class="btn btn-info pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
 				</div>
 			</div>
 		</section>
 
-		<section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
-			<a href="#" th:href="@{/gimnasioRoot/customers}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Listado de clientes</button>
+		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+			<a href="#" th:href="@{/usuario/userList}" class="textDecoration-none">
+				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Usuarios</button>
 			</a>
 		</section>
 		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
-			<a href="#" th:href="@{/adminTorneo/torneoList}" class="textDecoration-none">
-				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Torneos</button>
+			<a href="#" th:href="@{/adminUtil/utilList}" class="textDecoration-none">
+				<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Parámetros</button>
 			</a>
 		</section>
 		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
-			<a href="#" th:href="@{/adminGimnasio/}" class="textDecoration-none">
-				<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Gimnasio</button>
+			<a href="#" th:href="@{/adminCinturon/cinturonList}" class="textDecoration-none">
+				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Cinturones</button>
 			</a>
 		</section>
 		

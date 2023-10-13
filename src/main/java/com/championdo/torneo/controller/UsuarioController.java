@@ -6,6 +6,7 @@ import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.FormularioService;
 import com.championdo.torneo.service.UserRoleService;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import java.util.Set;
+
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
+
+	/**
+	 * TODO INFORMACIÓN MUY IMPORTANTE
+	 * Los usuario dueños de gimnasio (y clientes para mi) tendrán rol ROLE_ADMIN
+	 * Los usuario clientes del gimnasio tendrán ROLE_USER
+	 * Yo tendré ROLE_ROOT y tendré una consola especial con acceso a absolutamente toda la información
+	*/
 	
 	@Autowired
 	private UserService userService;
@@ -88,13 +99,13 @@ public class UsuarioController {
 	 * TODO DAMIAN Este método debería habilitarlo para el rol root
 	 */
 	@GetMapping("/eliminarUsuario")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView eliminarUsuario(@ModelAttribute("username") String username) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (userService.delete(username)) {
-			modelAndView.addObject("eliminacionCorrecta","actualizacionCorrecta");
+			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
 		} else {
-			modelAndView.addObject("eliminacionError","eliminacionError");
+			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
 		}
 		LoggerMapper.log(Level.INFO, "eliminarUsuario", modelAndView, getClass());
 		return userList(modelAndView);
@@ -106,7 +117,7 @@ public class UsuarioController {
 	 * TODO DAMIAN Este método debería habilitarlo para el rol root
 	 */
 	@GetMapping("/resetearClaveUsuario")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView resetearClaveUsuario(@ModelAttribute("username") String username) {
 		ModelAndView modelAndView = new ModelAndView();
 		UserModel usuario = userService.findModelByUsername(username);
@@ -121,11 +132,26 @@ public class UsuarioController {
 	@GetMapping("/userList")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView userList(ModelAndView modelAndView) {
-		modelAndView.setViewName("adminUser");
-		modelAndView.addObject("userList", userService.findAllModel());
+		modelAndView.setViewName("gimnasio/adminUser");
+		com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+
+		if(hasRootRole(usuario.getUserRole())) {
+			modelAndView.addObject("userList", userService.findAll());
+		} else {
+			modelAndView.addObject("userList", userService.findAll(usuario.getCodigoGimnasio()));
+		}
 		modelAndView.addObject("userRoleList", userRoleService.findDistinctByRole());
 		LoggerMapper.log(Level.INFO, "userList", modelAndView, this.getClass());
 		return modelAndView;
+	}
+
+	private boolean hasRootRole (Set<UserRole> userRoleList) {
+		for (UserRole userRole: userRoleList) {
+			if(Constantes.ROLE_ROOT.equals(userRole.getRole())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@GetMapping("/enabled/{username}")
@@ -133,7 +159,7 @@ public class UsuarioController {
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
-		com.championdo.torneo.entity.User user = userService.cargarUsuarioCompleto(modelAndView);
+		com.championdo.torneo.entity.User user = userService.getLoggedUser();
 		usuario.setUsernameModificacione(user.getUsername());
 		userService.addOrUpdate(usuario);
 		modelAndView.addObject("updateOK", "Habilitación de " + usuario.getName()

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Serializable>{
 	User findByUsername(String username);
-
     List<User> findAllByOrderByLastnameDesc();
+    List<User> findByCodigoGimnasioOrderByLastnameDesc(int codigoGimnasio);
 }

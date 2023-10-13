@@ -27,7 +27,7 @@ public class AdminCinturonController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView cinturonList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("adminCinturon");
+        modelAndView.setViewName("gimnasio/adminCinturon");
         modelAndView.addObject("cinturonModel", new CinturonModel());
         modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "cinturonList", modelAndView, this.getClass());

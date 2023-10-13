@@ -93,17 +93,14 @@ public class UserService implements UserDetailsService {
 		return bCryptPasswordEncoder.encode(newPass);
 	}
 
-	public List<com.championdo.torneo.entity.User> findAll() {
-		return userRepository.findAll();
+	public List<UserModel> findAll() {
+		List<com.championdo.torneo.entity.User> userList = userRepository.findAllByOrderByLastnameDesc();
+		return getModelList(userList);
 	}
 
-	public List<UserModel> findAllModel() {
-		List<com.championdo.torneo.entity.User> userList = userRepository.findAll();
-		List<UserModel> userModelList = new ArrayList<>();
-		for(com.championdo.torneo.entity.User user : userList) {
-			userModelList.add(mapperUser.entity2Model(user));
-		}
-		return userModelList;
+	public List<UserModel> findAll(int codigoGimnasio) {
+		List<com.championdo.torneo.entity.User> userList = userRepository.findByCodigoGimnasioOrderByLastnameDesc(codigoGimnasio);
+		return getModelList(userList);
 	}
 
 	public com.championdo.torneo.entity.User findByUsername(String username) {
@@ -119,15 +116,13 @@ public class UserService implements UserDetailsService {
 	}
 
 	public com.championdo.torneo.entity.User cargarUsuarioCompleto(ModelAndView modelAndView) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		com.championdo.torneo.entity.User usuario = findByUsername(user.getUsername());
+		com.championdo.torneo.entity.User usuario = getLoggedUser();
 		modelAndView.addObject("usuario", usuario);
 		return usuario;
 	}
 
 	public UserModel cargarUserModelCompleto(ModelAndView modelAndView) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		com.championdo.torneo.entity.User usuario = findByUsername(user.getUsername());
+		com.championdo.torneo.entity.User usuario = getLoggedUser();
 		UserModel userModel = mapperUser.entity2Model(usuario);
 		modelAndView.addObject("usuario", userModel);
 		return userModel;
@@ -150,6 +145,11 @@ public class UserService implements UserDetailsService {
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, Constantes.ROLE_ADMIN));
 	}
+
+	public com.championdo.torneo.entity.User getLoggedUser() {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return findByUsername(user.getUsername());
+	}
 	
 	private User buildUser(com.championdo.torneo.entity.User user, List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), user.isEnabled(),
@@ -163,5 +163,13 @@ public class UserService implements UserDetailsService {
 			grantedAuthorities.add(new SimpleGrantedAuthority(userRole.getRole()));
 		}
 		return new ArrayList<>(grantedAuthorities);
+	}
+
+	private List<UserModel> getModelList(List<com.championdo.torneo.entity.User> userList) {
+		List<UserModel> userModelList = new ArrayList<>();
+		for(com.championdo.torneo.entity.User user : userList) {
+			userModelList.add(mapperUser.entity2Model(user));
+		}
+		return userModelList;
 	}
 }

@@ -9,6 +9,7 @@ public class Constantes {
 	public static final String ROLES = "ROLE_ROOT,ROLE_ADMIN,ROLE_USER";
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
+	public static final String ROLE_ROOT = "ROLE_ROOT";
 
 	// categorías
 	public static final String INCLUSIVO = "INCLUSIVO";
