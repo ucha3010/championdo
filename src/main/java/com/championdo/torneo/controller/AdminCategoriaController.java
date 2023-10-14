@@ -32,7 +32,7 @@ public class AdminCategoriaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView categoriaList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("adminCategoria");
+        modelAndView.setViewName("torneo/adminCategoria");
         modelAndView.addObject("categoriaModel", new CategoriaModel());
         modelAndView.addObject("categoriaList", categoriaService.findAllNameExtended(user.getCodigoGimnasio()));
         modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));

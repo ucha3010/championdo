@@ -13,4 +13,5 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Intege
     Inscripcion findByDniInscripto(String dniInscripto);
 
     List<Inscripcion> findAllByOrderByIdDesc();
+    List<Inscripcion> findByIdTorneoOrderByFechaInscripcionDesc(int idTorneo);
 }

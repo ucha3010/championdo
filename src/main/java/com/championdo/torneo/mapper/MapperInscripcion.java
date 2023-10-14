@@ -21,6 +21,7 @@ public class MapperInscripcion {
             localObject.setDireccionCampeonato(externObject.getDireccionCampeonato());
             localObject.setCategoria(externObject.getCategoria());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setIdTorneo(externObject.getIdTorneo());
 
             localObject.setNombreInscripto(externObject.getNombreInscripto());
             localObject.setApellido1Inscripto(externObject.getApellido1Inscripto());
@@ -70,6 +71,7 @@ public class MapperInscripcion {
             localObject.setDireccionCampeonato(externObject.getDireccionCampeonato());
             localObject.setCategoria(externObject.getCategoria());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setIdTorneo(externObject.getIdTorneo());
 
             localObject.setNombreInscripto(externObject.getNombreInscripto());
             localObject.setApellido1Inscripto(externObject.getApellido1Inscripto());

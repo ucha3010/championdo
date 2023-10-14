@@ -27,7 +27,7 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView poomsaeList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("adminPoomsae");
+        modelAndView.setViewName("torneo/adminPoomsae");
         modelAndView.addObject("poomsaeModel", new PoomsaeModel());
         modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "poomsaeList", modelAndView, this.getClass());

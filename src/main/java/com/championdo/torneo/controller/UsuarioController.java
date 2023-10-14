@@ -145,15 +145,6 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
-	private boolean hasRootRole (Set<UserRole> userRoleList) {
-		for (UserRole userRole: userRoleList) {
-			if(Constantes.ROLE_ROOT.equals(userRole.getRole())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@GetMapping("/enabled/{username}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
@@ -183,6 +174,15 @@ public class UsuarioController {
 				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(user.getSecondLastname()) ? " " + user.getSecondLastname() : "")
 				+ " actualizado correctamente");
 		return userList(modelAndView);
+	}
+
+	private boolean hasRootRole (Set<UserRole> userRoleList) {
+		for (UserRole userRole: userRoleList) {
+			if(Constantes.ROLE_ROOT.equals(userRole.getRole())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

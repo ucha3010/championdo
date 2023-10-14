@@ -57,28 +57,35 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public List<InscripcionModel> findByDniAutorizador(String dniAutorizador) {
-        List<Inscripcion> inscripcionList = inscripcionRepository.findByDniAutorizador(dniAutorizador);
         List<InscripcionModel> inscripcionModelList = new ArrayList<>();
-        if (inscripcionList != null) {
-            for (Inscripcion inscripcion : inscripcionList) {
-                inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
-            }
+        for (Inscripcion inscripcion: inscripcionRepository.findByDniAutorizador(dniAutorizador)) {
+            inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
         }
-        LoggerMapper.log(Level.INFO, "findByDniAutorizador", inscripcionList, getClass());
+        LoggerMapper.methodOut(Level.INFO, "findByDniAutorizador", "inscripcionModelList.size(): "+ inscripcionModelList.size(), getClass());
         return inscripcionModelList;
     }
 
     @Override
     public InscripcionModel findByDniInscripto(String dniInscripto) {
         InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.findByDniInscripto(dniInscripto));
-        LoggerMapper.log(Level.INFO, "findByDniInscripto", inscripcion, getClass());
+        LoggerMapper.methodOut(Level.INFO, "findByDniInscripto", inscripcion, getClass());
         return inscripcion;
+    }
+
+    @Override
+    public List<InscripcionModel> findByIdTorneo(int idTorneo) {
+        List<InscripcionModel> inscripcionModelList = new ArrayList<>();
+        for (Inscripcion inscripcion: inscripcionRepository.findByIdTorneoOrderByFechaInscripcionDesc(idTorneo)) {
+            inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
+        }
+        LoggerMapper.methodOut(Level.INFO, "findByIdTorneo", "inscripcionModelList.size(): "+ inscripcionModelList.size(), getClass());
+        return inscripcionModelList;
     }
 
     @Override
     public InscripcionModel add(InscripcionModel inscripcionModel) {
         InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.save(mapperInscripcion.model2Entity(inscripcionModel)));
-        LoggerMapper.log(Level.INFO, "add", inscripcion, getClass());
+        LoggerMapper.methodOut(Level.INFO, "add", inscripcion, getClass());
         return inscripcion;
     }
 

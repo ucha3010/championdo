@@ -81,24 +81,31 @@
 
 </head>
 <body>
-    <div class="container">
-
+    <section>
         <div th:if="${removeProblem != null}" class="alert alert-danger" role="alert"><span th:text="${removeProblem}"></span></div>
+    </section>
+    <div class="container">
+        <h1>
+            ¡Hola <span th:text="${usuario.name}"></span>!
+            <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
+        </h1>
+        <nav class="navbar navbar-default" role="navigation">
+            <form th:action="@{/logout}" method="POST">
+                <button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+            </form>
+        </nav>
 
         <section>
-            <div class="colorGreen">
-                <h1>Poomsaes</h1>
-            </div>
-        </section>
+            <div class="row">
+                <div class="col-xs-2 mb-1">
+                </div>
 
-        <section>
-            <div class="row mb-1">
-                <div class="col-xs-2">
+                <div class="col-xs-8 mb-10 colorGreen">
+                    <h1>Poomsaes</h1>
                 </div>
-                <div class="col-xs-2">
-                    <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
-                </div>
-                <div class="col-xs-8">
+
+                <div class="col-xs-2 mb-1">
+                    <a class="btn btn-info pull-right" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
                 </div>
             </div>
         </section>
@@ -147,7 +154,7 @@
             <div class="col-xs-2">
             </div>
             <div class="col-xs-2">
-                <a class="btn btn-primary pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
             </div>
             <div class="col-xs-8">
             </div>

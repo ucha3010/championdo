@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+
+	<title>Administración de Torneos</title>
+
+	<script>
+        function goDetail(id){
+            var relativeUrl = "adminTorneo/torneo/" + id;
+            var domain = getDomain(location.href);
+            location.href = domain + relativeUrl;
+        }
+    </script>
+</head>
+<body>
+	<section>
+		<div th:if="${removeProblem != null}" class="alert alert-danger" role="alert"><span th:text="${removeProblem}"></span></div>
+	</section>
+	<div class="container">
+		<h1>
+			¡Hola <span th:text="${usuario.name}"></span>!
+			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
+		</h1>
+		<nav class="navbar navbar-default" role="navigation">
+			<form th:action="@{/logout}" method="POST">
+				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+			</form>
+		</nav>
+
+		<section>
+			<div class="row">
+				<div class="col-xs-2 mb-1">
+				</div>
+
+				<div class="col-xs-8 mb-10 colorGreen">
+					<h1>Administración de Torneos</h1>
+				</div>
+
+				<div class="col-xs-2 mb-1">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/admin/adminList}">Volver</a>
+				</div>
+			</div>
+		</section>
+
+		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+			<a href="#" th:href="@{/adminPoomsae/poomsaeList}" class="textDecoration-none">
+				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Poomsaes</button>
+			</a>
+			<a href="#" th:href="@{/adminCategoria/categoriaList}" class="textDecoration-none">
+				<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Categorías</button>
+			</a>
+		</section>
+
+		<section>
+			<div class="col-xs-12">
+				<a href="#" th:href="@{/adminTorneo/torneo/0}" class="textDecoration-none">
+					<button class="btn btn-success pull-right" type="button">Alta torneo</button>
+				</a>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Fecha del torneo</th>
+						<th scope="col">Nombre torneo</th>
+						<th scope="col">Comienzo inscripción</th>
+						<th scope="col">Fin inscripción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="torneo : ${torneoList}" th:attr="onclick=|goDetail('${torneo.id}')|">
+						<td><span th:text="${#calendars.format(torneo.fechaTorneo,'dd/MM/yyyy')}"></span></td>
+						<td><span th:text="${torneo.nombre}"></span></td>
+						<td><span th:text="${#calendars.format(torneo.fechaComienzoInscripcion,'dd/MM/yyyy')}"></span></td>
+						<td><span th:text="${#calendars.format(torneo.fechaFinInscripcion,'dd/MM/yyyy')}"></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+</html>

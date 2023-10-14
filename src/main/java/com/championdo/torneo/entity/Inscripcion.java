@@ -32,6 +32,7 @@ public class Inscripcion {
     @Column(name = "categoria", length = 45)
     private String categoria;
     private int codigoGimnasio;
+    private int idTorneo;
 
     //Usuario inscripto
     @Column(name = "nombreInscripto", length = 60)

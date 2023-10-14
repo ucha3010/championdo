@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	
+	<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+	
+	<title>Torneo</title>
+	
+	<script type="text/javascript">
+		function validar(){
+
+			var campo = ['nombre','direccion','fechaTorneo','fechaComienzoInscripcion','fechaFinInscripcion'];
+			restablecer();
+			var validado = true;			
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+			    var nombreRolError = document.getElementById(campo[i]+'Error');
+				if(nombreRol.value==''){
+					nombreRolError.innerHTML = "Campo obligatorio";
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+			
+			if(validado){
+				return true;
+			} else {
+				document.getElementById('hayError').innerHTML = "Por favor rellenar todos los campos";
+				return false;
+			}
+		}
+		function restablecer(){
+			var errorSpan = document.getElementsByName('errorSpan');
+			for (var i = 0; i < errorSpan.length; i++) {
+				errorSpan[i].innerHTML='';
+			}
+			var campos = document.getElementsByClassName("form-control");
+			for (var i = 0; i < campos.length; i++) {
+				campos[i].style.borderColor="#ced4da";
+			}
+		}
+
+		function confirmDelete(){
+            var id = document.getElementById('id');
+            var nombre = document.getElementById('nombre');
+			if(confirm("¿Seguro que desea eliminar " + nombre.value + "?")){
+                var relativeUrl = "adminTorneo/torneo/remove/" + id.value;
+                var domain = getDomain(location.href);
+                location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
+
+		function participatingGyms(){
+            var id = document.getElementById('id');
+			var relativeUrl = "adminTorneoGimnasio/getGimnasio/" + id.value;
+			var domain = getDomain(location.href);
+			location.href = domain + relativeUrl;
+		}
+	</script>
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>
+			¡Hola <span th:text="${usuario.name}"></span>!
+			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
+		</h1>
+		<nav class="navbar navbar-default" role="navigation">
+			<form th:action="@{/logout}" method="POST">
+				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+			</form>
+		</nav>
+
+		<section>
+			<div class="row">
+				<div class="col-xs-2 mb-1">
+				</div>
+
+				<div class="col-xs-8 mb-10 colorGreen">
+					<h1>Torneo</h1>
+				</div>
+
+				<div class="col-xs-2 mb-1">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
+				</div>
+			</div>
+		</section>
+		
+		<form action="#" th:action="@{/adminTorneo/addTorneo}" th:object="${torneoModel}" method="post" onsubmit="return validar()">
+		
+			<input type="hidden" name="id" id="id" th:value="${torneoModel.id}"/>
+
+			<div class="row mb-1">
+				<div class="col-md-1">
+				</div>
+				<div class="col-xs-3 text-center">
+					<label for="nombre">Nombre del torneo:</label>
+				</div>
+				<div class="col-xs-9 col-md-6">
+					<input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="Nombre" size="200"/>
+				</div>
+				<div class="col-md-2">
+					<span id="nombreError" name="errorSpan"></span>
+				</div>
+			</div>
+
+			<div class="row mb-1">
+				<div class="col-md-1">
+				</div>
+				<div class="col-xs-3 text-center">
+					<label for="direccion">Dirección del torneo:</label>
+				</div>
+				<div class="col-xs-9 col-md-6">
+					<input type="text" th:field="*{direccion}" id="direccion" class="form-control" placeholder="Dirección" size="200"/>
+				</div>
+				<div class="col-md-2">
+					<span id="direccionError" name="errorSpan"></span>
+				</div>
+			</div>
+
+			<div class="row mb-1">
+				<div class="col-md-1">
+				</div>
+				<div class="col-xs-3 text-center">
+					<label for="fechaTorneo">Fecha del torneo:</label>
+				</div>
+				<div class="col-xs-4 col-md-3">
+					<input type="date" th:field="*{fechaTorneo}" id="fechaTorneo" class="form-control" placeholder="Fecha del torneo"/>
+				</div>
+				<div class="col-xs-5">
+					<span id="fechaTorneoError" name="errorSpan"></span>
+				</div>
+			</div>
+
+			<div class="row mb-1">
+				<div class="col-md-1">
+				</div>
+				<div class="col-xs-3 text-center">
+					<label for="fechaComienzoInscripcion">Fecha comienzo inscripción:</label>
+				</div>
+				<div class="col-xs-4 col-md-3">
+					<input type="date" th:field="*{fechaComienzoInscripcion}" id="fechaComienzoInscripcion" class="form-control" placeholder="Fecha comienzo inscripción"/>
+				</div>
+				<div class="col-xs-5">
+					<span id="fechaComienzoInscripcionError" name="errorSpan"></span>
+				</div>
+			</div>
+
+			<div class="row mb-1">
+				<div class="col-md-1">
+				</div>
+				<div class="col-xs-3 text-center">
+					<label for="fechaFinInscripcion">Fecha fin inscripción:</label>
+				</div>
+				<div class="col-xs-4 col-md-3">
+					<input type="date" th:field="*{fechaFinInscripcion}" id="fechaFinInscripcion" class="form-control" placeholder="Fecha fin inscripción"/>
+				</div>
+				<div class="col-xs-5">
+					<span id="fechaFinInscripcionError" name="errorSpan"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-xs-4">
+					<button th:if="${botonBorrar}" class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
+				</div>
+
+				<div class="col-xs-5">
+				</div>
+
+				<div class="col-xs-3">
+					<button class="btn btn-success" type="submit"><span th:text="${buttonTitle}"/></button>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-6 mb-3">
+				</div>
+				<div class="col-xs-6 mb-3">
+					<span id="hayError" name="errorSpan" class="colorRed"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-xs-4">
+				</div>
+
+				<div class="col-xs-4">
+					<button th:if="${botonGimnasios}" class="btn btn-primary" onclick="participatingGyms()">Gimnasios participantes</button>
+				</div>
+
+				<div class="col-xs-4">
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<section>
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th scope="col">Nombre</th>
+				<th scope="col">Primer apellido</th>
+				<th scope="col">Segundo apellido</th>
+				<th scope="col">Fecha inscripción</th>
+				<th scope="col">Categoría</th>
+				<th scope="col">Poomsae</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="inscripcion : ${inscripcionList}">
+				<td><span th:text="${inscripcion.nombreInscripto}"></span></td>
+				<td><span th:text="${inscripcion.apellido1inscripto}"></span></td>
+				<td><span th:text="${inscripcion.apellido2Inscripto}"></span></td>
+				<td><span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy')}"></span></td>
+				<td><span th:text="${inscripcion.categoria}"></span></td>
+				<td><span th:attr="class=${inscripcion.inscripcionInclusiva ? 'colorGreen' : ''}" th:text="${inscripcion.poomsae}"></span></td>
+			</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+</html>

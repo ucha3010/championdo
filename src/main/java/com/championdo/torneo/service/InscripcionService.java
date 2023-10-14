@@ -17,6 +17,7 @@ public interface InscripcionService {
     List<InscripcionModel> findByDniAutorizador(String dniAutorizador);
 
     InscripcionModel findByDniInscripto(String dniInscripto);
+    List<InscripcionModel> findByIdTorneo(int idTorneo);
 
     InscripcionModel add(InscripcionModel inscripcionModel);
 
