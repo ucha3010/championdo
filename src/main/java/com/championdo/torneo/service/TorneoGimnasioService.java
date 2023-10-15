@@ -16,7 +16,7 @@ public interface TorneoGimnasioService {
 
     void update(TorneoGimnasioModel torneoGimnasioModel);
 
-    void delete(int id) throws RemoveException;
+    void delete(TorneoGimnasioModel torneoGimnasioModel) throws RemoveException;
 
     void dragOfPosition(int idTorneo, int initialPosition, int finalPosition);
 

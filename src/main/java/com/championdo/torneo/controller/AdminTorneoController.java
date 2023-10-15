@@ -5,6 +5,7 @@ import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.TorneoModel;
 import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -23,6 +24,8 @@ public class AdminTorneoController {
 
     @Autowired
     private TorneoService torneoService;
+    @Autowired
+    private TorneoGimnasioService torneoGimnasioService;
     @Autowired
     private InscripcionService inscripcionService;
     @Autowired
@@ -45,13 +48,13 @@ public class AdminTorneoController {
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         TorneoModel torneoModel = torneoService.findById(id);
         if(torneoModel.getId() == 0) {
-            modelAndView.addObject("buttonTitle", "Crear");
+            modelAndView.addObject("buttonAddUpdate", "Crear");
         } else {
-            modelAndView.addObject("buttonTitle", "Actualizar");
-            modelAndView.addObject("botonGimnasios",true);
+            modelAndView.addObject("buttonAddUpdate", "Actualizar");
+            modelAndView.addObject("buttonGyms",true);
             List<InscripcionModel> inscripcionList = inscripcionService.findByIdTorneo(torneoModel.getId());
             if (inscripcionList.isEmpty()) {
-                modelAndView.addObject("botonBorrar",true);
+                modelAndView.addObject("buttonDelete",true);
             } else {
                 modelAndView.addObject("inscripcionList", inscripcionList);
             }
@@ -66,7 +69,11 @@ public class AdminTorneoController {
     public ModelAndView addTorneo(ModelAndView modelAndView, @ModelAttribute("torneoModel") TorneoModel torneoModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         torneoModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        torneoService.add(torneoModel);
+        if (torneoModel.getId() == 0) {
+            torneoService.add(torneoModel);
+        } else {
+            torneoService.update(torneoModel);
+        }
         return torneoList(modelAndView);
     }
 

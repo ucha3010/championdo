@@ -14,6 +14,7 @@ public class MapperTorneoGimnasio {
             localObject.setIdTorneo(externObject.getIdTorneo());
             localObject.setNombreGimnasio(externObject.getNombreGimnasio());
             localObject.setPosition(externObject.getPosition());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }
@@ -24,6 +25,7 @@ public class MapperTorneoGimnasio {
             localObject.setIdTorneo(externObject.getIdTorneo());
             localObject.setNombreGimnasio(externObject.getNombreGimnasio());
             localObject.setPosition(externObject.getPosition());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;
     }

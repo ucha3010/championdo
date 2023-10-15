@@ -3,9 +3,12 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.Torneo;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperTorneo;
+import com.championdo.torneo.model.TorneoGimnasioModel;
 import com.championdo.torneo.model.TorneoModel;
 import com.championdo.torneo.repository.TorneoRepository;
+import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -25,6 +28,10 @@ public class TorneoServiceImpl implements TorneoService {
     private MapperTorneo mapperTorneo;
     @Autowired
     private InscripcionService inscripcionService;
+    @Autowired
+    private GimnasioRootService gimnasioRootService;
+    @Autowired
+    private TorneoGimnasioService torneoGimnasioService;
 
     @Override
     public List<TorneoModel> findAll(int codigoGimnasio) {
@@ -46,7 +53,12 @@ public class TorneoServiceImpl implements TorneoService {
 
     @Override
     public void add(TorneoModel torneoModel) {
-        torneoRepository.save(mapperTorneo.model2Entity(torneoModel));
+        torneoModel = mapperTorneo.entity2Model(torneoRepository.save(mapperTorneo.model2Entity(torneoModel)));
+        TorneoGimnasioModel torneoGimnasioModel = new TorneoGimnasioModel();
+        torneoGimnasioModel.setIdTorneo(torneoModel.getId());
+        torneoGimnasioModel.setNombreGimnasio(gimnasioRootService.findById(torneoModel.getCodigoGimnasio()).getNombreGimnasio());
+        torneoGimnasioModel.setCodigoGimnasio(torneoModel.getCodigoGimnasio());
+        torneoGimnasioService.add(torneoGimnasioModel);
     }
 
     @Override
@@ -61,6 +73,9 @@ public class TorneoServiceImpl implements TorneoService {
                 throw new RemoveException("101", "Se está intentando eliminar un torneo que tiene inscripciones");
             }
             torneoRepository.deleteById(id);
+            for (TorneoGimnasioModel torneoGimnasioModel: torneoGimnasioService.findAll(id)) {
+                torneoGimnasioService.delete(torneoGimnasioModel);
+            }
         } catch (IllegalArgumentException e) {
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
             throw new RemoveException("100", "Error al borrar el torneo");

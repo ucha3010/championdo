@@ -22,7 +22,7 @@ public class TorneoGimnasio {
     private int idTorneo;
     @Column(name = "nombreGimnasio", length = 100)
     private String nombreGimnasio;
-    @Column(name = "position")
     private int position;
+    private int codigoGimnasio;
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Repository("torneoGimnasioRepository")
 public interface TorneoGimnasioRepository extends JpaRepository<TorneoGimnasio, Integer> {
     
-    List<TorneoGimnasio> findByIdTorneoOrderByPositionDesc(int idTorneo);
+    List<TorneoGimnasio> findByIdTorneoOrderByPositionAsc(int idTorneo);
 
     TorneoGimnasio findTopByIdTorneoOrderByPositionDesc(int idTorneo);
 

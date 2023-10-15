@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <title>Gimnasio de torneo</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
+
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function()
+    {
+        $("#sortable").sortable(
+        {
+
+            start: function(e, ui) {
+                // creates a temporary attribute on the element with the old index
+                $(this).attr('data-previndex', ui.item.index());
+                //console.log("oldIndex: " + $(this).attr('data-previndex'));
+            },
+            update: function(e, ui) {
+                // gets the new and old index then removes the temporary attribute
+                var newIndex = ui.item.index();
+                //console.log("newIndex: " + newIndex);
+                var oldIndex = $(this).attr('data-previndex');
+                var idTorneo = $("#idTorneo").val();
+                var relativeUrl = "adminTorneoGimnasio/torneoGimnasio/" + idTorneo + "/" + oldIndex + "/" + newIndex;
+                var domain = getDomain(location.href);
+                $(this).removeAttr('data-previndex');
+                //console.log(location.href + " - " + domain + relativeUrl);
+                location.href = domain + relativeUrl;
+            }
+        });
+    }
+    );
+
+		function validar(){
+			var campo = ['nombreGimnasio'];
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+				if(nombreRol.value==''){
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+			return validado;
+		}
+
+		function restablecer(){
+			var campos = document.getElementsByClassName("form-control");
+			for (var i = 0; i < campos.length; i++) {
+				campos[i].style.borderColor="#ced4da";
+			}
+		}
+
+		function confirmDelete(){
+            var torneoGimnasioElegido = document.getElementById('idTorneoGimnasio').selectedOptions[0];
+			if(confirm("¿Seguro que desea eliminar " + torneoGimnasioElegido.text + "?")){
+                var relativeUrl = "adminTorneoGimnasio/torneoGimnasio/remove/" + torneoGimnasioElegido.value;
+                var domain = getDomain(location.href);
+                location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
+    </script>
+
+</head>
+<body>
+    <section>
+        <div th:if="${removeProblem != null}" class="alert alert-danger" role="alert"><span th:text="${removeProblem}"></span></div>
+    </section>
+    <div class="container">
+        <h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
+
+        <nav class="navbar navbar-default" role="navigation">
+            <form th:action="@{/logout}" method="POST">
+                <button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+            </form>
+        </nav>
+
+        <section>
+            <div class="row">
+                <div class="col-xs-2 mb-1">
+                </div>
+
+                <div class="col-xs-8 mb-10 colorGreen">
+                    <h1>Gimnasios de <span th:text="${torneo.nombre}"></span></h1>
+                </div>
+
+                <div class="col-xs-2 mb-1">
+                    <a class="btn btn-info pull-right" href="#" th:href="@{/adminTorneo/torneo/__${torneo.id}__}">Volver</a>
+                </div>
+            </div>
+        </section>
+
+        <section  sec:authorize="hasRole('ROLE_ADMIN')">
+            <form action="#" th:action="@{/adminTorneoGimnasio/addTorneoGimnasio}" th:object="${torneoGimnasioModel}" method="post" onsubmit="return validar()">
+
+            <input type="hidden" name="idTorneo" id="idTorneo" th:value="${torneo.id}"/>
+                <div class="row mb-1">
+                  <div class="col-xs-3 col-md-1">
+                      <label for="nombreGimnasio">Nombre del gimnasio:</label>
+                  </div>
+                  <div class="col-xs-9 col-md-2">
+                      <input type="text" th:field="*{nombreGimnasio}" id="nombreGimnasio" class="form-control" placeholder="Nombre del gimnasio" maxlength="100" />
+                  </div>
+                  <div class="col-xs-12 col-md-1">
+                      <button class="btn btn-success" type="submit">Alta</button>
+                  </div>
+                  <div class="col-xs-5 col-md-1">
+                  </div>
+                  <div class="col-xs-5 col-md-3">
+                      <select id="idTorneoGimnasio" class="form-control form-control-lg">
+                          <option th:each="unit : ${torneoGimnasioList}" th:value="${unit.id}" th:text="${unit.nombreGimnasio}"></option>
+                      </select>
+                  </div>
+                  <div class="col-xs-2 col-md-1">
+                      <button class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
+                  </div>
+              </div>
+            </form>
+
+            <div class="row">
+              <div class="col-xs-3 col-md-4">
+              </div>
+              <div class="col-xs-5 col-md-3">
+                  <ul id="sortable" class="s1 list-group mb-1">
+                      <li th:each="unit : ${torneoGimnasioList}" th:value="${unit.id}" th:text="${unit.nombreGimnasio}" class="list-group-item move">
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-xs-4 col-md-5">
+              </div>
+            </div>
+        </section>
+
+        <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary pull-right" href="#" th:href="@{/adminTorneo/torneo/__${torneo.id}__}">Volver</a>
+            </div>
+            <div class="col-xs-8">
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

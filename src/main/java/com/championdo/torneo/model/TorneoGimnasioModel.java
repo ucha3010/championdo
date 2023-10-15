@@ -13,4 +13,5 @@ public class TorneoGimnasioModel {
     private int idTorneo;
     private String nombreGimnasio;
     private int position;
+    private int codigoGimnasio;
 }

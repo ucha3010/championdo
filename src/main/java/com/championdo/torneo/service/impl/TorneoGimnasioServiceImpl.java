@@ -26,7 +26,7 @@ public class TorneoGimnasioServiceImpl implements TorneoGimnasioService {
     @Override
     public List<TorneoGimnasioModel> findAll(int idTorneo) {
         List<TorneoGimnasioModel> torneoGimnasioModelList = new ArrayList<>();
-        for (TorneoGimnasio torneoGimnasio: torneoGimnasioRepository.findByIdTorneoOrderByPositionDesc(idTorneo)) {
+        for (TorneoGimnasio torneoGimnasio: torneoGimnasioRepository.findByIdTorneoOrderByPositionAsc(idTorneo)) {
             torneoGimnasioModelList.add(mapperTorneoGimnasio.entity2Model(torneoGimnasio));
         }
         return torneoGimnasioModelList;
@@ -52,11 +52,10 @@ public class TorneoGimnasioServiceImpl implements TorneoGimnasioService {
     }
 
     @Override
-    public void delete(int id) throws RemoveException {
-        TorneoGimnasio torneoGimnasio = torneoGimnasioRepository.getById(id);
+    public void delete(TorneoGimnasioModel torneoGimnasioModel) throws RemoveException {
         try {
-            torneoGimnasioRepository.deleteById(id);
-            List<TorneoGimnasio> torneoGimnasioList = torneoGimnasioRepository.findByIdTorneoOrderByPositionDesc(torneoGimnasio.getIdTorneo());
+            torneoGimnasioRepository.deleteById(torneoGimnasioModel.getId());
+            List<TorneoGimnasio> torneoGimnasioList = torneoGimnasioRepository.findByIdTorneoOrderByPositionAsc(torneoGimnasioModel.getIdTorneo());
             for (int i = 0; i < torneoGimnasioList.size(); i++) {
                 if (torneoGimnasioList.get(i).getPosition() != i) {
                     torneoGimnasioList.get(i).setPosition(i);
@@ -67,7 +66,7 @@ public class TorneoGimnasioServiceImpl implements TorneoGimnasioService {
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
             throw new RemoveException("100", "Error al borrar el gimnasio");
         }
-        LoggerMapper.methodOut(Level.INFO, "delete", id, getClass());
+        LoggerMapper.methodOut(Level.INFO, "delete", torneoGimnasioModel.getId(), getClass());
     }
 
     @Override
