@@ -15,4 +15,6 @@ public interface CinturonRepository extends JpaRepository<Cinturon, Integer> {
     Cinturon findTopByCodigoGimnasioOrderByPositionDesc(int codigoGimnasio);
 
     List<Cinturon> findByCodigoGimnasio(int codigoGimnasio);
+
+    int findPositionById(int id);
 }

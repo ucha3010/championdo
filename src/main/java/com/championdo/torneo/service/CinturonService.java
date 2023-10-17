@@ -28,4 +28,6 @@ public interface CinturonService {
     void deleteFromRoot (int idGimnasioRootModel);
 
     void addFromRoot(GimnasioRootModel customer);
+
+    int findPositionById(int id);
 }

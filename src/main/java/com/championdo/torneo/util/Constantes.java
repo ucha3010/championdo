@@ -6,13 +6,30 @@ public class Constantes {
 	public static final String LOGIN = "loginTorneo";
 
 	// posibles roles
-	public static final String ROLES = "ROLE_ROOT,ROLE_ADMIN,ROLE_USER";
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 	public static final String ROLE_ROOT = "ROLE_ROOT";
 
-	// categorías
+	// poomsaes
 	public static final String INCLUSIVO = "INCLUSIVO";
+	public static final String KICHO = "KICHO";
+	public static final String POOMSAE1 = "1º POOMSAE";
+	public static final String POOMSAE2 = "2º POOMSAE";
+	public static final String POOMSAE3 = "3º POOMSAE";
+	public static final String POOMSAE4 = "4º POOMSAE";
+	public static final String POOMSAE5 = "5º POOMSAE";
+	public static final String POOMSAE6 = "6º POOMSAE";
+	public static final String POOMSAE7 = "7º POOMSAE";
+	public static final String POOMSAE8 = "8º POOMSAE";
+	public static final String KORYO = "KORYO";
+	public static final String KUMGANG = "KUMGANG";
+	public static final String TAEBEK = "TAEBEK";
+	public static final String PYONGWON = "PYONGWON";
+	public static final String SYPCCHIN = "SYPCCHIN";
+	public static final String CHITAE = "CHITAE";
+	public static final String CHUNGKWON = "CHUNGKWON";
+	public static final String JANSU = "JANSU";
+	public static final String ILIO = "ILIO";
 
 	// colores cinturón
 	public static final String BLANCO = "Blanco";

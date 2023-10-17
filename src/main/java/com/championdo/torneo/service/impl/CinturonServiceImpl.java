@@ -134,23 +134,43 @@ public class CinturonServiceImpl implements CinturonService {
     public void addFromRoot(GimnasioRootModel customer) {
         List<Cinturon> cinturonList = new ArrayList<>();
         cinturonList.add(new Cinturon(Constantes.BLANCO, 0, customer.getId()));
-        cinturonList.add(new Cinturon("Amarillo", 1, customer.getId()));
-        cinturonList.add(new Cinturon("Naranja", 2, customer.getId()));
-        cinturonList.add(new Cinturon("Verde", 3, customer.getId()));
-        cinturonList.add(new Cinturon("Azul", 4, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo", 5, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 1º DAN", 6, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 2º DAN", 7, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 3º DAN", 8, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 4º DAN", 9, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 5º DAN", 10, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 6º DAN", 11, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 7º DAN", 12, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 8º DAN", 13, customer.getId()));
+        cinturonList.add(new Cinturon("Blanco Amarillo", 1, customer.getId()));
+        cinturonList.add(new Cinturon("Amarillo", 2, customer.getId()));
+        cinturonList.add(new Cinturon("Amarillo Naranja", 3, customer.getId()));
+        cinturonList.add(new Cinturon("Naranja", 4, customer.getId()));
+        cinturonList.add(new Cinturon("Naranja Verde", 5, customer.getId()));
+        cinturonList.add(new Cinturon("Verde", 6, customer.getId()));
+        cinturonList.add(new Cinturon("Verde Azul", 7, customer.getId()));
+        cinturonList.add(new Cinturon("Azul", 8, customer.getId()));
+        cinturonList.add(new Cinturon("Azul Rojo", 9, customer.getId()));
+        cinturonList.add(new Cinturon("Azul Marrón", 10, customer.getId()));
+        cinturonList.add(new Cinturon("Marrón", 11, customer.getId()));
+        cinturonList.add(new Cinturon("Marrón Rojo", 12, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo", 13, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo Negro", 14, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo Negro 1º PUM", 15, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo Negro 2º PUM", 16, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo Negro 3º PUM", 17, customer.getId()));
+        cinturonList.add(new Cinturon("Rojo Negro 4º PUM", 18, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 1º DAN", 19, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 2º DAN", 20, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 3º DAN", 21, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 4º DAN", 22, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 5º DAN", 23, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 6º DAN", 24, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 7º DAN", 25, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 8º DAN", 26, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 9º DAN", 27, customer.getId()));
+        cinturonList.add(new Cinturon("Negro 10º DAN", 28, customer.getId()));
         for(Cinturon cinturon: cinturonList) {
             cinturonRepository.save(cinturon);
         }
 
+    }
+
+    @Override
+    public int findPositionById(int id) {
+        return cinturonRepository.findPositionById(id);
     }
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {

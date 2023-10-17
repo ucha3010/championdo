@@ -90,6 +90,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaModel calcularCategoria(UserModel usuarioInscripto) {
+        //TODO DAMIAN este método lo tengo que revisar
         Categoria categoria;
         if(usuarioInscripto.isInclusivo()) {
             categoria = categoriaRepository.findByCodigoGimnasioAndNombre(usuarioInscripto.getCodigoGimnasio(), Constantes.INCLUSIVO);
@@ -150,15 +151,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public void addFromRoot(GimnasioRootModel customer) {
-        Categoria categoria = new Categoria();
-        categoria.setEdadInicio(0);
-        categoria.setEdadFin(0);
-        categoria.setPositionCinturonInicio(0);
-        categoria.setPositionCinturonFin(cinturonService.findMaxPosition(customer.getId()));
-        categoria.setInclusivo(Boolean.TRUE);
-        categoria.setIdPoomsae(poomsaeService.findByCodigoGimnasioAndNombre(customer.getId(), Constantes.INCLUSIVO).getId());
-        categoria.setNombre(Constantes.INCLUSIVO);
-        categoria.setCodigoGimnasio(customer.getId());
+        Categoria categoria = new Categoria(0,0,0,Constantes.INCLUSIVO,
+                0,cinturonService.findMaxPosition(customer.getId()),
+                poomsaeService.findByCodigoGimnasioAndNombre(customer.getId(), Constantes.INCLUSIVO).getId(),
+                Boolean.TRUE,Boolean.FALSE,0,customer.getId());
         categoriaRepository.save(categoria);
     }
 

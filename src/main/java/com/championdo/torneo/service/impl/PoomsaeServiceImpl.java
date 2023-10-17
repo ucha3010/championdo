@@ -132,17 +132,25 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     @Override
     public void addFromRoot(GimnasioRootModel customer) {
         List<Poomsae> poomsaeList = new ArrayList<>();
-        poomsaeList.add(new Poomsae("1º KICHO",0,customer.getId()));
-        poomsaeList.add(new Poomsae("1º POOMSAE",1,customer.getId()));
-        poomsaeList.add(new Poomsae("2º POOMSAE",2,customer.getId()));
-        poomsaeList.add(new Poomsae("3º POOMSAE",3,customer.getId()));
-        poomsaeList.add(new Poomsae("4º POOMSAE",4,customer.getId()));
-        poomsaeList.add(new Poomsae("5º POOMSAE",5,customer.getId()));
-        poomsaeList.add(new Poomsae("6º POOMSAE",6,customer.getId()));
-        poomsaeList.add(new Poomsae("7º POOMSAE",7,customer.getId()));
-        poomsaeList.add(new Poomsae("8º POOMSAE",8,customer.getId()));
-        poomsaeList.add(new Poomsae("KORYO",9,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.INCLUSIVO,10,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.KICHO,0,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE1,1,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE2,2,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE3,3,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE4,4,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE5,5,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE6,6,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE7,7,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE8,8,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.KORYO,9,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.KUMGANG,10,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.TAEBEK,11,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.PYONGWON,12,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.SYPCCHIN,13,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.CHITAE,14,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.CHUNGKWON,15,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.JANSU,16,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.ILIO,17,customer.getId()));
+        poomsaeList.add(new Poomsae(Constantes.INCLUSIVO,18,customer.getId()));
         for (Poomsae poomsae: poomsaeList) {
             poomsaeRepository.save(poomsae);
         }

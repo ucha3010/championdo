@@ -1,9 +1,6 @@
 package com.championdo.torneo.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Categoria {
 
@@ -19,33 +17,17 @@ public class Categoria {
     @GeneratedValue
     @Column(name = "id")
     private int id;
-
-    @Column(name = "edadInicio")
     private int edadInicio;
-
-    @Column(name = "edadFin")
     private int edadFin;
-
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
-
-    @Column(name = "positionCinturonInicio")
     private int positionCinturonInicio;
-
-    @Column(name = "positionCinturonFin")
     private int positionCinturonFin;
-
-    @Column(name = "idPoomsae")
     private int idPoomsae;
-
     @Column(name = "inclusivo", nullable = false)
     private boolean inclusivo;
-
     @Column(name = "infantil", nullable = false)
     private boolean infantil;
-
-    @Column(name = "position")
     private int position;
-
     private int codigoGimnasio;
 }
