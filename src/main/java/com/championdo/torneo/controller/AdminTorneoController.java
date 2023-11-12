@@ -71,10 +71,12 @@ public class AdminTorneoController {
         torneoModel.setCodigoGimnasio(user.getCodigoGimnasio());
         if (torneoModel.getId() == 0) {
             torneoService.add(torneoModel);
+            return torneoList(modelAndView);
         } else {
             torneoService.update(torneoModel);
+            modelAndView.addObject("updateOK", "Actualización realizada con éxito");
+            return getTorneo(modelAndView, torneoModel.getId());
         }
-        return torneoList(modelAndView);
     }
 
     @GetMapping("/torneo/remove/{id}")

@@ -41,13 +41,8 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public GimnasioModel findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre) {
-        List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasioAndNombre(codigoGimnasio, nombre);
-        GimnasioModel gimnasioModel = new GimnasioModel();
-        if (gimnasioList != null && !gimnasioList.isEmpty()) {
-            gimnasioModel = mapperGimnasio.entity2Model(gimnasioList.get(0));
-        }
-        return gimnasioModel;
+    public GimnasioModel findByCodigoGimnasio(int codigoGimnasio) {
+        return mapperGimnasio.entity2Model(gimnasioRepository.findByCodigoGimnasio(codigoGimnasio));
     }
 
     @Override
@@ -56,8 +51,8 @@ public class GimnasioServiceImpl implements GimnasioService {
     }
 
     @Override
-    public void update(GimnasioModel gimnasioModel) {
-        gimnasioRepository.save(mapperGimnasio.model2Entity(gimnasioModel));
+    public GimnasioModel update(GimnasioModel gimnasioModel) {
+        return add(gimnasioModel);
     }
 
     @Override
@@ -120,8 +115,7 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Override
     public void deleteFromRoot (int idGimnasioRootModel) {
-        List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasio(idGimnasioRootModel);
-        gimnasioRepository.deleteAll(gimnasioList);
+        gimnasioRepository.delete(gimnasioRepository.findByCodigoGimnasio(idGimnasioRootModel));
     }
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {

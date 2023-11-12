@@ -59,8 +59,6 @@
 		<div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
 	</section>
 
-
-
 	<div class="container">
 		<h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
 
@@ -120,8 +118,53 @@
 							<option th:each="lsn : ${listaSiNo}" th:value="${lsn.valor}" th:text="${lsn.clave}" th:selected="${lsn.valor == unitInscripciones.valor}"></option>
 						</select>
 					</div>
+
+					<div class="col-xs-2">
+					</div>
 				</form>
 			</div>
+		</section>
+
+
+		<section  sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorAquamarine">
+			<form action="#" th:action="@{/adminGimnasio/updateGimnasio}" th:object="${gimnasioModel}" method="post">
+
+				<input type="hidden" name="id" th:value="${gimnasioModel.id}"/>
+
+				<div class="row">
+					<div class="col-xs-4">
+						<label for="nombreGimnasio">Nombre gimnasio</label>
+					</div>
+					<div class="col-xs-6">
+						<input type="text" th:field="*{nombre}" id="nombreGimnasio" class="form-control" placeholder="Nombre gimnasio"/>
+					</div>
+
+					<div class="col-xs-2">
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-10">
+					</div>
+
+					<div class="col-xs-2">
+						<button class="btn btn-primary" type="submit">Actualizar</button>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-xs-4">
+						<label for="direccionGimnasio">Dirección gimnasio</label>
+					</div>
+					<div class="col-xs-6">
+						<input type="text" th:field="*{direccion}" id="direccionGimnasio" class="form-control" placeholder="Dirección gimnasio"/>
+					</div>
+
+					<div class="col-xs-2">
+					</div>
+				</div>
+
+			</form>
 		</section>
 
 		<div class="row">

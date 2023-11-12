@@ -67,6 +67,10 @@ a:link, a:visited,  a:hover, a:active
   font-weight: bold;
 }
 
+.backgroundColorAquamarine {
+  background-color: #7fffd4;
+}
+
 .btn-primary .badge {
   background-color: red;
   color: white;

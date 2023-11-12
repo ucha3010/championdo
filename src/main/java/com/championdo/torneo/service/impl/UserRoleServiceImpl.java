@@ -6,12 +6,14 @@ import com.championdo.torneo.model.UserRoleModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
 import com.championdo.torneo.service.UserRoleService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -111,6 +113,11 @@ public class UserRoleServiceImpl implements UserRoleService {
             }
         }
         return userRoleListExit;
+    }
+
+    @Override
+    public List<UserRole> adminAvailableRoles() {
+         return Arrays.asList(new UserRole(null, Constantes.ROLE_USER), new UserRole(null, Constantes.ROLE_ADMIN));
     }
 
     private User findUserByUsername(String username) {

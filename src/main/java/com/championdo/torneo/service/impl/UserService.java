@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
 		userModel.setUsername(userModel.getUsername().toUpperCase());
 		userModel.setPassword(encodePassword(userModel.getPassword()));
 		GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(userModel.getCodigoGimnasio());
-		userModel.setGimnasio(gimnasioService.findByCodigoGimnasioAndNombre(gimnasioRootModel.getId(), gimnasioRootModel.getNombreGimnasio()));
+		userModel.setGimnasio(gimnasioService.findByCodigoGimnasio(gimnasioRootModel.getId()));
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, rol));
 		return user;

@@ -12,11 +12,11 @@ public interface GimnasioService {
 
     GimnasioModel findById(int id);
 
-    GimnasioModel findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre);
+    GimnasioModel findByCodigoGimnasio(int codigoGimnasio);
 
     GimnasioModel add(GimnasioModel gimnasioModel);
 
-    void update(GimnasioModel gimnasioModel);
+    GimnasioModel update(GimnasioModel gimnasioModel);
 
     void delete(int idGimnasio);
 

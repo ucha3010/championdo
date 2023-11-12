@@ -136,7 +136,7 @@ public class GimnasioRootController {
     public ModelAndView deleteCustomer(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "deleteCustomer", "id: " + id, this.getClass());
         userService.cargarUsuarioCompleto(modelAndView);
-        cargasInicialesClienteService.eliminacionesCatPoomCint(id); // TODO DAMIAN probar agregar y eliminar clientes
+        cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
         userService.deleteFromRoot(id);
         gimnasioService.deleteFromRoot(id);

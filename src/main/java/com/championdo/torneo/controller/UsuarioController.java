@@ -51,7 +51,6 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("formularioUsuario");
 		try {
 			userService.addOrUpdate(usuario);
 			modelAndView.addObject("actualizacionCorrecta", "actualizacionCorrecta");
@@ -60,13 +59,13 @@ public class UsuarioController {
 			LoggerMapper.log(Level.ERROR, "actualizarUsuario", e.getMessage(), getClass());
 		}
 		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
-		return modelAndView;
+		return formularioUsuario(modelAndView);
 	}
 
 	@GetMapping("/formularioCambioClave")
 	@PreAuthorize("isAuthenticated()")
-	public ModelAndView formularioCambioClave() {
-		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
+	public ModelAndView formularioCambioClave(ModelAndView modelAndView) {
+		modelAndView.setViewName("formularioCambioClave");
 		com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
 		ClaveUsuarioModel claveUsuarioModel = new ClaveUsuarioModel();
 		claveUsuarioModel.setUsername(usuario.getUsername());
@@ -78,7 +77,7 @@ public class UsuarioController {
 	@PostMapping("/actualizarClaveUsuario")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarClaveUsuario(@ModelAttribute("claveUsuarioModel") ClaveUsuarioModel claveUsuarioModel ) {
-		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
+		ModelAndView modelAndView = new ModelAndView();
 		UserModel usuario = userService.findModelByUsername(claveUsuarioModel.getUsername());
 		if (userService.comparePassword(claveUsuarioModel.getAntiguaClave(), usuario.getPassword())) {
 			usuario.setPassword(userService.encodePassword(claveUsuarioModel.getNuevaClave()));
@@ -92,7 +91,7 @@ public class UsuarioController {
 		modelAndView.addObject("usuario", usuario);
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
 		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
-		return modelAndView;
+		return formularioCambioClave(modelAndView);
 	}
 
 	/**
@@ -140,7 +139,7 @@ public class UsuarioController {
 		} else {
 			modelAndView.addObject("userList", userService.findAll(usuario.getCodigoGimnasio()));
 		}
-		modelAndView.addObject("userRoleList", userRoleService.findDistinctByRole());
+		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
 		LoggerMapper.log(Level.INFO, "userList", modelAndView, this.getClass());
 		return modelAndView;
 	}

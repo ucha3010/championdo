@@ -71,6 +71,9 @@
 	</script>
 </head>
 <body>
+	<section>
+		<div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
+	</section>
 
 	<div class="container">
 

@@ -26,4 +26,6 @@ public interface UserRoleService {
 
     List<UserRole> findDistinctByRole();
 
+    List<UserRole> adminAvailableRoles();
+
 }
