@@ -1,9 +1,9 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Categoria;
+import com.championdo.torneo.entity.Cinturon;
 import com.championdo.torneo.mapper.MapperCategoria;
 import com.championdo.torneo.model.CategoriaModel;
-import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.service.CategoriaService;
@@ -90,7 +90,6 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaModel calcularCategoria(UserModel usuarioInscripto) {
-        //TODO DAMIAN este método lo tengo que revisar
         Categoria categoria;
         if(usuarioInscripto.isInclusivo()) {
             categoria = categoriaRepository.findByCodigoGimnasioAndNombre(usuarioInscripto.getCodigoGimnasio(), Constantes.INCLUSIVO);
@@ -101,14 +100,17 @@ public class CategoriaServiceImpl implements CategoriaService {
             calendar.setTime(new Date());
             int anioActual = calendar.get(Calendar.YEAR);
             int edad = anioActual - anioNacimiento;
+            int positionCinturonUser = usuarioInscripto.getCinturon().getPosition();
             if ((edad <= 6) ||
-                    (edad <= 8 &&
-                            (!StringUtils.isNullOrEmpty(usuarioInscripto.getMenorEntreCategorias())
+                    (edad <= 8 && (!StringUtils.isNullOrEmpty(usuarioInscripto.getMenorEntreCategorias())
                              && usuarioInscripto.getMenorEntreCategorias().equalsIgnoreCase("Kicho")))) {
-                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPreinfantilTrue(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+            } else if (edad <= 15) {
+                List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilTrue(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+                categoria = findCategoria(categoriaList, positionCinturonUser);
             } else {
-                int positionCinturon = usuarioInscripto.getCinturon().getPosition();
-                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPositionCinturonInicioLessThanEqualAndPositionCinturonFinGreaterThanEqualAndInfantil(usuarioInscripto.getCodigoGimnasio(), edad, edad, positionCinturon, positionCinturon, usuarioInscripto.isMenor());
+                List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndAdultoTrue(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+                categoria = findCategoria(categoriaList, positionCinturonUser);
             }
         }
         return mapperCategoria.entity2Model(categoria);
@@ -141,26 +143,21 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
     }
 
-    @Override
-    public void deleteFromRoot (int idGimnasioRootModel) {
-        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasio(idGimnasioRootModel);
-        for (Categoria categoria: categoriaList) {
-            delete(categoria.getId());
-        }
-    }
-
-    @Override
-    public void addFromRoot(GimnasioRootModel customer) {
-        Categoria categoria = new Categoria(0,0,0,Constantes.INCLUSIVO,
-                0,cinturonService.findMaxPosition(customer.getId()),
-                poomsaeService.findByCodigoGimnasioAndNombre(customer.getId(), Constantes.INCLUSIVO).getId(),
-                Boolean.TRUE,Boolean.FALSE,0,customer.getId());
-        categoriaRepository.save(categoria);
-    }
-
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
         Categoria categoria = categoriaRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
         categoria.setPosition(position + (moveUp ? 1 : -1));
         categoriaRepository.save(categoria);
+    }
+
+    private Categoria findCategoria(List<Categoria> categoriaList, int positionCinturonUser) {
+        for (Categoria categoria : categoriaList) {
+            Cinturon cinturonInicio = cinturonService.findByIdEntity(categoria.getIdCinturonInicio());
+            Cinturon cinturonFin = cinturonService.findByIdEntity(categoria.getIdCinturonFin());
+            if (cinturonInicio.getPosition() <= positionCinturonUser && positionCinturonUser <= cinturonFin.getPosition()) {
+                return categoria;
+            }
+
+        }
+        return null;
     }
 }

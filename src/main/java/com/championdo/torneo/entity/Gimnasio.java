@@ -16,19 +16,14 @@ import javax.persistence.*;
 public class Gimnasio {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @SequenceGenerator(name = "gimnasioGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gimnasioGenerator")
     private int id;
-
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-
     @Column(name = "direccion", length = 200)
     private String direccion;
-
-    @Column(name = "position")
     private int position;
-
     private int codigoGimnasio;
 
 }

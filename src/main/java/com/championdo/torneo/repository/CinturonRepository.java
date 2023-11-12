@@ -16,5 +16,5 @@ public interface CinturonRepository extends JpaRepository<Cinturon, Integer> {
 
     List<Cinturon> findByCodigoGimnasio(int codigoGimnasio);
 
-    int findPositionById(int id);
+    int findPositionByCodigoGimnasioAndId(int codigoGimnasio, int id);
 }

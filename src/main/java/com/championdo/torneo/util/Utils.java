@@ -61,7 +61,7 @@ public class Utils {
         Date ahora = new Date();
         Calendar caducidad = Calendar.getInstance();
         caducidad.setTime(ahora);
-        caducidad.add(Calendar.MINUTE, 15);
+        caducidad.add(Calendar.MINUTE, minutos);
         return caducidad.getTime();
     }
 

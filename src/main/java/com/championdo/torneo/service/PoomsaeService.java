@@ -2,7 +2,6 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.exception.RemoveException;
-import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.PoomsaeModel;
 
 import java.util.List;
@@ -24,8 +23,4 @@ public interface PoomsaeService {
     void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 
     int findMaxPosition(int codigoGimnasio);
-
-    void deleteFromRoot (int idGimnasioRootModel);
-
-    void addFromRoot(GimnasioRootModel customer);
 }

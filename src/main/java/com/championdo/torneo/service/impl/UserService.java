@@ -146,6 +146,13 @@ public class UserService implements UserDetailsService {
 		userRoleRepository.save(new UserRole(user, Constantes.ROLE_ADMIN));
 	}
 
+	public void deleteFromRoot (int idGimnasioRootModel) {
+		List<com.championdo.torneo.entity.User> userList = userRepository.findByCodigoGimnasioOrderByLastnameDesc(idGimnasioRootModel);
+		for (com.championdo.torneo.entity.User user : userList) {
+			delete(user.getUsername());
+		}
+	}
+
 	public com.championdo.torneo.entity.User getLoggedUser() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return findByUsername(user.getUsername());

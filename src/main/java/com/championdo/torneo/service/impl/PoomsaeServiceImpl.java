@@ -4,12 +4,10 @@ import com.championdo.torneo.entity.Categoria;
 import com.championdo.torneo.entity.Poomsae;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperPoomsae;
-import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.PoomsaeModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.PoomsaeRepository;
 import com.championdo.torneo.service.PoomsaeService;
-import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,46 +111,6 @@ public class PoomsaeServiceImpl implements PoomsaeService {
             return poomsae.getPosition();
         } else {
             return -1;
-        }
-    }
-
-    @Override
-    public void deleteFromRoot(int idGimnasioRootModel) {
-        List<Poomsae> poomsaeList = poomsaeRepository.findByCodigoGimnasio(idGimnasioRootModel);
-        for (Poomsae poomsae: poomsaeList) {
-            try {
-                delete(poomsae.getId());
-            } catch (RemoveException e) {
-                LoggerMapper.log(Level.ERROR, "deleteFromRoot", e.getMessage(), getClass());
-            }
-        }
-
-    }
-
-    @Override
-    public void addFromRoot(GimnasioRootModel customer) {
-        List<Poomsae> poomsaeList = new ArrayList<>();
-        poomsaeList.add(new Poomsae(Constantes.KICHO,0,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE1,1,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE2,2,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE3,3,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE4,4,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE5,5,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE6,6,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE7,7,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE8,8,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.KORYO,9,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.KUMGANG,10,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.TAEBEK,11,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.PYONGWON,12,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.SYPCCHIN,13,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.CHITAE,14,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.CHUNGKWON,15,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.JANSU,16,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.ILIO,17,customer.getId()));
-        poomsaeList.add(new Poomsae(Constantes.INCLUSIVO,18,customer.getId()));
-        for (Poomsae poomsae: poomsaeList) {
-            poomsaeRepository.save(poomsae);
         }
     }
 

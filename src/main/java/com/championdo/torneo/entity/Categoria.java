@@ -14,8 +14,8 @@ import javax.persistence.*;
 public class Categoria {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @SequenceGenerator(name = "categoriaGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categoriaGenerator")
     private int id;
     private int edadInicio;
     private int edadFin;
@@ -23,11 +23,13 @@ public class Categoria {
     private String nombre;
     private int positionCinturonInicio;
     private int positionCinturonFin;
+    private int idCinturonInicio;
+    private int idCinturonFin;
     private int idPoomsae;
-    @Column(name = "inclusivo", nullable = false)
     private boolean inclusivo;
-    @Column(name = "infantil", nullable = false)
+    private boolean preinfantil;
     private boolean infantil;
+    private boolean adulto;
     private int position;
     private int codigoGimnasio;
 }

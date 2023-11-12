@@ -16,16 +16,12 @@ import javax.persistence.*;
 public class Cinturon {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @SequenceGenerator(name = "cinturonGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cinturonGenerator")
     private int id;
-
     @Column(name = "color", nullable = false, length = 40)
     private String color;
-
-    @Column(name = "position")
     private int position;
-
     private int codigoGimnasio;
 
     public Cinturon(String color, int position, int codigoGimnasio) {

@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.Cinturon;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CategoriaModel;
 import com.championdo.torneo.service.CategoriaService;
@@ -55,6 +56,8 @@ public class AdminCategoriaController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         categoriaModel.setCodigoGimnasio(user.getCodigoGimnasio());
         categoriaModel.setPosition(categoriaService.findMaxPosition(user.getCodigoGimnasio()) + 1);
+        categoriaModel.setCinturonInicio(cinturonService.findById(categoriaModel.getCinturonInicio().getId()));
+        categoriaModel.setCinturonFin(cinturonService.findById(categoriaModel.getCinturonFin().getId()));
         categoriaService.add(categoriaModel);
         return categoriaList(modelAndView);
     }

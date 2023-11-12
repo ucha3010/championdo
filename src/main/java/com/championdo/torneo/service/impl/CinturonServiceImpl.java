@@ -2,14 +2,13 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Categoria;
 import com.championdo.torneo.entity.Cinturon;
+import com.championdo.torneo.exception.PositionException;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperCinturon;
 import com.championdo.torneo.model.CinturonModel;
-import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.CinturonRepository;
 import com.championdo.torneo.service.CinturonService;
-import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +49,8 @@ public class CinturonServiceImpl implements CinturonService {
     }
 
     @Override
-    public CinturonModel findByCodigoGimnasioAndPosition(int codigoGimnasio, int position) {
-        try {
-            return mapperCinturon.entity2Model(cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position));
-        } catch (EntityNotFoundException e) {
-            return new CinturonModel();
-        }
+    public Cinturon findByIdEntity(int id) {
+        return cinturonRepository.getById(id);
     }
 
     @Override
@@ -92,6 +87,34 @@ public class CinturonServiceImpl implements CinturonService {
     }
 
     @Override
+    public void verifyDragOfPositionAvailable(int codigoGimnasio, int posIni, int posFin) throws PositionException {
+        List<Categoria> categoriaList;
+        int posMenor;
+        int posMayor;
+        if(posIni < posFin) {
+            posMenor = posIni;
+            posMayor = posFin;
+        } else {
+            posMenor = posFin;
+            posMayor = posIni;
+        }
+        categoriaList = categoriaRepository.findByCodigoGimnasioAndPositionCinturonFinGreaterThanEqualAndPositionCinturonInicioLessThanEqual(codigoGimnasio, posMenor, posMayor);
+        for (Categoria categoria : categoriaList) {
+            int catIni = categoria.getPositionCinturonInicio();
+            int catFin = categoria.getPositionCinturonFin();
+            /*
+            * si el movimiento de posición del cinturón comienza en
+            * una posición fuera del rango de la categoría y termina dentro del mismo
+            * o bien comienza dentro del rango pero termina fuera, está mal
+            */
+            if ((dentro(catIni, catFin, posMenor) && fuera(catIni, catFin, posMayor)) ||
+                    (fuera(catIni, catFin, posMenor) && dentro(catIni, catFin, posMayor))) {
+                throw new PositionException("1003","No se puede cambiar la posición ya que afecta a la categoría ".concat(categoria.getNombre()));
+            }
+        }
+    }
+
+    @Override
     public void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition) {
         Cinturon cinturon = cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, initialPosition);
         if (initialPosition > finalPosition) {
@@ -106,6 +129,7 @@ public class CinturonServiceImpl implements CinturonService {
         }
         cinturon.setPosition(finalPosition);
         cinturonRepository.save(cinturon);
+        shortCategorias(codigoGimnasio, cinturon);
     }
 
     @Override
@@ -118,64 +142,30 @@ public class CinturonServiceImpl implements CinturonService {
         }
     }
 
-    @Override
-    public void deleteFromRoot(int idGimnasioRootModel){
-        List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasio(idGimnasioRootModel);
-        for (Cinturon cinturon: cinturonList) {
-            try {
-                delete(cinturon.getId());
-            } catch (RemoveException e) {
-                LoggerMapper.log(Level.ERROR, "deleteFromRoot", e.getMessage(), getClass());
-            }
-        }
-    }
-
-    @Override
-    public void addFromRoot(GimnasioRootModel customer) {
-        List<Cinturon> cinturonList = new ArrayList<>();
-        cinturonList.add(new Cinturon(Constantes.BLANCO, 0, customer.getId()));
-        cinturonList.add(new Cinturon("Blanco Amarillo", 1, customer.getId()));
-        cinturonList.add(new Cinturon("Amarillo", 2, customer.getId()));
-        cinturonList.add(new Cinturon("Amarillo Naranja", 3, customer.getId()));
-        cinturonList.add(new Cinturon("Naranja", 4, customer.getId()));
-        cinturonList.add(new Cinturon("Naranja Verde", 5, customer.getId()));
-        cinturonList.add(new Cinturon("Verde", 6, customer.getId()));
-        cinturonList.add(new Cinturon("Verde Azul", 7, customer.getId()));
-        cinturonList.add(new Cinturon("Azul", 8, customer.getId()));
-        cinturonList.add(new Cinturon("Azul Rojo", 9, customer.getId()));
-        cinturonList.add(new Cinturon("Azul Marrón", 10, customer.getId()));
-        cinturonList.add(new Cinturon("Marrón", 11, customer.getId()));
-        cinturonList.add(new Cinturon("Marrón Rojo", 12, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo", 13, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo Negro", 14, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo Negro 1º PUM", 15, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo Negro 2º PUM", 16, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo Negro 3º PUM", 17, customer.getId()));
-        cinturonList.add(new Cinturon("Rojo Negro 4º PUM", 18, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 1º DAN", 19, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 2º DAN", 20, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 3º DAN", 21, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 4º DAN", 22, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 5º DAN", 23, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 6º DAN", 24, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 7º DAN", 25, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 8º DAN", 26, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 9º DAN", 27, customer.getId()));
-        cinturonList.add(new Cinturon("Negro 10º DAN", 28, customer.getId()));
-        for(Cinturon cinturon: cinturonList) {
-            cinturonRepository.save(cinturon);
-        }
-
-    }
-
-    @Override
-    public int findPositionById(int id) {
-        return cinturonRepository.findPositionById(id);
-    }
-
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
-        Cinturon cinturonAux = cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
-        cinturonAux.setPosition(position + (moveUp ? 1 : -1));
-        cinturonRepository.save(cinturonAux);
+        Cinturon cinturon = cinturonRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
+        cinturon.setPosition(position + (moveUp ? 1 : -1));
+        cinturonRepository.save(cinturon);
+        shortCategorias(codigoGimnasio, cinturon);
+    }
+
+    private void shortCategorias(int codigoGimnasio, Cinturon cinturon) {
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(codigoGimnasio, cinturon.getId(), cinturon.getId());
+        for (Categoria categoria: categoriaList) {
+            if (categoria.getIdCinturonInicio() == cinturon.getId()) {
+                categoria.setPositionCinturonInicio(cinturon.getPosition());
+            } else if (categoria.getIdCinturonFin() == cinturon.getId()) {
+                categoria.setPositionCinturonFin(cinturon.getPosition());
+            }
+            categoriaRepository.save(categoria);
+        }
+    }
+
+    private boolean dentro(int catIni, int catFin, int pos) {
+        return catIni <= pos && pos <= catFin;
+    }
+
+    private boolean fuera(int catIni, int catFin, int pos) {
+        return pos < catIni || pos > catFin;
     }
 }

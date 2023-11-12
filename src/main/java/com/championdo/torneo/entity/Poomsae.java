@@ -16,16 +16,12 @@ import javax.persistence.*;
 public class Poomsae {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @SequenceGenerator(name = "poomsaeGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "poomsaeGenerator")
     private int id;
-
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
-
-    @Column(name = "position")
     private int position;
-
     private int codigoGimnasio;
 
     public Poomsae (String nombre, int position, int codigoGimnasio) {

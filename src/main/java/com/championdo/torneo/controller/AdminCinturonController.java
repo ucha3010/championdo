@@ -1,6 +1,7 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.exception.PositionException;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.CinturonModel;
 import com.championdo.torneo.service.CinturonService;
@@ -38,7 +39,12 @@ public class AdminCinturonController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragCinturon(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
-        cinturonService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
+        try {
+            cinturonService.verifyDragOfPositionAvailable(user.getCodigoGimnasio(), oldIndex, newIndex);
+            cinturonService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
+        } catch (PositionException pe) {
+            modelAndView.addObject("dragPositionProblem", pe.getMessage());
+        }
         return cinturonList(modelAndView);
     }
 

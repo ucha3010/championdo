@@ -32,7 +32,7 @@ public class AdminUtilController {
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("utilModel", new UtilModel());
-        modelAndView.addObject("utilListCampeonato", utilService.findAllStarsWith("campeonato", user.getCodigoGimnasio()));
+        modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", user.getCodigoGimnasio()));
         modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", user.getCodigoGimnasio()));
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
         LoggerMapper.log(Level.INFO, "utilList", modelAndView, this.getClass());

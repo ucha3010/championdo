@@ -1,9 +1,10 @@
 package com.championdo.torneo.service;
 
 
+import com.championdo.torneo.entity.Cinturon;
+import com.championdo.torneo.exception.PositionException;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.CinturonModel;
-import com.championdo.torneo.model.GimnasioRootModel;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface CinturonService {
 
     CinturonModel findById(int id);
 
-    CinturonModel findByCodigoGimnasioAndPosition(int codigoGimnasio, int position);
+    Cinturon findByIdEntity(int id);
 
     void add(CinturonModel cinturonModel);
 
@@ -21,13 +22,9 @@ public interface CinturonService {
 
     void delete(int idCinturon) throws RemoveException;
 
+    void verifyDragOfPositionAvailable(int codigoGimnasio, int initialPosition, int finalPosition) throws PositionException;
+
     void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 
     int findMaxPosition(int codigoGimnasio);
-
-    void deleteFromRoot (int idGimnasioRootModel);
-
-    void addFromRoot(GimnasioRootModel customer);
-
-    int findPositionById(int id);
 }

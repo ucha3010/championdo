@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
 
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
 
@@ -82,6 +81,7 @@
 </head>
 <body>
     <section>
+        <div th:if="${dragPositionProblem != null}" class="alert alert-danger" role="alert"><span th:text="${dragPositionProblem}"></span></div>
         <div th:if="${removeProblem != null}" class="alert alert-danger" role="alert"><span th:text="${removeProblem}"></span></div>
     </section>
     <div class="container">
@@ -149,12 +149,10 @@
         </section>
 
         <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-10">
             </div>
             <div class="col-xs-2">
-                <a class="btn btn-primary pull-right" href="#" th:href="@{/adminGimnasio/}">Volver</a>
-            </div>
-            <div class="col-xs-8">
+                <a class="btn btn-info pull-right" href="#" th:href="@{/adminGimnasio/}">Volver</a>
             </div>
         </div>
     </div>

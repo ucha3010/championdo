@@ -7,13 +7,11 @@ import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.repository.UtilRepository;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
-import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service()
@@ -29,6 +27,20 @@ public class UtilServiceImpl implements UtilService {
         List<UtilModel> utilModelList = new ArrayList<>();
         for (Util util: utilRepository.findByCodigoGimnasio(codigoGimnasio)) {
             if(util.getClave().startsWith(startWord)) {
+                utilModelList.add(mapperUtil.entity2Model(util));
+            }
+        }
+        return utilModelList;
+    }
+
+    @Override
+    public List<UtilModel> findAllEndWith(String endWord, int codigoGimnasio) {
+        List<UtilModel> utilModelList = new ArrayList<>();
+        for (Util util: utilRepository.findByCodigoGimnasio(codigoGimnasio)) {
+            if(util.getClave().endsWith(endWord)) {
+                if (util.getClave().startsWith("clave")) {
+                    util.setValor("");
+                }
                 utilModelList.add(mapperUtil.entity2Model(util));
             }
         }
@@ -53,7 +65,7 @@ public class UtilServiceImpl implements UtilService {
     public void addFromRoot(GimnasioRootModel customer) {
         List<Util> utilList = new ArrayList<>();
         utilList.add(new Util(Constantes.DIRECCION_CAMPEONATO,"",customer.getId()));
-        utilList.add(new Util(Constantes.FECHA_CAMPEONATO, Utils.date2String(new Date()),customer.getId()));
+        utilList.add(new Util(Constantes.FECHA_CAMPEONATO, "",customer.getId()));
         utilList.add(new Util(Constantes.NOMBRE_CAMPEONATO,"",customer.getId()));
         utilList.add(new Util(Constantes.CLAVE_CORREO,"",customer.getId()));
         utilList.add(new Util(Constantes.CORREO_GIMNASIO, customer.getCorreo(),customer.getId()));
@@ -63,5 +75,11 @@ public class UtilServiceImpl implements UtilService {
         for (Util util: utilList) {
             utilRepository.save(util);
         }
+    }
+
+    @Override
+    public void deleteFromRoot(int idGimnasioRootModel) {
+        List<Util> utilList = utilRepository.findByCodigoGimnasio(idGimnasioRootModel);
+        utilRepository.deleteAll(utilList);
     }
 }

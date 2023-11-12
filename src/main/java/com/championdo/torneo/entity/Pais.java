@@ -16,14 +16,11 @@ import javax.persistence.*;
 public class Pais {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @SequenceGenerator(name = "paisGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paisGenerator")
     private int id;
-
     @Column(name = "nombre", nullable = false, length = 20)
     private String nombre;
-
-    @Column(name = "position")
     private int position;
 
 }

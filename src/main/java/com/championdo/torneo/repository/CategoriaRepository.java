@@ -10,9 +10,11 @@ import java.util.List;
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
     Categoria findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre);
 
-    Categoria findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilFalse(int codigoGimnasio, int edadInicio, int edadFin);
+    Categoria findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPreinfantilTrue(int codigoGimnasio, int edadInicio, int edadFin);
 
-    Categoria findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPositionCinturonInicioLessThanEqualAndPositionCinturonFinGreaterThanEqualAndInfantil(int codigoGimnasio, int edadInicio, int edadFin, int cituronInicio, int cinturonFin, boolean infantil);
+    List<Categoria> findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilTrue(int codigoGimnasio, int edadInicio, int edadFin);
+
+    List<Categoria> findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndAdultoTrue(int codigoGimnasio, int edadInicio, int edadFin);
 
     List<Categoria> findByCodigoGimnasioOrderByPositionAsc(int codigoGimnasio);
 
@@ -25,5 +27,9 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
     List<Categoria> findByCodigoGimnasioAndPositionCinturonInicioOrPositionCinturonFin(int codigoGimnasio, int cituronInicio, int cinturonFin);
 
     List<Categoria> findByCodigoGimnasioAndIdPoomsae(int codigoGimnasio, int idPoomsae);
+
+    List<Categoria> findByCodigoGimnasioAndPositionCinturonFinGreaterThanEqualAndPositionCinturonInicioLessThanEqual(int codigoGimnasio, int cinturonPosMenor, int cituronPosMayor);
+
+    List<Categoria> findByCodigoGimnasioAndIdCinturonInicioOrIdCinturonFin(int codigoGimnasio, int idCituronInicio, int idCinturonFin);
 
 }

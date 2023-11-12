@@ -33,7 +33,7 @@
 		</section>
 
 
-		<section class="text-center">
+		<section sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" class="text-center">
 			<a href="#" th:href="@{/gimnasio/tipoInscripcion}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Taekwondo <span th:if="${inscripcionTaekwondo != null}" class="badge" th:text="${inscripcionTaekwondo}"></span></button><br>
 			</a>
@@ -45,9 +45,27 @@
 			<a href="#" th:href="@{/principal/principalTorneo}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción Torneo <span th:if="${inscripcionTorneo != null}" class="badge" th:text="${inscripcionTorneo}"></span></button><br>
 			</a>
+		</section>
 
-			<a sec:authorize="hasRole('ROLE_ADMIN')" href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
+		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+
+			<a href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
 				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
+			</a>
+		</section>
+
+		<section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+			<a href="#" th:href="@{/gimnasioRoot/customers}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Listado de clientes</button>
+			</a>
+		</section>
+
+		<section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+			<a href="#" th:href="@{/adminCalidad/calidadList}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Calidad</button>
+			</a>
+			<a href="#" th:href="@{/adminPais/paisList}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">País</button>
 			</a>
 		</section>
 		

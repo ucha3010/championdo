@@ -6,6 +6,7 @@ import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.service.SeguridadService;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -34,31 +35,11 @@ class TorneoApplicationTests {
 	@Autowired
 	private EmailService emailService;
 	@Autowired
+	private UserService userService;
+	@Autowired
 	private SeguridadService seguridadService;
 
 	private PdfModel pdfModel;
-
-	private void cargarPDF() {
-		pdfModel = new PdfModel();
-		pdfModel.setNombre("Nombre Autorizador Apellido1dor Apellido2dor");
-		pdfModel.setDni("22222222A");
-		pdfModel.setFechaNacimiento("30/10/1960");
-		pdfModel.setDomicilio("calle Mayor 150");
-		pdfModel.setLocalidad("Madrid (28003) - España");
-		pdfModel.setGimnasio("Championdo");
-		pdfModel.setFechaCampeonato("20-12-2022");
-		pdfModel.setDireccionCampeonato("Polideportivo La Luz");
-		pdfModel.setCalidadDe("padre");
-		pdfModel.setNombreMenor("Nombre Autorizado Apellido1do Apellido2do");
-		pdfModel.setDniMenor("01234567A");
-		pdfModel.setCinturonBlanco(true);
-		pdfModel.setMayorEdad(false);
-		pdfModel.setInclusivo(true);
-		pdfModel.setCinturonActual("Amarillo Naranja");
-		pdfModel.setIdInscripcion(999999);
-		pdfModel.setCategoria("C2");
-		pdfModel.setPoomsae("5º POOMSAE");
-	}
 	@Test
 	File testGenerarPdf() {
 		cargarPDF();
@@ -69,7 +50,9 @@ class TorneoApplicationTests {
 	@Test
 	void testPassword() {
 		String pass = Utils.generateSecurePassword();
-		LoggerMapper.log(Level.INFO, "testPassword", pass, getClass());
+		LoggerMapper.log(Level.INFO, "testPassword sin encriptar", pass, getClass());
+		pass = userService.encodePassword(pass);
+		LoggerMapper.log(Level.INFO, "testPassword encriptada", pass, getClass());
 	}
 
 	@Test
@@ -135,6 +118,28 @@ class TorneoApplicationTests {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void cargarPDF() {
+		pdfModel = new PdfModel();
+		pdfModel.setNombre("Nombre Autorizador Apellido1dor Apellido2dor");
+		pdfModel.setDni("22222222A");
+		pdfModel.setFechaNacimiento("30/10/1960");
+		pdfModel.setDomicilio("calle Mayor 150");
+		pdfModel.setLocalidad("Madrid (28003) - España");
+		pdfModel.setGimnasio("Championdo");
+		pdfModel.setFechaCampeonato("20-12-2022");
+		pdfModel.setDireccionCampeonato("Polideportivo La Luz");
+		pdfModel.setCalidadDe("padre");
+		pdfModel.setNombreMenor("Nombre Autorizado Apellido1do Apellido2do");
+		pdfModel.setDniMenor("01234567A");
+		pdfModel.setCinturonBlanco(true);
+		pdfModel.setMayorEdad(false);
+		pdfModel.setInclusivo(true);
+		pdfModel.setCinturonActual("Amarillo Naranja");
+		pdfModel.setIdInscripcion(999999);
+		pdfModel.setCategoria("C2");
+		pdfModel.setPoomsae("5º POOMSAE");
 	}
 
 	private static void eliminarDirectorioRecursivamente(Path directorio) throws IOException {

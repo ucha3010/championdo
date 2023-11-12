@@ -18,7 +18,9 @@ public class CategoriaModel {
     private CinturonModel cinturonFin;
     private PoomsaeModel poomsae;
     private boolean inclusivo;
+    private boolean preinfantil;
     private boolean infantil;
+    private boolean adulto;
     private int position;
     private int codigoGimnasio;
 }

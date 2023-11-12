@@ -17,7 +17,8 @@ import java.util.Date;
 public class GimnasioRoot {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "gimnasioRootGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gimnasioRootGenerator")
     private int id;
     private boolean enabled;
     @Column(name = "nombreGimnasio", length = 100)

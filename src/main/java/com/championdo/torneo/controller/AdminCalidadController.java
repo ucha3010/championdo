@@ -23,9 +23,10 @@ public class AdminCalidadController {
     private UserService userService;
 
     @GetMapping("/calidadList")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView calidadList(ModelAndView modelAndView) {
-        modelAndView.setViewName("adminCalidad");
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("management/adminCalidad");
         modelAndView.addObject("calidadModel", new CalidadModel());
         modelAndView.addObject("calidadList", calidadService.findAll());
         LoggerMapper.log(Level.INFO, "calidadList", modelAndView, this.getClass());
@@ -33,14 +34,14 @@ public class AdminCalidadController {
     }
 
     @GetMapping("/calidad/{oldIndex}/{newIndex}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView dragCalidad(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         calidadService.dragOfPosition(oldIndex, newIndex);
         return calidadList(modelAndView);
     }
 
     @PostMapping("/addCalidad")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addCalidad(ModelAndView modelAndView, @ModelAttribute("calidadModel") CalidadModel calidadModel) {
         calidadModel.setPosition(calidadService.findMaxPosition() + 1);
         User user = userService.cargarUsuarioCompleto(modelAndView);
@@ -49,7 +50,7 @@ public class AdminCalidadController {
     }
 
     @GetMapping("/calidad/remove/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView removeCalidad(ModelAndView modelAndView, @PathVariable int id) {
         calidadService.delete(id);
         return calidadList(modelAndView);

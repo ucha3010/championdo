@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
 	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-	<link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css?v=2">
 
 	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
 	<script type="text/javascript" th:src="@{/js/table.js}"></script>
@@ -77,22 +76,31 @@
 
 		<div th:if="${addProblem != null}" class="alert alert-danger" role="alert"><span th:text="${addProblem}"></span></div>
 		<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
+		<h1>
+			¡Hola <span th:text="${usuario.name}"></span>!
+			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
+		</h1>
+		<nav class="navbar navbar-default" role="navigation">
+			<form th:action="@{/logout}" method="POST">
+				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+			</form>
+		</nav>
 
 		<section>
-			<h1 th:text="${customer.nombreGimnasio}"></h1>
-		</section>
+			<div class="row">
+				<div class="col-xs-2 mb-1">
+				</div>
 
-		<section>
-			<div class="row mb-3">
-				<div class="col-xs-2">
+				<div class="col-xs-8 mb-10 colorGreen">
+					<h1 th:text="${customer.nombreGimnasio}"></h1>
 				</div>
-				<div class="col-xs-2">
-					<a class="btn btn-primary pull-right" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
-				</div>
-				<div class="col-xs-8">
+
+				<div class="col-xs-2 mb-1">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
 				</div>
 			</div>
 		</section>
+
 		<section sec:authorize="hasRole('ROLE_ROOT')">
 
 			<form action="#" th:action="@{/gimnasioRoot/customers}" th:object="${customer}" method="post" onsubmit="return validar()">
@@ -308,7 +316,7 @@
 					<div class="col-md-1">
 					</div>
 					<div class="col-xs-8 col-md-4">
-						<a class="btn btn-primary pull-right" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
+						<a class="btn btn-info" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
 					</div>
 					<div class="col-xs-8 col-md-4">
 					</div>

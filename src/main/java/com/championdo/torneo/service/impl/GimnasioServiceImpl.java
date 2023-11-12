@@ -121,9 +121,7 @@ public class GimnasioServiceImpl implements GimnasioService {
     @Override
     public void deleteFromRoot (int idGimnasioRootModel) {
         List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasio(idGimnasioRootModel);
-        for (Gimnasio gimnasio: gimnasioList) {
-            delete(gimnasio.getId());
-        }
+        gimnasioRepository.deleteAll(gimnasioList);
     }
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {

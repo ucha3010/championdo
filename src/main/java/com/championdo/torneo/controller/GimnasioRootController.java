@@ -3,7 +3,10 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
-import com.championdo.torneo.service.*;
+import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.service.impl.CargasInicialesClienteService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -21,16 +24,10 @@ public class GimnasioRootController {
     private GimnasioRootService gimnasioRootService;
 
     @Autowired
-    private CategoriaService categoriaService;
-
-    @Autowired
-    private CinturonService cinturonService;
+    private CargasInicialesClienteService cargasInicialesClienteService;
 
     @Autowired
     private GimnasioService gimnasioService;
-
-    @Autowired
-    private PoomsaeService poomsaeService;
 
     @Autowired
     private UserService userService;
@@ -96,16 +93,23 @@ public class GimnasioRootController {
         LoggerMapper.methodIn(Level.INFO, "addCustomer", customer, this.getClass());
         User user = userService.cargarUsuarioCompleto(modelAndView);
         customer.setUsuarioModificacion(user.getUsername());
+        int idCustomer = 0;
         try {
             customer = gimnasioRootService.add(customer);
+            idCustomer = customer.getId();
             GimnasioModel gimnasioModel = gimnasioService.addFromRoot(customer);
             userService.addFromRoot(customer, gimnasioModel);
             utilService.addFromRoot(customer);
-            cinturonService.addFromRoot(customer);
-            poomsaeService.addFromRoot(customer);
-            categoriaService.addFromRoot(customer);
+            cargasInicialesClienteService.cargasCintPoomCat(idCustomer);
             return customers(modelAndView);
         } catch (Exception e) {
+            if(idCustomer != 0) {
+                cargasInicialesClienteService.eliminacionesCatPoomCint(idCustomer);
+                utilService.deleteFromRoot(idCustomer);
+                userService.deleteFromRoot(idCustomer);
+                gimnasioService.deleteFromRoot(idCustomer);
+                gimnasioRootService.delete(idCustomer);
+            }
             modelAndView.setViewName("management/addCustomer");
             modelAndView.addObject("customer", customer);
             modelAndView.addObject("addProblem", "Hubo un problema con la inserción - " + e.getMessage());
@@ -115,16 +119,29 @@ public class GimnasioRootController {
         return modelAndView;
     }
 
+    @GetMapping("/resetCintPoomCat/{id}")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView resetCintPoomCat(ModelAndView modelAndView, @PathVariable int id) {
+        LoggerMapper.methodIn(Level.INFO, "resetCintPoomCat", "", this.getClass());
+        userService.cargarUsuarioCompleto(modelAndView);
+        cargasInicialesClienteService.eliminacionesCatPoomCint(id);
+        cargasInicialesClienteService.cargasCintPoomCat(id);
+        modelAndView.addObject("resetOk", "Reseteo realizado con éxito");
+        LoggerMapper.methodOut(Level.INFO, "resetCintPoomCat", modelAndView, this.getClass());
+        return customersId(modelAndView, id);
+    }
+
     @GetMapping("/deleteCustomer/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView deleteCustomer(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "deleteCustomer", "id: " + id, this.getClass());
         userService.cargarUsuarioCompleto(modelAndView);
-        categoriaService.deleteFromRoot(id);
-        cinturonService.deleteFromRoot(id);
-        poomsaeService.deleteFromRoot(id);
+        cargasInicialesClienteService.eliminacionesCatPoomCint(id); // TODO DAMIAN probar agregar y eliminar clientes
+        utilService.deleteFromRoot(id);
+        userService.deleteFromRoot(id);
         gimnasioService.deleteFromRoot(id);
         gimnasioRootService.delete(id);
+        //TODO DAMIAN ver si también borro Torneo y TorneoGimnasio (ver si afecta en las inscripciones)
         LoggerMapper.methodOut(Level.INFO, "deleteCustomer", modelAndView, this.getClass());
         return customers(modelAndView);
     }
