@@ -18,6 +18,8 @@ public interface TorneoGimnasioService {
 
     void delete(TorneoGimnasioModel torneoGimnasioModel) throws RemoveException;
 
+    void deleteByCodigoGimnasio(int codigoGimnasio);
+
     void dragOfPosition(int idTorneo, int initialPosition, int finalPosition);
 
     int findMaxPosition(int idTorneo);

@@ -49,7 +49,8 @@
 
 		<section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
 
-			<a href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
+			<h2  th:if="${not gimnasioAvailable}">Gimnasio deshabilitado, por favor contacte con administrador</h2>
+			<a  th:if="${gimnasioAvailable}" href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
 				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
 			</a>
 		</section>

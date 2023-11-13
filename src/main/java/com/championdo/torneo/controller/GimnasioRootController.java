@@ -5,6 +5,7 @@ import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.service.impl.CargasInicialesClienteService;
 import com.championdo.torneo.service.impl.UserService;
@@ -28,6 +29,9 @@ public class GimnasioRootController {
 
     @Autowired
     private GimnasioService gimnasioService;
+
+    @Autowired
+    private TorneoGimnasioService torneoGimnasioService;
 
     @Autowired
     private UserService userService;
@@ -140,8 +144,9 @@ public class GimnasioRootController {
         utilService.deleteFromRoot(id);
         userService.deleteFromRoot(id);
         gimnasioService.deleteFromRoot(id);
-        gimnasioRootService.delete(id);
-        //TODO DAMIAN ver si también borro Torneo y TorneoGimnasio (ver si afecta en las inscripciones)
+        torneoGimnasioService.deleteByCodigoGimnasio(id);
+        gimnasioRootService.enableDisable(id, Boolean.FALSE);
+        //Deshabilito el cliente pero no lo borro ya que Torneo tira del id y para que no se eliminen las inscripciones a los usuarios
         LoggerMapper.methodOut(Level.INFO, "deleteCustomer", modelAndView, this.getClass());
         return customers(modelAndView);
     }

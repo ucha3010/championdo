@@ -14,5 +14,7 @@ public interface TorneoGimnasioRepository extends JpaRepository<TorneoGimnasio, 
     TorneoGimnasio findTopByIdTorneoOrderByPositionDesc(int idTorneo);
 
     TorneoGimnasio findByIdTorneoAndPosition(int idTorneo, int position);
+
+    void deleteByCodigoGimnasio(int codigoGimnasio);
     
 }

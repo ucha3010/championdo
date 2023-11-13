@@ -4,6 +4,7 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.PoomsaeModel;
 import com.championdo.torneo.service.PoomsaeService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -19,7 +20,8 @@ public class AdminPoomsaeController {
 
     @Autowired
     private PoomsaeService poomsaeService;
-
+    @Autowired
+    private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
 
@@ -27,6 +29,7 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView poomsaeList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsaeList");
         modelAndView.setViewName("torneo/adminPoomsae");
         modelAndView.addObject("poomsaeModel", new PoomsaeModel());
         modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
@@ -38,6 +41,7 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragPoomsae(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsae/" + oldIndex + "/" + newIndex);
         poomsaeService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         return poomsaeList(modelAndView);
     }
@@ -46,6 +50,7 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addPoomsae(ModelAndView modelAndView, @ModelAttribute("poomsaeModel") PoomsaeModel poomsaeModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/addPoomsae");
         poomsaeModel.setCodigoGimnasio(user.getCodigoGimnasio());
         poomsaeModel.setPosition(poomsaeService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         poomsaeService.add(poomsaeModel);
@@ -55,6 +60,8 @@ public class AdminPoomsaeController {
     @GetMapping("/poomsae/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removePoomsae(ModelAndView modelAndView, @PathVariable int id) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsae/remove/" + id);
         try {
             poomsaeService.delete(id);
         } catch (RemoveException re) {

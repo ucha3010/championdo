@@ -4,9 +4,11 @@ import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.FirmaModel;
 import com.championdo.torneo.service.FirmaService;
+import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.util.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -17,6 +19,9 @@ public class SeguridadServiceImpl implements SeguridadService {
 
     @Autowired
     private FirmaService firmaService;
+
+    @Autowired
+    private GimnasioRootService gimnasioRootService;
 
     @Override
     public String obtenerCodigo() {
@@ -62,6 +67,13 @@ public class SeguridadServiceImpl implements SeguridadService {
                 firmaService.delete(firmaModel.getId());
             }
             firmaService.add(new FirmaModel(idOperacion));
+        }
+    }
+
+    @Override
+    public void gimnasioHabilitadoAdministracion(int codigoGimnasio, String uri) throws AccessDeniedException {
+        if (!gimnasioRootService.verifyEnable(codigoGimnasio)) {
+            throw new AccessDeniedException(uri);
         }
     }
 }

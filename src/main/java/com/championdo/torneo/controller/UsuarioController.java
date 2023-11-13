@@ -1,9 +1,11 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.ClaveUsuarioModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.FormularioService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.UserRoleService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -31,11 +32,12 @@ public class UsuarioController {
 	
 	@Autowired
 	private UserService userService;
-
 	@Autowired
 	private UserRoleService userRoleService;
 	@Autowired
 	private FormularioService formularioService;
+	@Autowired
+	private SeguridadService seguridadService;
 	
 	@GetMapping("/formularioUsuario")
 	@PreAuthorize("isAuthenticated()")
@@ -131,13 +133,14 @@ public class UsuarioController {
 	@GetMapping("/userList")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView userList(ModelAndView modelAndView) {
-		modelAndView.setViewName("gimnasio/adminUser");
-		com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+		User user = userService.cargarUsuarioCompleto(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/userList");
 
-		if(hasRootRole(usuario.getUserRole())) {
+		modelAndView.setViewName("gimnasio/adminUser");
+		if(hasRootRole(user.getUserRole())) {
 			modelAndView.addObject("userList", userService.findAll());
 		} else {
-			modelAndView.addObject("userList", userService.findAll(usuario.getCodigoGimnasio()));
+			modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
 		}
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
 		LoggerMapper.log(Level.INFO, "userList", modelAndView, this.getClass());
@@ -147,9 +150,10 @@ public class UsuarioController {
 	@GetMapping("/enabled/{username}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
+		User user = userService.cargarUsuarioCompleto(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/enabled/" + username);
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
-		com.championdo.torneo.entity.User user = userService.getLoggedUser();
 		usuario.setUsernameModificacione(user.getUsername());
 		userService.addOrUpdate(usuario);
 		modelAndView.addObject("updateOK", "Habilitación de " + usuario.getName()
@@ -162,15 +166,17 @@ public class UsuarioController {
 	@GetMapping("/rol/{username}/{rol}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView update(ModelAndView modelAndView, @PathVariable String username, @PathVariable String rol) {
+		User user = userService.cargarUsuarioCompleto(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/rol/" + username + "/" + rol);
 		UserRole userRole = new UserRole();
-		com.championdo.torneo.entity.User user = userService.findByUsername(username);
-		userRole.setUser(user);
+		com.championdo.torneo.entity.User usuario = userService.findByUsername(username);
+		userRole.setUser(usuario);
 		userRole.setRole(rol);
 		userRoleService.deleteByUsername(username);
 		userRoleService.save(userRole);
-		modelAndView.addObject("updateOK", "Rol de " + user.getName()
-				+ " " + user.getLastname()
-				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(user.getSecondLastname()) ? " " + user.getSecondLastname() : "")
+		modelAndView.addObject("updateOK", "Rol de " + usuario.getName()
+				+ " " + usuario.getLastname()
+				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizado correctamente");
 		return userList(modelAndView);
 	}

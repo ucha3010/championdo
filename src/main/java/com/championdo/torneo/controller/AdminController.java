@@ -1,5 +1,7 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -16,12 +18,15 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private SeguridadService seguridadService;
 
     @GetMapping("/adminList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView adminList(ModelAndView modelAndView) {
         modelAndView.setViewName("adminList");
-        userService.cargarUsuarioCompleto(modelAndView);
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/admin/adminList, codigoGimnasio " + user.getCodigoGimnasio());
         LoggerMapper.log(Level.INFO, "adminList", modelAndView, this.getClass());
         return modelAndView;
     }

@@ -1,6 +1,7 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.impl.UserService;
@@ -22,10 +23,10 @@ public class PrincipalController {
 
     @Autowired
     private PrincipalService principalService;
-
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
-
+    @Autowired
+    private GimnasioRootService gimnasioRootService;
     @Autowired
     private UserService userService;
 
@@ -42,6 +43,7 @@ public class PrincipalController {
         }
         modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(usuario.getCodigoGimnasio()));
         LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
         return modelAndView;
     }

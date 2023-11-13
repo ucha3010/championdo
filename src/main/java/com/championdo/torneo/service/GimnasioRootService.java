@@ -19,4 +19,8 @@ public interface GimnasioRootService {
 
     void delete(int idGimnasio);
 
+    void enableDisable(int idGimnasioRootModel, boolean enableDisable);
+
+    boolean verifyEnable(int idGimnasioRootModel);
+
 }

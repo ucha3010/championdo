@@ -5,6 +5,8 @@ import com.championdo.torneo.mapper.MapperGimnasioRoot;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.repository.GimnasioRootRepository;
 import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.util.LoggerMapper;
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +69,22 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
     @Override
     public void delete(int idGimnasioRoot) {
         gimnasioRootRepository.deleteById(idGimnasioRoot);
+    }
+
+    @Override
+    public void enableDisable(int idGimnasioRootModel, boolean enableDisable) {
+        GimnasioRootModel gimnasioRootModel = findById(idGimnasioRootModel);
+        gimnasioRootModel.setEnabled(enableDisable);
+        try {
+            update(gimnasioRootModel);
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "enableDisable", e.getMessage(), this.getClass());
+        }
+    }
+
+    @Override
+    public boolean verifyEnable(int idGimnasioRootModel) {
+        GimnasioRootModel gimnasioRootModel = findById(idGimnasioRootModel);
+        return gimnasioRootModel.getId() != 0 && gimnasioRootModel.isEnabled();
     }
 }

@@ -31,6 +31,7 @@ public class AdminInscripcionController {
 
     @Autowired
     private UserService userService;
+    //TODO DAMIAN ver si tengo que meter control acceso en este controller cuando el cliente está deshabilitado
 
     @GetMapping("/inscripcionList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

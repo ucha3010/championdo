@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -28,12 +29,15 @@ public class AdminUtilController {
     private UtilService utilService;
     @Autowired
     private GimnasioService gimnasioService;
+    @Autowired
+    private SeguridadService seguridadService;
 
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
         modelAndView.addObject("gimnasioModel", gimnasioService.findByCodigoGimnasio(user.getCodigoGimnasio()));
         modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", user.getCodigoGimnasio()));
@@ -47,6 +51,7 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/updateUtil");
         utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");

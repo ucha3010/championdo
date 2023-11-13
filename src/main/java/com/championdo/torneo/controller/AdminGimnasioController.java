@@ -3,9 +3,9 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
-import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +19,10 @@ public class AdminGimnasioController {
 
     @Autowired
     private GimnasioService gimnasioService;
-
+    @Autowired
+    private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
-
     @Autowired
     private AdminUtilController adminUtilController;
 
@@ -30,6 +30,7 @@ public class AdminGimnasioController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gymAdministration(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/");
         modelAndView.setViewName("gimnasio/adminGimnasio");
         LoggerMapper.log(Level.INFO, "gymAdministration", modelAndView, this.getClass());
         return modelAndView;
@@ -39,6 +40,7 @@ public class AdminGimnasioController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gimnasioList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/gimnasioList");
         modelAndView.setViewName("adminGimnasio");
         modelAndView.addObject("gimnasioModel", new GimnasioModel());
         modelAndView.addObject("gimnasioList", gimnasioService.findAll(user.getCodigoGimnasio()));
@@ -50,6 +52,7 @@ public class AdminGimnasioController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragGimnasio(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/gimnasio/" + oldIndex + "/" + newIndex);
         gimnasioService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         return gimnasioList(modelAndView);
     }
@@ -58,6 +61,7 @@ public class AdminGimnasioController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/addGimnasio");
         gimnasioModel.setCodigoGimnasio(user.getCodigoGimnasio());
         gimnasioModel.setPosition(gimnasioService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         gimnasioService.add(gimnasioModel);
@@ -67,6 +71,8 @@ public class AdminGimnasioController {
     @PostMapping("/updateGimnasio")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/updateGimnasio");
         GimnasioModel gimnasioModelBBDD = gimnasioService.findById(gimnasioModel.getId());
         gimnasioModel.setCodigoGimnasio(gimnasioModelBBDD.getCodigoGimnasio());
         gimnasioModel.setPosition(gimnasioModelBBDD.getPosition());
@@ -78,6 +84,8 @@ public class AdminGimnasioController {
     @GetMapping("/gimnasio/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeGimnasio(ModelAndView modelAndView, @PathVariable int id) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/gimnasio/remove/" + id);
         gimnasioService.delete(id);
         return gimnasioList(modelAndView);
     }

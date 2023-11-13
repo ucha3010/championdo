@@ -70,6 +70,11 @@ public class TorneoGimnasioServiceImpl implements TorneoGimnasioService {
     }
 
     @Override
+    public void deleteByCodigoGimnasio(int codigoGimnasio) {
+        torneoGimnasioRepository.deleteByCodigoGimnasio(codigoGimnasio);
+    }
+
+    @Override
     public void dragOfPosition(int idTorneo, int initialPosition, int finalPosition) {
         TorneoGimnasio torneoGimnasio = torneoGimnasioRepository.findByIdTorneoAndPosition(idTorneo, initialPosition);
         if (initialPosition > finalPosition) {
