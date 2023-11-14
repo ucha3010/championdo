@@ -26,4 +26,6 @@ public interface EmailService {
     void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, List<File> files) throws SenderException;
 
     void confirmAdminSepaSigned(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException;
+
+    void sendUserAdded(User user) throws SenderException;
 }

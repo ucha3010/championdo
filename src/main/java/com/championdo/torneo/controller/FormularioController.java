@@ -1,6 +1,7 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
@@ -26,16 +27,12 @@ public class FormularioController {
 
     @Autowired
     private FormularioService formularioService;
-
     @Autowired
     private EmailService emailService;
-
     @Autowired
     private InscripcionService inscripcionService;
-
     @Autowired
     private PdfService pdfService;
-
     @Autowired
     private UserService userService;
 
@@ -182,13 +179,16 @@ public class FormularioController {
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
                 com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
-                //TODO DAMIAN enviar email a usuario con confirmación de alta
+                emailService.sendUserAdded(user);
                 modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
                 modelAndView.setViewName(Constantes.LOGIN);
                 LoggerMapper.log(Level.INFO, "alta", user, this.getClass());
                 return modelAndView;
             } catch (PersistenceException e) {
                 modelAndView.addObject("problemasAlta", "Problemas dando de alta usuario con DNI " + userModel.getUsername());
+                LoggerMapper.log(Level.ERROR, "alta", e.getMessage(), this.getClass());
+            } catch (SenderException se) {
+                LoggerMapper.log(Level.ERROR, "alta", se.getMessage(), this.getClass());
             }
         } else {
             modelAndView.addObject("dniDadoDeAlta", "Ya existe un usuario dado de alta con DNI " + userModel.getUsername());

@@ -5,6 +5,7 @@ import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
@@ -25,22 +26,22 @@ public class AdminInscripcionController {
 
     @Autowired
     private InscripcionService inscripcionService;
-
     @Autowired
     private PdfService pdfService;
-
+    @Autowired
+    private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
-    //TODO DAMIAN ver si tengo que meter control acceso en este controller cuando el cliente está deshabilitado
 
     @GetMapping("/inscripcionList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView inscripcionList(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/inscripcionList");
         modelAndView.setViewName("adminInscripcion");
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("inscripcionList", inscripcionService.findAll());
         modelAndView.addObject("inscripcionModel", new InscripcionModel());
-        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor())) {
+        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable(user.getCodigoGimnasio()).getValor())) {
             modelAndView.addObject("deleteEnable", "Deshabilitar borrar");
         } else {
             modelAndView.addObject("deleteEnable", "Habilitar borrar");
@@ -52,6 +53,8 @@ public class AdminInscripcionController {
     @GetMapping("/pay/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable int id) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/pay/" + id);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         inscripcionModel.setPagoRealizado(!inscripcionModel.isPagoRealizado());
         inscripcionModel.setFechaPago(new Date());
@@ -66,6 +69,8 @@ public class AdminInscripcionController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView update(ModelAndView modelAndView, @ModelAttribute("inscripcionModel") InscripcionModel inscripcionModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/update");
         InscripcionModel inscripcionModelBBDD = inscripcionService.findById(inscripcionModel.getId());
         inscripcionModelBBDD.setFechaPago(inscripcionModel.getFechaPago());
         inscripcionModelBBDD.setNotas(inscripcionModel.getNotas());
@@ -97,14 +102,17 @@ public class AdminInscripcionController {
     @GetMapping("/deleteEnable")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteEnable(ModelAndView modelAndView) {
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        inscripcionService.changeValueDeleteEnable(usuario.getCodigoGimnasio());
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteEnable");
+        inscripcionService.changeValueDeleteEnable(user.getCodigoGimnasio());
         return inscripcionList(modelAndView);
     }
 
     @GetMapping("/deleteAll")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteAll(ModelAndView modelAndView) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteAll");
         inscripcionService.deleteAll();
         return inscripcionList(modelAndView);
     }

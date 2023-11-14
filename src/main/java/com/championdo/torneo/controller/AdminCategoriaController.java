@@ -24,9 +24,9 @@ public class AdminCategoriaController {
     @Autowired
     private CinturonService cinturonService;
     @Autowired
-    private SeguridadService seguridadService;
-    @Autowired
     private PoomsaeService poomsaeService;
+    @Autowired
+    private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
 

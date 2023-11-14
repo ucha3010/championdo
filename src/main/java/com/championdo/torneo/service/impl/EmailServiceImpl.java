@@ -104,6 +104,17 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    public void sendUserAdded(User user) throws SenderException {
+        try {
+            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, user.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(correoGimnasio, user.getCorreo(),
+                    "Alta de ".concat(user.getName()), textMessageConfirmAddedUser(user), null, user.getCodigoGimnasio());
+        } catch (Exception e) {
+            throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
+        }
+    }
+
     private String textMessageNewPassword (UserModel userModel) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -226,6 +237,21 @@ public class EmailServiceImpl implements EmailService {
                 (StringUtils.isNullOrEmpty(insc.getMayorApellido2()) ? "" : " " + insc.getMayorApellido2());
         stringBuilder.append("<h1>Hola<b>").append("</b>!</h1><br>");
         stringBuilder.append("<p>El cliente ").append(mayor).append(" acaba de subir un formulario de domiciliación bancaria firmado.</p>");
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>¡Que pases un buen día!</p>");
+        stringBuilder.append("</BODY></HTML>");
+        return stringBuilder.toString();
+    }
+
+    private String textMessageConfirmAddedUser(User user) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>");
+        stringBuilder.append("<HTML><BODY>");
+        String mayor = user.getName() + " " + user.getLastname() +
+                (StringUtils.isNullOrEmpty(user.getSecondLastname()) ? "" : " " + user.getSecondLastname());
+        stringBuilder.append("<h1>Hola<b>").append(mayor).append("</b>!</h1><br>");
+        stringBuilder.append("<p>Te confirmamos que tu usuario ha sido dado de alta de forma exitosa en la plataforma.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
         stringBuilder.append("</BODY></HTML>");

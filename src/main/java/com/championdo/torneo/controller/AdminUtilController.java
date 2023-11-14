@@ -22,15 +22,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/adminUtil")
 public class AdminUtilController {
 
-
-    @Autowired
-    private UserService userService;
     @Autowired
     private UtilService utilService;
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
     private SeguridadService seguridadService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

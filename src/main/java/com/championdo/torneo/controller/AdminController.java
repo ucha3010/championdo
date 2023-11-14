@@ -17,9 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private SeguridadService seguridadService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/adminList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

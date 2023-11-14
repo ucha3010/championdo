@@ -23,19 +23,14 @@ public class GimnasioRootController {
 
     @Autowired
     private GimnasioRootService gimnasioRootService;
-
     @Autowired
     private CargasInicialesClienteService cargasInicialesClienteService;
-
     @Autowired
     private GimnasioService gimnasioService;
-
     @Autowired
     private TorneoGimnasioService torneoGimnasioService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private UtilService utilService;
 

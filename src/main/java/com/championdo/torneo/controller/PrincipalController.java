@@ -24,9 +24,9 @@ public class PrincipalController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private InscripcionTaekwondoService inscripcionTaekwondoService;
-    @Autowired
     private GimnasioRootService gimnasioRootService;
+    @Autowired
+    private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
     private UserService userService;
 

@@ -25,9 +25,9 @@ import java.io.StringWriter;
 public class LoginController {
 
 	@Autowired
-	private UserService userService;
-	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("/")
 	@PreAuthorize("permitAll()")
