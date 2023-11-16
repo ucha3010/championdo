@@ -101,36 +101,42 @@ public class UsuarioController {
 		return formularioCambioClave(modelAndView);
 	}
 
-	/**
-	 * TODO DAMIAN Este método debería habilitarlo para el rol admin (el cliente debe poder eliminar un usuario de su gimnasio aunque es mejor deshabilitar)
-	 */
-	@GetMapping("/eliminarUsuario")
+	@GetMapping("/remove/{username}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @ModelAttribute("username") String username) {
+	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @PathVariable String username) {
 		com.championdo.torneo.entity.User user = userService.cargarUsuarioCompleto(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/remove/"+username);
 		if (userService.delete(username, user.getCodigoGimnasio())) {
 			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
 		} else {
 			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
 		}
 		LoggerMapper.log(Level.INFO, "eliminarUsuario", modelAndView, getClass());
-		return userList(modelAndView);
+		return users(modelAndView);
 	}
 
-	@GetMapping("/userList")
+	@GetMapping("/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ModelAndView userList(ModelAndView modelAndView) {
+	public ModelAndView users(ModelAndView modelAndView) {
 		User user = userService.cargarUsuarioCompleto(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/userList");
-
-		modelAndView.setViewName("gimnasio/adminUser");
-		if(hasRootRole(user.getUserRole())) {
-			modelAndView.addObject("userList", userService.findAll());
-		} else {
-			modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
-		}
+		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users");
+		modelAndView.setViewName("gimnasio/adminUsers");
+		modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
-		LoggerMapper.log(Level.INFO, "userList", modelAndView, this.getClass());
+		LoggerMapper.log(Level.INFO, "users", modelAndView, this.getClass());
+		return modelAndView;
+	}
+
+	@GetMapping("/users/{username}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView userDetail(ModelAndView modelAndView, @PathVariable String username) {
+		LoggerMapper.methodIn(Level.INFO, "/users/"+username, username, this.getClass());
+		User user = userService.cargarUsuarioCompleto(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users/"+username);
+		modelAndView.setViewName("gimnasio/adminUser");
+		modelAndView.addObject("user", userService.findModelByUsername(username));
+		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
+		LoggerMapper.methodOut(Level.INFO, "/users/"+username, modelAndView, this.getClass());
 		return modelAndView;
 	}
 
@@ -147,7 +153,7 @@ public class UsuarioController {
 				+ " " + usuario.getLastname()
 				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizada correctamente");
-		return userList(modelAndView);
+		return userDetail(modelAndView, username);
 	}
 
 	@GetMapping("/rol/{username}/{rol}")
@@ -165,7 +171,7 @@ public class UsuarioController {
 				+ " " + usuario.getLastname()
 				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizado correctamente");
-		return userList(modelAndView);
+		return userDetail(modelAndView, username);
 	}
 
 	private boolean hasRootRole (Set<UserRole> userRoleList) {

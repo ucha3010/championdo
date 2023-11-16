@@ -141,7 +141,7 @@ public class GimnasioRootController {
         gimnasioService.deleteFromRoot(id);
         torneoGimnasioService.deleteByCodigoGimnasio(id);
         gimnasioRootService.enableDisable(id, Boolean.FALSE);
-        //Deshabilito el cliente pero no lo borro ya que Torneo tira del id y para que no se eliminen las inscripciones a los usuarios
+        //Deshabilito el cliente pero no lo borro ya que Torneo (que tampoco se borran los torneos) tira del id y para que no se eliminen las inscripciones a los usuarios
         LoggerMapper.methodOut(Level.INFO, "deleteCustomer", modelAndView, this.getClass());
         return customers(modelAndView);
     }

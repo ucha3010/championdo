@@ -1,145 +1,310 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-
-    <title>Usuarios</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
 
-    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
-    <script type="text/javascript" th:src="@{/js/table.js}"></script>
-
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-
-    <script>
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+	<script type="text/javascript" th:src="@{/js/table.js}"></script>
+	
+	<title>Formulario usuario</title>
+	
+	<script type="text/javascript">
         function changeRole(username){
             var relativeUrl = "usuario/rol/" + username + "/" + document.getElementById("rolSelect" + username).value;
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;
         }
-    </script>
 
+		function confirmDelete(id,nombre){
+			if(confirm("¿Seguro que desea eliminar a " + nombre + " en lugar de deshabilitarlo? Se perderá toda la información")){
+				var relativeUrl = "usuario/remove/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
+	</script>
 </head>
 <body>
-    <section>
-        <div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
-        <div th:if="${reseteoClaveCorrecto != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${reseteoClaveCorrecto}"></span></div>
-        <div th:if="${eliminacionCorrecta != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${eliminacionCorrecta}"></span></div>
-        <div th:if="${eliminacionError != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${eliminacionError}"></span></div>
-    </section>
+	<div class="container">
+		<h1>
+			¡Hola <span th:text="${usuario.name}"></span>!
+		</h1>
+		<nav class="navbar navbar-default" role="navigation">
+			<form th:action="@{/logout}" method="POST">
+				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+			</form>
+		</nav>
 
-    <div class="container">
-        <h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
+		<div th:if="${updateOK != null}" class="alert alert-danger" role="alert"><span th:text="${updateOK}"></span></div>
 
-        <nav class="navbar navbar-default" role="navigation">
-            <form th:action="@{/logout}" method="POST">
-                <button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-            </form>
-        </nav>
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="dni">DNI:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.username}" id="dni" class="form-control" disabled/>
+			</div>
 
-        <section>
-            <div class="row">
-                <div class="col-xs-2 mb-1">
-                </div>
+			<div class="col-xs-5 col-md-7">
+				<a class="btn btn-info pull-right" href="#" th:href="@{/usuario/users}">Volver</a>
+			</div>
+		</div>
 
-                <div class="col-xs-8 mb-10 colorGreen">
-                    <h1>Usuarios</h1>
-                </div>
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="name">Nombre:</label>
+			</div>
+			<div class="col-xs-9 col-md-8">
+				<input type="text" th:value="${user.name}" id="name" class="form-control" placeholder="Nombre" size="60" disabled/>
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
 
-                <div class="col-xs-2 mb-1">
-                    <a class="btn btn-info pull-right" href="#" th:href="@{/adminGimnasio/}">Volver</a>
-                </div>
-            </div>
-        </section>
-    </div>
-    <section sec:authorize="hasRole('ROLE_ADMIN')">
-        <table class="table table-hover sortable">
-            <thead>
-            <tr>
-                <th>
-                    <button>
-                        DNI
-                        <span aria-hidden="true"></span>
-                    </button>
-                </th>
-                <th>
-                    <button>
-                        Nombre
-                        <span aria-hidden="true"></span>
-                    </button>
-                </th>
-                <th>
-                    <button>
-                        Primer apellido
-                        <span aria-hidden="true"></span>
-                    </button>
-                </th>
-                <th>
-                    <button>
-                        Segundo apellido
-                        <span aria-hidden="true"></span>
-                    </button>
-                </th>
-                <th>
-                    <button>
-                        Correo
-                        <span aria-hidden="true"></span>
-                    </button>
-                </th>
-                <th>
-                    <button>
-                        Fecha alta
-                        <span aria-hidden="true"></span>
-                    </button>
-                </th>
-                <th>Habilitado</th>
-                <th>Rol</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${userList}">
-                <td><span th:text="${user.username}"></span></td>
-                <td><span th:text="${user.name}"></span></td>
-                <td><span th:text="${user.lastname}"></span></td>
-                <td><span th:text="${user.secondLastname}"></span></td>
-                <td><span th:text="${user.correo}"></span></td>
-                <td><span th:text="${#calendars.format(user.fechaAlta,'dd/MM/yyyy')}"></span></td>
-                <td>
-                    <label class="containercheckbox">
-                        <a href="#" th:href="@{/usuario/enabled/__${user.username}__}">
-                            <input type="checkbox" th:checked="${user.enabled}">
-                            <span class="checkmark"></span>
-                        </a>
-                    </label>
-                </td>
-                <td>
-                    <select th:attr="id=|rolSelect${user.username}|" class="form-control form-control-lg">
-                        <option th:each="unit : ${userRoleList}" th:value="${unit.role}" th:text="${unit.role}" th:selected="${unit.role==user.userRoles[0]}"/>
-                    </select>
-                </td>
-                <td><button class="btn btn-success" th:attr="onclick=|changeRole('${user.username}')|">Guardar</button></td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="lastname">Primer apellido:</label>
+			</div>
+			<div class="col-xs-9 col-md-8">
+				<input type="text" th:value="${user.lastname}" id="lastname" class="form-control" placeholder="Primer apellido" size="60" disabled/>
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
 
-    <section>
-        <div class="row">
-            <div class="col-xs-10">
-            </div>
-            <div class="col-xs-2">
-                <a class="btn btn-info pull-right" href="#" th:href="@{/adminGimnasio/}">Volver</a>
-            </div>
-        </div>
-    </section>
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="secondLastname">Segundo apellido:</label>
+			</div>
+			<div class="col-xs-9 col-md-8">
+				<input type="text" th:value="${user.secondLastname}" id="secondLastname" class="form-control" placeholder="Segundo apellido" size="60" disabled/>
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="secondLastname">Habilitado:</label>
+			</div>
+			<div class="col-xs-9 col-md-8">
+				<label class="containercheckbox">
+					<a href="#" th:href="@{/usuario/enabled/__${user.username}__}">
+						<input type="checkbox" th:checked="${user.enabled}">
+						<span class="checkmark"></span>
+					</a>
+				</label>
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="telefono">Teléfono:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.telefono}" id="telefono" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="sexo">Sexo:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.sexo}" id="sexo" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="fechaNacimiento">Fecha de nacimiento:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="date" th:value="${#calendars.format(user.fechaNacimiento,'dd/MM/yyyy')}" id="fechaNacimiento" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label  th:attr="for=|rolSelect${user.username}|">Rol del usuario:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<select th:attr="id=|rolSelect${user.username}|" class="form-control form-control-lg">
+					<option th:each="unit : ${userRoleList}" th:value="${unit.role}" th:text="${unit.role}" th:selected="${unit.role==user.userRoles[0]}"></option>
+				</select>
+			</div>
+				<button class="btn btn-success" th:attr="onclick=|changeRole('${user.username}')|">Guardar rol</button>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="correo">Dirección de correo electrónico:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.correo}" id="correo" class="form-control" size="100" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<span>Domicilio</span>
+			</div>
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="domicilioCalle">Tipo y nombre vía</label>
+			</div>
+			<div class="col-xs-6 col-md-8">
+				<input type="text" th:value="${user.domicilioCalle}" id="domicilioCalle" class="form-control" size="60" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+			</div>
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="domicilioNumero">Número</label>
+			</div>
+			<div class="col-xs-6 col-md-8">
+				<input type="text" th:value="${user.domicilioNumero}" id="domicilioNumero" class="form-control" size="60" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+			</div>
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="domicilioOtros">Otros datos</label>
+			</div>
+			<div class="col-xs-6 col-md-8">
+				<input type="text" th:value="${user.domicilioOtros}" id="domicilioOtros" class="form-control" size="60" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+			</div>
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="domicilioLocalidad">Localidad</label>
+			</div>
+			<div class="col-xs-6 col-md-8">
+				<input type="text" th:value="${user.domicilioLocalidad}" id="domicilioLocalidad" class="form-control" size="60" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-xs-3 col-md-2 text-center">
+			</div>
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="domicilioCp">Código postal</label>
+			</div>
+			<div class="col-xs-6 col-md-8">
+				<input type="text" th:value="${user.domicilioCp}" id="domicilioCp" class="form-control" size="60" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="pais">País:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.pais.nombre}" id="pais" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="gimnasio">Gimnasio:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.gimnasio.nombre}" id="gimnasio" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="cinturon">Cinturón actual:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${user.cinturon.color}" id="cinturon" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="fechaAlta">Fecha de alta:</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:value="${#calendars.format(user.fechaAlta,'dd/MM/yyyy')}" id="fechaAlta" class="form-control" size="60" disabled/>
+			</div>
+			<div class="col-xs-5 col-md-7">
+			</div>
+		</div>
+
+		<div class="row mb-3">
+
+			<div class="col-xs-5">
+				<button class="btn btn-danger" th:attr="onclick=|confirmDelete('${user.username}','${user.name}')|">Borrar Usuario</button>
+			</div>
+
+			<div class="col-xs-3">
+			</div>
+			<div class="col-xs-4">
+				<a class="btn btn-info pull-right" href="#" th:href="@{/usuario/users}">Volver</a>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-6 mb-3">
+			</div>
+			<div class="col-xs-6 mb-3">
+				<span id="hayError" name="errorSpan" class="colorRed"></span>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
 </body>
 </html>
