@@ -1,5 +1,6 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.entity.InscripcionTaekwondo;
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.GimnasioModel;
@@ -9,6 +10,8 @@ import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
 import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.util.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +42,10 @@ public class UserService implements UserDetailsService {
 	private GimnasioService gimnasioService;
 	@Autowired
 	private GimnasioRootService gimnasioRootService;
+	@Autowired
+	private InscripcionService inscripcionService;
+	@Autowired
+	private InscripcionTaekwondoService inscripcionTaekwondoService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -68,19 +75,26 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public boolean delete(String username) {
+	public boolean delete(String username, int codigoGimnasio) {
+		boolean respuesta = true;
 		try {
 			com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
-			Set<UserRole> userRoles = userRoleRepository.findByUser(user);
-			for(UserRole userRole: userRoles) {
-				userRoleRepository.delete(userRole);
+			if (codigoGimnasio == user.getCodigoGimnasio()) {
+				inscripcionService.deleteByDni(username);
+				inscripcionTaekwondoService.deleteByDni(username);
+				Set<UserRole> userRoles = userRoleRepository.findByUser(user);
+				for (UserRole userRole : userRoles) {
+					userRoleRepository.delete(userRole);
+				}
+				user.setUserRole(null);
+				userRepository.delete(user);
+			} else {
+				respuesta = false;
 			}
-			user.setUserRole(null);
-			userRepository.delete(user);
 		} catch (Exception e) {
-			return false;
+			respuesta = false;
 		}
-		return true;
+		return respuesta;
 	}
 
 	public boolean comparePassword(String newPass, String oldPass) {

@@ -2,14 +2,17 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.ClaveUsuarioModel;
 import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.FormularioService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.UserRoleService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +37,8 @@ public class UsuarioController {
 	private UserService userService;
 	@Autowired
 	private UserRoleService userRoleService;
+	@Autowired
+	private EmailService emailService;
 	@Autowired
 	private FormularioService formularioService;
 	@Autowired
@@ -97,36 +102,18 @@ public class UsuarioController {
 	}
 
 	/**
-	 * TODO DAMIAN Este método debería habilitarlo para el rol root
+	 * TODO DAMIAN Este método debería habilitarlo para el rol admin (el cliente debe poder eliminar un usuario de su gimnasio aunque es mejor deshabilitar)
 	 */
 	@GetMapping("/eliminarUsuario")
-	@PreAuthorize("hasRole('ROLE_ROOT')")
-	public ModelAndView eliminarUsuario(@ModelAttribute("username") String username) {
-		ModelAndView modelAndView = new ModelAndView();
-		if (userService.delete(username)) {
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @ModelAttribute("username") String username) {
+		com.championdo.torneo.entity.User user = userService.cargarUsuarioCompleto(modelAndView);
+		if (userService.delete(username, user.getCodigoGimnasio())) {
 			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
 		} else {
 			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
 		}
 		LoggerMapper.log(Level.INFO, "eliminarUsuario", modelAndView, getClass());
-		return userList(modelAndView);
-	}
-
-	/**
-	 * Este método sirve para que el administrador pueda "resetear" la clave del usuario cambiándola
-	 * a fuego por el nombre de usuario del usuario.
-	 * TODO DAMIAN Este método debería habilitarlo para el rol root
-	 */
-	@GetMapping("/resetearClaveUsuario")
-	@PreAuthorize("hasRole('ROLE_ROOT')")
-	public ModelAndView resetearClaveUsuario(@ModelAttribute("username") String username) {
-		ModelAndView modelAndView = new ModelAndView();
-		UserModel usuario = userService.findModelByUsername(username);
-		usuario.setPassword(userService.encodePassword(username));
-		userService.addOrUpdate(usuario);
-		String mensaje = "Nueva clave de " + usuario.getName() + " " + usuario.getLastname() + ": " + username;
-		modelAndView.addObject("reseteoClaveCorrecto",mensaje);
-		LoggerMapper.log(Level.INFO, "resetearClaveUsuario", modelAndView, getClass());
 		return userList(modelAndView);
 	}
 

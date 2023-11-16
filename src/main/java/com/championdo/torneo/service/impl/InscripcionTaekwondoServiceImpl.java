@@ -100,6 +100,17 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     }
 
     @Override
+    public void deleteByDni(String dni) {
+        LoggerMapper.methodIn(Level.INFO, "deleteByDni", "DNI: " + dni, getClass());
+        List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = findByMayorDni(dni);
+        for(InscripcionTaekwondoModel inscripcion : inscripcionTaekwondoModelList) {
+            delete(inscripcion.getId());
+        }
+        LoggerMapper.methodOut(Level.INFO, "deleteByDni", "", getClass());
+
+    }
+
+    @Override
     public void deleteAll() {
         inscripcionTaekwondoRepository.deleteAll();
     }

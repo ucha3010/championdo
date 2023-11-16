@@ -138,6 +138,18 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
+    public void deleteByDni(String dni) {
+        LoggerMapper.methodIn(Level.INFO, "deleteByDni", "DNI: " + dni, getClass());
+        List<InscripcionModel> inscripcionModelList = findByDniAutorizador(dni);
+        InscripcionModel inscripcionModel = findByDniInscripto(dni);
+        inscripcionModelList.add(inscripcionModel);
+        for(InscripcionModel inscripcion : inscripcionModelList) {
+            delete(inscripcion.getId());
+        }
+        LoggerMapper.methodOut(Level.INFO, "deleteByDni", "", getClass());
+    }
+
+    @Override
     public void deleteAll() {
         inscripcionRepository.deleteAll();
     }

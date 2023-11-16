@@ -25,6 +25,8 @@ public interface InscripcionTaekwondoService {
 
     void delete(int idInscripcion);
 
+    void deleteByDni(String dni);
+
     void deleteAll();
 
     UtilModel getDeleteEnable(int codigoGimnasio);

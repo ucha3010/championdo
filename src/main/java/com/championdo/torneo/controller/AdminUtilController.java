@@ -34,6 +34,7 @@ public class AdminUtilController {
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
+        //TODO DAMIAN al configurar el correo debería preguntar cuál es la plataforma del mismo. Ya que no es lo mismo enviar un correo de Gmail a uno de Msn
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/utilList");
