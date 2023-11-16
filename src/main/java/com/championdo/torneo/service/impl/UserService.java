@@ -163,7 +163,7 @@ public class UserService implements UserDetailsService {
 	public void deleteFromRoot (int idGimnasioRootModel) {
 		List<com.championdo.torneo.entity.User> userList = userRepository.findByCodigoGimnasioOrderByLastnameDesc(idGimnasioRootModel);
 		for (com.championdo.torneo.entity.User user : userList) {
-			delete(user.getUsername());
+			delete(user.getUsername(), user.getCodigoGimnasio());
 		}
 	}
 
