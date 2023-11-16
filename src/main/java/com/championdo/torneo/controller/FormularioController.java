@@ -176,27 +176,33 @@ public class FormularioController {
     @PostMapping("/alta")
     @PreAuthorize("permitAll()")
     public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
+        boolean altaCorrecta = true;
+        User user = new User();
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
-                com.championdo.torneo.entity.User user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
+                user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
                 emailService.sendUserAdded(user);
-                modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
-                modelAndView.setViewName(Constantes.LOGIN);
-                LoggerMapper.log(Level.INFO, "alta", user, this.getClass());
-                return modelAndView;
             } catch (PersistenceException e) {
                 modelAndView.addObject("problemasAlta", "Problemas dando de alta usuario con DNI " + userModel.getUsername());
                 LoggerMapper.log(Level.ERROR, "alta", e.getMessage(), this.getClass());
+                altaCorrecta = false;
             } catch (SenderException se) {
                 LoggerMapper.log(Level.ERROR, "alta", se.getMessage(), this.getClass());
             }
         } else {
             modelAndView.addObject("dniDadoDeAlta", "Ya existe un usuario dado de alta con DNI " + userModel.getUsername());
+            altaCorrecta = false;
         }
-        modelAndView.setViewName("formularioAlta");
-        modelAndView.addObject("userModel", userModel);
-        formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
-        return modelAndView;
+        if(altaCorrecta) {
+            modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
+            modelAndView.setViewName(Constantes.LOGIN);
+            LoggerMapper.log(Level.INFO, "alta", user, this.getClass());
+            return modelAndView;
+        } else {
+            modelAndView.setViewName("formularioAlta");
+            modelAndView.addObject("userModel", userModel);
+            return getAlta(modelAndView);
+        }
 
     }
 
