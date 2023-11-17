@@ -46,6 +46,8 @@ public class Constantes {
 	public static final String HABILITAR_CUENTA_BANCARIA = "inscripciones.cuenta.bancaria";
 	public static final String CORREO_GIMNASIO = "gimnasio.correo";
 	public static final String CLAVE_CORREO = "clave.correo";
+	public static final String HOST_CORREO = "host.email";
+	public static final String PORT_CORREO = "port.email";
 
 	// códigos de avisos
     public static final String AVISO_EMAIL = "1000";

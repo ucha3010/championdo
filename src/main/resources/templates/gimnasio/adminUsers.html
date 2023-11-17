@@ -20,12 +20,6 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
     <script>
-        function changeRole(username){
-            var relativeUrl = "usuario/rol/" + username + "/" + document.getElementById("rolSelect" + username).value;
-            var domain = getDomain(location.href);
-            location.href = domain + relativeUrl;
-        }
-
         function viewDetail(username){
             var relativeUrl = "usuario/users/" + username;
             var domain = getDomain(location.href);

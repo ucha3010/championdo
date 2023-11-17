@@ -1,5 +1,6 @@
 package com.championdo.torneo.util;
 
+import com.championdo.torneo.model.EmailModel;
 import com.championdo.torneo.service.UtilService;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
-import java.util.List;
 import java.util.Properties;
 
 @Component
@@ -34,33 +34,33 @@ public class SendMessage {
      * Indicaciones www.youtube.com/watch?v=ZggjlwLzrxg
      * Indicaciones archivos adjuntos www.youtube.com/watch?v=o7v0EQgxP50
     */
-    public void enviarCorreo(String fromEmailAddress, String toEmailAddress, String messageSubject, String bodyText, List<File> files, int codigoGimnasio)
-            throws MessagingException {
+    public void enviarCorreo(EmailModel emailModel) throws MessagingException {
 
-        LoggerMapper.methodIn(Level.INFO, "enviarCorreo", "fromEmailAddress: " + fromEmailAddress + ", toEmailAddress: " + toEmailAddress, getClass());
+        LoggerMapper.methodIn(Level.INFO, "enviarCorreo", "fromEmailAddress: " + emailModel.getFromEmailAddress()
+                + ", toEmailAddress: " + emailModel.getToEmailAddress(), getClass());
 
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.host", emailModel.getHost());//smtp.gmail.com,smtp.office365.com
+        props.put("mail.smtp.ssl.trust", emailModel.getHost());//smtp.gmail.com,smtp.office365.com
         props.setProperty("mail.smtp.starttls.enable", "true");
-        props.setProperty("mail.smtp.port", "587");
-        props.setProperty("mail.smtp.user", fromEmailAddress);
-        props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.setProperty("mail.smtp.port", emailModel.getPort());//587
+        props.setProperty("mail.smtp.user", emailModel.getFromEmailAddress());
+        props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");//no está
         props.setProperty("mail.smtp.auth", "true");
 
         Session session = Session.getDefaultInstance(props);
         MimeMessage email = new MimeMessage(session);
-        email.setFrom(new InternetAddress(fromEmailAddress));
-        email.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(toEmailAddress));
-        email.setSubject(messageSubject);
-        if (files == null) {
-            email.setText(bodyText, "ISO-8859-1", "html");
+        email.setFrom(new InternetAddress(emailModel.getFromEmailAddress()));
+        email.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(emailModel.getToEmailAddress()));
+        email.setSubject(emailModel.getMessageSubject());
+        if (emailModel.getFiles() == null) {
+            email.setText(emailModel.getBodyText(), "ISO-8859-1", "html");
         } else {
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(bodyText, "text/html; charset=utf-8");
+            mimeBodyPart.setContent(emailModel.getBodyText(), "text/html; charset=utf-8");
             MimeMultipart multipart = new MimeMultipart();
             multipart.addBodyPart(mimeBodyPart);
-            for (File file: files) {
+            for (File file: emailModel.getFiles()) {
                 mimeBodyPart = new MimeBodyPart();
                 mimeBodyPart.setDataHandler(new DataHandler(new FileDataSource(file)));
                 mimeBodyPart.setFileName(file.getName());
@@ -72,7 +72,7 @@ public class SendMessage {
 
         //Enviar el correo
         Transport transport = session.getTransport("smtp");
-        transport.connect(fromEmailAddress, utilService.findByClave(Constantes.CLAVE_CORREO, codigoGimnasio).getValor());
+        transport.connect(emailModel.getFromEmailAddress(), utilService.findByClave(Constantes.CLAVE_CORREO, emailModel.getCodigoGimnasio()).getValor());
         transport.sendMessage(email, email.getRecipients(javax.mail.Message.RecipientType.TO));
         transport.close();
 

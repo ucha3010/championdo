@@ -2,6 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
+import com.championdo.torneo.model.EmailModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UserModel;
@@ -28,8 +29,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendNewPassword (UserModel userModel) throws SenderException {
         try {
-            sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO, userModel.getCodigoGimnasio()).getValor(), userModel.getCorreo(),
-                    "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null, userModel.getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, userModel.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, userModel.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(utilService.findByClave(Constantes.CORREO_GIMNASIO, userModel.getCodigoGimnasio()).getValor(), userModel.getCorreo(),
+                    "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null, host, port, userModel.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -46,8 +49,11 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminTournamentRegistration(UserAutorizacionModel userAutorizacionModel) throws SenderException {
         try {
             String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(correoGimnasio, correoGimnasio,
-                    "Nueva inscripción en torneo", textMessageConfirmAdminTournamentRegistration(userAutorizacionModel), null, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, correoGimnasio, "Nueva inscripción en torneo",
+                    textMessageConfirmAdminTournamentRegistration(userAutorizacionModel), null, host, port,
+                    userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -66,8 +72,10 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException {
         try {
             String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(correoGimnasio, correoGimnasio,
-                    "Nueva inscripción en el gimnasio", textMessageConfirmAdminGymJoining(inscripcionTaekwondoModel), null, inscripcionTaekwondoModel.getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, correoGimnasio, "Nueva inscripción en el gimnasio",
+                    textMessageConfirmAdminGymJoining(inscripcionTaekwondoModel), null, host, port, inscripcionTaekwondoModel.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -76,8 +84,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendCodeValidation(User user, String code) throws SenderException {
         try {
-            sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO, user.getCodigoGimnasio()).getValor(), user.getCorreo(),
-                    "Código de validación", textMessageCodeValidation(user, code), null, user.getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, user.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, user.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(utilService.findByClave(Constantes.CORREO_GIMNASIO, user.getCodigoGimnasio()).getValor(), user.getCorreo(),
+                    "Código de validación", textMessageCodeValidation(user, code), null, host, port, user.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -86,8 +96,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, List<File> files) throws SenderException {
         try {
-            sendMessage.enviarCorreo(utilService.findByClave(Constantes.CORREO_GIMNASIO, userModel.getCodigoGimnasio()).getValor(), userModel.getCorreo(),
-                    messageSubject, messageBody, files, userModel.getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, userModel.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, userModel.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(utilService.findByClave(Constantes.CORREO_GIMNASIO, userModel.getCodigoGimnasio()).getValor(), userModel.getCorreo(),
+                    messageSubject, messageBody, files, host, port, userModel.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL_ARCHIVO_ADJUNTO,e.getMessage());
         }
@@ -97,8 +109,10 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminSepaSigned(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException {
         try {
             String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(correoGimnasio, correoGimnasio,
-                    "Nuevo formulario de domiciliación firmado", textMessageConfirmAdminSepaSigned(inscripcionTaekwondoModel), null, inscripcionTaekwondoModel.getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, correoGimnasio, "Nuevo formulario de domiciliación firmado",
+                    textMessageConfirmAdminSepaSigned(inscripcionTaekwondoModel), null, host, port, inscripcionTaekwondoModel.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -108,8 +122,10 @@ public class EmailServiceImpl implements EmailService {
     public void sendUserAdded(User user) throws SenderException {
         try {
             String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, user.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(correoGimnasio, user.getCorreo(),
-                    "Alta de ".concat(user.getName()), textMessageConfirmAddedUser(user), null, user.getCodigoGimnasio());
+            String host = utilService.findByClave(Constantes.HOST_CORREO, user.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, user.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, user.getCorreo(),
+                    "Alta de ".concat(user.getName()), textMessageConfirmAddedUser(user), null, host, port, user.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
