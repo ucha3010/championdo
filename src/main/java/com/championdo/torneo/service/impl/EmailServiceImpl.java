@@ -137,7 +137,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
-        stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola <b>").append(name).append("</b>!</h1><br>");
         stringBuilder.append("<p>Nos ha llegado tu solicitud de cambio de contraseña</p>");
         stringBuilder.append("<p>Tu nueva contraseña es: ").append(userModel.getPassword()).append("</p>");
         stringBuilder.append("<br><br>");
@@ -153,7 +153,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
-        stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola <b>").append(name).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te adjuntamos la confirmación de inscripción al Torneo de Tres Cantos.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
@@ -166,7 +166,7 @@ public class EmailServiceImpl implements EmailService {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
-        stringBuilder.append("<h1>Hola<b>").append(inscripcionTaekwondoModel.getMayorNombre()).append("</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola <b>").append(inscripcionTaekwondoModel.getMayorNombre()).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te adjuntamos la confirmación de inscripción al Gimnasio.</p>");
         if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
             stringBuilder.append("<p>Por favor no olvides enviarnos la autorización de domiciliación firmada.</p>");
@@ -266,7 +266,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<HTML><BODY>");
         String mayor = user.getName() + " " + user.getLastname() +
                 (StringUtils.isNullOrEmpty(user.getSecondLastname()) ? "" : " " + user.getSecondLastname());
-        stringBuilder.append("<h1>Hola<b>").append(mayor).append("</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola <b>").append(mayor).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te confirmamos que tu usuario ha sido dado de alta de forma exitosa en la plataforma.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");

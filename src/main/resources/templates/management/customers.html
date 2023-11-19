@@ -76,6 +76,7 @@
             <tr>
                 <th>ID</th>
                 <th>Habilitado</th>
+                <th>NIF/CIF</th>
                 <th>Nombre Gimnasio</th>
                 <th>Nombre Responsable</th>
                 <th>Primer apellido Responsable</th>
@@ -92,6 +93,7 @@
             <tr th:each="customer : ${customerList}" th:attr="onclick=|viewDetail('${customer.id}')|">
                 <td th:text="${customer.id}"></td>
                 <td th:text="${customer.enabled}"></td>
+                <td th:text="${customer.cifNif}"></td>
                 <td th:text="${customer.nombreGimnasio}"></td>
                 <td th:text="${customer.nombreResponsable}"></td>
                 <td th:text="${customer.apellido1Responsable}"></td>

@@ -73,7 +73,11 @@ public class MapperUser {
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             if (externObject.getGimnasio() != null) {
                 localObject.setIdGimnasio(externObject.getGimnasio().getId());
-                localObject.setCodigoGimnasio(externObject.getGimnasio().getCodigoGimnasio());
+                if (externObject.getGimnasio().getCodigoGimnasio() != 0) {
+                    localObject.setCodigoGimnasio(externObject.getGimnasio().getCodigoGimnasio());
+                } else {
+                    localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+                }
             } else {
                 localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             }

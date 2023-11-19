@@ -68,6 +68,7 @@
 			<input type="hidden" name="password" th:value="${usuario.password}"/>
 			<input type="hidden" name="enabled" th:value="${usuario.enabled}"/>
 			<input type="hidden" name="username" th:value="${usuario.username}"/>
+			<input type="hidden" name="codigoGimnasio" th:value="${usuario.codigoGimnasio}"/>
 			<input th:if="${usuario.fechaAlta != null}" type="hidden" name="fechaAlta" th:value="${#dates.format(usuario.fechaAlta, 'yyyy/MM/dd HH:mm:ss')}"/>
 
 			<div class="row mb-1">

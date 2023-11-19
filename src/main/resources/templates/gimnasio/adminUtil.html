@@ -33,6 +33,16 @@
 				}
 			};
         }
+
+
+		function mostrarClave() {
+			var x = document.getElementById("clave.correo");
+				if (x.type === "password") {
+				x.type = "text";
+			} else {
+				x.type = "password";
+			}
+		}
     </script>
 	
 	<title>Parámetros</title>
@@ -89,19 +99,39 @@
 
 					<input type="hidden" name="clave" th:value="${unit.clave}"/>
 
-					<div class="col-xs-4">
-						<label th:for="${unit.clave}"><span th:text="#{${unit.clave}}"></span></label>
+					<div th:if="${unit.clave == 'clave.correo' and unit.codigoGimnasio == -1}" class="col-xs-4">
+						<label th:for="${unit.clave}">
+							<span th:text="#{${unit.clave}}"></span>
+							<span th:text="#{ya.existe.clave}" class="text-success"></span>
+						</label>
+					</div>
+
+					<div th:if="${unit.clave == 'clave.correo' and unit.codigoGimnasio != -1}" class="col-xs-4">
+						<label th:for="${unit.clave}">
+							<span th:text="#{${unit.clave}}"></span>
+							<span th:text="#{no.existe.clave}" class="text-danger"></span>
+						</label>
+					</div>
+
+					<div th:if="${unit.clave != 'clave.correo'}" class="col-xs-4">
+						<label th:for="${unit.clave}">
+							<span th:text="#{${unit.clave}}"></span>
+						</label>
 					</div>
 
 					<div class="col-xs-6">
-						<input type="text" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" />
+						<input th:if="${unit.clave} != clave.correo" type="text" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" />
+						<input th:if="${unit.clave} == clave.correo" type="password" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" />
 					</div>
 
 					<div class="col-xs-2">
-						<button class="btn btn-primary" type="submit">Actualizar</button>
+						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
 					</div>
 
 				</form>
+				<div th:if="${unit.clave} == clave.correo" class="col-xs-12">
+					<input type="checkbox" onclick="mostrarClave()"><span th:text="#{mostrar.clave}"></span>
+				</div>
 			</div>
 
 			<div class="row mb-3" th:each="unitInscripciones, iterStat : ${utilListInscripciones}">

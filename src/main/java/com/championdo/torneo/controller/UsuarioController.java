@@ -2,7 +2,6 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
-import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.ClaveUsuarioModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
@@ -10,17 +9,13 @@ import com.championdo.torneo.service.FormularioService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.UserRoleService;
 import com.championdo.torneo.service.impl.UserService;
-import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
-import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Set;
 
 @Controller
 @RequestMapping("/usuario")
@@ -57,6 +52,7 @@ public class UsuarioController {
 	@PostMapping("/actualizarUsuario")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
+		//TODO DAMIAN acá debería hacer que se modifiquen los campos que yo quiero modificar y no todos así no se arrastran campos como la password
 		ModelAndView modelAndView = new ModelAndView();
 		try {
 			userService.addOrUpdate(usuario);
@@ -172,15 +168,6 @@ public class UsuarioController {
 				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizado correctamente");
 		return userDetail(modelAndView, username);
-	}
-
-	private boolean hasRootRole (Set<UserRole> userRoleList) {
-		for (UserRole userRole: userRoleList) {
-			if(Constantes.ROLE_ROOT.equals(userRole.getRole())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }
