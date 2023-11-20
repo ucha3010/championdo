@@ -6,6 +6,8 @@ import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -34,7 +36,6 @@ public class AdminUtilController {
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
-        //TODO DAMIAN al configurar el correo debería preguntar cuál es la plataforma del mismo. Ya que no es lo mismo enviar un correo de Gmail a uno de Msn
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/utilList");
@@ -42,6 +43,8 @@ public class AdminUtilController {
         modelAndView.addObject("gimnasioModel", gimnasioService.findByCodigoGimnasio(user.getCodigoGimnasio()));
         modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", user.getCodigoGimnasio()));
         modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", user.getCodigoGimnasio()));
+        modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", user.getCodigoGimnasio()).get(0));
+        modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
         LoggerMapper.log(Level.INFO, "utilList", modelAndView, this.getClass());
         return modelAndView;
@@ -55,6 +58,25 @@ public class AdminUtilController {
         utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
+        return utilList(modelAndView);
+    }
+
+    @PostMapping("/updateHost")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView updateHost(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
+        User user = userService.cargarUsuarioCompleto(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/updateHost");
+        UtilModel utilPort = new UtilModel();
+        for (EmailEnum emailEnum : EmailEnum.values()) {
+            if (emailEnum.getHost().equals(utilModel.getValor())) {
+                utilPort = new UtilModel(Constantes.PORT_CORREO, emailEnum.getPort(), user.getCodigoGimnasio());
+                break;
+            }
+        }
+        utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
+        utilService.update(utilModel);
+        utilService.update(utilPort);
+        modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");
         return utilList(modelAndView);
     }
 }

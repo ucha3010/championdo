@@ -93,7 +93,7 @@
 			</div>
 		</section>
 
-		<section  sec:authorize="hasRole('ROLE_ADMIN')">
+		<section  sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorLightOrange">
 			<div class="row mb-3" th:each="unit : ${utilListCorreo}">
 				<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
 
@@ -133,6 +133,29 @@
 					<input type="checkbox" onclick="mostrarClave()"><span th:text="#{mostrar.clave}"></span>
 				</div>
 			</div>
+
+			<div class="row mb-3">
+				<form action="#" th:action="@{/adminUtil/updateHost}" th:object="${utilModel}" method="post">
+
+					<input type="hidden" name="clave" th:value="${utilHost.clave}"/>
+
+					<div class="col-xs-6">
+						<label th:for="host.email"><span th:text="#{host.name}"></span></label>
+					</div>
+
+					<div class="col-xs-4">
+						<select name="valor" id="host.email" class="form-control form-control-lg" onchange="this.form.submit()">
+							<option th:each="unitHost : ${utilListHost}" th:value="${unitHost.valor}" th:text="${unitHost.clave}" th:selected="${unitHost.valor == utilHost.valor}"></option>
+						</select>
+					</div>
+
+					<div class="col-xs-2">
+					</div>
+				</form>
+			</div>
+		</section>
+
+		<section  sec:authorize="hasRole('ROLE_ADMIN')">
 
 			<div class="row mb-3" th:each="unitInscripciones, iterStat : ${utilListInscripciones}">
 				<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">

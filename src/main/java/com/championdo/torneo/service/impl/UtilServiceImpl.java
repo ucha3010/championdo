@@ -39,7 +39,7 @@ public class UtilServiceImpl implements UtilService {
         List<UtilModel> utilModelList = new ArrayList<>();
         for (Util util: utilRepository.findByCodigoGimnasio(codigoGimnasio)) {
             if(util.getClave().endsWith(endWord)) {
-                if (util.getClave().startsWith("clave") && !StringUtils.isNullOrEmpty(util.getClave())) {
+                if (util.getClave().startsWith("clave") && !StringUtils.isNullOrEmpty(util.getValor())) {
                     util.setCodigoGimnasio(-1);
                     util.setValor("");
                 }

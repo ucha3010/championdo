@@ -52,7 +52,7 @@ public class UsuarioController {
 	@PostMapping("/actualizarUsuario")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
-		//TODO DAMIAN acá debería hacer que se modifiquen los campos que yo quiero modificar y no todos así no se arrastran campos como la password
+		//TODO DAMIAN acá debería hacer el método addOrUpdate modifique los campos que yo quiero modificar y no todos así no se arrastran campos como la password desde front
 		ModelAndView modelAndView = new ModelAndView();
 		try {
 			userService.addOrUpdate(usuario);

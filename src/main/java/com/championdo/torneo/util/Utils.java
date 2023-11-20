@@ -89,4 +89,12 @@ public class Utils {
         listaSiNo.add(new UtilModel("No", Constantes.FALSE));
         return listaSiNo;
     }
+
+    public static List<UtilModel> cargarListaProveedoresHost() {
+        List<UtilModel> listaHost = new ArrayList<>();
+        for (EmailEnum emailEnum : EmailEnum.values()) {
+            listaHost.add(new UtilModel(emailEnum.getProveedor(),emailEnum.getHost()));
+        }
+        return listaHost;
+    }
 }

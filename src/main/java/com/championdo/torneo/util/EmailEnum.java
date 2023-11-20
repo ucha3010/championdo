@@ -1,10 +1,10 @@
 package com.championdo.torneo.util;
 
-public enum EmailEnum {//TODO DAMIAN Falta hacer configuración para que ADMIN pueda seleccionar el proveeror y con eso relleno los datos de acá
+public enum EmailEnum {
     VACIO("Seleccionar proveedor","",""),
     GMAIL("Gmail","smtp.gmail.com","587"),
     OFFICE365("Office 365","smtp.office365.com","587"),
-    YAHOO("Office 365","smtp.mail.yahoo.com","587");
+    YAHOO("Yahoo","smtp.mail.yahoo.com","587");
 
     private final String proveedor;
     private final String host;
