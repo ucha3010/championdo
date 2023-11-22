@@ -60,7 +60,6 @@ public class GimnasioRootController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
         LoggerMapper.methodIn(Level.INFO, "updateCustomer", customer, this.getClass());
-        modelAndView.setViewName("management/updateCustomer");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         customer.setUsuarioModificacion(user.getUsername());
         try {
@@ -70,9 +69,8 @@ public class GimnasioRootController {
             modelAndView.addObject("updateProblem", "Hubo un problema con la actualización");
             LoggerMapper.log(Level.ERROR, "updateCustomer", e.getMessage(), this.getClass());
         }
-        modelAndView.addObject("customer", customer);
         LoggerMapper.methodOut(Level.INFO, "updateCustomer", modelAndView, this.getClass());
-        return modelAndView;
+        return customersId(modelAndView, customer.getId());
     }
 
     @GetMapping("/formNewCustomer")

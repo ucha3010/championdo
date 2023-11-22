@@ -65,7 +65,6 @@
 		
 		<form action="#" th:action="@{/usuario/actualizarUsuario}" th:object="${usuario}" method="post" onsubmit="return validar()">
 		
-			<input type="hidden" name="password" th:value="${usuario.password}"/>
 			<input type="hidden" name="enabled" th:value="${usuario.enabled}"/>
 			<input type="hidden" name="username" th:value="${usuario.username}"/>
 			<input type="hidden" name="codigoGimnasio" th:value="${usuario.codigoGimnasio}"/>

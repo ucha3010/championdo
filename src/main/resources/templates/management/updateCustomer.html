@@ -94,9 +94,9 @@
 <body>
 	<div class="container">
 
-		<div th:if="${updateOk != null}" class="alert alert-success" role="alert"><span th:text="${updateOk}"></span></div>
-		<div th:if="${resetOk != null}" class="alert alert-success" role="alert"><span th:text="${resetOk}"></span></div>
-		<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
+		<div th:if="${updateOk != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOk}"></span></div>
+		<div th:if="${resetOk != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${resetOk}"></span></div>
+		<div th:if="${updateProblem != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${updateProblem}"></span></div>
 		<h1>
 			¡Hola <span th:text="${usuario.name}"></span>!
 			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
@@ -126,8 +126,8 @@
 
 			<form action="#" th:action="@{/gimnasioRoot/updateCustomer}" th:object="${customer}" method="post" onsubmit="return validar()">
 
-				<input type="hidden" name="id" th:value="*{id}"/>
-				<input type="hidden" name="fechaAlta" th:value="*{fechaAlta}"/>
+				<input type="hidden" th:field="*{id}" />
+				<input type="hidden" th:field="*{fechaAlta}" />
 
 				<div class="row mb-1">
 					<div class="col-md-2">

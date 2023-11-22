@@ -53,6 +53,7 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
 		//TODO DAMIAN acá debería hacer el método addOrUpdate modifique los campos que yo quiero modificar y no todos así no se arrastran campos como la password desde front
+		// en principio está hecho. Hay que probar
 		ModelAndView modelAndView = new ModelAndView();
 		try {
 			userService.addOrUpdate(usuario);
@@ -84,7 +85,7 @@ public class UsuarioController {
 		UserModel usuario = userService.findModelByUsername(claveUsuarioModel.getUsername());
 		if (userService.comparePassword(claveUsuarioModel.getAntiguaClave(), usuario.getPassword())) {
 			usuario.setPassword(userService.encodePassword(claveUsuarioModel.getNuevaClave()));
-			userService.addOrUpdate(usuario);
+			userService.updatePass(usuario);
 			modelAndView.addObject("claveModificada", "claveModificada");
 			LoggerMapper.log(Level.INFO, "actualizarUsuario", "Contraseña actualizada", getClass());
 		} else {

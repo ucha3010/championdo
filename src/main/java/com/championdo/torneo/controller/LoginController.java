@@ -68,7 +68,7 @@ public class LoginController {
 			UserModel usuario = userService.findModelByUsername(claveUsuarioModel.getUsername());
 			String password = Utils.generateSecurePassword();
 			usuario.setPassword(userService.encodePassword(password));
-			userService.addOrUpdate(usuario);
+			userService.updatePass(usuario);
 			usuario.setPassword(password);
 			emailService.sendNewPassword(usuario);
 			modelAndView.addObject("emailEnvio", Utils.ofuscar(usuario.getCorreo()));

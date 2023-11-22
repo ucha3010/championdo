@@ -1,6 +1,5 @@
 package com.championdo.torneo.service.impl;
 
-import com.championdo.torneo.entity.InscripcionTaekwondo;
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.GimnasioModel;
@@ -67,6 +66,19 @@ public class UserService implements UserDetailsService {
 	}
 
 	public com.championdo.torneo.entity.User addOrUpdate(UserModel usuario) throws PersistenceException {
+		try {
+			usuario.setPassword(findModelByUsername(usuario.getUsername()).getPassword());
+		} catch (NoResultException ignored) {
+		}
+		usuario.setFechaModificacion(new Date());
+		try {
+			return userRepository.save(mapperUser.model2Entity(usuario));
+		} catch (Exception exception) {
+			throw new PersistenceException();
+		}
+	}
+
+	public com.championdo.torneo.entity.User updatePass(UserModel usuario) throws PersistenceException {
 		usuario.setFechaModificacion(new Date());
 		try {
 			return userRepository.save(mapperUser.model2Entity(usuario));
@@ -118,7 +130,11 @@ public class UserService implements UserDetailsService {
 	}
 
 	public com.championdo.torneo.entity.User findByUsername(String username) {
-		return userRepository.findByUsername(username);
+		com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
+		if (user != null) {
+			user.setPassword(null);
+		}
+		return user;
 	}
 
 	public UserModel findModelByUsername(String username) throws NoResultException {
