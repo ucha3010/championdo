@@ -302,7 +302,6 @@ public class UserModel {
 	public String toString() {
 		return "UserModel{" +
 				"username='" + username + '\'' +
-				", password='" + password + '\'' +
 				", enabled=" + enabled +
 				", name='" + name + '\'' +
 				", lastname='" + lastname + '\'' +

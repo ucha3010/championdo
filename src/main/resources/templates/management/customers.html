@@ -92,7 +92,10 @@
             <tbody>
             <tr th:each="customer : ${customerList}" th:attr="onclick=|viewDetail('${customer.id}')|">
                 <td th:text="${customer.id}"></td>
-                <td th:text="${customer.enabled}"></td>
+                <td>
+                    <img th:if="${customer.enabled}" class="check-img" src="#" th:src="@{/imgs/ok.png}" alt="Habilitado">
+                    <img th:if="${!customer.enabled}" class="check-img" src="#" th:src="@{/imgs/ko.png}" alt="Deshabilitado">
+                </td>
                 <td th:text="${customer.cifNif}"></td>
                 <td th:text="${customer.nombreGimnasio}"></td>
                 <td th:text="${customer.nombreResponsable}"></td>

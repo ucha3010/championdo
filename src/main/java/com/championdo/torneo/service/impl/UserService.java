@@ -78,10 +78,10 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public com.championdo.torneo.entity.User updatePass(UserModel usuario) throws PersistenceException {
+	public void updatePass(UserModel usuario) throws PersistenceException {
 		usuario.setFechaModificacion(new Date());
 		try {
-			return userRepository.save(mapperUser.model2Entity(usuario));
+			userRepository.save(mapperUser.model2Entity(usuario));
 		} catch (Exception exception) {
 			throw new PersistenceException();
 		}
@@ -130,11 +130,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public com.championdo.torneo.entity.User findByUsername(String username) {
-		com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
-		if (user != null) {
-			user.setPassword(null);
-		}
-		return user;
+		return userRepository.findByUsername(username);
 	}
 
 	public UserModel findModelByUsername(String username) throws NoResultException {
@@ -208,5 +204,9 @@ public class UserService implements UserDetailsService {
 			userModelList.add(mapperUser.entity2Model(user));
 		}
 		return userModelList;
+	}
+
+	public Boolean isLoggedUser(String loggerUser, String foundUser) {
+		return loggerUser.equals(foundUser);
 	}
 }

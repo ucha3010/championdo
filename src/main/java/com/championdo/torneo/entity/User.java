@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class User {
 	
 	@Id
@@ -111,4 +110,36 @@ public class User {
 		this.userRole = userRole;
 	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+				"username='" + username + '\'' +
+				", enabled=" + enabled +
+				", name='" + name + '\'' +
+				", lastname='" + lastname + '\'' +
+				", secondLastname='" + secondLastname + '\'' +
+				", sexo='" + sexo + '\'' +
+				", fechaNacimiento=" + fechaNacimiento +
+				", idGimnasio=" + idGimnasio +
+				", idCalidad=" + idCalidad +
+				", idPais=" + idPais +
+				", idCinturon=" + idCinturon +
+				", fechaAlta=" + fechaAlta +
+				", fechaModificacion=" + fechaModificacion +
+				", usernameModificacione='" + usernameModificacione + '\'' +
+				", correo='" + correo + '\'' +
+				", menor=" + menor +
+				", dniMenor='" + dniMenor + '\'' +
+				", usernameACargo='" + usernameACargo + '\'' +
+				", domicilioCalle='" + domicilioCalle + '\'' +
+				", domicilioNumero='" + domicilioNumero + '\'' +
+				", domicilioOtros='" + domicilioOtros + '\'' +
+				", domicilioLocalidad='" + domicilioLocalidad + '\'' +
+				", domicilioCp='" + domicilioCp + '\'' +
+				", inclusivo=" + inclusivo +
+				", telefono='" + telefono + '\'' +
+				", codigoGimnasio=" + codigoGimnasio +
+				", userRole=" + userRole +
+				'}';
+	}
 }

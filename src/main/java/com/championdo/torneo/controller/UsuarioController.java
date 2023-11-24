@@ -52,8 +52,6 @@ public class UsuarioController {
 	@PostMapping("/actualizarUsuario")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
-		//TODO DAMIAN acá debería hacer el método addOrUpdate modifique los campos que yo quiero modificar y no todos así no se arrastran campos como la password desde front
-		// en principio está hecho. Hay que probar
 		ModelAndView modelAndView = new ModelAndView();
 		try {
 			userService.addOrUpdate(usuario);
@@ -131,8 +129,10 @@ public class UsuarioController {
 		User user = userService.cargarUsuarioCompleto(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users/"+username);
 		modelAndView.setViewName("gimnasio/adminUser");
-		modelAndView.addObject("user", userService.findModelByUsername(username));
+		UserModel userModel = userService.findModelByUsername(username);
+		modelAndView.addObject("user", userModel);
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
+		modelAndView.addObject("loggedUser", userService.isLoggedUser(user.getUsername(), userModel.getUsername()));
 		LoggerMapper.methodOut(Level.INFO, "/users/"+username, modelAndView, this.getClass());
 		return modelAndView;
 	}

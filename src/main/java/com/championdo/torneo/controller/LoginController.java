@@ -60,11 +60,11 @@ public class LoginController {
 	public ModelAndView nuevaClave(@ModelAttribute("claveUsuarioModel") ClaveUsuarioModel claveUsuarioModel, ModelAndView modelAndView) {
 		try {
 			//TODO DAMIAN evaluar este método. No me gusta así, ya que cualquiera puede pedir el cambio de clave de alguien y la clave directamente se cambia
-			//por ahí sería mejor enviar por email el acceso a una página de cambio de contraseña
-			//En el enlace que se envía iría un campo con una clave, esa clave la genero acá y la guardo en algún lado con un tiempo de validez
-			//Cuando se le abre la nueva página (que tengo que crear) al usuario para cambiar su contraseña, guardo de forma oculta la clave
-			//Al darle el usuario clic en enviar viajaría la clave, el username (DNI) y la nueva contraseña
-			//En backend verifico que la clave existe, que no está caducada y que pertenece al DNI que me envían y si cumple, cambio la contraseña
+			// por ahí sería mejor enviar por email el acceso a una página de cambio de contraseña
+			// En el enlace que se envía iría un campo con una clave, esa clave la genero acá y la guardo en algún lado con un tiempo de validez
+			// Cuando se le abre la nueva página (que tengo que crear) al usuario para cambiar su contraseña, guardo de forma oculta la clave
+			// Al darle el usuario clic en enviar viajaría la clave, el username (DNI) y la nueva contraseña
+			// En backend verifico que la clave existe, que no está caducada y que pertenece al DNI que me envían y si cumple, cambio la contraseña
 			UserModel usuario = userService.findModelByUsername(claveUsuarioModel.getUsername());
 			String password = Utils.generateSecurePassword();
 			usuario.setPassword(userService.encodePassword(password));

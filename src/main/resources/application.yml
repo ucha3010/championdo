@@ -10,7 +10,7 @@ spring:
     basename: templates/languages/messages
     encoding: UTF-8
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
   thymeleaf:
