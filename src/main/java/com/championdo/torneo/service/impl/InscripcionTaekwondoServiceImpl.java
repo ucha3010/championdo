@@ -176,6 +176,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         UserModel autorizado = userAutorizacionModel.getAutorizado();
 
         inscripcionTaekwondoModel.setMayorDni(mayorAutorizador.getUsername());
+        inscripcionTaekwondoModel.setCodigoGimnasio(mayorAutorizador.getCodigoGimnasio());
         inscripcionTaekwondoModel.setMayorNombre(mayorAutorizador.getName());
         inscripcionTaekwondoModel.setMayorApellido1(mayorAutorizador.getLastname());
         inscripcionTaekwondoModel.setMayorApellido2(mayorAutorizador.getSecondLastname());

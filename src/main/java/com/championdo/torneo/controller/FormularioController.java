@@ -115,6 +115,7 @@ public class FormularioController {
         ModelAndView modelAndView = new ModelAndView();
         User user = userService.cargarUsuarioCompleto(modelAndView);
         userAutorizacionModel.getAutorizado().setCodigoGimnasio(user.getCodigoGimnasio());
+        userAutorizacionModel.getMayorAutorizador().setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {

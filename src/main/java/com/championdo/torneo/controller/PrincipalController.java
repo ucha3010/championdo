@@ -29,7 +29,7 @@ public class PrincipalController {
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
     private UserService userService;
-
+// TODO DAMIAN falta hacer la renovación de licencia
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipal(ModelAndView modelAndView) {

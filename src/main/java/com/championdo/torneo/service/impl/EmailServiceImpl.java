@@ -62,6 +62,7 @@ public class EmailServiceImpl implements EmailService {
         UserModel userModel = new UserModel();
         userModel.setName(inscripcionTaekwondoModel.getMayorNombre());
         userModel.setCorreo(inscripcionTaekwondoModel.getMayorCorreo());
+        userModel.setCodigoGimnasio(inscripcionTaekwondoModel.getCodigoGimnasio());
         sendAttachedFile(userModel, "Confirmación inscripción gimnasio", textMessageGymJoining(inscripcionTaekwondoModel), files);
     }
 
