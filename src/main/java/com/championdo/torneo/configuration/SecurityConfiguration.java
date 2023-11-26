@@ -32,6 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/").permitAll()
 		.antMatchers("/olvidoClave").permitAll()
 		.antMatchers("/nuevaClave").permitAll()
+		.antMatchers("/pass-new").permitAll()
+		.antMatchers("/change-pass").permitAll()
 		.antMatchers("/formulario/alta").permitAll()
 		.anyRequest().authenticated()
 		.and()

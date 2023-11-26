@@ -427,6 +427,14 @@ CREATE TABLE `util` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Volcado de datos para la tabla `pais`
+--
+
+INSERT INTO `util` (`clave`, `codigo_gimnasio`, `valor`) VALUES
+('host.page.name', 0, 'http://localhost:8080');
+
+
+--
 -- Índices para tablas volcadas
 --
 

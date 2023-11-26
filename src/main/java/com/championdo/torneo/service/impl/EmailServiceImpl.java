@@ -2,10 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
-import com.championdo.torneo.model.EmailModel;
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
-import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
@@ -25,17 +22,17 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private UtilService utilService;
-
     @Override
-    public void sendNewPassword (UserModel userModel) throws SenderException {
+    public void sendChangePassword(UserModel userModel, TokenModel tokenModel) throws SenderException {
         try {
             String host = utilService.findByClave(Constantes.HOST_CORREO, userModel.getCodigoGimnasio()).getValor();
             String port = utilService.findByClave(Constantes.PORT_CORREO, userModel.getCodigoGimnasio()).getValor();
             sendMessage.enviarCorreo(new EmailModel(utilService.findByClave(Constantes.CORREO_GIMNASIO, userModel.getCodigoGimnasio()).getValor(), userModel.getCorreo(),
-                    "Nueva contraseña inscripción torneo", textMessageNewPassword(userModel), null, host, port, userModel.getCodigoGimnasio()));
+                    "Correo para poder modificar contraseña", textMessageChangePassword(userModel, tokenModel), null, host, port, userModel.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
+
     }
 
     @Override
@@ -131,20 +128,28 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    private String textMessageNewPassword (UserModel userModel) {
+    private String textMessageChangePassword(UserModel userModel, TokenModel tokenModel) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
-        stringBuilder.append("<h1>Hola <b>").append(name).append("</b>!</h1><br>");
-        stringBuilder.append("<p>Nos ha llegado tu solicitud de cambio de contraseña</p>");
-        stringBuilder.append("<p>Tu nueva contraseña es: ").append(userModel.getPassword()).append("</p>");
+        stringBuilder.append("<table style=\"width:100%; text-align:center;\">");
+        stringBuilder.append("<tr><td>");
+        stringBuilder.append("<h1>Hola<b>").append(name).append("</b>!</h1><br>");
+        stringBuilder.append("<p>Nos ha llegado tu solicitud de cambio de contraseña.</p>");
+        stringBuilder.append("<p>Por favor, para poder cambiar tu contraseña, presiona el siguiente botón:</p>");
+        stringBuilder.append("<br>");
+        stringBuilder.append("<a href=\"").append(utilService.findByClave(Constantes.HOST_PAGE_NAME,0).getValor()).append("/pass-new?username=")
+                .append(userModel.getUsername()).append("&token=").append(tokenModel.getId()).append("\">");
+        stringBuilder.append("<button style=\"background-color: #4CAF50; color: white; border: none; ")
+                .append("border-radius: 5px; padding: 10px 20px; font-size: 16px;\">Cambiar contraseña</button>");
+        stringBuilder.append("</a>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
+        stringBuilder.append("</td></tr></table>");
         stringBuilder.append("</BODY></HTML>");
         return stringBuilder.toString();
-
     }
 
     private String textMessageTournamentRegistration(UserModel userModel) {

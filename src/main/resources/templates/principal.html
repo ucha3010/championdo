@@ -69,6 +69,12 @@
 				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">País</button>
 			</a>
 		</section>
+
+		<section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+			<a href="#" th:href="@{/adminUtil/root-util}" class="textDecoration-none">
+				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Configuración</button>
+			</a>
+		</section>
 		
 	</div>
 

@@ -79,4 +79,24 @@ public class AdminUtilController {
         modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");
         return utilList(modelAndView);
     }
+
+    @GetMapping("/root-util")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView rootUtil(ModelAndView modelAndView) {
+        modelAndView.setViewName("management/adminUtil");
+        userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("utilModel", utilService.findByClave(Constantes.HOST_PAGE_NAME,0));
+        LoggerMapper.methodOut(Level.INFO, "rootUtil", modelAndView, this.getClass());
+        return modelAndView;
+    }
+
+    @PostMapping("/root-update-util")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView rootUpdateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
+        userService.cargarUsuarioCompleto(modelAndView);
+        utilService.update(utilModel);
+        modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
+        LoggerMapper.methodOut(Level.INFO, "rootUpdateUtil", modelAndView, getClass());
+        return rootUtil(modelAndView);
+    }
 }

@@ -47,8 +47,8 @@
 
 
 		<section class="margenArribaAbajo3Porc">
-			<div th:if="${errorEnvio != null}" class="alert alert-danger" role="alert">No se ha podido enviar una nueva contraseña al usuario <span th:text="${errorEnvio}"></span>. Por favor contacte con administrador.</div>
-			<div th:if="${emailEnvio != null}" class="alert alert-success" role="alert">Su nueva contraseña ha sido enviada a <span th:text="${emailEnvio}"></span></div>
+			<div th:if="${errorEnvio != null}" class="alert alert-danger" role="alert"><span th:text="${errorEnvio}"></span></div>
+			<div th:if="${emailEnvio != null}" class="alert alert-success" role="alert"><span th:text="${emailEnvio}"></span></div>
 		</section>
 
 		<section class="margenArribaAbajo3Porc">

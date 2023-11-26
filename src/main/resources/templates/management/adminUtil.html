@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	
+	<title>Parámetros</title>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+
+	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+</head>
+<body>
+	<section>
+		<div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
+	</section>
+
+	<div class="container">
+		<h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
+
+		<nav class="navbar navbar-default" role="navigation">
+			<form th:action="@{/logout}" method="POST">
+				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+			</form>
+		</nav>
+
+		<section>
+			<div class="row">
+				<div class="col-xs-2 mb-1">
+				</div>
+
+				<div class="col-xs-8 mb-10 colorGreen">
+					<h1>Parámetros</h1>
+				</div>
+
+				<div class="col-xs-2 mb-1">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				</div>
+			</div>
+		</section>
+
+		<section  sec:authorize="hasRole('ROLE_ROOT')">
+			<form action="#" th:action="@{/adminUtil/root-update-util}" th:object="${utilModel}" method="post">
+
+				<input type="hidden" th:field="*{clave}" />
+
+				<div class="col-xs-4">
+					<label th:for="${utilModel.clave}">
+						<span th:text="#{${utilModel.clave}}"></span>
+					</label>
+				</div>
+
+				<div class="col-xs-6">
+					<input type="text" th:field="*{valor}" class="form-control" />
+				</div>
+
+				<div class="col-xs-2">
+					<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
+				</div>
+
+			</form>
+
+		</section>
+
+		<div class="row">
+			<div class="col-xs-10">
+			</div>
+			<div class="col-xs-2">
+				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

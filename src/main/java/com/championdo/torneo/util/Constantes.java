@@ -48,6 +48,7 @@ public class Constantes {
 	public static final String CLAVE_CORREO = "clave.correo";
 	public static final String HOST_CORREO = "host.email";
 	public static final String PORT_CORREO = "port.email";
+	public static final String HOST_PAGE_NAME = "host.page.name";
 
 	// códigos de avisos
     public static final String AVISO_EMAIL = "1000";

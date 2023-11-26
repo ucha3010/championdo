@@ -3,6 +3,7 @@ package com.championdo.torneo.service;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.TokenModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UserModel;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface EmailService {
 
-    void sendNewPassword(UserModel userModel) throws SenderException;
+    void sendChangePassword(UserModel userModel, TokenModel tokenModel) throws SenderException;
 
     void sendTournamentRegistration(UserModel userModel, File inscripcion) throws SenderException;
 

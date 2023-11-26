@@ -56,20 +56,6 @@ class TorneoApplicationTests {
 	}
 
 	@Test
-	void testEmailPass() {
-		try {
-			UserModel userModel = new UserModel();
-			userModel.setName("Julián");
-			userModel.setPassword("123456");
-			userModel.setCorreo("dusheff@hotmail.com");
-			emailService.sendNewPassword(userModel);
-		} catch (SenderException e) {
-			LoggerMapper.log(Level.ERROR, "testEmail", e.getMessage(), getClass());
-
-		}
-	}
-
-	@Test
 	void testEmailWithAttachedFile() {
 		try {
 			UserModel userModel = new UserModel();
@@ -161,11 +147,9 @@ class TorneoApplicationTests {
 				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
 					if (exc == null && !directorio.equals(dir)) {
 						Files.delete(dir);
-						return FileVisitResult.CONTINUE;
-					} else {
-						// Manejar el error al eliminar un directorio, si es necesario
-						return FileVisitResult.CONTINUE;
 					}
+					// Manejar el error al eliminar un directorio, si es necesario, con el else
+					return FileVisitResult.CONTINUE;
 				}
 			});
 		}
