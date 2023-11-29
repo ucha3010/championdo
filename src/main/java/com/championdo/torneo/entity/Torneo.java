@@ -26,6 +26,9 @@ public class Torneo {
     private Date fechaTorneo;
     private Date fechaComienzoInscripcion;
     private Date fechaFinInscripcion;
+    private boolean adulto;
+    private boolean menor;
+    private boolean inclusivo;
     private int codigoGimnasio;
 
 }

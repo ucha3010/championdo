@@ -12,7 +12,7 @@
 
 	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
 
-	<title>Página principal</title>
+	<title>Principal torneo</title>
 
 	<script type="text/javascript">
 		function confirmDelete(id){
@@ -78,15 +78,15 @@
 		</section>
 
 		<section class="text-center">
-			<a href="#" th:href="@{/formulario/propia}" class="textDecoration-none">
+			<a href="#" th:href="@{/formulario/selectTournament/adulto}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button" th:disabled="${inscripcion != null and inscripcion.id != 0}">Inscripción propia</button><br>
 			</a>
 
-			<a href="#" th:href="@{/formulario/menorOInclisivo/true}" class="textDecoration-none">
+			<a href="#" th:href="@{/formulario/selectTournament/menor}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización menor de 16 años</button><br>
 			</a>
 
-			<a href="#" th:href="@{/formulario/menorOInclisivo/false}" class="textDecoration-none">
+			<a href="#" th:href="@{/formulario/selectTournament/inclusivo}" class="textDecoration-none">
 				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización inclusiva</button><br>
 			</a>
 		</section>

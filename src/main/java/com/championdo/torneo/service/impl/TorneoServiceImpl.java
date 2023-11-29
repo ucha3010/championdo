@@ -10,6 +10,7 @@ import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service()
@@ -70,7 +72,7 @@ public class TorneoServiceImpl implements TorneoService {
     public void delete(int id) throws RemoveException {
         try {
             if(!inscripcionService.findByIdTorneo(id).isEmpty()) {
-                throw new RemoveException("101", "Se está intentando eliminar un torneo que tiene inscripciones");
+                throw new RemoveException(Constantes.ERROR_BORRAR_TORNEO_CON_INSCRIPCIONES, "Se está intentando eliminar un torneo que tiene inscripciones");
             }
             torneoRepository.deleteById(id);
             for (TorneoGimnasioModel torneoGimnasioModel: torneoGimnasioService.findAll(id)) {
@@ -78,8 +80,14 @@ public class TorneoServiceImpl implements TorneoService {
             }
         } catch (IllegalArgumentException e) {
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
-            throw new RemoveException("100", "Error al borrar el torneo");
+            throw new RemoveException(Constantes.ERROR_BORRAR_TORNEO, "Error al borrar el torneo");
         }
         LoggerMapper.methodOut(Level.INFO, "delete", id, getClass());
+    }
+
+    @Override
+    public List<TorneoModel> findAllowedWithGyms(Date date, String tournamentType) {
+        // TODO DAMIAN filtrar para que la fecha esté dentro de la fecha de inscripción y que tenga habilitado lo que llegue en tournamentType
+        return null;
     }
 }

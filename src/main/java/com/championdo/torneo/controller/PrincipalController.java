@@ -44,18 +44,18 @@ public class PrincipalController {
         modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(usuario.getCodigoGimnasio()));
-        LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, "paginaPrincipal", modelAndView, getClass());
         return modelAndView;
     }
 
     @GetMapping("/principalTorneo")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipalTorneo(ModelAndView modelAndView) {
-        modelAndView.setViewName("principalTorneo");
+        modelAndView.setViewName("torneo/principalTorneo");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        LoggerMapper.log(Level.INFO, "paginaPrincipal", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, "paginaPrincipalTorneo", modelAndView, getClass());
         return modelAndView;
     }
 

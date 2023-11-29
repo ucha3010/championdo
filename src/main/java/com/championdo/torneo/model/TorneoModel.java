@@ -22,6 +22,9 @@ public class TorneoModel {
     private Date fechaComienzoInscripcion;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaFinInscripcion;
+    private boolean adulto;
+    private boolean menor;
+    private boolean inclusivo;
     private List<TorneoGimnasioModel> gimnasios;
     private int codigoGimnasio;
 }

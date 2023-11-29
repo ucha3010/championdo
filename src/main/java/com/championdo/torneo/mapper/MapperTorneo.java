@@ -21,6 +21,9 @@ public class MapperTorneo {
             localObject.setFechaTorneo(externObject.getFechaTorneo());
             localObject.setFechaComienzoInscripcion(externObject.getFechaComienzoInscripcion());
             localObject.setFechaFinInscripcion(externObject.getFechaFinInscripcion());
+            localObject.setAdulto(externObject.isAdulto());
+            localObject.setMenor(externObject.isMenor());
+            localObject.setInclusivo(externObject.isInclusivo());
             localObject.setGimnasios(torneoGimnasioService.findAll(externObject.getId()));
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
@@ -35,6 +38,9 @@ public class MapperTorneo {
             localObject.setFechaTorneo(externObject.getFechaTorneo());
             localObject.setFechaComienzoInscripcion(externObject.getFechaComienzoInscripcion());
             localObject.setFechaFinInscripcion(externObject.getFechaFinInscripcion());
+            localObject.setAdulto(externObject.isAdulto());
+            localObject.setMenor(externObject.isMenor());
+            localObject.setInclusivo(externObject.isInclusivo());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
         }
         return localObject;

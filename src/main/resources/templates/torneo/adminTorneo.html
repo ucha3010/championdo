@@ -31,6 +31,14 @@
 					validado = false;
 				}
 			}
+
+			var audultoCheck = document.getElementById('adulto').checked;
+			var menorCheck = document.getElementById('menor').checked;
+			var inclusivoCheck = document.getElementById('inclusivo').checked;
+			if(!audultoCheck && !menorCheck && !inclusivoCheck){
+				document.getElementById('adultoError').innerHTML = "Obligatorio seleccionar alguna opción";
+				validado = false;
+			}
 			
 			if(validado){
 				return true;
@@ -145,6 +153,31 @@
 				</div>
 				<div class="col-xs-5">
 					<span id="fechaTorneoError" name="errorSpan"></span>
+				</div>
+			</div>
+
+			<div class="row mb-1">
+				<div class="col-xs-3">
+				</div>
+				<div class="col-xs-2 form-check">
+					<input class="form-check-input" type="checkbox" th:field="*{adulto}" id="adulto">
+					<label class="form-check-label" for="adulto">Adulto</label>
+				</div>
+				<div class="col-xs-2 form-check">
+					<input class="form-check-input" type="checkbox" th:field="*{menor}" id="menor">
+					<label class="form-check-label" for="menor">Menor</label>
+				</div>
+				<div class="col-xs-2 form-check">
+					<input class="form-check-input" type="checkbox" th:field="*{inclusivo}" id="inclusivo">
+					<label class="form-check-label" for="inclusivo">Inclusivo</label>
+				</div>
+				<div class="col-xs-3">
+				</div>
+			</div>
+
+			<div class="row mb-1">
+				<div class="col-xs-12">
+					<span id="adultoError" name="errorSpan" style="color:red"></span>
 				</div>
 			</div>
 
