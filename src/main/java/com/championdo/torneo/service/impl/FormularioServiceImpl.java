@@ -35,6 +35,12 @@ public class FormularioServiceImpl implements FormularioService {
     private PaisService paisService;
 
     @Autowired
+    private TorneoService torneoService;
+
+    @Autowired
+    private TorneoGimnasioService torneoGimnasioService;
+
+    @Autowired
     private UtilService utilService;
 
 
@@ -81,14 +87,17 @@ public class FormularioServiceImpl implements FormularioService {
             pdfModel.setInclusivo(userAutorizacionModel.getAutorizado().isInclusivo());
             UserModel mayor = userAutorizacionModel.getMayorAutorizador();
             UserModel menor = userAutorizacionModel.getAutorizado();
+            menor.setIdTorneo(mayor.getIdTorneo());
+            menor.setIdTorneoGimnasio(mayor.getIdTorneoGimnasio());
 
             rellenoAutorizador(mayor, pdfModel);
             rellenoCompetidor(menor, pdfModel);
             rellenoMenor(menor, pdfModel);
         }
-        pdfModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor());
-        pdfModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor());
-        pdfModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO, userAutorizacionModel.getMayorAutorizador().getCodigoGimnasio()).getValor());
+        TorneoModel torneoModel = torneoService.findById(userAutorizacionModel.getMayorAutorizador().getIdTorneo());
+        pdfModel.setNombreCampeonato(torneoModel.getNombre());
+        pdfModel.setFechaCampeonato(Utils.date2String(torneoModel.getFechaTorneo()));
+        pdfModel.setDireccionCampeonato(torneoModel.getDireccion());
 
         return pdfModel;
     }
@@ -161,8 +170,8 @@ public class FormularioServiceImpl implements FormularioService {
                 pdfModel.setFechaNacimientoMenor(Utils.date2String(userModel.getFechaNacimiento()));
             }
         }
-        if(userModel.getGimnasio() != null) {
-            pdfModel.setGimnasio(userModel.getGimnasio().getNombre());
+        if(userModel.getIdTorneoGimnasio() != 0) {
+            pdfModel.setGimnasio(torneoGimnasioService.findById(userModel.getIdTorneoGimnasio()).getNombreGimnasio());
         }
         if(userModel.getCinturon() != null) {
             pdfModel.setCinturonActual(userModel.getCinturon().getColor());

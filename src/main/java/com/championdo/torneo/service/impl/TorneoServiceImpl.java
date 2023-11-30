@@ -12,6 +12,7 @@ import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ public class TorneoServiceImpl implements TorneoService {
 
     @Override
     public void add(TorneoModel torneoModel) {
+        torneoModel.setFechaFinInscripcion(Utils.cambiarHMS(torneoModel.getFechaFinInscripcion(),23,59,59));
         torneoModel = mapperTorneo.entity2Model(torneoRepository.save(mapperTorneo.model2Entity(torneoModel)));
         TorneoGimnasioModel torneoGimnasioModel = new TorneoGimnasioModel();
         torneoGimnasioModel.setIdTorneo(torneoModel.getId());
@@ -86,8 +88,25 @@ public class TorneoServiceImpl implements TorneoService {
     }
 
     @Override
-    public List<TorneoModel> findAllowedWithGyms(Date date, String tournamentType) {
-        // TODO DAMIAN filtrar para que la fecha esté dentro de la fecha de inscripción y que tenga habilitado lo que llegue en tournamentType
-        return null;
+    public List<TorneoModel> findAllowed(Date date, String tournamentType) {
+        List<Torneo> torneoList;
+        List<TorneoModel> torneoModelList = new ArrayList<>();
+        switch (tournamentType) {
+            case Constantes.ADULTO:
+                torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndAdultoTrue(date, date);
+                break;
+            case Constantes.MENOR:
+                torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndMenorTrue(date, date);
+                break;
+            case Constantes.INCLUSIVO:
+                torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndInclusivoTrue(date, date);
+                break;
+            default:
+                torneoList = new ArrayList<>();
+        }
+        for (Torneo torneo : torneoList) {
+            torneoModelList.add(mapperTorneo.entity2Model(torneo));
+        }
+        return torneoModelList;
     }
 }

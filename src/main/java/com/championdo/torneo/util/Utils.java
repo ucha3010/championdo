@@ -64,6 +64,22 @@ public class Utils {
         caducidad.add(Calendar.MINUTE, minutos);
         return caducidad.getTime();
     }
+    public static Date cambiarHMS(Date fechaOriginal, int hora, int min, int seg) {
+
+        Calendar calendario = Calendar.getInstance();
+        calendario.setTime(fechaOriginal);
+        // si deseo no cambiar hora, minutos o segundos envío ese dato como negativo
+        if (hora >= 0) {
+            calendario.set(Calendar.HOUR_OF_DAY, hora);
+        }
+        if (min >= 0) {
+            calendario.set(Calendar.MINUTE, min);
+        }
+        if (seg >= 0) {
+            calendario.set(Calendar.SECOND, seg);
+        }
+        return calendario.getTime();
+    }
 
     public static String ofuscar(String entrada) {
         StringBuilder sb = new StringBuilder();

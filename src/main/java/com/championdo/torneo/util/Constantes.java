@@ -4,6 +4,8 @@ public class Constantes {
 
 	// vistas
 	public static final String LOGIN = "loginTorneo";
+	public static final String ADULTO = "adulto";
+	public static final String MENOR = "menor";
 
 	// posibles roles
 	public static final String ROLE_USER = "ROLE_USER";

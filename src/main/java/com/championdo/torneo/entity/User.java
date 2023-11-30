@@ -3,7 +3,6 @@ package com.championdo.torneo.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -38,26 +37,12 @@ public class User {
 
 	@Column(name = "sexo", length = 9)
 	private String sexo;
-
-	@Column(name = "fechaNacimiento")
 	private Date fechaNacimiento;
-
-	@Column(name = "idGimnasio")
 	private int idGimnasio;
-
-	@Column(name = "idCalidad")
 	private int idCalidad;
-
-	@Column(name = "idPais")
 	private int idPais;
-
-	@Column(name = "idCinturon")
 	private int idCinturon;
-
-	@Column(name = "fechaAlta")
 	private Date fechaAlta;
-
-	@Column(name = "fechaModificacion")
 	private Date fechaModificacion;
 
 	@Column(name = "usernameModificacione", length = 45)
@@ -95,7 +80,8 @@ public class User {
 
 	@Column(name = "telefono", length = 20)
 	private String telefono;
-
+	private int idTorneo;
+	private int idTorneoGimnasio;
 	private int codigoGimnasio;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")

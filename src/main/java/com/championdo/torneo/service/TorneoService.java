@@ -2,7 +2,6 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.exception.RemoveException;
-import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.TorneoModel;
 
 import java.util.Date;
@@ -20,5 +19,5 @@ public interface TorneoService {
 
     void delete(int id) throws RemoveException;
 
-    List<TorneoModel> findAllowedWithGyms(Date date, String tournamentType);
+    List<TorneoModel> findAllowed(Date date, String tournamentType);
 }

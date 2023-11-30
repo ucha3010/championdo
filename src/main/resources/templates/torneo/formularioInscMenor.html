@@ -134,10 +134,12 @@
 		
 		<form action="#" th:action="@{/formulario/guardarMenorOInclisivo}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
 		
-			<input type="hidden" name="mayorAutorizador.username" th:value="*{mayorAutorizador.username}"/>
-			<input type="hidden" name="mayorAutorizador.correo" th:value="*{mayorAutorizador.correo}"/>
-			<input type="hidden" name="autorizado.menor" th:value="*{autorizado.menor}"/>
-			<input type="hidden" name="autorizado.inclusivo" th:value="*{autorizado.inclusivo}"/>
+			<input type="hidden" th:field="*{mayorAutorizador.username}"/>
+			<input type="hidden" th:field="*{mayorAutorizador.correo}"/>
+			<input type="hidden" th:field="*{mayorAutorizador.idTorneo}" />
+			<input type="hidden" th:field="*{mayorAutorizador.idTorneoGimnasio}" />
+			<input type="hidden" th:field="*{autorizado.menor}"/>
+			<input type="hidden" th:field="*{autorizado.inclusivo}"/>
 
 			<div class="row mb-1">
 				<div class="col-md-2 apartado">
@@ -350,21 +352,6 @@
 				<div class="col-xs-4 col-md-3">
 					<select th:field="*{autorizado.pais.id}" id="idPais" class="form-control form-control-lg">
 						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}" />
-					</select>
-				</div>
-				<div class="col-xs-5">
-				</div>
-			</div>
-
-			<div class="row mb-1">
-				<div class="col-md-2">
-				</div>
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="idGimnasio">Gimnasio*</label>
-				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{autorizado.gimnasio.id}" id="idGimnasio" class="form-control form-control-lg">
-						<option th:each="g : ${listaGimnasios}" th:value="${g.id}" th:text="${g.nombre}" />
 					</select>
 				</div>
 				<div class="col-xs-5">

@@ -53,6 +53,8 @@ public class MapperUser {
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setTelefono(externObject.getTelefono());
+            localObject.setIdTorneo(externObject.getIdTorneo());
+            localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
             localObject.setCodigoGimnasio(localObject.getGimnasio().getCodigoGimnasio());
             localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
         }
@@ -104,6 +106,8 @@ public class MapperUser {
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setInclusivo(externObject.isInclusivo());
             localObject.setTelefono(externObject.getTelefono());
+            localObject.setIdTorneo(externObject.getIdTorneo());
+            localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
         }
         return localObject;
     }

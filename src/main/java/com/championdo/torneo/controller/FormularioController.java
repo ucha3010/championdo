@@ -18,7 +18,6 @@ import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/formulario")
@@ -45,23 +44,52 @@ public class FormularioController {
 
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("torneo/formularioSeleccionTorneo");
-        List<TorneoModel> torneoModelList = torneoService.findAllowedWithGyms(new Date(), tournamentType);
+        modelAndView.addObject("torneoModelList", torneoService.findAllowed(new Date(), tournamentType));
+        modelAndView.addObject("tournamentType", tournamentType);
         if (tournamentType.isEmpty()) {
             modelAndView.addObject("errorMessage", "Problemas con la opción seleccionada");
         }
-        modelAndView.addObject("torneoModelList", torneoModelList);
-        LoggerMapper.methodOut(Level.INFO, "selectTournament", modelAndView, getClass());
         return modelAndView;
     }
 
-    @GetMapping("/propia")
+    @GetMapping("/selectTournament/{tournamentType}/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView propia(ModelAndView modelAndView) {
-        modelAndView.setViewName("torneo/formularioInscPropia");
+    public ModelAndView selectTournamentChargeGyms(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int id) {
+
+        modelAndView = selectTournament(modelAndView, tournamentType);
+        modelAndView.addObject("torneoGimnasioModelList", torneoGimnasioService.findAll(id));
+        TorneoModel torneoModel = new TorneoModel();
+        torneoModel.setId(id);
+        modelAndView.addObject("torneoModel", torneoModel);
+        LoggerMapper.methodOut(Level.INFO, "selectTournamentChargeGyms", modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @GetMapping("/cargar-formulario/{tournamentType}/{idTorneo}/{idGimnasio}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView cargarFormulario(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int idTorneo, @PathVariable int idGimnasio) {
+
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
+        usuario.setIdTorneo(idTorneo);
+        usuario.setIdTorneoGimnasio(idGimnasio);
+        switch (tournamentType) {
+            case Constantes.ADULTO:
+                modelAndView.setViewName("torneo/formularioInscPropia");
+                modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
+                break;
+            case Constantes.MENOR:
+                modelAndView.setViewName("torneo/formularioInscMenor");
+                modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
+                break;
+            case Constantes.INCLUSIVO:
+                modelAndView.setViewName("torneo/formularioInscInclusivo");
+                modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, false));
+                break;
+            default:
+                return selectTournament(modelAndView, tournamentType);
+        }
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
-        LoggerMapper.log(Level.INFO, "propia", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, "cargarFormulario", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -109,21 +137,6 @@ public class FormularioController {
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
         LoggerMapper.log(Level.INFO, "getPropia", modelAndView, getClass());
-        return modelAndView;
-    }
-
-    @GetMapping("/menorOInclisivo/{menor}")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
-        if (menor) {
-            modelAndView.setViewName("torneo/formularioInscMenor");
-        } else {
-            modelAndView.setViewName("torneo/formularioInscInclusivo");
-        }
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, menor));
-        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
-        LoggerMapper.log(Level.INFO, "menorOInclisivo/" + menor, modelAndView, getClass());
         return modelAndView;
     }
 
