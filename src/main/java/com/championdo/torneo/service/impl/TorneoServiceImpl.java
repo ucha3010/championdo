@@ -98,7 +98,7 @@ public class TorneoServiceImpl implements TorneoService {
             case Constantes.MENOR:
                 torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndMenorTrue(date, date);
                 break;
-            case Constantes.INCLUSIVO:
+            case Constantes.INCLUSIVO_MINUSCULAS:
                 torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndInclusivoTrue(date, date);
                 break;
             default:

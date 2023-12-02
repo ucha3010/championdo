@@ -29,7 +29,8 @@ public class PrincipalController {
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
     private UserService userService;
-// TODO DAMIAN falta hacer la renovación de licencia
+    // TODO DAMIAN falta hacer la renovación de licencia
+    // TODO DAMIAN hay que permitir, en la página de login, un alta a torneo sin necesidad de ser usuario
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipal(ModelAndView modelAndView) {

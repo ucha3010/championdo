@@ -82,6 +82,8 @@ public class UserModel {
 				", telefono='" + telefono + '\'' +
 				", autorizaWhatsApp=" + autorizaWhatsApp +
 				", domiciliacion=" + domiciliacion +
+				", idTorneo=" + idTorneo +
+				", idTorneoGimnasio=" + idTorneoGimnasio +
 				", codigoGimnasio=" + codigoGimnasio +
 				", userRoles=" + userRoles +
 				'}';

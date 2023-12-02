@@ -75,7 +75,7 @@
 				</div>
 				<div class="col-xs-6">
 					<select name="torneo" id="torneo" class="form-control form-control-lg" th:attr="onchange=|cargarGimnasios('${tournamentType}')|">
-						<option th:each="unit : ${torneoModelList}" th:value="${unit.id}" th:text="${unit.nombre} - ${#calendars.format(unit.fechaTorneo,'dd/MM/yyyy')}" th:selected="${unit.id==torneoModel.id}"></option>
+						<option th:each="unit : ${torneoModelList}" th:value="${unit.id}" th:text="${unit.nombre}+' - '+${#calendars.format(unit.fechaTorneo,'dd/MM/yyyy')}" th:selected="${unit.id==torneoModel.id}"></option>
 					</select>
 				</div>
 				<div class="col-xs-3">

@@ -1,10 +1,7 @@
 package com.championdo.torneo.service;
 
 
-import com.championdo.torneo.model.InscripcionModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
-import com.championdo.torneo.model.UserModel;
-import com.championdo.torneo.model.UtilModel;
+import com.championdo.torneo.model.*;
 
 import java.util.List;
 
@@ -21,9 +18,9 @@ public interface InscripcionService {
 
     InscripcionModel add(InscripcionModel inscripcionModel);
 
-    InscripcionModel addPropia(UserModel userModel);
+    InscripcionModel addPropia(UserModel userModel, PdfModel pdfModel);
 
-    InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel);
+    InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel, PdfModel pdfModel);
 
     void update(InscripcionModel inscripcionModel);
 

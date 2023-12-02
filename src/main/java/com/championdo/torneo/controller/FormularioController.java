@@ -18,6 +18,7 @@ import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/formulario")
@@ -44,10 +45,15 @@ public class FormularioController {
 
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.setViewName("torneo/formularioSeleccionTorneo");
-        modelAndView.addObject("torneoModelList", torneoService.findAllowed(new Date(), tournamentType));
+        List<TorneoModel> torneoModelList = torneoService.findAllowed(new Date(), tournamentType);
+        modelAndView.addObject("torneoModelList", torneoModelList);
         modelAndView.addObject("tournamentType", tournamentType);
+        modelAndView.addObject("torneoModel", new TorneoModel());
         if (tournamentType.isEmpty()) {
             modelAndView.addObject("errorMessage", "Problemas con la opción seleccionada");
+        }
+        if (torneoModelList.size() == 1) {
+            modelAndView.addObject("torneoGimnasioModelList", torneoGimnasioService.findAll(torneoModelList.get(0).getId()));
         }
         return modelAndView;
     }
@@ -81,7 +87,7 @@ public class FormularioController {
                 modelAndView.setViewName("torneo/formularioInscMenor");
                 modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
                 break;
-            case Constantes.INCLUSIVO:
+            case Constantes.INCLUSIVO_MINUSCULAS:
                 modelAndView.setViewName("torneo/formularioInscInclusivo");
                 modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, false));
                 break;
@@ -106,7 +112,7 @@ public class FormularioController {
         try {
             formularioService.fillObjects(userModel);
             pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
-            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel);
+            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel, pdfModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
@@ -152,7 +158,7 @@ public class FormularioController {
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
-            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel);
+            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel, pdfModel);
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
@@ -196,7 +202,7 @@ public class FormularioController {
 
     @GetMapping("/alta")
     @PreAuthorize("permitAll()")
-    public ModelAndView getAlta(ModelAndView modelAndView) { // TODO DAMIAN el problema es que estoy relacionando el alta de un usuario a un gimnasio que debe ser cliente mío
+    public ModelAndView getAlta(ModelAndView modelAndView) {
         modelAndView.setViewName("formularioAlta");
         formularioService.cargarDesplegablesAltaUsuario(modelAndView);
         if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {

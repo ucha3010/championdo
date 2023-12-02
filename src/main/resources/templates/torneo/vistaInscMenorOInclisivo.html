@@ -267,40 +267,42 @@
 			</div>
 
 		<div class="row mb-3">
+			<div class="col-md-2">
+			</div>
 			<div class="col-xs-3 col-md-2 text-center">
 				<label for="fecha">Fecha de inscripción</label>
 			</div>
 			<div class="col-xs-4 col-md-3">
 				<span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy HH:mm')}" id="fecha"></span>
 			</div>
-			<div class="col-xs-5 col-md-7">
+			<div class="col-xs-5">
 			</div>
 		</div>
 
 		<div class="row mb-3">
+			<div class="col-md-2">
+			</div>
 			<div class="col-xs-3 col-md-2 text-center">
 				<label for="idCategoria">Categoría</label>
 			</div>
 			<div class="col-xs-2 col-md-3">
 				<input type="text" th:field="*{inscripcion.categoria}" id="idCategoria" class="form-control" disabled />
 			</div>
-			<div class="col-xs-3 col-md-2 text-center">
+			<div class="col-xs-2 text-center">
 				<label for="idPoomsae">Poomsae</label>
 			</div>
-			<div class="col-xs-4 col-md-5">
+			<div class="col-xs-5 col-md-3">
 				<input type="text" th:field="*{inscripcion.poomsae}" id="idPoomsae" class="form-control" disabled />
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col-xs-2">
+			<div class="col-md-2 apartado">
 			</div>
-
-			<div class="col-xs-2">
+			<div class="col-xs-10 col-md-9 text-center">
+			</div>
+			<div class="col-xs-2 col-md-1">
 				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
-			</div>
-
-			<div class="col-xs-8">
 			</div>
 		</div>
 		

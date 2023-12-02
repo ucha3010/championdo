@@ -90,33 +90,33 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public InscripcionModel addPropia(UserModel userModel) {
-        InscripcionModel inscripcionModel = fillInscripcionModel(userModel, null);
+    public InscripcionModel addPropia(UserModel userModel, PdfModel pdfModel) {
+        InscripcionModel inscripcionModel = fillInscripcionModel(userModel, null, pdfModel);
         inscripcionModel.setInscripcionPropia(true);
         return add(inscripcionModel);
     }
 
     @Override
-    public InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel) {
+    public InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel, PdfModel pdfModel) {
         UserModel usuarioAutorizador = userAutorizacionModel.getMayorAutorizador();
         UserModel usuarioInscripto = userAutorizacionModel.getAutorizado();
 
         if (usuarioInscripto.isInclusivo()) {
-            return addInclusivo(usuarioAutorizador, usuarioInscripto);
+            return addInclusivo(usuarioAutorizador, usuarioInscripto, pdfModel);
         } else if (usuarioInscripto.isMenor()) {
-            return addMenor(usuarioAutorizador, usuarioInscripto);
+            return addMenor(usuarioAutorizador, usuarioInscripto, pdfModel);
         }
         return null;
     }
 
-    private InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
-        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador);
+    private InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto, PdfModel pdfModel) {
+        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador, pdfModel);
         inscripcionModel.setInscripcionMenor(true);
         return add(inscripcionModel);
     }
 
-    private InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto) {
-        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador);
+    private InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto, PdfModel pdfModel) {
+        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador, pdfModel);
         inscripcionModel.setInscripcionInclusiva(true);
         return add(inscripcionModel);
     }
@@ -171,7 +171,7 @@ public class InscripcionServiceImpl implements InscripcionService {
         utilService.update(utilModel);
     }
 
-    private InscripcionModel fillInscripcionModel(UserModel usuarioInscripto, UserModel usuarioAutorizador) {
+    private InscripcionModel fillInscripcionModel(UserModel usuarioInscripto, UserModel usuarioAutorizador, PdfModel pdfModel) {
         InscripcionModel inscripcionModel = new InscripcionModel();
         CategoriaModel categoriaModel = categoriaService.calcularCategoria(usuarioInscripto);
 
@@ -190,12 +190,11 @@ public class InscripcionServiceImpl implements InscripcionService {
         inscripcionModel.setDomicilioOtrosInscripto(usuarioInscripto.getDomicilioOtros());
         inscripcionModel.setDomicilioLocalidadInscripto(usuarioInscripto.getDomicilioLocalidad());
         inscripcionModel.setDomicilioCpInscripto(usuarioInscripto.getDomicilioCp());
-        inscripcionModel.setGimnasio(gimnasioService.findById(usuarioInscripto.getGimnasio().getId()).getNombre());
+        inscripcionModel.setGimnasio(pdfModel.getGimnasio());
         inscripcionModel.setPais(paisService.findById(usuarioInscripto.getPais().getId()).getNombre());
         inscripcionModel.setCinturon(cinturonService.findById(usuarioInscripto.getCinturon().getId()).getColor());
         inscripcionModel.setPoomsae(categoriaModel.getPoomsae().getNombre());
 
-        int codigoGimnasio;
         if (usuarioAutorizador != null) {
             inscripcionModel.setNombreAutorizador(usuarioAutorizador.getName());
             inscripcionModel.setApellido1Autorizador(usuarioAutorizador.getLastname());
@@ -211,14 +210,11 @@ public class InscripcionServiceImpl implements InscripcionService {
             inscripcionModel.setDomicilioOtrosAutorizador(usuarioAutorizador.getDomicilioOtros());
             inscripcionModel.setDomicilioLocalidadAutorizador(usuarioAutorizador.getDomicilioLocalidad());
             inscripcionModel.setDomicilioCpAutorizador(usuarioAutorizador.getDomicilioCp());
-            codigoGimnasio = usuarioAutorizador.getCodigoGimnasio();
-        } else {
-            codigoGimnasio = usuarioInscripto.getCodigoGimnasio();
         }
 
-        inscripcionModel.setFechaCampeonato(utilService.findByClave(Constantes.FECHA_CAMPEONATO, codigoGimnasio).getValor());
-        inscripcionModel.setNombreCampeonato(utilService.findByClave(Constantes.NOMBRE_CAMPEONATO, codigoGimnasio).getValor());
-        inscripcionModel.setDireccionCampeonato(utilService.findByClave(Constantes.DIRECCION_CAMPEONATO, codigoGimnasio).getValor());
+        inscripcionModel.setFechaCampeonato(pdfModel.getFechaCampeonato());
+        inscripcionModel.setNombreCampeonato(pdfModel.getNombreCampeonato());
+        inscripcionModel.setDireccionCampeonato(pdfModel.getDireccionCampeonato());
 
         return inscripcionModel;
     }
