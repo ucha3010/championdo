@@ -133,10 +133,11 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getPropia(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/vistaInscPropia");
-        userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.log(Level.INFO, "getPropia", modelAndView, getClass());
         return modelAndView;
     }
@@ -180,10 +181,11 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/vistaInscMenorOInclisivo");
-        userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.log(Level.INFO, "getMenorOInclisivo", modelAndView, getClass());
         return modelAndView;
     }

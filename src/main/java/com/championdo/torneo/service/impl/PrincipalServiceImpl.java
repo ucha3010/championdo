@@ -1,7 +1,6 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.model.InscripcionModel;
-import com.championdo.torneo.model.PrincipalModel;
 import com.championdo.torneo.model.PrincipalUserModel;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.InscripcionService;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service()
@@ -21,40 +21,35 @@ public class PrincipalServiceImpl implements PrincipalService {
     private InscripcionService inscripcionService;
 
     @Override
-    public PrincipalModel findByDni(String dni) {
+    public List<PrincipalUserModel> findByDni(String dni) {
 
-        PrincipalModel principalModel = new PrincipalModel();
-
-        InscripcionModel inscripcionPropia = inscripcionService.findByDniInscripto(dni);
-        if (inscripcionPropia != null && inscripcionPropia.getId() != 0) {
-            principalModel.setId(inscripcionPropia.getId());
-            principalModel.setUsername(inscripcionPropia.getDniInscripto());
-            principalModel.setFecha(inscripcionPropia.getFechaInscripcion());
-        }
-
-        List<InscripcionModel> inscripcionAutorizadaList = inscripcionService.findByDniAutorizador(dni);
-        List<PrincipalUserModel> autorizaciones = new ArrayList<>();
         PrincipalUserModel principalUserModel;
-        if (!inscripcionAutorizadaList.isEmpty()) {
-            for (InscripcionModel inscripcionAutorizada : inscripcionAutorizadaList) {
+        List<InscripcionModel> inscripcionList = inscripcionService.findByDniInscripto(dni);
+        inscripcionList.addAll(inscripcionService.findByDniAutorizador(dni));
+        List<PrincipalUserModel> principalUserModelList = new ArrayList<>();
+        if (!inscripcionList.isEmpty()) {
+            inscripcionList.sort(Comparator.comparing(InscripcionModel::getFechaInscripcion).reversed());
+            for (InscripcionModel inscripcionModel : inscripcionList) {
                 principalUserModel = new PrincipalUserModel();
-                principalUserModel.setId(inscripcionAutorizada.getId());
-                principalUserModel.setNombre(inscripcionAutorizada.getNombreInscripto());
-                principalUserModel.setApellido1(inscripcionAutorizada.getApellido1Inscripto());
-                principalUserModel.setApellido2(inscripcionAutorizada.getApellido2Inscripto());
-                principalUserModel.setFecha(inscripcionAutorizada.getFechaInscripcion());
-                autorizaciones.add(principalUserModel);
+                principalUserModel.setId(inscripcionModel.getId());
+                principalUserModel.setNombre(inscripcionModel.getNombreInscripto());
+                principalUserModel.setApellido1(inscripcionModel.getApellido1Inscripto());
+                principalUserModel.setApellido2(inscripcionModel.getApellido2Inscripto());
+                principalUserModel.setFechaInscripcion(inscripcionModel.getFechaInscripcion());
+                principalUserModel.setNombreTorneo(inscripcionModel.getNombreCampeonato());
+                principalUserModel.setFechaTorneo(inscripcionModel.getFechaCampeonato());
+                principalUserModel.setInscripcionPropia(inscripcionModel.isInscripcionPropia());
+                principalUserModelList.add(principalUserModel);
             }
-            principalModel.setAutorizaciones(autorizaciones);
         }
-        LoggerMapper.log(Level.INFO, "findByDni", principalModel, getClass());
-        return principalModel;
+        LoggerMapper.methodOut(Level.INFO, "findByDni", principalUserModelList, getClass());
+        return principalUserModelList;
     }
 
     @Override
     public void deleteInscripcion(int id) {
         inscripcionService.delete(id);
-        LoggerMapper.log(Level.INFO, "deleteInscripcion", "id: " + id, getClass());
+        LoggerMapper.methodOut(Level.INFO, "deleteInscripcion", "id: " + id, getClass());
     }
 
     @Override

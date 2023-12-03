@@ -1,12 +1,14 @@
 package com.championdo.torneo.service;
 
 
-import com.championdo.torneo.model.PrincipalModel;
+import com.championdo.torneo.model.PrincipalUserModel;
 import com.championdo.torneo.model.UtilModel;
+
+import java.util.List;
 
 public interface PrincipalService {
 
-    PrincipalModel findByDni(String dni);
+    List<PrincipalUserModel> findByDni(String dni);
 
     void deleteInscripcion(int id);
 

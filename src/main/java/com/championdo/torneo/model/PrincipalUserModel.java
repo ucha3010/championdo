@@ -1,63 +1,24 @@
 package com.championdo.torneo.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.Date;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class PrincipalUserModel {
 
     private int id;
-    private Date fecha;
+    private Date fechaInscripcion;
+    private String nombreTorneo;
+    private String fechaTorneo;
     private String nombre;
     private String apellido1;
     private String apellido2;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido1() {
-        return apellido1;
-    }
-
-    public void setApellido1(String apellido1) {
-        this.apellido1 = apellido1;
-    }
-
-    public String getApellido2() {
-        return apellido2;
-    }
-
-    public void setApellido2(String apellido2) {
-        this.apellido2 = apellido2;
-    }
-
-    @Override
-    public String toString() {
-        return "PrincipalUserModel{" +
-                "id=" + id +
-                ", fecha=" + fecha +
-                ", nombre='" + nombre + '\'' +
-                ", apellido1='" + apellido1 + '\'' +
-                ", apellido2='" + apellido2 + '\'' +
-                '}';
-    }
+    private boolean inscripcionPropia;
 }

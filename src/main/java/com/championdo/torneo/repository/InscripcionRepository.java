@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository("inscripcionRepository")
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Integer> {
-    List<Inscripcion> findByDniAutorizador(String dniAutorizador);
+    List<Inscripcion> findByDniAutorizadorOrderByFechaInscripcionDesc(String dniAutorizador);
 
-    Inscripcion findByDniInscripto(String dniInscripto);
+    List<Inscripcion> findByDniInscriptoOrderByFechaInscripcionDesc(String dniInscripto);
 
     List<Inscripcion> findAllByOrderByIdDesc();
     List<Inscripcion> findByIdTorneoOrderByFechaInscripcionDesc(int idTorneo);

@@ -58,7 +58,7 @@ public class InscripcionServiceImpl implements InscripcionService {
     @Override
     public List<InscripcionModel> findByDniAutorizador(String dniAutorizador) {
         List<InscripcionModel> inscripcionModelList = new ArrayList<>();
-        for (Inscripcion inscripcion: inscripcionRepository.findByDniAutorizador(dniAutorizador)) {
+        for (Inscripcion inscripcion: inscripcionRepository.findByDniAutorizadorOrderByFechaInscripcionDesc(dniAutorizador)) {
             inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
         }
         LoggerMapper.methodOut(Level.INFO, "findByDniAutorizador", "inscripcionModelList.size(): "+ inscripcionModelList.size(), getClass());
@@ -66,10 +66,13 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public InscripcionModel findByDniInscripto(String dniInscripto) {
-        InscripcionModel inscripcion = mapperInscripcion.entity2Model(inscripcionRepository.findByDniInscripto(dniInscripto));
-        LoggerMapper.methodOut(Level.INFO, "findByDniInscripto", inscripcion, getClass());
-        return inscripcion;
+    public List<InscripcionModel> findByDniInscripto(String dniInscripto) {
+        List<InscripcionModel> inscripcionModelList = new ArrayList<>();
+        for (Inscripcion inscripcion: inscripcionRepository.findByDniInscriptoOrderByFechaInscripcionDesc(dniInscripto)) {
+            inscripcionModelList.add(mapperInscripcion.entity2Model(inscripcion));
+        }
+        LoggerMapper.methodOut(Level.INFO, "findByDniInscripto", "inscripcionModelList.size(): "+ inscripcionModelList.size(), getClass());
+        return inscripcionModelList;
     }
 
     @Override
@@ -141,8 +144,7 @@ public class InscripcionServiceImpl implements InscripcionService {
     public void deleteByDni(String dni) {
         LoggerMapper.methodIn(Level.INFO, "deleteByDni", "DNI: " + dni, getClass());
         List<InscripcionModel> inscripcionModelList = findByDniAutorizador(dni);
-        InscripcionModel inscripcionModel = findByDniInscripto(dni);
-        inscripcionModelList.add(inscripcionModel);
+        inscripcionModelList.addAll(findByDniInscripto(dni));
         for(InscripcionModel inscripcion : inscripcionModelList) {
             delete(inscripcion.getId());
         }
@@ -212,6 +214,7 @@ public class InscripcionServiceImpl implements InscripcionService {
             inscripcionModel.setDomicilioCpAutorizador(usuarioAutorizador.getDomicilioCp());
         }
 
+        inscripcionModel.setIdTorneo(usuarioInscripto.getIdTorneo());
         inscripcionModel.setFechaCampeonato(pdfModel.getFechaCampeonato());
         inscripcionModel.setNombreCampeonato(pdfModel.getNombreCampeonato());
         inscripcionModel.setDireccionCampeonato(pdfModel.getDireccionCampeonato());

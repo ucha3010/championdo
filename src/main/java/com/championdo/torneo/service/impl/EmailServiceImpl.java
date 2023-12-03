@@ -160,7 +160,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<HTML><BODY>");
         String name = userModel.getName() != null ? " " + userModel.getName() : "";
         stringBuilder.append("<h1>Hola <b>").append(name).append("</b>!</h1><br>");
-        stringBuilder.append("<p>Te adjuntamos la confirmación de inscripción al Torneo de Tres Cantos.</p>");
+        stringBuilder.append("<p>Te adjuntamos la confirmación de inscripción al Torneo.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
         stringBuilder.append("</BODY></HTML>");
@@ -222,7 +222,9 @@ public class EmailServiceImpl implements EmailService {
                     .append(mayor.getLastname()).append(" ").append(mayor.getSecondLastname()).append(" en el torneo!</p>");
         } else {
             stringBuilder.append("<p>¡Se acaba de inscribir ").append(autorizado.getName()).append(" ")
-                    .append(autorizado.getLastname()).append(" ").append(autorizado.getSecondLastname()).append(" (que es menor de edad) en el torneo!</p>");
+                    .append(autorizado.getLastname()).append(" ").append(autorizado.getSecondLastname())
+                    .append(autorizado.isInclusivo() ? " (categoría inclusiva)" : " (categoría menor de edad)")
+                    .append(" en el torneo!</p>");
             stringBuilder.append("<p>Está autorizado por ").append(mayor.getName()).append(" ").append(mayor.getLastname())
                     .append(" ").append(mayor.getSecondLastname()).append(".</p>");
         }

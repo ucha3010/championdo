@@ -42,7 +42,6 @@ public class PrincipalController {
                 modelAndView.addObject("inscripcionTaekwondo", "Documentación pendiente de firma");
             }
         }
-        modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(usuario.getCodigoGimnasio()));
         LoggerMapper.methodOut(Level.INFO, "paginaPrincipal", modelAndView, getClass());
@@ -54,7 +53,7 @@ public class PrincipalController {
     public ModelAndView paginaPrincipalTorneo(ModelAndView modelAndView) {
         modelAndView.setViewName("torneo/principalTorneo");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("inscripcion", principalService.findByDni(usuario.getUsername()));
+        modelAndView.addObject("inscripciones", principalService.findByDni(usuario.getUsername()));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, "paginaPrincipalTorneo", modelAndView, getClass());
         return modelAndView;

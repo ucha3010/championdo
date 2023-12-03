@@ -47,11 +47,11 @@ public class PdfServiceImpl implements PdfService {
             // Text
             contentStream.beginText();
             contentStream.setFont(PDType1Font.TIMES_BOLD, 16);
-            contentStream.newLineAtOffset( 130, page.getMediaBox().getHeight() - 80);
+            contentStream.newLineAtOffset( 100, page.getMediaBox().getHeight() - 80);
             if (pdfModel.isMayorEdad()) {
                 contentStream.showText("AUTORIZACIÓN DE MAYORES DE 18 AÑOS");
             } else if (pdfModel.isInclusivo()) {
-                contentStream.showText("AUTORIZACIÓN INCLUSIVA");
+                contentStream.showText("AUTORIZACIÓN DE INSCRIPCIÓN INCLUSIVA");
             } else {
                 contentStream.showText("AUTORIZACIÓN PARA MENORES DE 18 AÑOS");
             }
@@ -79,7 +79,7 @@ public class PdfServiceImpl implements PdfService {
                 parrafo.append(" con fecha de nacimiento ").append(pdfModel.getFechaNacimientoMenor());
             }
 
-            parrafo.append(" perteneciente al gimnasio ").append(pdfModel.getGimnasio());
+            parrafo.append(" perteneciente a ").append(pdfModel.getGimnasio());
             parrafo.append(" actualmente con cinturón ").append(pdfModel.getCinturonActual()).append(" y categoría ").append(pdfModel.getCategoria());
 
             if (!pdfModel.isInclusivo()) {
