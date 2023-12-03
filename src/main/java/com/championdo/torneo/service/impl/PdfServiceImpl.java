@@ -188,8 +188,7 @@ public class PdfServiceImpl implements PdfService {
             Calendar calendar = GregorianCalendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
             String[] hoy = sdf.format(calendar.getTime()).split("/");
-            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-            String[] hoy2 = sdf.format(calendar.getTime()).split("/");
+            String[] hoy2 = new SimpleDateFormat("dd-MM-yyyy").format(calendar.getTime()).split("-");
 
             if(!StringUtils.isNullOrEmpty(pdfModel.getCalidadDe())) {
                 nombreMenor = " (" + pdfModel.getNombreMenor() + ")";
