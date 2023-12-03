@@ -43,17 +43,12 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView selectTournament(ModelAndView modelAndView, @PathVariable String tournamentType) {
 
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("torneo/formularioSeleccionTorneo");
-        List<TorneoModel> torneoModelList = torneoService.findAllowed(new Date(), tournamentType);
-        modelAndView.addObject("torneoModelList", torneoModelList);
-        modelAndView.addObject("tournamentType", tournamentType);
-        modelAndView.addObject("torneoModel", new TorneoModel());
-        if (tournamentType.isEmpty()) {
-            modelAndView.addObject("errorMessage", "Problemas con la opción seleccionada");
-        }
-        if (torneoModelList.size() == 1) {
+        List<TorneoModel> torneoModelList = selectTournamentCommon(modelAndView, tournamentType);
+        if (!torneoModelList.isEmpty()) {
             modelAndView.addObject("torneoGimnasioModelList", torneoGimnasioService.findAll(torneoModelList.get(0).getId()));
+        }
+        if (!tournamentType.isEmpty() && torneoModelList.isEmpty()) {
+            modelAndView.addObject("errorMessage", "No hay torneo disponibles en este momento");
         }
         return modelAndView;
     }
@@ -62,7 +57,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView selectTournamentChargeGyms(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int id) {
 
-        modelAndView = selectTournament(modelAndView, tournamentType);
+        selectTournamentCommon(modelAndView, tournamentType);
         modelAndView.addObject("torneoGimnasioModelList", torneoGimnasioService.findAll(id));
         TorneoModel torneoModel = new TorneoModel();
         torneoModel.setId(id);
@@ -242,6 +237,20 @@ public class FormularioController {
             return getAlta(modelAndView);
         }
 
+    }
+
+    private List<TorneoModel> selectTournamentCommon(ModelAndView modelAndView, String tournamentType) {
+
+        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("torneo/formularioSeleccionTorneo");
+        List<TorneoModel> torneoModelList = torneoService.findAllowed(new Date(), tournamentType);
+        modelAndView.addObject("torneoModelList", torneoModelList);
+        modelAndView.addObject("tournamentType", tournamentType);
+        modelAndView.addObject("torneoModel", new TorneoModel());
+        if (tournamentType.isEmpty()) {
+            modelAndView.addObject("errorMessage", "Problemas con la opción seleccionada");
+        }
+        return torneoModelList;
     }
 
 }
