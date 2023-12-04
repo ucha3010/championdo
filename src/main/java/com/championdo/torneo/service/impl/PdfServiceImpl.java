@@ -195,7 +195,8 @@ public class PdfServiceImpl implements PdfService {
                 salto = 15;
                 tamanioFuente = 14;
                 parrafo = new StringBuilder();
-                parrafo.append("Para los menores, son los datos de").append(pdfModel.getCalidadDe().equalsIgnoreCase("Madre") ? " la " : "l ");
+                parrafo.append("Para los menores o solicitud inclusiva, son los datos de");
+                parrafo.append(pdfModel.getCalidadDe().equalsIgnoreCase("Madre") ? " la " : "l ");
                 parrafo.append(pdfModel.getCalidadDe()).append(" y entre paréntesis el nombre del deportista.");
                 parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
                 generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
@@ -837,30 +838,6 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, @NotNull String section) {
-
-        if (StringUtils.isNullOrEmpty(pdfModel.getExtension())) {
-            pdfModel.setExtension(Constantes.EXTENSION_PDF);
-        }
-        String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
-                + "static" + File.separator + "files" + File.separator + section + tounamentDate(pdfModel) : "");
-        if(rutaCompleta) {
-            File directorio = new File(getAbsolutePath() + ruta);
-            if (!directorio.exists()) {
-                directorio.mkdirs();
-            }
-        }
-        ruta += section;
-        if (pdfModel.isMayorEdad()) {
-            return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + pdfModel.getExtension();
-        } else {
-            return ruta + pdfModel.getDni()
-                    + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? "-" + pdfModel.getDniMenor().trim() : "")
-                    + "-" + pdfModel.getIdInscripcion() + pdfModel.getExtension();
-        }
-    }
-
-    @Override
     public PdfModel getImpresion(InscripcionModel inscripcionModel) {
 
         PdfModel pdfModel = new PdfModel();
@@ -879,6 +856,7 @@ public class PdfServiceImpl implements PdfService {
         return pdfModel;
     }
 
+    @Override
     public PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel) {
 
         PdfModel pdfModel = new PdfModel();
@@ -929,6 +907,64 @@ public class PdfServiceImpl implements PdfService {
         return "";
     }
 
+    private int calculateSeason(String[] today) {
+        int season = Integer.parseInt(today[2]);
+        // en noviembre y diciembre se hace la autorización para la temporada del año siguiente
+        if ("11".equals(today[1]) || "12".equals(today[1])) {
+            season++;
+        }
+        return season;
+    }
+
+    private String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, @NotNull String section) {
+
+        if (StringUtils.isNullOrEmpty(pdfModel.getExtension())) {
+            pdfModel.setExtension(Constantes.EXTENSION_PDF);
+        }
+        String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
+                + "static" + File.separator + "files" + File.separator + section + tounamentDate(pdfModel) : "");
+        if(rutaCompleta) {
+            File directorio = new File(getAbsolutePath() + ruta);
+            if (!directorio.exists()) {
+                directorio.mkdirs();
+            }
+        }
+        ruta += section;
+        if (pdfModel.isMayorEdad()) {
+            return ruta + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion() + pdfModel.getExtension();
+        } else {
+            return ruta + pdfModel.getDni()
+                    + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? "-" + pdfModel.getDniMenor().trim() : "")
+                    + "-" + pdfModel.getIdInscripcion() + pdfModel.getExtension();
+        }
+    }
+
+    private String tounamentDate(PdfModel pdfModel) {
+        StringBuilder dateFolder = new StringBuilder();
+        if(pdfModel != null && !StringUtils.isNullOrEmpty(pdfModel.getFechaCampeonato())) {
+            String[] folderNameArray = pdfModel.getFechaCampeonato().split("-");
+            dateFolder.append(File.separator);
+            dateFolder.append(Constantes.SECCION_TORNEO);
+            for(int i=folderNameArray.length; i>0; i--) {
+                dateFolder.append(folderNameArray[i - 1]);
+            }
+        }
+        dateFolder.append(File.separator);
+        return dateFolder.toString();
+    }
+
+    private String getAbsolutePath() {
+        String[] absolute = new String[1];
+        try {
+            File f = new File("program.txt");
+            absolute = f.getAbsolutePath().split(f.getName());
+        }
+        catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "getAbsolutePath", e.getMessage(), PdfServiceImpl.class);
+        }
+        return absolute[0];
+    }
+
     private int rellenarAdulto(PdfModel pdfModel, int alturaComienzoParrafo, PDPageContentStream contentStream, PDPage page,
                                float x, float width) throws IOException, EmptyException {
 
@@ -957,7 +993,7 @@ public class PdfServiceImpl implements PdfService {
     }
 
     private void generoParrafo(PDPageContentStream contentStream, PDPage page, List<String> parrafoList,
-                                  int alturaPagina, PDType1Font fuente, int fontSize, Integer margenDerecho, int salto) throws IOException {
+                               int alturaPagina, PDType1Font fuente, int fontSize, Integer margenDerecho, int salto) throws IOException {
         int i = 0;
         for (String parrafo1: parrafoList) {
             contentStream.beginText();
@@ -967,39 +1003,6 @@ public class PdfServiceImpl implements PdfService {
             contentStream.endText();
             i=i+salto;
         }
-    }
-
-    private int calculateSeason(String[] today) {
-        int season = Integer.parseInt(today[2]);
-        // en noviembre y diciembre se hace la autorización para la temporada del año siguiente
-        if ("11".equals(today[1]) || "12".equals(today[1])) {
-            season++;
-        }
-        return season;
-    }
-
-    private String tounamentDate(PdfModel pdfModel) {
-        StringBuilder dateFolder = new StringBuilder();
-        if(pdfModel != null && !StringUtils.isNullOrEmpty(pdfModel.getFechaCampeonato())) {
-            String[] folderNameArray = pdfModel.getFechaCampeonato().split("-");
-            for(int i=folderNameArray.length; i>0; i--) {
-                dateFolder.append(folderNameArray[i - 1]);
-            }
-        }
-        dateFolder.append(File.separator);
-        return dateFolder.toString();
-    }
-
-    private String getAbsolutePath() {
-        String[] absolute = new String[1];
-        try {
-            File f = new File("program.txt");
-            absolute = f.getAbsolutePath().split(f.getName());
-        }
-        catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "getAbsolutePath", e.getMessage(), PdfServiceImpl.class);
-        }
-        return absolute[0];
     }
 
 

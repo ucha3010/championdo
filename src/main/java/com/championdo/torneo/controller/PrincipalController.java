@@ -54,7 +54,6 @@ public class PrincipalController {
         modelAndView.setViewName("torneo/principalTorneo");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("inscripciones", principalService.findByDni(usuario.getUsername()));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, "paginaPrincipalTorneo", modelAndView, getClass());
         return modelAndView;
     }

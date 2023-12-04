@@ -183,9 +183,10 @@ public class FormularioController {
         modelAndView.setViewName("torneo/vistaInscMenorOInclisivo");
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
+        TorneoModel torneoModel = torneoService.findById(inscripcionModel.getIdTorneo());
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(torneoModel.getCodigoGimnasio()).getValor()));
         LoggerMapper.log(Level.INFO, "getMenorOInclisivo", modelAndView, getClass());
         return modelAndView;
     }

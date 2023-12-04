@@ -139,8 +139,11 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
         if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
+            //TODO DAMIAN acá tengo que crear el mandato, guardar el id del mandato en pdfModelGeneral.getIdInscripcion()
+            // y luego llamar a pdfService.generarPdfMandato(pdfModelGeneral)
             File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
             files.add(pdfMandato);
+            pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
         }
         if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
             File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);

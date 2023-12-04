@@ -24,8 +24,6 @@ public interface PdfService {
 
     boolean subirArchivo(PdfModel pdfModel, MultipartFile file, String seccion);
 
-    String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, String seccion);
-
     PdfModel getImpresion(InscripcionModel inscripcionModel);
 
     PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel);
