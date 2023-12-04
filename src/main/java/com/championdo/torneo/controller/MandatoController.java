@@ -16,6 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Controller
@@ -60,10 +64,16 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarAdulto(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        LoggerMapper.log(Level.INFO, "ENTRADA gaurdarAdulto", mandatoModel, getClass());
         User user = userService.cargarUsuarioCompleto(modelAndView);
+        mandatoService.fillMandato(mandatoModel, true, user.getCodigoGimnasio());
+        mandatoModel = mandatoService.add(mandatoModel);
 
-        //TODO DAMIAN hacer lógica mandato
+        //TODO DAMIAN MandatoModel tendrá que tener:
+        // nombre, apellido1 y apellido2 de las dos personas
+        // calidadDe
+        // todos los datos de la dirección
+        // para poder rellenar pdfModel y crear el archivo llamando a pdfService.generarPdfMandato(pdfModel)
+        // haciendo antes lo que se indica en pdfService.getPdfInscripcionTaekwondo(mandatoModel) hay que crear el método
 
         LoggerMapper.methodOut(Level.INFO, "gaurdarAdulto", modelAndView, getClass());
         return modelAndView;

@@ -231,7 +231,7 @@ public class PdfServiceImpl implements PdfService {
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que el presente MANDATO, que se rige por los arts. 1709 a 1739 CC español se confiere para que se pueda llevar ");
-            parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(calculateSeason(hoy2));
+            parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(Utils.calculateSeason(hoy2));
             parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
             generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
@@ -905,15 +905,6 @@ public class PdfServiceImpl implements PdfService {
             return fileName.substring(dotIndex);
         }
         return "";
-    }
-
-    private int calculateSeason(String[] today) {
-        int season = Integer.parseInt(today[2]);
-        // en noviembre y diciembre se hace la autorización para la temporada del año siguiente
-        if ("11".equals(today[1]) || "12".equals(today[1])) {
-            season++;
-        }
-        return season;
     }
 
     private String nombreArchivo(PdfModel pdfModel, boolean rutaCompleta, @NotNull String section) {

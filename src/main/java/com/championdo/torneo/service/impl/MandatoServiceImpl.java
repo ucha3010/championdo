@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service()
 public class MandatoServiceImpl implements MandatoService {
@@ -40,13 +40,23 @@ public class MandatoServiceImpl implements MandatoService {
     }
 
     @Override
-    public MandatoModel add(MandatoModel MandatoModel) {
-        return mapperMandato.entity2Model(mandatoRepository.save(mapperMandato.model2Entity(MandatoModel)));
+    public MandatoModel add(MandatoModel mandatoModel) {
+        return mapperMandato.entity2Model(mandatoRepository.save(mapperMandato.model2Entity(mandatoModel)));
     }
 
     @Override
     public void delete(int idMandato) {
         mandatoRepository.deleteById(idMandato);
+    }
+
+    @Override
+    public void fillMandato(MandatoModel mandatoModel, boolean adulto, int codigoGimnasio) {
+        mandatoModel.setAdulto(adulto);
+        Calendar calendar = GregorianCalendar.getInstance();
+        String[] hoy = new SimpleDateFormat("dd-MM-yyyy").format(calendar.getTime()).split("-");
+        mandatoModel.setTemporada(Arrays.toString(hoy));
+        mandatoModel.setFechaAlta(calendar.getTime());
+        mandatoModel.setCodigoGimnasio(codigoGimnasio);
     }
 
     private List<MandatoModel> fillModelList(List<Mandato> mandatoList) {
