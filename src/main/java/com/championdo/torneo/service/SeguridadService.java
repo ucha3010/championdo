@@ -1,12 +1,16 @@
 package com.championdo.torneo.service;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.servlet.ModelAndView;
 
 public interface SeguridadService {
 
     String obtenerCodigo();
+
+    ModelAndView enviarCodigoFirma(ModelAndView modelAndView, FirmaCodigoModel firmaCodigoModel, User userLogged);
 
     void validarCodigo(String codigoEnviadoPorUsuario, String dni, FirmaCodigoModel firmaCodigoModel) throws ValidationException;
 

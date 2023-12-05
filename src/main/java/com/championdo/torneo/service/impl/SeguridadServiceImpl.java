@@ -1,15 +1,18 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.FirmaModel;
-import com.championdo.torneo.service.FirmaService;
-import com.championdo.torneo.service.GimnasioRootService;
-import com.championdo.torneo.service.SeguridadService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Random;
 
@@ -19,7 +22,10 @@ public class SeguridadServiceImpl implements SeguridadService {
 
     @Autowired
     private FirmaService firmaService;
-
+    @Autowired
+    private FirmaCodigoService firmaCodigoService;
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private GimnasioRootService gimnasioRootService;
 
@@ -33,6 +39,26 @@ public class SeguridadServiceImpl implements SeguridadService {
             codigo.append(alphabet.charAt(r.nextInt(alphabet.length())));
         }
         return codigo.toString();
+    }
+
+    @Override
+    public ModelAndView enviarCodigoFirma(ModelAndView modelAndView, FirmaCodigoModel firmaCodigoModel, User userLogged) {
+        modelAndView.setViewName("firma/envioCodigo");
+        try {
+            firmaCodigoModel = firmaCodigoService.add(firmaCodigoModel);
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, firmaCodigoModel.getOperativaOriginal(), e.getMessage(), getClass());
+        }
+
+        if (firmaCodigoModel.getId() != 0) {
+            modelAndView.addObject("direccionCorreo", Utils.ofuscar(userLogged.getCorreo()));
+            modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
+                    null, null, null, firmaCodigoModel.getOperativaOriginal()));
+        } else {
+            modelAndView.addObject("inscripcionError", "Ha ocurrido un error. Por favor contacte con el soporte técnico.");
+        }
+        return null;
     }
 
     @Override

@@ -17,9 +17,21 @@ public class MandatoModel {
     private Date fechaAlta;
     private String temporada;
     private boolean adulto;
-    private String mandante;
+    private String nombreMandante;
+    private String apellido1Mandante;
+    private String apellido2Mandante;
     private String dniMandante;
-    private String autorizado;
+    private String calidad;
+    private String nombreAutorizado;
+    private String apellido1Autorizado;
+    private String apellido2Autorizado;
     private String dniAutorizado;
+    private String domicilioCalle;
+    private String domicilioNumero;
+    private String domicilioOtros;
+    private String domicilioLocalidad;
+    private String domicilioCp;
+    private String pais;
     private int codigoGimnasio;
+    private boolean mandatoFirmado;
 }

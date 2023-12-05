@@ -96,7 +96,7 @@
           <div class="col-md-4">
           </div>
           <div class="col-md-8">
-            <a class="colorOrange" href="#" th:href="@{'/gimnasio/nuevoEnvioCodigo/' + ${firmaCodigoModel.idOperacion}}">Enviar nuevo código al correo</a>
+            <a class="colorOrange" href="#" th:href="@{'/seguridad/nuevoEnvioCodigo/' + ${firmaCodigoModel.operativaOriginal} + '/' + ${firmaCodigoModel.idOperacion}}">Enviar nuevo código al correo</a>
           </div>
         </div>
 

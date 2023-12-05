@@ -1,14 +1,20 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Mandato;
+import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.mapper.MapperMandato;
+import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.MandatoModel;
+import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.repository.MandatoRepository;
+import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.MandatoService;
+import com.championdo.torneo.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -19,6 +25,10 @@ public class MandatoServiceImpl implements MandatoService {
     private MandatoRepository mandatoRepository;
     @Autowired
     private MapperMandato mapperMandato;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private PdfService pdfService;
 
     @Override
     public List<MandatoModel> findAll(int codigoGimnasio) {
@@ -45,18 +55,36 @@ public class MandatoServiceImpl implements MandatoService {
     }
 
     @Override
+    public MandatoModel update(MandatoModel mandatoModel) {
+        return add(mandatoModel);
+    }
+
+    @Override
     public void delete(int idMandato) {
         mandatoRepository.deleteById(idMandato);
     }
 
     @Override
     public void fillMandato(MandatoModel mandatoModel, boolean adulto, int codigoGimnasio) {
-        mandatoModel.setAdulto(adulto);
         Calendar calendar = GregorianCalendar.getInstance();
         String[] hoy = new SimpleDateFormat("dd-MM-yyyy").format(calendar.getTime()).split("-");
-        mandatoModel.setTemporada(Arrays.toString(hoy));
         mandatoModel.setFechaAlta(calendar.getTime());
+        mandatoModel.setTemporada(Arrays.toString(hoy));
+        mandatoModel.setAdulto(adulto);
         mandatoModel.setCodigoGimnasio(codigoGimnasio);
+    }
+
+    @Override
+    public void crearEnviarArchivosInscripcionTaekwondo(FirmaCodigoModel firmaCodigoModel) throws SenderException {
+        List<File> files = new ArrayList<>();
+        MandatoModel mandatoModel = findById(firmaCodigoModel.getIdOperacion());
+        PdfModel pdfModel = pdfService.getPdfMandato(mandatoModel);
+        File pdfMandato = pdfService.generarPdfMandato(pdfModel);
+        files.add(pdfMandato);
+        mandatoModel.setMandatoFirmado(Boolean.TRUE);
+        update(mandatoModel);
+        emailService.sendNewMandato(mandatoModel, files);
+        emailService.confirmAdminNewMandato(mandatoModel);
     }
 
     private List<MandatoModel> fillModelList(List<Mandato> mandatoList) {

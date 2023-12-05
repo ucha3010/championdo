@@ -1,13 +1,11 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.MandatoModel;
-import com.championdo.torneo.model.UserModel;
-import com.championdo.torneo.service.GimnasioRootService;
-import com.championdo.torneo.service.InscripcionTaekwondoService;
-import com.championdo.torneo.service.MandatoService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 @Controller
 @RequestMapping("/mandato")
 public class MandatoController {
@@ -29,18 +21,27 @@ public class MandatoController {
     @Autowired
     private MandatoService mandatoService;
     @Autowired
+    private FormularioService formularioService;
+    @Autowired
     private GimnasioRootService gimnasioRootService;
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
+    @Autowired
+    private PaisService paisService;
+    @Autowired
+    private PdfService pdfService;
+    @Autowired
+    private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
 
     @GetMapping("/adulto")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView adulto(ModelAndView modelAndView) {
-        modelAndView.setViewName("formularioMandatoAdulto");
+        modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("mandatoModel", new MandatoModel());
+        modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
+        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         LoggerMapper.methodOut(Level.INFO, "adulto", modelAndView, getClass());
         return modelAndView;
     }
@@ -48,35 +49,51 @@ public class MandatoController {
     @GetMapping("/menor/{menor}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
-        modelAndView.setViewName("formularioMandatoMenor");
+        modelAndView.setViewName("gimnasio/formularioMandatoMenor");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
+        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         if (menor) {
             modelAndView.addObject("titulo", "Mandato para licencia menor de edad");
         } else {
             modelAndView.addObject("titulo", "Mandato para licencia inclusiva");
         }
-        modelAndView.addObject("mandatoModel", new MandatoModel());
         LoggerMapper.methodOut(Level.INFO, "menorOInclisivo", modelAndView, getClass());
         return modelAndView;
     }
 
-    @PostMapping("/gaurdarAdulto")
+    @PostMapping("/guardarAdulto")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarAdulto(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User user = userService.cargarUsuarioCompleto(modelAndView);
-        mandatoService.fillMandato(mandatoModel, true, user.getCodigoGimnasio());
+        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        mandatoService.fillMandato(mandatoModel, true, userLogged.getCodigoGimnasio());
         mandatoModel = mandatoService.add(mandatoModel);
-
-        //TODO DAMIAN MandatoModel tendrá que tener:
-        // nombre, apellido1 y apellido2 de las dos personas
-        // calidadDe
-        // todos los datos de la dirección
-        // para poder rellenar pdfModel y crear el archivo llamando a pdfService.generarPdfMandato(pdfModel)
-        // haciendo antes lo que se indica en pdfService.getPdfInscripcionTaekwondo(mandatoModel) hay que crear el método
-
+        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
+                seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
+                "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
+        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
         LoggerMapper.methodOut(Level.INFO, "gaurdarAdulto", modelAndView, getClass());
         return modelAndView;
+    }
+
+    //TODO DAMIAN falta hacer el post de guardarMenor, crear los métodos faltantes en MandatoServiceImpl y crear el html gimnasio/formularioMandatoMenor
+
+    private MandatoModel fillMandatoModel(User usuario) {
+        MandatoModel mandatoModel = new MandatoModel();
+        mandatoModel.setNombreMandante(usuario.getName());
+        mandatoModel.setApellido1Mandante(usuario.getLastname());
+        mandatoModel.setApellido2Mandante(usuario.getSecondLastname());
+        mandatoModel.setDniMandante(usuario.getUsername());
+        mandatoModel.setDomicilioCalle(usuario.getDomicilioCalle());
+        mandatoModel.setDomicilioNumero(usuario.getDomicilioNumero());
+        mandatoModel.setDomicilioOtros(usuario.getDomicilioOtros());
+        mandatoModel.setDomicilioCp(usuario.getDomicilioCp());
+        mandatoModel.setDomicilioLocalidad(usuario.getDomicilioLocalidad());
+        if(usuario.getIdPais() != 0) {
+            mandatoModel.setPais(paisService.findById(usuario.getIdPais()).getNombre());
+        }
+        return mandatoModel;
     }
 
 }

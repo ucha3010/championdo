@@ -75,6 +75,7 @@ public class Constantes {
 
 	// FIRMAS - operativa original
 	public static final String INSCRIPCION_GIMNASIO = "inscripcionGimnasio";
+	public static final String INSCRIPCION_MANDATO = "inscripcionMandato";
 
 	// extensiones de archivos
     public static final String EXTENSION_PDF = ".pdf";
