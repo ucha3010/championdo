@@ -31,8 +31,12 @@ public class Mandato {
     private String apellido2Mandante;
     @Column(name = "dniMandante", length = 45)
     private String dniMandante;
+    @Column(name = "correoMandante", length = 100)
+    private String correoMandante;
     @Column(name = "calidad", length = 20)
     private String calidad;
+    @Column(name = "calidadOtro", length = 20)
+    private String calidadOtro;
     @Column(name = "nombreAutorizado", length = 60)
     private String nombreAutorizado;
     @Column(name = "apellido1Autorizado", length = 60)

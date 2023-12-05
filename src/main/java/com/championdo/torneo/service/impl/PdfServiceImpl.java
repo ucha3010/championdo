@@ -898,6 +898,36 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
+    public PdfModel getPdfMandato(MandatoModel mandatoModel) {
+        PdfModel pdfModel = new PdfModel();
+        GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(mandatoModel.getCodigoGimnasio());
+        pdfModel.setIdInscripcion(mandatoModel.getId());
+        pdfModel.setNombre(mandatoModel.getNombreMandante() + " " + mandatoModel.getApellido1Mandante()
+                + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : ""));
+        pdfModel.setDni(mandatoModel.getDniMandante());
+        pdfModel.setCorreo(mandatoModel.getCorreoMandante());
+        pdfModel.setGimnasio(gimnasioRootModel.getNombreGimnasio());
+        pdfModel.setDireccionGimnasio(gimnasioRootModel.getDomicilioCalle() + " "
+                + (StringUtils.isNullOrEmpty(gimnasioRootModel.getDomicilioNumero()) ? "" : gimnasioRootModel.getDomicilioNumero() + " ")
+                + (StringUtils.isNullOrEmpty(gimnasioRootModel.getDomicilioOtros()) ? "" : gimnasioRootModel.getDomicilioOtros() + " ")
+                + gimnasioRootModel.getDomicilioLocalidad() + " (" + gimnasioRootModel.getDomicilioCp() + ")");
+        pdfModel.setMayorEdad(mandatoModel.isAdulto());
+        if (!StringUtils.isNullOrEmpty(mandatoModel.getDomicilioCalle())) {
+            pdfModel.setDomicilio(mandatoModel.getDomicilioCalle() + " " + mandatoModel.getDomicilioNumero()
+                    + " " + mandatoModel.getDomicilioOtros());
+            pdfModel.setLocalidad(mandatoModel.getDomicilioLocalidad() + " (" + mandatoModel.getDomicilioCp()
+                    + ")" + (mandatoModel.getPais() != null ? " - " + mandatoModel.getPais() : ""));
+        }
+        if (!StringUtils.isNullOrEmpty(mandatoModel.getCalidad()) || !StringUtils.isNullOrEmpty(mandatoModel.getCalidadOtro())) {
+            pdfModel.setCalidadDe(!StringUtils.isNullOrEmpty(mandatoModel.getCalidad()) ? mandatoModel.getCalidad() : mandatoModel.getCalidadOtro());
+            pdfModel.setNombreMenor(mandatoModel.getNombreAutorizado() + " " + mandatoModel.getApellido1Autorizado()
+                    + (mandatoModel.getApellido2Autorizado() != null ? " " + mandatoModel.getApellido2Autorizado() : ""));
+            pdfModel.setDniMenor(mandatoModel.getDniAutorizado());
+        }
+        return null;
+    }
+
+    @Override
     public String getFileExtension(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         int dotIndex = fileName.lastIndexOf('.');

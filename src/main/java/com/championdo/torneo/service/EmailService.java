@@ -2,10 +2,7 @@ package com.championdo.torneo.service;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.model.TokenModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
-import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.model.*;
 
 import java.io.File;
 import java.util.List;
@@ -29,4 +26,8 @@ public interface EmailService {
     void confirmAdminSepaSigned(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException;
 
     void sendUserAdded(User user) throws SenderException;
+
+    void sendNewMandato(MandatoModel mandatoModel, List<File> files) throws SenderException;
+
+    void confirmAdminNewMandato(MandatoModel mandatoModel) throws SenderException;
 }

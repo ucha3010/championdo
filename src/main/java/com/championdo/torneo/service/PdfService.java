@@ -2,6 +2,7 @@ package com.championdo.torneo.service;
 
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.model.PdfModel;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,8 @@ public interface PdfService {
     PdfModel getImpresion(InscripcionModel inscripcionModel);
 
     PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel);
+
+    PdfModel getPdfMandato(MandatoModel mandatoModel);
 
     File generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral);
 

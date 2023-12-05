@@ -129,6 +129,34 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    public void sendNewMandato(MandatoModel mandatoModel, List<File> files) throws SenderException {
+        try {
+            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, mandatoModel.getCodigoGimnasio()).getValor();
+            String host = utilService.findByClave(Constantes.HOST_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, mandatoModel.getCorreoMandante(),
+                    "Mandato para licencia solicitada por ".concat(mandatoModel.getNombreMandante()), textMessageSendNewMandato(mandatoModel), files, host, port, mandatoModel.getCodigoGimnasio()));
+        } catch (Exception e) {
+            throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void confirmAdminNewMandato(MandatoModel mandatoModel) throws SenderException {
+        try {
+            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, mandatoModel.getCodigoGimnasio()).getValor();
+            String host = utilService.findByClave(Constantes.HOST_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, correoGimnasio, "Nuevo mandato firmado",
+                    textMessageConfirmAdminNewMandato(mandatoModel), null, host, port, mandatoModel.getCodigoGimnasio()));
+        } catch (Exception e) {
+            throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
+        }
+
+    }
+
     private String textMessageChangePassword(UserModel userModel, TokenModel tokenModel) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -276,6 +304,33 @@ public class EmailServiceImpl implements EmailService {
                 (StringUtils.isNullOrEmpty(user.getSecondLastname()) ? "" : " " + user.getSecondLastname());
         stringBuilder.append("<h1>Hola <b>").append(mayor).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te confirmamos que tu usuario ha sido dado de alta de forma exitosa en la plataforma.</p>");
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>¡Que pases un buen día!</p>");
+        stringBuilder.append("</BODY></HTML>");
+        return stringBuilder.toString();
+    }
+
+    private String textMessageSendNewMandato(MandatoModel mandatoModel) {
+
+        return "<!DOCTYPE html>" +
+                "<HTML><BODY>" +
+                "<h1>Hola <b>" + mandatoModel.getNombreMandante() + "</b>!</h1><br>" +
+                "<p>Te confirmamos que tu solicitud de mandato para la licencia federativa ha sido enviada de forma exitosa en la plataforma.</p>" +
+                "<br><br>" +
+                "<p>¡Que pases un buen día!</p>" +
+                "</BODY></HTML>";
+    }
+
+    private String textMessageConfirmAdminNewMandato(MandatoModel mandatoModel) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>");
+        stringBuilder.append("<HTML><BODY>");
+        stringBuilder.append("<h1>Hola<b>").append("</b>!</h1><br>");
+        stringBuilder.append("<p>El cliente ").append(mandatoModel.getNombreMandante()).append(" acaba de subir un mandato de licencia firmado.</p>");
+        if (!StringUtils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
+            stringBuilder.append("<p>El mandato es para ").append(mandatoModel.getNombreAutorizado()).append(".</p>");
+        }
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
         stringBuilder.append("</BODY></HTML>");

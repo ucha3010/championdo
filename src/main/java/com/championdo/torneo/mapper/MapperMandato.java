@@ -14,11 +14,25 @@ public class MapperMandato {
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setTemporada(externObject.getTemporada());
             localObject.setAdulto(externObject.isAdulto());
-            localObject.setMandante(externObject.getMandante());
+            localObject.setNombreMandante(externObject.getNombreMandante());
+            localObject.setApellido1Mandante(externObject.getApellido1Mandante());
+            localObject.setApellido2Mandante(externObject.getApellido2Mandante());
             localObject.setDniMandante(externObject.getDniMandante());
-            localObject.setAutorizado(externObject.getAutorizado());
+            localObject.setCorreoMandante(externObject.getCorreoMandante());
+            localObject.setCalidad(externObject.getCalidad());
+            localObject.setCalidadOtro(externObject.getCalidadOtro());
+            localObject.setNombreAutorizado(externObject.getNombreAutorizado());
+            localObject.setApellido1Autorizado(externObject.getApellido1Autorizado());
+            localObject.setApellido2Autorizado(externObject.getApellido2Autorizado());
             localObject.setDniAutorizado(externObject.getDniAutorizado());
+            localObject.setDomicilioCalle(externObject.getDomicilioCalle());
+            localObject.setDomicilioNumero(externObject.getDomicilioNumero());
+            localObject.setDomicilioOtros(externObject.getDomicilioOtros());
+            localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
+            localObject.setDomicilioCp(externObject.getDomicilioCp());
+            localObject.setPais(externObject.getPais());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setMandatoFirmado(externObject.isMandatoFirmado());
         }
         return localObject;
     }
@@ -29,11 +43,25 @@ public class MapperMandato {
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setTemporada(externObject.getTemporada());
             localObject.setAdulto(externObject.isAdulto());
-            localObject.setMandante(externObject.getMandante());
+            localObject.setNombreMandante(externObject.getNombreMandante());
+            localObject.setApellido1Mandante(externObject.getApellido1Mandante());
+            localObject.setApellido2Mandante(externObject.getApellido2Mandante());
             localObject.setDniMandante(externObject.getDniMandante());
-            localObject.setAutorizado(externObject.getAutorizado());
+            localObject.setCorreoMandante(externObject.getCorreoMandante());
+            localObject.setCalidad(externObject.getCalidad());
+            localObject.setCalidadOtro(externObject.getCalidadOtro());
+            localObject.setNombreAutorizado(externObject.getNombreAutorizado());
+            localObject.setApellido1Autorizado(externObject.getApellido1Autorizado());
+            localObject.setApellido2Autorizado(externObject.getApellido2Autorizado());
             localObject.setDniAutorizado(externObject.getDniAutorizado());
+            localObject.setDomicilioCalle(externObject.getDomicilioCalle());
+            localObject.setDomicilioNumero(externObject.getDomicilioNumero());
+            localObject.setDomicilioOtros(externObject.getDomicilioOtros());
+            localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
+            localObject.setDomicilioCp(externObject.getDomicilioCp());
+            localObject.setPais(externObject.getPais());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setMandatoFirmado(externObject.isMandatoFirmado());
         }
         return localObject;
     }

@@ -21,7 +21,9 @@ public class MandatoModel {
     private String apellido1Mandante;
     private String apellido2Mandante;
     private String dniMandante;
+    private String correoMandante;
     private String calidad;
+    private String calidadOtro;
     private String nombreAutorizado;
     private String apellido1Autorizado;
     private String apellido2Autorizado;

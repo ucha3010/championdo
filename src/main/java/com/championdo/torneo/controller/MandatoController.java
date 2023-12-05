@@ -68,16 +68,21 @@ public class MandatoController {
 
         User userLogged = userService.cargarUsuarioCompleto(modelAndView);
         mandatoService.fillMandato(mandatoModel, true, userLogged.getCodigoGimnasio());
-        mandatoModel = mandatoService.add(mandatoModel);
-        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
-                seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
-                "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
-        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+        modelAndView = commonMandato(modelAndView, mandatoModel, userLogged);
         LoggerMapper.methodOut(Level.INFO, "gaurdarAdulto", modelAndView, getClass());
         return modelAndView;
     }
 
-    //TODO DAMIAN falta hacer el post de guardarMenor, crear los métodos faltantes en MandatoServiceImpl y crear el html gimnasio/formularioMandatoMenor
+    @PostMapping("/guardarMenor")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView guardarMenor(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
+
+        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        mandatoService.fillMandato(mandatoModel, false, userLogged.getCodigoGimnasio());
+        modelAndView = commonMandato(modelAndView, mandatoModel, userLogged);
+        LoggerMapper.methodOut(Level.INFO, "guardarMenor", modelAndView, getClass());
+        return modelAndView;
+    }
 
     private MandatoModel fillMandatoModel(User usuario) {
         MandatoModel mandatoModel = new MandatoModel();
@@ -94,6 +99,16 @@ public class MandatoController {
             mandatoModel.setPais(paisService.findById(usuario.getIdPais()).getNombre());
         }
         return mandatoModel;
+    }
+
+    private ModelAndView commonMandato(ModelAndView modelAndView, MandatoModel mandatoModel, User userLogged) {
+        mandatoModel.setCorreoMandante(userLogged.getCorreo());
+        mandatoModel = mandatoService.add(mandatoModel);
+        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
+                seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
+                "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
+        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+        return modelAndView;
     }
 
 }
