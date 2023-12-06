@@ -25,7 +25,7 @@ public class AdminGimnasioController {
     private UserService userService;
     @Autowired
     private AdminUtilController adminUtilController;
-
+// TODO DAMIAN en la administración del gimnasio se debe separar los usuarios de la plataforma dados de alta a los usuarios inscritos en taekwondo
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gymAdministration(ModelAndView modelAndView) {

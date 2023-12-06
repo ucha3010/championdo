@@ -10,11 +10,7 @@ import java.util.List;
 @Repository("torneoRepository")
 public interface TorneoRepository extends JpaRepository<Torneo, Integer> {
     
-    List<Torneo> findByCodigoGimnasio(int codigoGimnasio);
     List<Torneo> findByCodigoGimnasioOrderByFechaTorneoDesc(int codigoGimnasio);
-    Torneo findByCodigoGimnasioAndId(int codigoGimnasio, int id);
-    List<Torneo> findByCodigoGimnasioAndNombre(int codigoGimnasio, String nombre);
-    List<Torneo> findByCodigoGimnasioAndFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqual(int codigoGimnasio, Date fechaComienzoInscripcion, Date fechaFinInscripcion);
     List<Torneo> findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndAdultoTrue(Date fechaComienzoInscripcion, Date fechaFinInscripcion);
     List<Torneo> findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndMenorTrue(Date fechaComienzoInscripcion, Date fechaFinInscripcion);
     List<Torneo> findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndInclusivoTrue(Date fechaComienzoInscripcion, Date fechaFinInscripcion);
