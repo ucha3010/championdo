@@ -58,7 +58,7 @@ public class SeguridadServiceImpl implements SeguridadService {
         } else {
             modelAndView.addObject("inscripcionError", "Ha ocurrido un error. Por favor contacte con el soporte técnico.");
         }
-        return null;
+        return modelAndView;
     }
 
     @Override

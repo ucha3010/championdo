@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.MandatoModel;
+import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
@@ -13,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/mandato")
@@ -34,6 +37,17 @@ public class MandatoController {
     private SeguridadService seguridadService;
     @Autowired
     private UserService userService;
+
+    @GetMapping("/mandatos")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView mandatos(ModelAndView modelAndView) {
+        modelAndView.setViewName("gimnasio/principalMandato");
+        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.addObject("mandatoModelList", mandatoService.findByDniMandante(usuario.getCodigoGimnasio(), usuario.getUsername()));
+        modelAndView.addObject("mandatoModel", new MandatoModel());
+        LoggerMapper.methodOut(Level.INFO, "mandatos", modelAndView, getClass());
+        return modelAndView;
+    }
 
     @GetMapping("/adulto")
     @PreAuthorize("isAuthenticated()")
@@ -84,6 +98,22 @@ public class MandatoController {
         return modelAndView;
     }
 
+    @PostMapping("/descargarPdf")
+    @PreAuthorize("isAuthenticated()")
+    public void descargarPdf(@ModelAttribute("mandatoModel") MandatoModel mandatoModel, HttpServletResponse response) {
+        mandatoModel = mandatoService.findById(mandatoModel.getId());
+        PdfModel pdfModel = new PdfModel();
+        if(mandatoModel.isAdulto()) {
+            pdfModel.setDni(mandatoModel.getDniMandante());
+        } else {
+            pdfModel.setDni(mandatoModel.getDniMandante());
+            pdfModel.setDniMenor(mandatoModel.getDniAutorizado());
+        }
+        pdfModel.setIdInscripcion(mandatoModel.getId());
+        pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_MANDATO);
+        LoggerMapper.methodOut(Level.INFO, "mandato/descargarPdf", "Descarga de documento correcta", getClass());
+    }
+
     private MandatoModel fillMandatoModel(User usuario) {
         MandatoModel mandatoModel = new MandatoModel();
         mandatoModel.setNombreMandante(usuario.getName());
@@ -107,7 +137,7 @@ public class MandatoController {
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                 seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
                 "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
-        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+        seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
         return modelAndView;
     }
 

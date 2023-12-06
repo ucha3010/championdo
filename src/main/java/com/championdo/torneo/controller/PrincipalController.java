@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
+import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -28,8 +29,9 @@ public class PrincipalController {
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
+    private MandatoService mandatoService;
+    @Autowired
     private UserService userService;
-    // TODO DAMIAN falta hacer la renovación de licencia
     // TODO DAMIAN hay que permitir, en la página de login, un alta a torneo sin necesidad de ser usuario
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
@@ -41,6 +43,9 @@ public class PrincipalController {
             if (!inscripcionTaekwondoModel.isInscripcionFirmada() || (inscripcionTaekwondoModel.isDomiciliacionSEPA() && !inscripcionTaekwondoModel.isMandatoSEPAFirmado())) {
                 modelAndView.addObject("inscripcionTaekwondo", "Documentación pendiente de firma");
             }
+        }
+        if(!mandatoService.findByDniMandanteAndMandatoFirmadoFalse(usuario.getCodigoGimnasio(), usuario.getUsername()).isEmpty()) {
+            modelAndView.addObject("licenciaTaekwondo", "Documentación pendiente de firma");
         }
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(usuario.getCodigoGimnasio()));

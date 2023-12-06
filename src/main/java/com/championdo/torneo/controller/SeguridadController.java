@@ -5,6 +5,7 @@ import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
+import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.service.FirmaCodigoService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.service.MandatoService;
@@ -48,7 +49,7 @@ public class SeguridadController {
             firmaCodigoModel = firmaCodigoService.findByIdOperacion(firmaCodigoModel.getIdOperacion());
             seguridadService.validarCodigo(codigoEnviadoPorUsuario, userLogged.getUsername(), firmaCodigoModel);
 
-            //Acá se agregan los procesos para generar y enviar archivos firmados
+            // TODO INFORMACIÓN FIRMA Acá se agregan los procesos para generar y enviar archivos firmados
             if (Constantes.INSCRIPCION_GIMNASIO.equals(firmaCodigoModel.getOperativaOriginal())) {
                 inscripcionTaekwondoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
             } else if (Constantes.INSCRIPCION_MANDATO.equals(firmaCodigoModel.getOperativaOriginal())) {
@@ -82,12 +83,17 @@ public class SeguridadController {
         User userLogged = userService.cargarUsuarioCompleto(modelAndView);
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel();
 
-        //Acá se agregan los procesos para un nuevo envío de código
+        // TODO INFORMACIÓN FIRMA Acá se agregan los procesos para un nuevo envío de código
         if (Constantes.INSCRIPCION_GIMNASIO.equals(operativaOriginal)) {
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                     seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
                     "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_GIMNASIO);
+        } else if (Constantes.INSCRIPCION_MANDATO.equals(operativaOriginal)) {
+            MandatoModel mandatoModel = mandatoService.findById(id);
+            firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
+                    seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
+                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
         }
 
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);

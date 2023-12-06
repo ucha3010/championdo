@@ -4,19 +4,23 @@ import com.championdo.torneo.entity.Mandato;
 import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.mapper.MapperMandato;
 import com.championdo.torneo.model.FirmaCodigoModel;
+import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.repository.MandatoRepository;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Service()
 public class MandatoServiceImpl implements MandatoService {
@@ -50,6 +54,11 @@ public class MandatoServiceImpl implements MandatoService {
     }
 
     @Override
+    public List<MandatoModel> findByDniMandanteAndMandatoFirmadoFalse(int codigoGimnasio, String dniMandante) {
+        return fillModelList(mandatoRepository.findByCodigoGimnasioAndDniMandanteAndMandatoFirmadoFalseOrderByFechaAltaDesc(codigoGimnasio, dniMandante));
+    }
+
+    @Override
     public MandatoModel add(MandatoModel mandatoModel) {
         return mapperMandato.entity2Model(mandatoRepository.save(mapperMandato.model2Entity(mandatoModel)));
     }
@@ -67,11 +76,34 @@ public class MandatoServiceImpl implements MandatoService {
     @Override
     public void fillMandato(MandatoModel mandatoModel, boolean adulto, int codigoGimnasio) {
         Calendar calendar = GregorianCalendar.getInstance();
-        String[] hoy = new SimpleDateFormat("dd-MM-yyyy").format(calendar.getTime()).split("-");
         mandatoModel.setFechaAlta(calendar.getTime());
-        mandatoModel.setTemporada(Arrays.toString(hoy));
+        mandatoModel.setTemporada(Utils.calculateSeason(calendar.getTime()));
         mandatoModel.setAdulto(adulto);
         mandatoModel.setCodigoGimnasio(codigoGimnasio);
+    }
+
+    @Override
+    public MandatoModel fromInscripcionTaekwondoToMandato(InscripcionTaekwondoModel inscripcionTaekwondoModel) {
+        MandatoModel mandatoModel = new MandatoModel();
+        fillMandato(mandatoModel, inscripcionTaekwondoModel.isMayorLicencia(), inscripcionTaekwondoModel.getCodigoGimnasio());
+        mandatoModel.setNombreMandante(inscripcionTaekwondoModel.getMayorNombre());
+        mandatoModel.setApellido1Mandante(inscripcionTaekwondoModel.getMayorApellido1());
+        mandatoModel.setApellido2Mandante(inscripcionTaekwondoModel.getMayorApellido2());
+        mandatoModel.setDniMandante(inscripcionTaekwondoModel.getMayorDni());
+        mandatoModel.setCorreoMandante(inscripcionTaekwondoModel.getMayorCorreo());
+        mandatoModel.setCalidad(inscripcionTaekwondoModel.getMayorCalidad());
+        mandatoModel.setNombreAutorizado(inscripcionTaekwondoModel.getAutorizadoNombre());
+        mandatoModel.setApellido1Autorizado(inscripcionTaekwondoModel.getAutorizadoApellido1());
+        mandatoModel.setApellido2Autorizado(inscripcionTaekwondoModel.getAutorizadoApellido2());
+        mandatoModel.setDniAutorizado(inscripcionTaekwondoModel.getAutorizadoDni());
+        mandatoModel.setDomicilioCalle(inscripcionTaekwondoModel.getMayorDomicilioCalle());
+        mandatoModel.setDomicilioNumero(inscripcionTaekwondoModel.getMayorDomicilioNumero());
+        mandatoModel.setDomicilioOtros(inscripcionTaekwondoModel.getMayorDomicilioOtros());
+        mandatoModel.setDomicilioLocalidad(inscripcionTaekwondoModel.getMayorDomicilioLocalidad());
+        mandatoModel.setDomicilioCp(inscripcionTaekwondoModel.getMayorDomicilioCp());
+        mandatoModel.setPais(inscripcionTaekwondoModel.getMayorPais());
+        mandatoModel.setMandatoFirmado(true);
+        return mandatoModel;
     }
 
     @Override

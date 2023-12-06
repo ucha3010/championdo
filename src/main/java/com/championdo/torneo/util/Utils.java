@@ -114,12 +114,13 @@ public class Utils {
         return listaHost;
     }
 
-    public static int calculateSeason(String[] today) {
-        int season = Integer.parseInt(today[2]);
+    public static String calculateSeason(Date date) {
+        String[] dateArray = new SimpleDateFormat("dd-MM-yyyy").format(date).split("-");
+        int season = Integer.parseInt(dateArray[2]);
         // en noviembre y diciembre se hace la autorización para la temporada del año siguiente
-        if ("11".equals(today[1]) || "12".equals(today[1])) {
+        if ("11".equals(dateArray[1]) || "12".equals(dateArray[1])) {
             season++;
         }
-        return season;
+        return String.valueOf(season);
     }
 }

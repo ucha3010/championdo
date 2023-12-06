@@ -188,7 +188,6 @@ public class PdfServiceImpl implements PdfService {
             Calendar calendar = GregorianCalendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
             String[] hoy = sdf.format(calendar.getTime()).split("/");
-            String[] hoy2 = new SimpleDateFormat("dd-MM-yyyy").format(calendar.getTime()).split("-");
 
             if(!StringUtils.isNullOrEmpty(pdfModel.getCalidadDe())) {
                 nombreMenor = " (" + pdfModel.getNombreMenor() + ")";
@@ -231,7 +230,7 @@ public class PdfServiceImpl implements PdfService {
             //salto = 15;tamanioFuente = 14;
             parrafo = new StringBuilder();
             parrafo.append("Que el presente MANDATO, que se rige por los arts. 1709 a 1739 CC español se confiere para que se pueda llevar ");
-            parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(Utils.calculateSeason(hoy2));
+            parrafo.append("a cabo la inscripción federativa del MANDANTE en la temporada ").append(Utils.calculateSeason(calendar.getTime()));
             parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
             generoParrafo(contentStream, page, parrafoList, alturaComienzoParrafo, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);
             alturaComienzoParrafo += (parrafoList.size() * salto + saltoParrafo);
@@ -924,7 +923,7 @@ public class PdfServiceImpl implements PdfService {
                     + (mandatoModel.getApellido2Autorizado() != null ? " " + mandatoModel.getApellido2Autorizado() : ""));
             pdfModel.setDniMenor(mandatoModel.getDniAutorizado());
         }
-        return null;
+        return pdfModel;
     }
 
     @Override

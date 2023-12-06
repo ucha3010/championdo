@@ -43,12 +43,14 @@ public class GimnasioController {
         modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
-        for (InscripcionTaekwondoModel inscripcionTaekwondoModel: inscripcionTaekwondoModelList) {
-            if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
-                modelAndView.addObject("ocultarAdulto", "ocultarAdulto");
+        if (!inscripcionTaekwondoModelList.isEmpty()) {
+            for (InscripcionTaekwondoModel inscripcionTaekwondoModel : inscripcionTaekwondoModelList) {
+                if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
+                    modelAndView.addObject("ocultarAdulto", "ocultarAdulto");
+                }
             }
+            modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
         }
-        modelAndView.addObject("inscripcion", inscripcionTaekwondoModelList);
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
         return modelAndView;

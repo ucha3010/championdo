@@ -75,6 +75,10 @@ a:link, a:visited,  a:hover, a:active
   background-color: #FFDC9B;
 }
 
+.backgroundColorLightViolet {
+  background-color: #768df1;
+}
+
 .btn-primary .badge {
   background-color: red;
   color: white;

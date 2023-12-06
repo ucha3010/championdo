@@ -32,7 +32,7 @@
 			<div class="col-xs-7 col-md-8">
 				<input type="text" th:field="*{inscripcion.mayorNombre}" id="nombre" class="form-control" disabled/>
 			</div>
-			<div class="col-xs-2 col-md-1">
+			<div class="col-xs-2 col-md-2">
 				<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 			</div>
 		</div>
@@ -63,27 +63,6 @@
 			<div class="col-xs-9 col-md-8">
 				<input type="text" th:field="*{inscripcion.mayorApellido2}" id="apellido2" class="form-control" disabled/>
 			</div>
-			<div th:if="${inscripcion.inscripcionFirmada and inscripcion.mayorLicencia}" class="col-md-2">
-				<form action="#" th:action="@{/gimnasio/descargarPdf}"th:object="${pdfModel}" method="POST">
-					<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
-					<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
-					<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
-					<input type="hidden" name="mayorEdad" th:value="!${inscripcion.autorizadoMenor}"/>
-					<input type="hidden" name="seccion" th:value="mandato"/>
-					<button class="btn btn-success pull-right" type="submit">Mandato Licencia</button>
-				</form>
-			</div>
-		</div>
-
-		<div class="row mb-1">
-			<div class="col-xs-3 col-md-2 text-center">
-				<label for="sexo">Sexo</label>
-			</div>
-			<div class="col-xs-4 col-md-3">
-				<input type="text" th:field="*{inscripcion.mayorSexo}" id="sexo" class="form-control" disabled/>
-			</div>
-			<div class="col-xs-3 col-md-5">
-			</div>
 			<div th:if="${inscripcion.inscripcionFirmada and inscripcion.mayorAutorizaWhatsApp}" class="col-md-2">
 				<form action="#" th:action="@{/gimnasio/descargarPdf}"th:object="${pdfModel}" method="POST">
 					<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
@@ -98,10 +77,10 @@
 
 		<div class="row mb-1">
 			<div class="col-xs-3 col-md-2 text-center">
-				<label for="dni">DNI</label>
+				<label for="sexo">Sexo</label>
 			</div>
 			<div class="col-xs-4 col-md-3">
-				<input type="text" th:field="*{inscripcion.mayorDni}" id="dni" class="form-control" disabled/>
+				<input type="text" th:field="*{inscripcion.mayorSexo}" id="sexo" class="form-control" disabled/>
 			</div>
 			<div class="col-xs-3 col-md-5">
 			</div>
@@ -115,6 +94,19 @@
 					<input type="hidden" name="extension" th:value="${inscripcion.extensionSEPAFirmado}"/>
 					<button class="btn btn-success pull-right" type="submit">Domiciliación</button>
 				</form>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-xs-3 col-md-2 text-center">
+				<label for="dni">DNI</label>
+			</div>
+			<div class="col-xs-4 col-md-3">
+				<input type="text" th:field="*{inscripcion.mayorDni}" id="dni" class="form-control" disabled/>
+			</div>
+			<div class="col-xs-3 col-md-5">
+			</div>
+			<div class="col-md-2">
 			</div>
 		</div>
 
@@ -238,7 +230,7 @@
 				<span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy HH:mm')}" id="fecha"></span>
 			</div>
 			<div class="col-xs-5 col-md-7">
-				<span th:if="${inscripcion.mayorLicencia}">Autorizo licencia Federativa para este año</span>
+				<span th:if="${inscripcion.mayorLicencia}">Autorizo mandato de licencia Federativa</span>
 			</div>
 		</div>
 
@@ -279,14 +271,11 @@
 		</div>
 
 		<div class="row">
-			<div class="col-xs-2">
+			<div class="col-xs-10">
 			</div>
 
 			<div class="col-xs-2">
 				<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
-			</div>
-
-			<div class="col-xs-8">
 			</div>
 		</div>
 	</div>

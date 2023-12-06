@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository("InscripcionTaekwondoRepository")
 public interface InscripcionTaekwondoRepository extends JpaRepository<InscripcionTaekwondo, Integer> {
-    List<InscripcionTaekwondo> findByMayorDni(String mayorDni);
+    List<InscripcionTaekwondo> findByMayorDniOrderByFechaInscripcionDesc(String mayorDni);
 
     List<InscripcionTaekwondo> findAllByOrderByIdDesc();
 }

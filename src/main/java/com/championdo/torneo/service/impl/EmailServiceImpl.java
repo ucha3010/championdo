@@ -312,13 +312,19 @@ public class EmailServiceImpl implements EmailService {
 
     private String textMessageSendNewMandato(MandatoModel mandatoModel) {
 
-        return "<!DOCTYPE html>" +
-                "<HTML><BODY>" +
-                "<h1>Hola <b>" + mandatoModel.getNombreMandante() + "</b>!</h1><br>" +
-                "<p>Te confirmamos que tu solicitud de mandato para la licencia federativa ha sido enviada de forma exitosa en la plataforma.</p>" +
-                "<br><br>" +
-                "<p>¡Que pases un buen día!</p>" +
-                "</BODY></HTML>";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>");
+        stringBuilder.append("<HTML><BODY>");
+        stringBuilder.append("<h1>Hola <b>").append(mandatoModel.getNombreMandante()).append("</b>!</h1><br>");
+        stringBuilder.append("<p>Te confirmamos que tu solicitud de mandato para la licencia federativa");
+        if (!StringUtils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
+            stringBuilder.append(" de ").append(mandatoModel.getNombreAutorizado());
+        }
+        stringBuilder.append(" ha sido enviada de forma exitosa en la plataforma.</p>");
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>¡Que pases un buen día!</p>");
+        stringBuilder.append("</BODY></HTML>");
+        return stringBuilder.toString();
     }
 
     private String textMessageConfirmAdminNewMandato(MandatoModel mandatoModel) {
@@ -326,7 +332,7 @@ public class EmailServiceImpl implements EmailService {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
-        stringBuilder.append("<h1>Hola<b>").append("</b>!</h1><br>");
+        stringBuilder.append("<h1>Hola!</h1><br>");
         stringBuilder.append("<p>El cliente ").append(mandatoModel.getNombreMandante()).append(" acaba de subir un mandato de licencia firmado.</p>");
         if (!StringUtils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
             stringBuilder.append("<p>El mandato es para ").append(mandatoModel.getNombreAutorizado()).append(".</p>");

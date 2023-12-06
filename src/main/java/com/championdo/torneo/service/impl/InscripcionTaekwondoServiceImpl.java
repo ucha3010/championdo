@@ -5,10 +5,7 @@ import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.mapper.MapperInscripcionTaekwondo;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.repository.InscripcionTaekwondoRepository;
-import com.championdo.torneo.service.EmailService;
-import com.championdo.torneo.service.InscripcionTaekwondoService;
-import com.championdo.torneo.service.PdfService;
-import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.mysql.cj.util.StringUtils;
@@ -31,6 +28,8 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     private InscripcionTaekwondoRepository inscripcionTaekwondoRepository;
     @Autowired
     private MapperInscripcionTaekwondo mapperInscripcionTaekwondo;
+    @Autowired
+    private MandatoService mandatoService;
     @Autowired
     private PdfService pdfService;
     @Autowired
@@ -56,7 +55,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
 
     @Override
     public List<InscripcionTaekwondoModel> findByMayorDni(String mayorDni) {
-        List<InscripcionTaekwondo> inscripcionTaekwondoList = inscripcionTaekwondoRepository.findByMayorDni(mayorDni);
+        List<InscripcionTaekwondo> inscripcionTaekwondoList = inscripcionTaekwondoRepository.findByMayorDniOrderByFechaInscripcionDesc(mayorDni);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = new ArrayList<>();
         if (inscripcionTaekwondoList != null) {
             for (InscripcionTaekwondo inscripcion : inscripcionTaekwondoList) {
@@ -139,8 +138,9 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
         if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
-            //TODO DAMIAN acá tengo que crear el mandato, guardar el id del mandato en pdfModelGeneral.getIdInscripcion()
-            // y luego llamar a pdfService.generarPdfMandato(pdfModelGeneral)
+            MandatoModel mandatoModel = mandatoService.fromInscripcionTaekwondoToMandato(inscripcionTaekwondoModel);
+            mandatoModel = mandatoService.add(mandatoModel);
+            pdfModelGeneral.setIdInscripcion(mandatoModel.getId());
             File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
             files.add(pdfMandato);
             pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());

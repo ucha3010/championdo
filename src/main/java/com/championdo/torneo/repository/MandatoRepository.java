@@ -10,4 +10,5 @@ import java.util.List;
 public interface MandatoRepository extends JpaRepository<Mandato, Integer> {
     List<Mandato> findByCodigoGimnasioOrderByFechaAltaDesc(int codigoGimnasio);
     List<Mandato> findByCodigoGimnasioAndDniMandanteOrderByFechaAltaDesc(int codigoGimnasio, String dniMandante);
+    List<Mandato> findByCodigoGimnasioAndDniMandanteAndMandatoFirmadoFalseOrderByFechaAltaDesc(int codigoGimnasio, String dniMandante);
 }

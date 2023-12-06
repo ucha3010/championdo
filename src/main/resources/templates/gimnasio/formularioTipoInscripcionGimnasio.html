@@ -27,6 +27,7 @@
 				location.href = domain + relativeUrl;
 			})
 		});
+
 		function confirmDelete(id){
 			if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
 				var relativeUrl = "gimnasio/eliminarInscripcion/" + id;
@@ -36,6 +37,12 @@
 			}
 			return false;
 		}
+
+        function goDetail(id){
+            var relativeUrl = "gimnasio/getInscripcion/" + id;
+            var domain = getDomain(location.href);
+            location.href = domain + relativeUrl;
+        }
 	</script>
 </head>
 <body>
@@ -62,20 +69,6 @@
 				<div class="col-xs-2 mb-1">
 					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
 				</div>
-			</div>
-		</section>
-
-		<section class="text-center">
-			<div th:if="${inscripcion != null}" th:each="autorizacion : ${inscripcion}">
-				<a href="#" th:href="@{/gimnasio/getInscripcion/__${autorizacion.id}__}" class="textDecoration-none">
-					<button class="btn btn-link" type="button">
-						Inscripción de <span th:text="${autorizacion.autorizadoNombre}"></span> <span th:text="${autorizacion.autorizadoApellido1}"></span> <span th:text="${autorizacion.autorizadoApellido2}"></span> realizada el <span th:text="${#calendars.format(autorizacion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span>
-					</button>
-				</a>
-				<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
-
-				<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.mandatoSEPAFirmado}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
-				<a th:if="${!autorizacion.inscripcionFirmada}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionGimnasio/__${autorizacion.id}__}">¡Inscripción no firmada! Toque aquí para firmar</a>
 			</div>
 		</section>
 
@@ -111,12 +104,52 @@
 		</section>
 
 		<section class="text-center margenArribaAbajo3Porc">
-			<div class="col-xs-6 mb-3">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+			<div class="col-xs-5">
+			</div>
+			<div class="col-xs-2">
+				<button class="btn btn-success" type="submit" id="submit">Continuar</button>
+			</div>
+			<div class="col-xs-5">
+			</div>
+		</section>
+
+		<section>
+			<table class="table table-striped table-hover">
+				<thead>
+				<tr>
+					<th>Fecha de realización</th>
+					<th>Inscripción de</th>
+					<th></th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="autorizacion : ${inscripciones}">
+					<td th:attr="onclick=|goDetail('${autorizacion.id}')|">
+						<span th:text="${#calendars.format(autorizacion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span>
+					</td>
+					<td th:attr="onclick=|goDetail('${autorizacion.id}')|">
+						<span th:if="${autorizacion.autorizadoNombre != null}" th:text="${autorizacion.autorizadoNombre+' '+autorizacion.autorizadoApellido1+' '+autorizacion.autorizadoApellido2}"></span>
+						<span th:if="${autorizacion.autorizadoNombre == null}" th:text="${autorizacion.mayorNombre+' '+autorizacion.mayorApellido1+' '+autorizacion.mayorApellido2}"></span>
+					</td>
+					<td>
+						<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
+					</td>
+					<td>
+						<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.mandatoSEPAFirmado}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
+						<a th:if="${!autorizacion.inscripcionFirmada}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionGimnasio/__${autorizacion.id}__}">¡Inscripción no firmada! Toque aquí para firmar</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</section>
+
+		<section th:if="${inscripciones != null}" class="text-center margenArribaAbajo3Porc">
+			<div class="col-xs-10">
 			</div>
 
-			<div class="col-xs-6 mb-3">
-				<button class="btn btn-success" type="submit" id="submit">Continuar</button>
+			<div class="col-xs-2">
+				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
 			</div>
 		</section>
 	</div>
