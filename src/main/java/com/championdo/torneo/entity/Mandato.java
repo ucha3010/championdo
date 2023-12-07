@@ -59,5 +59,6 @@ public class Mandato {
     private String pais;
     private int codigoGimnasio;
     private boolean mandatoFirmado;
+    private boolean licenciaAbonada;
 
 }

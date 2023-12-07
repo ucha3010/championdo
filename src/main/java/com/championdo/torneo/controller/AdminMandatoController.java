@@ -22,7 +22,6 @@ public class AdminMandatoController {
     private MandatoService mandatoService;
     @Autowired
     private UserService userService;
-// TODO DAMIAN hay que agregar un campo para indicar si se abonó la licencia del mandato
     // TODO DAMIAN al crear el mandato hay que verificar si es menor o inclusivo que el DNI no se haya utilizado para esa temporada en un mandato
     // de adulto. Y al revés cuando se va a crear un mandato de adulto
     @GetMapping("/")
@@ -49,12 +48,22 @@ public class AdminMandatoController {
     @GetMapping("/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
-        modelAndView.setViewName("gimnasio/adminMandato");
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         mandatoService.delete(id);
         modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
         LoggerMapper.methodOut(Level.INFO, "removeMandato", modelAndView, getClass());
-        return modelAndView;
+        return mandatos(modelAndView);
+    }
+
+    @GetMapping("/pay/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView pay(ModelAndView modelAndView, @PathVariable int id) {
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        MandatoModel mandatoModel = mandatoService.findById(id);
+        mandatoModel.setLicenciaAbonada(!mandatoModel.isLicenciaAbonada());
+        mandatoService.update(mandatoModel);
+        LoggerMapper.methodOut(Level.INFO, "pay", modelAndView, getClass());
+        return mandato(modelAndView, id);
     }
 
 }

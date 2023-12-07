@@ -33,6 +33,7 @@ public class MapperMandato {
             localObject.setPais(externObject.getPais());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             localObject.setMandatoFirmado(externObject.isMandatoFirmado());
+            localObject.setLicenciaAbonada(externObject.isLicenciaAbonada());
         }
         return localObject;
     }
@@ -62,6 +63,7 @@ public class MapperMandato {
             localObject.setPais(externObject.getPais());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             localObject.setMandatoFirmado(externObject.isMandatoFirmado());
+            localObject.setLicenciaAbonada(externObject.isLicenciaAbonada());
         }
         return localObject;
     }

@@ -63,6 +63,7 @@
 					<th scope="col">Autorizado (menor o inclusivo)</th>
 					<th scope="col">Temporada</th>
 					<th></th>
+					<th></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -71,6 +72,8 @@
 					<td th:attr="onclick=|goDetail('${mandato.id}')|"><span th:text="${mandato.nombreMandante+' '+mandato.apellido1Mandante+' '+mandato.apellido2Mandante}"></span></td>
 					<td th:attr="onclick=|goDetail('${mandato.id}')|"><span th:if="${mandato.nombreAutorizado != null}" th:text="${mandato.nombreAutorizado+' '+mandato.apellido1Autorizado+' '+mandato.apellido2Autorizado}"></span></td>
 					<td th:attr="onclick=|goDetail('${mandato.id}')|"><span th:text="${mandato.temporada}"></span></td>
+					<td th:if="${mandato.licenciaAbonada}"><span class="colorGreen">Abonado</span></td>
+					<td th:if="${!mandato.licenciaAbonada}"><span class="colorRed">No abonado</span></td>
 					<td th:if="${mandato.mandatoFirmado}">
 						<form action="#" method="POST" th:action="@{/mandato/descargarPdf}" th:object="${mandatoModel}">
 							<input type="hidden" name="id" th:value="${mandato.id}"/>
