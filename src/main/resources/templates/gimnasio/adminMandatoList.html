@@ -28,9 +28,6 @@
 	</script>
 </head>
 <body>
-	<section>
-		<div th:if="${deleteOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${deleteOK}"></span></div>
-	</section>
 
 	<div class="container">
 		<h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
@@ -40,6 +37,10 @@
 				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
 			</form>
 		</nav>
+
+		<section>
+			<div th:if="${deleteOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${deleteOK}"></span></div>
+		</section>
 
 		<section>
 			<div class="row">

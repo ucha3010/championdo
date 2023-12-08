@@ -2,6 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.InscripcionTaekwondo;
 import com.championdo.torneo.exception.SenderException;
+import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.mapper.MapperInscripcionTaekwondo;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.repository.InscripcionTaekwondoRepository;
@@ -139,11 +140,15 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
         if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
             MandatoModel mandatoModel = mandatoService.fromInscripcionTaekwondoToMandato(inscripcionTaekwondoModel);
-            mandatoModel = mandatoService.add(mandatoModel);
-            pdfModelGeneral.setIdInscripcion(mandatoModel.getId());
-            File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
-            files.add(pdfMandato);
-            pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
+            try {
+                mandatoModel = mandatoService.add(mandatoModel);
+                pdfModelGeneral.setIdInscripcion(mandatoModel.getId());
+                File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
+                files.add(pdfMandato);
+                pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
+            } catch (ValidationException e) {
+                LoggerMapper.log(Level.ERROR, "crearEnviarArchivosInscripcionTaekwondo", e.getMessage(), this.getClass());
+            }
         }
         if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
             File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);

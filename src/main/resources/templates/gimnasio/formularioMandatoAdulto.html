@@ -65,6 +65,12 @@
 				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
 			</form>
 		</nav>
+
+		<h1 th:text="${titulo}"></h1>
+
+		<section th:if="${addKO != null}">
+			<div class="alert alert-danger textAlignCenter" role="alert"><span th:text="${addKO}"></span></div>
+		</section>
 		
 		<form action="#" th:action="@{/mandato/guardarAdulto}" th:object="${mandatoModel}" method="post" onsubmit="return validar()">
 

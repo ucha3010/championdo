@@ -1,6 +1,7 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.impl.UserService;
@@ -22,8 +23,7 @@ public class AdminMandatoController {
     private MandatoService mandatoService;
     @Autowired
     private UserService userService;
-    // TODO DAMIAN al crear el mandato hay que verificar si es menor o inclusivo que el DNI no se haya utilizado para esa temporada en un mandato
-    // de adulto. Y al revés cuando se va a crear un mandato de adulto
+
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView mandatos(ModelAndView modelAndView) {
@@ -57,7 +57,7 @@ public class AdminMandatoController {
 
     @GetMapping("/pay/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView pay(ModelAndView modelAndView, @PathVariable int id) {
+    public ModelAndView pay(ModelAndView modelAndView, @PathVariable int id) throws ValidationException {
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         MandatoModel mandatoModel = mandatoService.findById(id);
         mandatoModel.setLicenciaAbonada(!mandatoModel.isLicenciaAbonada());

@@ -21,6 +21,8 @@ public class Firma {
     private int idOperacion;
     private int numeroIntentos;
     private boolean firmado;
+    @Column(name = "operativaOriginal", length = 50)
+    private String operativaOriginal;
     private int codigoGimnasio;
 
 }

@@ -25,6 +25,16 @@
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;
         }
+
+		function confirmDelete(id){
+			if(confirm("¿Seguro que desea eliminar el mandato?")){
+				var relativeUrl = "mandato/remove/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
 	</script>
 </head>
 <body>
@@ -38,6 +48,10 @@
 				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
 			</form>
 		</nav>
+
+		<section>
+			<div th:if="${deleteOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${deleteOK}"></span></div>
+		</section>
 
 		<section>
 			<div class="row">
@@ -83,6 +97,7 @@
 					<th scope="col">Autorizado (menor o inclusivo)</th>
 					<th scope="col">Temporada</th>
 					<th></th>
+					<th></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -97,6 +112,9 @@
 							<button class="btn btn-success pull-right" type="submit">Descarga</button>
 						</form>
 						<a th:if="${!mandato.mandatoFirmado}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionMandato/__${mandato.id}__}">¡Mandato no firmado! Toque aquí para firmar</a>
+					</td>
+					<td>
+						<button th:if="${!mandato.mandatoFirmado}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${mandato.id}')|">Borrar mandato</button>
 					</td>
 				</tr>
 				</tbody>

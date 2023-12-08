@@ -76,6 +76,7 @@ public class SeguridadServiceImpl implements SeguridadService {
                 throw new ValidationException(Constantes.AVISO_VALIDACION_DATOS_NO_VALIDOS, "Datos de entrada no válidos");
             } else {
                 firmaModel.setFirmado(Boolean.TRUE);
+                firmaModel.setOperativaOriginal(firmaCodigoModel.getOperativaOriginal());
                 firmaService.update(firmaModel);
             }
         }

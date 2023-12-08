@@ -98,6 +98,12 @@
 				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
 			</form>
 		</nav>
+
+		<h1 th:text="${titulo}"></h1>
+
+		<section th:if="${addKO != null}">
+			<div class="alert alert-danger textAlignCenter" role="alert"><span th:text="${addKO}"></span></div>
+		</section>
 		
 		<form action="#" th:action="@{/mandato/guardarMenor}" th:object="${mandatoModel}" method="post" onsubmit="return validar()">
 
@@ -105,6 +111,7 @@
 			<input type="hidden" th:field="*{apellido1Mandante}" />
 			<input type="hidden" th:field="*{apellido2Mandante}" />
 			<input type="hidden" th:field="*{dniMandante}" />
+			<input type="hidden" th:field="*{menor}" />
 
 			<div class="row mb-1">
 				<div class="col-md-2 apartado">

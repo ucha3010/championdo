@@ -167,7 +167,7 @@ public class GimnasioController {
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                 seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_GIMNASIO);
+                "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_TAEKWONDO);
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
         LoggerMapper.methodOut(Level.INFO, "gimnasio/" + recurso, firmaCodigoModel, getClass());
         return modelAndView;

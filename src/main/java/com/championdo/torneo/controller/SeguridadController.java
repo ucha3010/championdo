@@ -50,7 +50,7 @@ public class SeguridadController {
             seguridadService.validarCodigo(codigoEnviadoPorUsuario, userLogged.getUsername(), firmaCodigoModel);
 
             // TODO INFORMACIÓN FIRMA Acá se agregan los procesos para generar y enviar archivos firmados
-            if (Constantes.INSCRIPCION_GIMNASIO.equals(firmaCodigoModel.getOperativaOriginal())) {
+            if (Constantes.INSCRIPCION_TAEKWONDO.equals(firmaCodigoModel.getOperativaOriginal())) {
                 inscripcionTaekwondoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
             } else if (Constantes.INSCRIPCION_MANDATO.equals(firmaCodigoModel.getOperativaOriginal())) {
                 mandatoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
@@ -84,11 +84,11 @@ public class SeguridadController {
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel();
 
         // TODO INFORMACIÓN FIRMA Acá se agregan los procesos para un nuevo envío de código
-        if (Constantes.INSCRIPCION_GIMNASIO.equals(operativaOriginal)) {
+        if (Constantes.INSCRIPCION_TAEKWONDO.equals(operativaOriginal)) {
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                     seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_GIMNASIO);
+                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_TAEKWONDO);
         } else if (Constantes.INSCRIPCION_MANDATO.equals(operativaOriginal)) {
             MandatoModel mandatoModel = mandatoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),

@@ -24,7 +24,7 @@ public class MapperMandato {
             localObject.setNombreAutorizado(externObject.getNombreAutorizado());
             localObject.setApellido1Autorizado(externObject.getApellido1Autorizado());
             localObject.setApellido2Autorizado(externObject.getApellido2Autorizado());
-            localObject.setDniAutorizado(externObject.getDniAutorizado());
+            localObject.setDniAutorizado(externObject.getDniAutorizado() != null ? externObject.getDniAutorizado().toUpperCase(): null);
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
             localObject.setDomicilioOtros(externObject.getDomicilioOtros());
@@ -54,7 +54,7 @@ public class MapperMandato {
             localObject.setNombreAutorizado(externObject.getNombreAutorizado());
             localObject.setApellido1Autorizado(externObject.getApellido1Autorizado());
             localObject.setApellido2Autorizado(externObject.getApellido2Autorizado());
-            localObject.setDniAutorizado(externObject.getDniAutorizado());
+            localObject.setDniAutorizado(externObject.getDniAutorizado() != null ? externObject.getDniAutorizado().toUpperCase(): null);
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
             localObject.setDomicilioOtros(externObject.getDomicilioOtros());

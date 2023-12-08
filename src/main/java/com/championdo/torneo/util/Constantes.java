@@ -58,7 +58,12 @@ public class Constantes {
 	public static final String ERROR_BORRAR_TORNEO_CON_INSCRIPCIONES = "101";
     public static final String AVISO_EMAIL = "1000";
     public static final String AVISO_EMAIL_ARCHIVO_ADJUNTO = "1001";
-    public static final String AVISO_VALIDACION_ERROR_DATOS_ENTRADA = "5000";
+	public static final String AVISO_MANDATO_ADULTO_YA_EXISTE = "2000";
+	public static final String AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_UN_MENOR = "2001";
+	public static final String AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_OTRO_MENOR = "2002";
+	public static final String AVISO_MANDATO_DNI_ADULTO_YA_USADO_EN_INSCRIPCION_ADULTO = "2003";
+	public static final String AVISO_MANDATO_MENOR_YA_EXISTE = "2004";
+	public static final String AVISO_VALIDACION_ERROR_DATOS_ENTRADA = "5000";
 	public static final String AVISO_VALIDACION_DATOS_NO_VALIDOS = "5001";
 	public static final String AVISO_VALIDACION_NUMERO_INTENTOS_SUPERADO = "5002";
 	public static final String AVISO_VALIDACION_OPERACION_FIRMADA_ANTES = "5003";
@@ -74,7 +79,7 @@ public class Constantes {
 	public static String SECCION_WHATSAPP = "whatsapp";
 
 	// FIRMAS - operativa original
-	public static final String INSCRIPCION_GIMNASIO = "inscripcionGimnasio";
+	public static final String INSCRIPCION_TAEKWONDO = "inscripcionTaekwondo";
 	public static final String INSCRIPCION_MANDATO = "inscripcionMandato";
 
 	// extensiones de archivos

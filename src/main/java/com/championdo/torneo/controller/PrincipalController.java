@@ -33,6 +33,7 @@ public class PrincipalController {
     @Autowired
     private UserService userService;
     // TODO DAMIAN hay que permitir, en la página de login, un alta a torneo sin necesidad de ser usuario
+    // TODO DAMIAN hacer la validación de usuario
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipal(ModelAndView modelAndView) {

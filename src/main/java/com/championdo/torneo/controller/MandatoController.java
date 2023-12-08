@@ -1,6 +1,7 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.model.PdfModel;
@@ -55,6 +56,7 @@ public class MandatoController {
         modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
+        modelAndView.addObject("titulo", "Mandato para licencia mayor de edad");
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         LoggerMapper.methodOut(Level.INFO, "adulto", modelAndView, getClass());
         return modelAndView;
@@ -65,13 +67,11 @@ public class MandatoController {
     public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
         modelAndView.setViewName("gimnasio/formularioMandatoMenor");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
+        MandatoModel mandatoModel = fillMandatoModel(usuario);
+        mandatoModel.setMenor(menor);
+        modelAndView.addObject("mandatoModel", mandatoModel);
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
-        if (menor) {
-            modelAndView.addObject("titulo", "Mandato para licencia menor de edad");
-        } else {
-            modelAndView.addObject("titulo", "Mandato para licencia inclusiva");
-        }
+        titulo(modelAndView, menor);
         LoggerMapper.methodOut(Level.INFO, "menorOInclisivo", modelAndView, getClass());
         return modelAndView;
     }
@@ -80,9 +80,16 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarAdulto(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
-        mandatoService.fillMandato(mandatoModel, true, userLogged.getCodigoGimnasio());
-        modelAndView = commonMandato(modelAndView, mandatoModel, userLogged);
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        mandatoService.fillMandato(mandatoModel, true, usuario.getCodigoGimnasio());
+        try {
+            commonMandato(modelAndView, mandatoModel, usuario);
+        } catch (ValidationException e) {
+            modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
+            modelAndView.addObject("addKO", e.getMessage());
+            modelAndView.addObject("mandatoModel", mandatoModel);
+            formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+        }
         LoggerMapper.methodOut(Level.INFO, "gaurdarAdulto", modelAndView, getClass());
         return modelAndView;
     }
@@ -91,9 +98,17 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenor(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
-        mandatoService.fillMandato(mandatoModel, false, userLogged.getCodigoGimnasio());
-        modelAndView = commonMandato(modelAndView, mandatoModel, userLogged);
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        mandatoService.fillMandato(mandatoModel, false, usuario.getCodigoGimnasio());
+        try {
+            commonMandato(modelAndView, mandatoModel, usuario);
+        } catch (ValidationException e) {
+            modelAndView.setViewName("gimnasio/formularioMandatoMenor");
+            titulo(modelAndView, mandatoModel.isMenor());
+            modelAndView.addObject("addKO", e.getMessage());
+            modelAndView.addObject("mandatoModel", mandatoModel);
+            formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+        }
         LoggerMapper.methodOut(Level.INFO, "guardarMenor", modelAndView, getClass());
         return modelAndView;
     }
@@ -114,6 +129,18 @@ public class MandatoController {
         LoggerMapper.methodOut(Level.INFO, "mandato/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
+    @GetMapping("/remove/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
+        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        if (!mandatoService.findById(id).isMandatoFirmado()) {
+            mandatoService.delete(id);
+            modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
+        }
+        LoggerMapper.methodOut(Level.INFO, "removeMandato", modelAndView, getClass());
+        return mandatos(modelAndView);
+    }
+
     private MandatoModel fillMandatoModel(User usuario) {
         MandatoModel mandatoModel = new MandatoModel();
         mandatoModel.setNombreMandante(usuario.getName());
@@ -131,14 +158,21 @@ public class MandatoController {
         return mandatoModel;
     }
 
-    private ModelAndView commonMandato(ModelAndView modelAndView, MandatoModel mandatoModel, User userLogged) {
+    private void titulo(ModelAndView modelAndView, boolean menor) {
+        if (menor) {
+            modelAndView.addObject("titulo", "Mandato para licencia menor de edad");
+        } else {
+            modelAndView.addObject("titulo", "Mandato para licencia inclusiva");
+        }
+    }
+
+    private void commonMandato(ModelAndView modelAndView, MandatoModel mandatoModel, User userLogged) throws ValidationException{
         mandatoModel.setCorreoMandante(userLogged.getCorreo());
         mandatoModel = mandatoService.add(mandatoModel);
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                 seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
                 "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
         seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
-        return modelAndView;
     }
 
 }

@@ -37,4 +37,5 @@ public class MandatoModel {
     private int codigoGimnasio;
     private boolean mandatoFirmado;
     private boolean licenciaAbonada;
+    private boolean menor;
 }
