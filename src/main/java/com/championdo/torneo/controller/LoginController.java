@@ -48,6 +48,7 @@ public class LoginController {
 								@RequestParam(name = "logout", required = false) String logout) {
 		model.addAttribute("error", error);
 		model.addAttribute("logout", logout);
+		LoggerMapper.methodOut(Level.INFO,"showLoginTorneoForm",model,this.getClass());
 		return Constantes.LOGIN;
 	}
 
@@ -58,6 +59,7 @@ public class LoginController {
 		if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("claveUsuarioModel")) {
 			modelAndView.addObject("claveUsuarioModel", new ClaveUsuarioModel());
 		}
+		LoggerMapper.methodOut(Level.INFO,"olvidoClave",modelAndView,this.getClass());
 		return modelAndView;
 	}
 

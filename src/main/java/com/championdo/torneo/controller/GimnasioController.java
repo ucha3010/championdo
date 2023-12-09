@@ -106,7 +106,7 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarArchivo(pdfModel, response, pdfModel.getSeccion());
-        LoggerMapper.log(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/eliminarInscripcion/{id}")

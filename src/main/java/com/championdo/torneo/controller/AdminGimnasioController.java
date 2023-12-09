@@ -32,7 +32,7 @@ public class AdminGimnasioController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/");
         modelAndView.setViewName("gimnasio/adminGimnasio");
-        LoggerMapper.log(Level.INFO, "gymAdministration", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "gymAdministration", modelAndView, this.getClass());
         return modelAndView;
     }
 
@@ -44,7 +44,7 @@ public class AdminGimnasioController {
         modelAndView.setViewName("adminGimnasio");
         modelAndView.addObject("gimnasioModel", new GimnasioModel());
         modelAndView.addObject("gimnasioList", gimnasioService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.log(Level.INFO, "gimnasioList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "gimnasioList", modelAndView, this.getClass());
         return modelAndView;
     }
 
@@ -78,7 +78,9 @@ public class AdminGimnasioController {
         gimnasioModel.setPosition(gimnasioModelBBDD.getPosition());
         gimnasioService.update(gimnasioModel);
         modelAndView.addObject("updateOK", "Dato gimnasio actualizado con éxito");
-        return adminUtilController.utilList(modelAndView);
+        adminUtilController.utilList(modelAndView);
+        LoggerMapper.methodOut(Level.INFO, "updateGimnasio", modelAndView, this.getClass());
+        return modelAndView;
     }
 
     @GetMapping("/gimnasio/remove/{id}")

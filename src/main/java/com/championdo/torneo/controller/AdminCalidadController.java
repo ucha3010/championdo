@@ -29,7 +29,7 @@ public class AdminCalidadController {
         modelAndView.setViewName("management/adminCalidad");
         modelAndView.addObject("calidadModel", new CalidadModel());
         modelAndView.addObject("calidadList", calidadService.findAll());
-        LoggerMapper.log(Level.INFO, "calidadList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "calidadList", modelAndView, this.getClass());
         return modelAndView;
     }
 

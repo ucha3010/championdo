@@ -45,7 +45,7 @@ public class UsuarioController {
 		modelAndView.setViewName("formularioUsuario");
 		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
 		formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
-		LoggerMapper.log(Level.INFO, "formularioUsuario " + userModel, modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, "formularioUsuario " + userModel, modelAndView, getClass());
 		return modelAndView;
 	}
 	
@@ -60,7 +60,7 @@ public class UsuarioController {
 			modelAndView.addObject("actualizacionError", "actualizacionError");
 			LoggerMapper.log(Level.ERROR, "actualizarUsuario", e.getMessage(), getClass());
 		}
-		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
+		LoggerMapper.methodOut(Level.INFO, "actualizarUsuario", usuario, getClass());
 		return formularioUsuario(modelAndView);
 	}
 
@@ -72,7 +72,7 @@ public class UsuarioController {
 		ClaveUsuarioModel claveUsuarioModel = new ClaveUsuarioModel();
 		claveUsuarioModel.setUsername(usuario.getUsername());
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
-		LoggerMapper.log(Level.INFO, "formularioCambioClave", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, "formularioCambioClave", modelAndView, getClass());
 		return modelAndView;
 	}
 
@@ -92,7 +92,7 @@ public class UsuarioController {
 		}
 		modelAndView.addObject("usuario", usuario);
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
-		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
+		LoggerMapper.methodOut(Level.INFO, "actualizarUsuario", usuario, getClass());
 		return formularioCambioClave(modelAndView);
 	}
 
@@ -106,7 +106,7 @@ public class UsuarioController {
 		} else {
 			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
 		}
-		LoggerMapper.log(Level.INFO, "eliminarUsuario", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, "eliminarUsuario", modelAndView, getClass());
 		return users(modelAndView);
 	}
 
@@ -118,7 +118,7 @@ public class UsuarioController {
 		modelAndView.setViewName("gimnasio/adminUsers");
 		modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
-		LoggerMapper.log(Level.INFO, "users", modelAndView, this.getClass());
+		LoggerMapper.methodOut(Level.INFO, "users", modelAndView, this.getClass());
 		return modelAndView;
 	}
 

@@ -50,6 +50,7 @@ public class FormularioController {
         if (!tournamentType.isEmpty() && torneoModelList.isEmpty()) {
             modelAndView.addObject("errorMessage", "No hay torneo disponibles en este momento");
         }
+        LoggerMapper.methodOut(Level.INFO, "selectTournament", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -98,7 +99,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userModel") UserModel userModel) {
 
-        LoggerMapper.log(Level.INFO, "ENTRADA gaurdarPropia", userModel, getClass());
+        LoggerMapper.methodIn(Level.INFO, "gaurdarPropia", userModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
         User user = userService.cargarUsuarioCompleto(modelAndView);
         userModel.setCodigoGimnasio(user.getCodigoGimnasio());
@@ -125,7 +126,7 @@ public class FormularioController {
             modelAndView.addObject("inscripcionError", "");
             modelAndView.addObject("pdfModel", pdfModel);
         }
-        LoggerMapper.log(Level.INFO, "gaurdarPropia", pdfModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, "gaurdarPropia", pdfModel, getClass());
         return modelAndView;
     }
 
@@ -138,7 +139,7 @@ public class FormularioController {
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        LoggerMapper.log(Level.INFO, "getPropia", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, "getPropia", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -172,7 +173,7 @@ public class FormularioController {
             modelAndView.addObject("inscripcionError", "");
             modelAndView.addObject("pdfModel", pdfModel);
         }
-        LoggerMapper.log(Level.INFO, "guardarMenorOInclisivo", pdfModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, "guardarMenorOInclisivo", pdfModel, getClass());
         return modelAndView;
 
     }
@@ -187,7 +188,7 @@ public class FormularioController {
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(torneoModel.getCodigoGimnasio()).getValor()));
-        LoggerMapper.log(Level.INFO, "getMenorOInclisivo", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, "getMenorOInclisivo", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -195,7 +196,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_TORNEO);
-        LoggerMapper.log(Level.INFO, "descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, "descargarPdf", "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/alta")
@@ -206,6 +207,7 @@ public class FormularioController {
         if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
             modelAndView.addObject("userModel", new UserModel());
         }
+        LoggerMapper.methodOut(Level.INFO, "getAlta", modelAndView, getClass());
         return modelAndView;
     }
 
@@ -232,7 +234,7 @@ public class FormularioController {
         if(altaCorrecta) {
             modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
             modelAndView.setViewName(Constantes.LOGIN);
-            LoggerMapper.log(Level.INFO, "alta", user, this.getClass());
+            LoggerMapper.methodOut(Level.INFO, "alta", user, this.getClass());
             return modelAndView;
         } else {
             modelAndView.setViewName("formularioAlta");

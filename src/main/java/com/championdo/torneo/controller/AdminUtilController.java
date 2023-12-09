@@ -46,7 +46,7 @@ public class AdminUtilController {
         modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", user.getCodigoGimnasio()).get(0));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
-        LoggerMapper.log(Level.INFO, "utilList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "utilList", modelAndView, this.getClass());
         return modelAndView;
     }
 

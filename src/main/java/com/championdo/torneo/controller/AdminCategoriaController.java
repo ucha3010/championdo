@@ -40,7 +40,7 @@ public class AdminCategoriaController {
         modelAndView.addObject("categoriaList", categoriaService.findAllNameExtended(user.getCodigoGimnasio()));
         modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));
         modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.log(Level.INFO, "categoriaList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "categoriaList", modelAndView, this.getClass());
         return modelAndView;
     }
 

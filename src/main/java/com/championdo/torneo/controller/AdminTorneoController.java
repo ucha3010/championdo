@@ -41,7 +41,7 @@ public class AdminTorneoController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminTorneo/torneoList");
         modelAndView.addObject("torneoList", torneoService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.log(Level.INFO, "torneoList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "torneoList", modelAndView, this.getClass());
         return modelAndView;
     }
 
@@ -65,7 +65,7 @@ public class AdminTorneoController {
             }
         }
         modelAndView.addObject("torneoModel", torneoModel);
-        LoggerMapper.log(Level.INFO, "getTorneo", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "getTorneo", modelAndView, this.getClass());
         return modelAndView;
     }
 

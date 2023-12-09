@@ -39,7 +39,7 @@ public class AdminTorneoGimnasioController {
         modelAndView.addObject("torneoGimnasioModel", new TorneoGimnasioModel());
         modelAndView.addObject("torneoGimnasioList", torneoGimnasioService.findAll(idTorneo));
         modelAndView.addObject("torneo", torneo);
-        LoggerMapper.log(Level.INFO, "torneoGimnasioList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "torneoGimnasioList", modelAndView, this.getClass());
         return modelAndView;
     }
 

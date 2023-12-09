@@ -34,7 +34,7 @@ public class AdminCinturonController {
         modelAndView.setViewName("gimnasio/adminCinturon");
         modelAndView.addObject("cinturonModel", new CinturonModel());
         modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.log(Level.INFO, "cinturonList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "cinturonList", modelAndView, this.getClass());
         return modelAndView;
     }
 

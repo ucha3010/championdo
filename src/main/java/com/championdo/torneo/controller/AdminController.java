@@ -27,7 +27,7 @@ public class AdminController {
         modelAndView.setViewName("adminList");
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/admin/adminList, codigoGimnasio " + user.getCodigoGimnasio());
-        LoggerMapper.log(Level.INFO, "adminList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "adminList", modelAndView, this.getClass());
         return modelAndView;
     }
 

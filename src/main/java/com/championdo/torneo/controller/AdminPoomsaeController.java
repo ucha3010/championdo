@@ -33,7 +33,7 @@ public class AdminPoomsaeController {
         modelAndView.setViewName("torneo/adminPoomsae");
         modelAndView.addObject("poomsaeModel", new PoomsaeModel());
         modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.log(Level.INFO, "poomsaeList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "poomsaeList", modelAndView, this.getClass());
         return modelAndView;
     }
 

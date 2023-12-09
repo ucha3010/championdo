@@ -29,7 +29,7 @@ public class AdminPaisController {
         modelAndView.setViewName("management/adminPais");
         modelAndView.addObject("paisModel", new PaisModel());
         modelAndView.addObject("paisList", paisService.findAll());
-        LoggerMapper.log(Level.INFO, "paisList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "paisList", modelAndView, this.getClass());
         return modelAndView;
     }
 

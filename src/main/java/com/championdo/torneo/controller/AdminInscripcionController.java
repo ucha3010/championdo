@@ -46,7 +46,7 @@ public class AdminInscripcionController {
         } else {
             modelAndView.addObject("deleteEnable", "Habilitar borrar");
         }
-        LoggerMapper.log(Level.INFO, "inscripcionList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, "inscripcionList", modelAndView, this.getClass());
         return modelAndView;
     }
 
@@ -96,7 +96,7 @@ public class AdminInscripcionController {
         pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
         pdfModel.setIdInscripcion(inscripcionModel.getId());
         pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_TORNEO);
-        LoggerMapper.log(Level.INFO, "adminInscripcion/descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, "adminInscripcion/descargarPdf", "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/deleteEnable")
