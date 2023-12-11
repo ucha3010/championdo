@@ -9,6 +9,7 @@ import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,7 @@ public class MandatoController {
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("mandatoModelList", mandatoService.findByDniMandante(usuario.getCodigoGimnasio(), usuario.getUsername()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
-        LoggerMapper.methodOut(Level.INFO, "mandatos", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -58,7 +59,7 @@ public class MandatoController {
         modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
         modelAndView.addObject("titulo", "Mandato para licencia mayor de edad");
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
-        LoggerMapper.methodOut(Level.INFO, "adulto", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -72,7 +73,7 @@ public class MandatoController {
         modelAndView.addObject("mandatoModel", mandatoModel);
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         titulo(modelAndView, menor);
-        LoggerMapper.methodOut(Level.INFO, "menorOInclisivo", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -90,7 +91,7 @@ public class MandatoController {
             modelAndView.addObject("mandatoModel", mandatoModel);
             formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         }
-        LoggerMapper.methodOut(Level.INFO, "gaurdarAdulto", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -109,7 +110,7 @@ public class MandatoController {
             modelAndView.addObject("mandatoModel", mandatoModel);
             formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
         }
-        LoggerMapper.methodOut(Level.INFO, "guardarMenor", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -126,7 +127,7 @@ public class MandatoController {
         }
         pdfModel.setIdInscripcion(mandatoModel.getId());
         pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_MANDATO);
-        LoggerMapper.methodOut(Level.INFO, "mandato/descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/remove/{id}")
@@ -137,7 +138,7 @@ public class MandatoController {
             mandatoService.delete(id);
             modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
         }
-        LoggerMapper.methodOut(Level.INFO, "removeMandato", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return mandatos(modelAndView);
     }
 

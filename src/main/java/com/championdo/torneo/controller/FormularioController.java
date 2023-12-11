@@ -7,6 +7,7 @@ import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,7 +51,7 @@ public class FormularioController {
         if (!tournamentType.isEmpty() && torneoModelList.isEmpty()) {
             modelAndView.addObject("errorMessage", "No hay torneo disponibles en este momento");
         }
-        LoggerMapper.methodOut(Level.INFO, "selectTournament", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -63,7 +64,7 @@ public class FormularioController {
         TorneoModel torneoModel = new TorneoModel();
         torneoModel.setId(id);
         modelAndView.addObject("torneoModel", torneoModel);
-        LoggerMapper.methodOut(Level.INFO, "selectTournamentChargeGyms", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -88,10 +89,11 @@ public class FormularioController {
                 modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, false));
                 break;
             default:
+                LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
                 return selectTournament(modelAndView, tournamentType);
         }
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
-        LoggerMapper.methodOut(Level.INFO, "cargarFormulario", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -126,7 +128,7 @@ public class FormularioController {
             modelAndView.addObject("inscripcionError", "");
             modelAndView.addObject("pdfModel", pdfModel);
         }
-        LoggerMapper.methodOut(Level.INFO, "gaurdarPropia", pdfModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -139,7 +141,7 @@ public class FormularioController {
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        LoggerMapper.methodOut(Level.INFO, "getPropia", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -173,7 +175,7 @@ public class FormularioController {
             modelAndView.addObject("inscripcionError", "");
             modelAndView.addObject("pdfModel", pdfModel);
         }
-        LoggerMapper.methodOut(Level.INFO, "guardarMenorOInclisivo", pdfModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
 
     }
@@ -188,7 +190,7 @@ public class FormularioController {
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(torneoModel.getCodigoGimnasio()).getValor()));
-        LoggerMapper.methodOut(Level.INFO, "getMenorOInclisivo", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -196,7 +198,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_TORNEO);
-        LoggerMapper.methodOut(Level.INFO, "descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/alta")
@@ -207,7 +209,7 @@ public class FormularioController {
         if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
             modelAndView.addObject("userModel", new UserModel());
         }
-        LoggerMapper.methodOut(Level.INFO, "getAlta", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -234,11 +236,12 @@ public class FormularioController {
         if(altaCorrecta) {
             modelAndView.addObject("altaUsuarioOK", userModel.getName() + " te has dado de alta correctamente");
             modelAndView.setViewName(Constantes.LOGIN);
-            LoggerMapper.methodOut(Level.INFO, "alta", user, this.getClass());
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return modelAndView;
         } else {
             modelAndView.setViewName("formularioAlta");
             modelAndView.addObject("userModel", userModel);
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return getAlta(modelAndView);
         }
 

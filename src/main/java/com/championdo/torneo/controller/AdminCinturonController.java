@@ -8,6 +8,7 @@ import com.championdo.torneo.service.CinturonService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +35,7 @@ public class AdminCinturonController {
         modelAndView.setViewName("gimnasio/adminCinturon");
         modelAndView.addObject("cinturonModel", new CinturonModel());
         modelAndView.addObject("cinturonList", cinturonService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.methodOut(Level.INFO, "cinturonList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -49,6 +50,7 @@ public class AdminCinturonController {
         } catch (PositionException pe) {
             modelAndView.addObject("dragPositionProblem", pe.getMessage());
         }
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return cinturonList(modelAndView);
     }
 
@@ -60,6 +62,7 @@ public class AdminCinturonController {
         cinturonModel.setCodigoGimnasio(user.getCodigoGimnasio());
         cinturonModel.setPosition(cinturonService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         cinturonService.add(cinturonModel);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return cinturonList(modelAndView);
     }
 
@@ -73,6 +76,7 @@ public class AdminCinturonController {
         } catch (RemoveException re) {
             modelAndView.addObject("removeProblem", re.getMessage());
         }
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return cinturonList(modelAndView);
     }
 

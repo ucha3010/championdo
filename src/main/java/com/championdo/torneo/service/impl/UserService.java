@@ -58,8 +58,8 @@ public class UserService implements UserDetailsService {
 		userModel.setFechaAlta(new Date());
 		userModel.setUsername(userModel.getUsername().toUpperCase());
 		userModel.setPassword(encodePassword(userModel.getPassword()));
-		GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(userModel.getCodigoGimnasio());
-		userModel.setGimnasio(gimnasioService.findByCodigoGimnasio(gimnasioRootModel.getId()));
+		GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(userModel.getCodigoGimnasio()); //TODO DAMIAN esto no debería estar
+		userModel.setGimnasio(gimnasioService.findByCodigoGimnasio(gimnasioRootModel.getId())); //TODO DAMIAN esto no debería estar
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, rol));
 		return user;

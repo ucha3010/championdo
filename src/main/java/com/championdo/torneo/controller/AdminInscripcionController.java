@@ -9,6 +9,7 @@ import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class AdminInscripcionController {
         } else {
             modelAndView.addObject("deleteEnable", "Habilitar borrar");
         }
-        LoggerMapper.methodOut(Level.INFO, "inscripcionList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -63,6 +64,7 @@ public class AdminInscripcionController {
                 + " " + inscripcionModel.getApellido1Inscripto()
                 + (!StringUtils.isNullOrEmpty(inscripcionModel.getApellido2Inscripto()) ? " " + inscripcionModel.getApellido2Inscripto() : "")
                 + " guardado correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return inscripcionList(modelAndView);
     }
 
@@ -79,6 +81,7 @@ public class AdminInscripcionController {
             + " " + inscripcionModelBBDD.getApellido1Inscripto()
             + (!StringUtils.isNullOrEmpty(inscripcionModelBBDD.getApellido2Inscripto()) ? " " + inscripcionModelBBDD.getApellido2Inscripto() : "")
             + " realizados correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return inscripcionList(modelAndView);
     }
 
@@ -96,7 +99,7 @@ public class AdminInscripcionController {
         pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
         pdfModel.setIdInscripcion(inscripcionModel.getId());
         pdfService.descargarArchivo(pdfModel, response, Constantes.SECCION_TORNEO);
-        LoggerMapper.methodOut(Level.INFO, "adminInscripcion/descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/deleteEnable")
@@ -105,6 +108,7 @@ public class AdminInscripcionController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteEnable");
         inscripcionService.changeValueDeleteEnable(user.getCodigoGimnasio());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return inscripcionList(modelAndView);
     }
 
@@ -114,6 +118,7 @@ public class AdminInscripcionController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteAll");
         inscripcionService.deleteAll();
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return inscripcionList(modelAndView);
     }
 

@@ -123,4 +123,16 @@ public class Utils {
         }
         return String.valueOf(season);
     }
+
+    public static String obtenerNombreMetodo() {
+        // Obtiene la pila de llamadas (stack trace) del hilo actual
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+        // El índice 1 representa el método que llamó a esta función
+        // El índice 0 es getStackTrace() y el índice 1 es el método actual
+        StackTraceElement metodoActual = stackTrace[2];
+
+        // Devuelve el nombre del método actual
+        return metodoActual.getMethodName();
+    }
 }

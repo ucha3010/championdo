@@ -6,6 +6,7 @@ import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,7 @@ public class AdminMandatoController {
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("mandatoModelList", mandatoService.findAll(usuario.getCodigoGimnasio()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
-        LoggerMapper.methodOut(Level.INFO, "mandatos", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -41,7 +42,7 @@ public class AdminMandatoController {
         modelAndView.setViewName("gimnasio/adminMandato");
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("mandatoModel", mandatoService.findById(id));
-        LoggerMapper.methodOut(Level.INFO, "mandato", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -51,7 +52,7 @@ public class AdminMandatoController {
         User usuario = userService.cargarUsuarioCompleto(modelAndView);
         mandatoService.delete(id);
         modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
-        LoggerMapper.methodOut(Level.INFO, "removeMandato", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return mandatos(modelAndView);
     }
 
@@ -62,7 +63,7 @@ public class AdminMandatoController {
         MandatoModel mandatoModel = mandatoService.findById(id);
         mandatoModel.setLicenciaAbonada(!mandatoModel.isLicenciaAbonada());
         mandatoService.update(mandatoModel);
-        LoggerMapper.methodOut(Level.INFO, "pay", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return mandato(modelAndView, id);
     }
 

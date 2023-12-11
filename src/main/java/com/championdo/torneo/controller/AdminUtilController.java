@@ -46,7 +46,7 @@ public class AdminUtilController {
         modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", user.getCodigoGimnasio()).get(0));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
-        LoggerMapper.methodOut(Level.INFO, "utilList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -58,6 +58,7 @@ public class AdminUtilController {
         utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return utilList(modelAndView);
     }
 
@@ -77,6 +78,7 @@ public class AdminUtilController {
         utilService.update(utilModel);
         utilService.update(utilPort);
         modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return utilList(modelAndView);
     }
 
@@ -86,7 +88,7 @@ public class AdminUtilController {
         modelAndView.setViewName("management/adminUtil");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("utilModel", utilService.findByClave(Constantes.HOST_PAGE_NAME,0));
-        LoggerMapper.methodOut(Level.INFO, "rootUtil", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -96,7 +98,7 @@ public class AdminUtilController {
         userService.cargarUsuarioCompleto(modelAndView);
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
-        LoggerMapper.methodOut(Level.INFO, "rootUpdateUtil", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return rootUtil(modelAndView);
     }
 }

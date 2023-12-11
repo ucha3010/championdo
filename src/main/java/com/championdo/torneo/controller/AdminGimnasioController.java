@@ -6,6 +6,7 @@ import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +33,7 @@ public class AdminGimnasioController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/");
         modelAndView.setViewName("gimnasio/adminGimnasio");
-        LoggerMapper.methodOut(Level.INFO, "gymAdministration", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -44,7 +45,7 @@ public class AdminGimnasioController {
         modelAndView.setViewName("adminGimnasio");
         modelAndView.addObject("gimnasioModel", new GimnasioModel());
         modelAndView.addObject("gimnasioList", gimnasioService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.methodOut(Level.INFO, "gimnasioList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -54,6 +55,7 @@ public class AdminGimnasioController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/gimnasio/" + oldIndex + "/" + newIndex);
         gimnasioService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return gimnasioList(modelAndView);
     }
 
@@ -65,6 +67,7 @@ public class AdminGimnasioController {
         gimnasioModel.setCodigoGimnasio(user.getCodigoGimnasio());
         gimnasioModel.setPosition(gimnasioService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         gimnasioService.add(gimnasioModel);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return gimnasioList(modelAndView);
     }
 
@@ -79,7 +82,7 @@ public class AdminGimnasioController {
         gimnasioService.update(gimnasioModel);
         modelAndView.addObject("updateOK", "Dato gimnasio actualizado con éxito");
         adminUtilController.utilList(modelAndView);
-        LoggerMapper.methodOut(Level.INFO, "updateGimnasio", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -89,6 +92,7 @@ public class AdminGimnasioController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminGimnasio/gimnasio/remove/" + id);
         gimnasioService.delete(id);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return gimnasioList(modelAndView);
     }
 

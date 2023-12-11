@@ -10,6 +10,7 @@ import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,7 @@ public class AdminTorneoController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminTorneo/torneoList");
         modelAndView.addObject("torneoList", torneoService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.methodOut(Level.INFO, "torneoList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -65,7 +66,7 @@ public class AdminTorneoController {
             }
         }
         modelAndView.addObject("torneoModel", torneoModel);
-        LoggerMapper.methodOut(Level.INFO, "getTorneo", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -77,10 +78,12 @@ public class AdminTorneoController {
         torneoModel.setCodigoGimnasio(user.getCodigoGimnasio());
         if (torneoModel.getId() == 0) {
             torneoService.add(torneoModel);
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return torneoList(modelAndView);
         } else {
             torneoService.update(torneoModel);
             modelAndView.addObject("updateOK", "Actualización realizada con éxito");
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return getTorneo(modelAndView, torneoModel.getId());
         }
     }
@@ -95,6 +98,7 @@ public class AdminTorneoController {
         } catch (RemoveException re) {
             modelAndView.addObject("removeProblem", re.getMessage());
         }
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return torneoList(modelAndView);
     }
 

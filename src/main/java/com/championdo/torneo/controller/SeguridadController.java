@@ -13,6 +13,7 @@ import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -72,8 +73,7 @@ public class SeguridadController {
                     "electrónico. Por favor contacte con soporte técnico. Gracias.");
             modelAndView.setViewName("firma/envioCodigo");
         }
-
-        LoggerMapper.methodOut(Level.INFO, "seguridad/validarCodigo", firmaCodigoModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -97,7 +97,7 @@ public class SeguridadController {
         }
 
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
-        LoggerMapper.methodOut(Level.INFO, "seguridad/nuevoEnvioCodigo", firmaCodigoModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 

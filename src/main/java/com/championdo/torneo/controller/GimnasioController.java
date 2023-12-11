@@ -9,6 +9,7 @@ import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +53,7 @@ public class GimnasioController {
             modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
         }
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/tipoInscripcion", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -70,7 +71,7 @@ public class GimnasioController {
         }
         modelAndView.addObject("licencia", "con licencia".equals(licencia));
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/formularioInscripcion/" + tipo + "/" + licencia, modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -98,7 +99,7 @@ public class GimnasioController {
         }
         modelAndView.addObject("inscripcion", inscripcionTaekwondoModel);
         modelAndView.addObject("pdfModel", new PdfModel());
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/getInscripcion", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -106,13 +107,14 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
         pdfService.descargarArchivo(pdfModel, response, pdfModel.getSeccion());
-        LoggerMapper.methodOut(Level.INFO, "formulario/descargarPdf", "Descarga de documento correcta", getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         inscripcionTaekwondoService.delete(id);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return tipoInscripcion(modelAndView);
     }
 
@@ -124,7 +126,7 @@ public class GimnasioController {
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         InscripcionTaekwondoModel inscripcion = inscripcionTaekwondoService.findById(id);
         modelAndView.addObject("inscripcion", inscripcion);
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -143,11 +145,11 @@ public class GimnasioController {
             } catch (Exception e) {
                 LoggerMapper.log(Level.ERROR, "gimnasio/normativa-sepa", e.getMessage(), getClass());
             }
-            LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return tipoInscripcion(modelAndView);
         } else {
             modelAndView.addObject("subidaError", "Error en la subida del archivo");
-            LoggerMapper.methodOut(Level.INFO, "gimnasio/normativa-sepa", modelAndView, getClass());
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return normativaSepa(modelAndView, idInscripcion);
         }
     }
@@ -169,7 +171,7 @@ public class GimnasioController {
                 seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
                 "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_TAEKWONDO);
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
-        LoggerMapper.methodOut(Level.INFO, "gimnasio/" + recurso, firmaCodigoModel, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
 
     }

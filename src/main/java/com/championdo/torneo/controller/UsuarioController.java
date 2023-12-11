@@ -10,6 +10,7 @@ import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.UserRoleService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,7 +46,7 @@ public class UsuarioController {
 		modelAndView.setViewName("formularioUsuario");
 		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
 		formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
-		LoggerMapper.methodOut(Level.INFO, "formularioUsuario " + userModel, modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 	
@@ -60,7 +61,7 @@ public class UsuarioController {
 			modelAndView.addObject("actualizacionError", "actualizacionError");
 			LoggerMapper.log(Level.ERROR, "actualizarUsuario", e.getMessage(), getClass());
 		}
-		LoggerMapper.methodOut(Level.INFO, "actualizarUsuario", usuario, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return formularioUsuario(modelAndView);
 	}
 
@@ -72,7 +73,7 @@ public class UsuarioController {
 		ClaveUsuarioModel claveUsuarioModel = new ClaveUsuarioModel();
 		claveUsuarioModel.setUsername(usuario.getUsername());
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
-		LoggerMapper.methodOut(Level.INFO, "formularioCambioClave", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
@@ -92,7 +93,7 @@ public class UsuarioController {
 		}
 		modelAndView.addObject("usuario", usuario);
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
-		LoggerMapper.methodOut(Level.INFO, "actualizarUsuario", usuario, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return formularioCambioClave(modelAndView);
 	}
 
@@ -106,7 +107,7 @@ public class UsuarioController {
 		} else {
 			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
 		}
-		LoggerMapper.methodOut(Level.INFO, "eliminarUsuario", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return users(modelAndView);
 	}
 
@@ -118,7 +119,7 @@ public class UsuarioController {
 		modelAndView.setViewName("gimnasio/adminUsers");
 		modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
-		LoggerMapper.methodOut(Level.INFO, "users", modelAndView, this.getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
@@ -133,7 +134,7 @@ public class UsuarioController {
 		modelAndView.addObject("user", userModel);
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
 		modelAndView.addObject("loggedUser", userService.isLoggedUser(user.getUsername(), userModel.getUsername()));
-		LoggerMapper.methodOut(Level.INFO, "/users/"+username, modelAndView, this.getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
@@ -150,6 +151,7 @@ public class UsuarioController {
 				+ " " + usuario.getLastname()
 				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizada correctamente");
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return userDetail(modelAndView, username);
 	}
 
@@ -168,6 +170,7 @@ public class UsuarioController {
 				+ " " + usuario.getLastname()
 				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizado correctamente");
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return userDetail(modelAndView, username);
 	}
 

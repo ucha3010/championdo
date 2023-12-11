@@ -10,6 +10,7 @@ import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.service.impl.CargasInicialesClienteService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,7 @@ public class GimnasioRootController {
         modelAndView.setViewName("management/customers");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("customerList", gimnasioRootService.findAllOrderByNombreGimnasioAsc());
-        LoggerMapper.methodOut(Level.INFO, "customers", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -52,7 +53,7 @@ public class GimnasioRootController {
         modelAndView.setViewName("management/updateCustomer");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("customer", gimnasioRootService.findById(id));
-        LoggerMapper.methodOut(Level.INFO, "customersId", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -69,7 +70,7 @@ public class GimnasioRootController {
             modelAndView.addObject("updateProblem", "Hubo un problema con la actualización");
             LoggerMapper.log(Level.ERROR, "updateCustomer", e.getMessage(), this.getClass());
         }
-        LoggerMapper.methodOut(Level.INFO, "updateCustomer", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return customersId(modelAndView, customer.getId());
     }
 
@@ -80,7 +81,7 @@ public class GimnasioRootController {
         modelAndView.setViewName("management/addCustomer");
         userService.cargarUsuarioCompleto(modelAndView);
         modelAndView.addObject("customer", new GimnasioRootModel());
-        LoggerMapper.methodOut(Level.INFO, "formNewCustomer", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -98,6 +99,7 @@ public class GimnasioRootController {
             userService.addFromRoot(customer, gimnasioModel);
             utilService.addFromRoot(customer);
             cargasInicialesClienteService.cargasCintPoomCat(idCustomer);
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
             return customers(modelAndView);
         } catch (Exception e) {
             if(idCustomer != 0) {
@@ -112,7 +114,7 @@ public class GimnasioRootController {
             modelAndView.addObject("addProblem", "Hubo un problema con la inserción - " + e.getMessage());
             LoggerMapper.log(Level.ERROR, "addCustomer", e.getMessage(), this.getClass());
         }
-        LoggerMapper.methodOut(Level.INFO, "addCustomer", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -124,7 +126,7 @@ public class GimnasioRootController {
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         cargasInicialesClienteService.cargasCintPoomCat(id);
         modelAndView.addObject("resetOk", "Reseteo realizado con éxito");
-        LoggerMapper.methodOut(Level.INFO, "resetCintPoomCat", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return customersId(modelAndView, id);
     }
 
@@ -140,7 +142,7 @@ public class GimnasioRootController {
         torneoGimnasioService.deleteByCodigoGimnasio(id);
         gimnasioRootService.enableDisable(id, Boolean.FALSE);
         //Deshabilito el cliente pero no lo borro ya que Torneo (que tampoco se borran los torneos) tira del id y para que no se eliminen las inscripciones a los usuarios
-        LoggerMapper.methodOut(Level.INFO, "deleteCustomer", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return customers(modelAndView);
     }
 

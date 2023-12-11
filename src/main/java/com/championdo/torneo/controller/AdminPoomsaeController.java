@@ -7,6 +7,7 @@ import com.championdo.torneo.service.PoomsaeService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +34,7 @@ public class AdminPoomsaeController {
         modelAndView.setViewName("torneo/adminPoomsae");
         modelAndView.addObject("poomsaeModel", new PoomsaeModel());
         modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
-        LoggerMapper.methodOut(Level.INFO, "poomsaeList", modelAndView, this.getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
@@ -43,6 +44,7 @@ public class AdminPoomsaeController {
         User user = userService.cargarUsuarioCompleto(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsae/" + oldIndex + "/" + newIndex);
         poomsaeService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return poomsaeList(modelAndView);
     }
 
@@ -54,6 +56,7 @@ public class AdminPoomsaeController {
         poomsaeModel.setCodigoGimnasio(user.getCodigoGimnasio());
         poomsaeModel.setPosition(poomsaeService.findMaxPosition(user.getCodigoGimnasio()) + 1);
         poomsaeService.add(poomsaeModel);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return poomsaeList(modelAndView);
     }
 
@@ -67,6 +70,7 @@ public class AdminPoomsaeController {
         } catch (RemoveException re) {
             modelAndView.addObject("removeProblem", re.getMessage());
         }
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return poomsaeList(modelAndView);
     }
 

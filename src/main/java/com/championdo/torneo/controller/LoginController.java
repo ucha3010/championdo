@@ -48,7 +48,7 @@ public class LoginController {
 								@RequestParam(name = "logout", required = false) String logout) {
 		model.addAttribute("error", error);
 		model.addAttribute("logout", logout);
-		LoggerMapper.methodOut(Level.INFO,"showLoginTorneoForm",model,this.getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), model, getClass());
 		return Constantes.LOGIN;
 	}
 
@@ -59,7 +59,7 @@ public class LoginController {
 		if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("claveUsuarioModel")) {
 			modelAndView.addObject("claveUsuarioModel", new ClaveUsuarioModel());
 		}
-		LoggerMapper.methodOut(Level.INFO,"olvidoClave",modelAndView,this.getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
@@ -81,7 +81,7 @@ public class LoginController {
 			mostrarExcepcion(e, claveUsuarioModel, modelAndView);
 		}
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
-		LoggerMapper.methodOut(Level.INFO, "nuevaClave", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return olvidoClave(modelAndView);
 	}
 
@@ -91,7 +91,7 @@ public class LoginController {
 		if (StringUtils.isNullOrEmpty(username) || StringUtils.isNullOrEmpty(token)) {
 			modelAndView.addObject("avisoKO", "Problemas con la redirección");
 			modelAndView.setViewName(Constantes.LOGIN);
-			LoggerMapper.methodOut(Level.INFO, "passNew", modelAndView, getClass());
+			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 			return modelAndView;
 		}
 		tokenService.deleteExpired();
@@ -102,12 +102,12 @@ public class LoginController {
 				|| userModel.getCodigoGimnasio() != tokenModel.getCodigoGimnasio()) {
 			modelAndView.addObject("avisoKO", "El intento de cambio de contraseña expiró o superó su límite");
 			modelAndView.setViewName(Constantes.LOGIN);
-			LoggerMapper.methodOut(Level.INFO, "passNew", modelAndView, getClass());
+			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 			return modelAndView;
 		}
 		modelAndView.addObject("tokenModel", tokenService.fillTokenToSend(tokenModel, userModel));
 		modelAndView.setViewName("formularioNuevaClave");
-		LoggerMapper.methodOut(Level.INFO, "passNew", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
@@ -118,7 +118,7 @@ public class LoginController {
 		if (StringUtils.isNullOrEmpty(tokenModel.getUsername()) || StringUtils.isNullOrEmpty(tokenModel.getId())
 				|| StringUtils.isNullOrEmpty(tokenModel.getPassword())) {
 			modelAndView.addObject("avisoKO", "Problemas con la redirección");
-			LoggerMapper.methodOut(Level.INFO, "changePass", modelAndView, getClass());
+			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 			return modelAndView;
 		}
 		tokenService.deleteExpired();
@@ -128,7 +128,7 @@ public class LoginController {
 				|| userModel.getUsername() == null || !userModel.getUsername().equals(tokenModelBBDD.getUsername())
 				|| userModel.getCodigoGimnasio() != tokenModelBBDD.getCodigoGimnasio()) {
 			modelAndView.addObject("avisoKO", "El intento de cambio de contraseña expiró o superó su límite");
-			LoggerMapper.methodOut(Level.INFO, "changePass", modelAndView, getClass());
+			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 			return modelAndView;
 		}
 		userModel.setPassword(userService.encodePassword(tokenModel.getPassword()));
@@ -141,7 +141,7 @@ public class LoginController {
 			LoggerMapper.log(Level.ERROR, "changePass", pe.getMessage(), getClass());
 			modelAndView.addObject("avisoKO", "Problemas al guardar la contraseña. Por favor inténtelo de nuevo.");
 		}
-		LoggerMapper.methodOut(Level.INFO, "changePass", modelAndView, getClass());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
