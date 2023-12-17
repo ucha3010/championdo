@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.3/components/navbars/navbar-1/assets/css/navbar-1.css" />
+        <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+        <link rel="stylesheet" href="#" th:href="@{/imgs/icons/icofont.min.css}" />
+
+        <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+        <script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <title>Menú Desplegable con Bootstrap</title>
+
+    </head>
+    <body>
+        <form th:action="@{/logout}" method="POST" id="formLogout"></form>
+        <div class="container">
+            <h1>
+                ¡Hola <span th:text="${usuario.name}"></span>!
+                <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="icofont-duotone icofont-manage-user"></span></a>
+            </h1>
+        </div>
+        <nav class="navbar navbar-expand-lg bg-light bsb-navbar bsb-navbar-hover bsb-navbar-caret">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="#" th:src="@{/imgs/LogoChampiondo.jpg}" alt="" width="180">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                    </svg>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body flex-grow-0 d-lg-inline">
+                        <ul class="navbar-nav justify-content-end">
+                            <li class="nav-item dropdown pe-2">
+                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownActividades" role="button" data-bs-toggle="dropdown" aria-expanded="false">Actividades</a>
+                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownActividades">
+                                    <li><a class="dropdown-item" href="#">Opción 1</a></li>
+                                    <li><a class="dropdown-item" href="#">Opción 2</a></li>
+                                    <li><hr class="dropdown-divider"/></li>
+                                    <li><a class="dropdown-item" href="#">Opción 3</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown pe-2">
+                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownArtesMarciales" role="button" data-bs-toggle="dropdown" aria-expanded="false">Artes Marciales</a>
+                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownArtesMarciales">
+                                    <li><a class="dropdown-item" href="#" th:href="@{/gimnasio/tipoInscripcion}">Inscripción Taekwondo <span th:if="${inscripcionTaekwondo != null}" class="badge" th:text="${inscripcionTaekwondo}"></span></a></li>
+                                    <li><a class="dropdown-item" href="#">Opción 5</a></li>
+                                    <li><hr class="dropdown-divider"/></li>
+                                    <li><a class="dropdown-item" href="#">Opción 6</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown pe-2">
+                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownGimnasios" role="button" data-bs-toggle="dropdown" aria-expanded="false">Gimnasios</a>
+                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownGimnasios">
+                                    <li><a class="dropdown-item" href="#">Opción 7</a></li>
+                                    <li><a class="dropdown-item" href="#">Opción 8</a></li>
+                                    <li><hr class="dropdown-divider"/></li>
+                                    <li><a class="dropdown-item" href="#">Opción 9</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown pe-2">
+                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownMasInscripciones" role="button" data-bs-toggle="dropdown" aria-expanded="false">Más inscripciones</a>
+                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownMasInscripciones">
+                                    <li><a class="dropdown-item" href="#" th:href="@{/principal/principalTorneo}">Inscripción Torneo Taekwondo <span th:if="${inscripcionTorneo != null}" class="badge" th:text="${inscripcionTorneo}"></span></a></li>
+                                    <li><a class="dropdown-item" href="#" th:href="@{/mandato/mandatos}">Mandato de Licencia Taekwondo <span th:if="${licenciaTaekwondo != null}" class="badge" th:text="${licenciaTaekwondo}"></span></a></li>
+                                    <li><hr class="dropdown-divider"/></li>
+                                    <li><a class="dropdown-item" href="#">Opción 12</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Ayuda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Contacto</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" th:attr="onclick=|logout()|"><span class="icofont-logout" aria-hidden="true"></span> Salir</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+
+            <a href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
+                <button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
+            </a>
+        </section>
+
+        <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+            <a href="#" th:href="@{/gimnasioRoot/customers}" class="textDecoration-none">
+                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Listado de clientes</button>
+            </a>
+        </section>
+
+        <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+            <a href="#" th:href="@{/adminCalidad/calidadList}" class="textDecoration-none">
+                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Calidad</button>
+            </a>
+            <a href="#" th:href="@{/adminPais/paisList}" class="textDecoration-none">
+                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">País</button>
+            </a>
+        </section>
+
+        <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+            <a href="#" th:href="@{/adminUtil/root-util}" class="textDecoration-none">
+                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Configuración</button>
+            </a>
+        </section>
+
+        <!-- Contenido de la página -->
+        <div class="container mt-3">
+            <h1 class="pageTitle">Transforma tu entrenamiento</h1>
+            <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="3000">
+                        <img src="#" th:src="@{/imgs/principal/__${fotoPrincipal}__}" class="d-block w-100" alt="">
+                    </div>
+                    <div th:each="foto : ${listaFotos}" class="carousel-item" data-bs-interval="3000">
+                        <img src="#" th:src="@{/imgs/principal/__${foto}__}" class="d-block w-100" alt="">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </div>
+
+
+
+    </body>
+    <footer>
+        <nav class="navbar navbar-expand-lg bsb-navbar bsb-navbar-hover bsb-navbar-caret justify-content-end">
+            <button class="navbar-toggler mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                </svg>
+            </button>
+        </nav>
+        <div>
+            Lo que se escribe en el footer
+        </div>
+    </footer>
+
+</html>

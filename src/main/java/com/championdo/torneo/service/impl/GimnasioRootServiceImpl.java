@@ -1,10 +1,16 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.GimnasioRoot;
+import com.championdo.torneo.entity.GimnasioRootMenu2;
 import com.championdo.torneo.mapper.MapperGimnasioRoot;
+import com.championdo.torneo.mapper.MapperMenu2;
 import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.Menu2Model;
+import com.championdo.torneo.repository.GimnasioRootMenu2Repository;
 import com.championdo.torneo.repository.GimnasioRootRepository;
+import com.championdo.torneo.repository.Menu2Repository;
 import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.service.Menu2Service;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,12 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
 
     @Autowired
     private MapperGimnasioRoot mapperGimnasioRoot;
+    @Autowired
+    private GimnasioRootMenu2Repository gimnasioRootMenu2Repository;
+    @Autowired
+    private Menu2Repository menu2Repository;
+    @Autowired
+    private MapperMenu2 mapperMenu2;
 
     @Override
     public List<GimnasioRootModel> findAll() {
@@ -45,7 +57,13 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
     @Override
     public GimnasioRootModel findById(int id) {
         try {
-            return mapperGimnasioRoot.entity2Model(gimnasioRootRepository.getById(id));
+            GimnasioRootModel gimnasioRootModel = mapperGimnasioRoot.entity2Model(gimnasioRootRepository.getById(id));
+            List<Menu2Model> menu2ModelList = new ArrayList<>();
+            for(GimnasioRootMenu2 gimnasioRootMenu2: gimnasioRootMenu2Repository.findByIdGimnasioRoot(id)) {
+                menu2ModelList.add(mapperMenu2.entity2Model(menu2Repository.getById(gimnasioRootMenu2.getIdMenu2())));
+            }
+            gimnasioRootModel.setMenu2ModelList(menu2ModelList);
+            return gimnasioRootModel;
         } catch (EntityNotFoundException e) {
             return new GimnasioRootModel();
         }
@@ -69,6 +87,7 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
     @Override
     public void delete(int idGimnasioRoot) {
         gimnasioRootRepository.deleteById(idGimnasioRoot);
+        gimnasioRootMenu2Repository.deleteByIdGimnasioRoot(idGimnasioRoot);
     }
 
     @Override

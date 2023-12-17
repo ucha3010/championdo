@@ -1,7 +1,7 @@
 body {
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #eee;
+  background-color: #e9ac532b;
 }
 
 h1 {
@@ -39,6 +39,10 @@ h1 {
 
 .mt-1 {
     margin-top: 10px;
+}
+
+.mr-8 {
+    margin-right: 8rem!important;
 }
 
 a:link, a:visited,  a:hover, a:active
@@ -112,6 +116,11 @@ a:link, a:visited,  a:hover, a:active
 .radioOption2 {
     font-size: large;
     background-color: hotpink;
+}
+
+.pageTitle {
+    font-size: 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 

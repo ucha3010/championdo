@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,5 +38,6 @@ public class GimnasioRootModel {
     private String usuarioModificacion;
     private String telefono;
     private String correo;
+    private List<Menu2Model> menu2ModelList;
 
 }

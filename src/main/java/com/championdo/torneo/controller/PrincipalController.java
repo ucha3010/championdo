@@ -1,7 +1,6 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.PrincipalService;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,8 +26,6 @@ public class PrincipalController {
 
     @Autowired
     private PrincipalService principalService;
-    @Autowired
-    private GimnasioRootService gimnasioRootService;
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
@@ -37,7 +36,21 @@ public class PrincipalController {
     // TODO DAMIAN hacer la validación de usuario
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView paginaPrincipal(ModelAndView modelAndView) {
+    public ModelAndView mainPage(ModelAndView modelAndView) {
+        modelAndView.setViewName("mainPage");
+        String ruta = "src" + File.separator + "main" + File.separator + "resources" + File.separator
+                + "static" + File.separator + "imgs" + File.separator + File.separator + "principal";
+        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        List<String> fotosList = new ArrayList<>(Utils.obtenerNombresArchivos(ruta));
+        modelAndView.addObject("fotoPrincipal", fotosList.get(0));
+        fotosList.remove(0);
+        modelAndView.addObject("listaFotos", fotosList);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+    }
+    @GetMapping("/paginaPrincipalAntigua")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView paginaPrincipalAntigua(ModelAndView modelAndView) {
         modelAndView.setViewName("principal");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
@@ -50,7 +63,6 @@ public class PrincipalController {
             modelAndView.addObject("licenciaTaekwondo", "Documentación pendiente de firma");
         }
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(usuario.getCodigoGimnasio())); //TODO DAMIAN esto debería cambiar
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -73,12 +85,12 @@ public class PrincipalController {
         return paginaPrincipalTorneo(modelAndView);
     }
 
-    @GetMapping("/gpt")
+/*    @GetMapping("/gpt")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gpt(ModelAndView modelAndView) {
         modelAndView.setViewName("principalGPT");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
-    }
+    }*/
 
 }

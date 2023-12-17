@@ -16,3 +16,7 @@ function buttonBlock(button) {
 function nullOrEmpty(myStr){
     return (myStr === null || myStr.trim() === "");
 }
+
+function logout() {
+    document.getElementById("formLogout").submit();
+}

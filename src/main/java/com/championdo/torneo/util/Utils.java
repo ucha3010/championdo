@@ -5,12 +5,10 @@ import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Utils {
 
@@ -134,5 +132,10 @@ public class Utils {
 
         // Devuelve el nombre del método actual
         return metodoActual.getMethodName();
+    }
+
+    public static List<String> obtenerNombresArchivos(String rutaCarpeta) {
+        File directorio = new File(rutaCarpeta);
+        return Arrays.asList(Objects.requireNonNull(directorio.list()));
     }
 }
