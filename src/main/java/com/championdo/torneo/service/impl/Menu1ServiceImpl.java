@@ -5,6 +5,7 @@ import com.championdo.torneo.mapper.MapperMenu1;
 import com.championdo.torneo.model.Menu1Model;
 import com.championdo.torneo.repository.Menu1Repository;
 import com.championdo.torneo.service.Menu1Service;
+import com.championdo.torneo.service.Menu2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +18,19 @@ public class Menu1ServiceImpl implements Menu1Service {
 
     @Autowired
     private Menu1Repository menu1Repository;
-
     @Autowired
     private MapperMenu1 mapperMenu1;
+    @Autowired
+    private Menu2Service menu2Service;
 
     @Override
     public List<Menu1Model> findAll() {
         List<Menu1Model> menu1ModelList = new ArrayList<>();
+        Menu1Model menu1Model;
         for (Menu1 menu1: menu1Repository.findAllByOrderByPositionAsc()) {
-            menu1ModelList.add(mapperMenu1.entity2Model(menu1));
+            menu1Model = mapperMenu1.entity2Model(menu1);
+            menu1Model.setMenu2ModelList(menu2Service.findAll(menu1.getId()));
+            menu1ModelList.add(menu1Model);
         }
         return menu1ModelList;
     }

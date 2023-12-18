@@ -157,7 +157,7 @@
 
 		<section  sec:authorize="hasRole('ROLE_ADMIN')">
 
-			<div class="row mb-3" th:each="unitInscripciones, iterStat : ${utilListInscripciones}">
+			<div class="row mb-3" th:each="unitInscripciones : ${utilListInscripciones}">
 				<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
 
 					<input type="hidden" name="clave" th:value="${unitInscripciones.clave}"/>

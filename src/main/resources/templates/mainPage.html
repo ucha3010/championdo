@@ -40,40 +40,10 @@
                     </div>
                     <div class="offcanvas-body flex-grow-0 d-lg-inline">
                         <ul class="navbar-nav justify-content-end">
-                            <li class="nav-item dropdown pe-2">
-                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownActividades" role="button" data-bs-toggle="dropdown" aria-expanded="false">Actividades</a>
+                            <li th:each="menu1, iStat : ${menu1List}" class="nav-item dropdown pe-2">
+                                <a class="nav-link dropdown-toggle" href="#!" id="dropdown${iStat.index}" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span th:text="${menu1.nombre}"></span></a>
                                 <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownActividades">
-                                    <li><a class="dropdown-item" href="#">Opción 1</a></li>
-                                    <li><a class="dropdown-item" href="#">Opción 2</a></li>
-                                    <li><hr class="dropdown-divider"/></li>
-                                    <li><a class="dropdown-item" href="#">Opción 3</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown pe-2">
-                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownArtesMarciales" role="button" data-bs-toggle="dropdown" aria-expanded="false">Artes Marciales</a>
-                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownArtesMarciales">
-                                    <li><a class="dropdown-item" href="#" th:href="@{/gimnasio/tipoInscripcion}">Inscripción Taekwondo <span th:if="${inscripcionTaekwondo != null}" class="badge" th:text="${inscripcionTaekwondo}"></span></a></li>
-                                    <li><a class="dropdown-item" href="#">Opción 5</a></li>
-                                    <li><hr class="dropdown-divider"/></li>
-                                    <li><a class="dropdown-item" href="#">Opción 6</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown pe-2">
-                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownGimnasios" role="button" data-bs-toggle="dropdown" aria-expanded="false">Gimnasios</a>
-                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownGimnasios">
-                                    <li><a class="dropdown-item" href="#">Opción 7</a></li>
-                                    <li><a class="dropdown-item" href="#">Opción 8</a></li>
-                                    <li><hr class="dropdown-divider"/></li>
-                                    <li><a class="dropdown-item" href="#">Opción 9</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown pe-2">
-                                <a class="nav-link dropdown-toggle" href="#!" id="dropdownMasInscripciones" role="button" data-bs-toggle="dropdown" aria-expanded="false">Más inscripciones</a>
-                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" aria-labelledby="dropdownMasInscripciones">
-                                    <li><a class="dropdown-item" href="#" th:href="@{/principal/principalTorneo}">Inscripción Torneo Taekwondo <span th:if="${inscripcionTorneo != null}" class="badge" th:text="${inscripcionTorneo}"></span></a></li>
-                                    <li><a class="dropdown-item" href="#" th:href="@{/mandato/mandatos}">Mandato de Licencia Taekwondo <span th:if="${licenciaTaekwondo != null}" class="badge" th:text="${licenciaTaekwondo}"></span></a></li>
-                                    <li><hr class="dropdown-divider"/></li>
-                                    <li><a class="dropdown-item" href="#">Opción 12</a></li>
+                                    <li th:if="${menu1.menu2ModelList != null}" th:each="menu2 : ${menu1.menu2ModelList}"><a class="dropdown-item" href="#" th:href="@{__${menu2.url}__}"><span th:text="${menu2.nombre}"></span> <span th:if="${__${menu2.aviso}__ != null}" class="badge" th:text="${__${menu2.aviso}__}"></span></a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">

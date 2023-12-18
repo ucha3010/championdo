@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.service.MandatoService;
+import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -31,6 +32,8 @@ public class PrincipalController {
     @Autowired
     private MandatoService mandatoService;
     @Autowired
+    private Menu1Service menu1Service;
+    @Autowired
     private UserService userService;
     // TODO DAMIAN hay que permitir, en la página de login, un alta a torneo sin necesidad de ser usuario
     // TODO DAMIAN hacer la validación de usuario
@@ -45,6 +48,7 @@ public class PrincipalController {
         modelAndView.addObject("fotoPrincipal", fotosList.get(0));
         fotosList.remove(0);
         modelAndView.addObject("listaFotos", fotosList);
+        modelAndView.addObject("menu1List", menu1Service.findAll());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
