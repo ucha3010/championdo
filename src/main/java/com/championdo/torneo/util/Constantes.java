@@ -56,6 +56,8 @@ public class Constantes {
 	// códigos de avisos
 	public static final String ERROR_BORRAR_TORNEO = "100";
 	public static final String ERROR_BORRAR_TORNEO_CON_INSCRIPCIONES = "101";
+	public static final String ERROR_BORRAR_MENU = "102";
+	public static final String ERROR_BORRAR_MENU_CON_SUBMENU = "103";
     public static final String AVISO_EMAIL = "1000";
     public static final String AVISO_EMAIL_ARCHIVO_ADJUNTO = "1001";
 	public static final String AVISO_MANDATO_ADULTO_YA_EXISTE = "2000";

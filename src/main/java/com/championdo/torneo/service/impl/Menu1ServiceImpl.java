@@ -1,11 +1,16 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Menu1;
+import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperMenu1;
 import com.championdo.torneo.model.Menu1Model;
+import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.repository.Menu1Repository;
 import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.Menu2Service;
+import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.LoggerMapper;
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,14 +60,20 @@ public class Menu1ServiceImpl implements Menu1Service {
     }
 
     @Override
-    public void delete(int idMenu1) {
-        menu1Repository.deleteById(idMenu1);
-        List<Menu1> menu1List = menu1Repository.findAllByOrderByPositionAsc();
-        for (int i = 0; i < menu1List.size(); i++) {
-            if (menu1List.get(i).getPosition() != i) {
-                menu1List.get(i).setPosition(i);
-                menu1Repository.save(menu1List.get(i));
+    public void delete(int id) throws RemoveException {
+        List<Menu2Model> menu2List = menu2Service.findAll(id);
+        if (menu2List == null || menu2List.isEmpty()) {
+            menu1Repository.deleteById(id);
+            List<Menu1> menu1List = menu1Repository.findAllByOrderByPositionAsc();
+            for (int i = 0; i < menu1List.size(); i++) {
+                if (menu1List.get(i).getPosition() != i) {
+                    menu1List.get(i).setPosition(i);
+                    menu1Repository.save(menu1List.get(i));
+                }
             }
+        } else {
+            LoggerMapper.log(Level.ERROR, "delete", "idMenu1: " + id + " tiene submenú asociado", getClass());
+            throw new RemoveException(Constantes.ERROR_BORRAR_MENU_CON_SUBMENU, "Error al borrar el menú principal");
         }
     }
 

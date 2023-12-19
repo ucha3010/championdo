@@ -10,6 +10,7 @@ import com.championdo.torneo.repository.GimnasioRootMenu2Repository;
 import com.championdo.torneo.repository.Menu2Repository;
 import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.Menu2Service;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class Menu2ServiceImpl implements Menu2Service {
             gimnasioRootMenu2Repository.deleteByIdMenu2(id);
         } catch (IllegalArgumentException e){
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
-            throw new RemoveException("100", "Error al borrar el gimnasio");
+            throw new RemoveException(Constantes.ERROR_BORRAR_MENU, "Error al borrar el menú secundario");
         }
         LoggerMapper.methodOut(Level.INFO, "delete", menu2.getId(), getClass());
     }
