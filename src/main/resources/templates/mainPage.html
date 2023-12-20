@@ -85,7 +85,10 @@
 
         <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
             <a href="#" th:href="@{/adminUtil/root-util}" class="textDecoration-none">
-                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Configuración</button>
+                <button class="btn btn-primary btn-lg" type="button">Configuración</button>
+            </a>
+            <a href="#" th:href="@{/adminMenu/menuList}" class="textDecoration-none">
+                <button class="btn btn-warning btn-lg" type="button">Barra menú</button>
             </a>
         </section>
 

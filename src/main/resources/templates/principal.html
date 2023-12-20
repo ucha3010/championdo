@@ -72,13 +72,10 @@
 
 		<section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
 			<a href="#" th:href="@{/adminUtil/root-util}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Configuración</button>
+				<button class="btn btn-warning btn-lg margenArribaAbajo3Porc" type="button">Configuración</button>
 			</a>
-		</section>
-
-		<section>
-			<a href="#" th:href="@{/principal/gpt}" class="textDecoration-none">
-				<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Principal GPT</button>
+			<a href="#" th:href="@{/adminMenu/menuList}" class="textDecoration-none">
+				<button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Barra menú</button>
 			</a>
 		</section>
 		

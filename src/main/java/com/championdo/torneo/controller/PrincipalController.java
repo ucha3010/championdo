@@ -89,12 +89,4 @@ public class PrincipalController {
         return paginaPrincipalTorneo(modelAndView);
     }
 
-/*    @GetMapping("/gpt")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView gpt(ModelAndView modelAndView) {
-        modelAndView.setViewName("principalGPT");
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return modelAndView;
-    }*/
-
 }

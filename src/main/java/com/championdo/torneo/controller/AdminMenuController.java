@@ -33,7 +33,7 @@ public class AdminMenuController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView menuList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
-        modelAndView.setViewName("management/adminMenu1");
+        modelAndView.setViewName("management/adminMenu");
         modelAndView.addObject("menu1Model", new Menu1Model());
         modelAndView.addObject("menu2Model", new Menu2Model());
         modelAndView.addObject("menu1List", menu1Service.findAll());
@@ -61,6 +61,7 @@ public class AdminMenuController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addMenu1(ModelAndView modelAndView, @ModelAttribute("menu1Model") Menu1Model menu1Model) {
         menu1Model.setPosition(menu1Service.findMaxPosition() + 1);
+        menu1Model.setEnabled(true);
         menu1Service.add(menu1Model);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return menuList(modelAndView);
@@ -70,6 +71,7 @@ public class AdminMenuController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addMenu2(ModelAndView modelAndView, @ModelAttribute("menu2Model") Menu2Model menu2Model) {
         menu2Model.setPosition(menu2Service.findMaxPosition(menu2Model.getIdMenu1()) + 1);
+        menu2Model.setEnabled(true);
         menu2Service.add(menu2Model);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return menuList(modelAndView);

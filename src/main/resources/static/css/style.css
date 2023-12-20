@@ -51,6 +51,10 @@ a:link, a:visited,  a:hover, a:active
     cursor: pointer;
 }
 
+.colorBlack {
+    color: black;
+}
+
 .colorRed {
     color: red;
 }
@@ -81,6 +85,14 @@ a:link, a:visited,  a:hover, a:active
 
 .backgroundColorLightViolet {
   background-color: #768df1;
+}
+
+.backgroundColorTransparent {
+  background-color: transparent;
+}
+
+.boderNone {
+    border: none;
 }
 
 .btn-primary .badge {

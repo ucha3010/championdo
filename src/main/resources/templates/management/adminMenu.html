@@ -19,30 +19,25 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
     <script type="text/javascript">
-    $(document).ready(function()
-    {
-        $("#sortable").sortable(
-        {
+        $(document).ready(function()
+            {
+                $("#sortable").sortable(
+                {
 
-            start: function(e, ui) {
-                // creates a temporary attribute on the element with the old index
-                $(this).attr('data-previndex', ui.item.index());
-                //console.log("oldIndex: " + $(this).attr('data-previndex'));
-            },
-            update: function(e, ui) {
-                // gets the new and old index then removes the temporary attribute
-                var newIndex = ui.item.index();
-                //console.log("newIndex: " + newIndex);
-                var oldIndex = $(this).attr('data-previndex');
-                var relativeUrl = "adminPais/pais/" + oldIndex + "/" + newIndex;
-                var domain = getDomain(location.href);
-                $(this).removeAttr('data-previndex');
-                //console.log(location.href + " - " + domain + relativeUrl);
-                location.href = domain + relativeUrl;
+                    start: function(e, ui) {
+                        $(this).attr('data-previndex', ui.item.index());
+                    },
+                    update: function(e, ui) {
+                        var newIndex = ui.item.index();
+                        var oldIndex = $(this).attr('data-previndex');
+                        var relativeUrl = "adminMenu/menu1/" + oldIndex + "/" + newIndex;
+                        var domain = getDomain(location.href);
+                        $(this).removeAttr('data-previndex');
+                        location.href = domain + relativeUrl;
+                    }
+                });
             }
-        });
-    }
-    );
+        );
 
 		function validarMenu1(){
 			var campo = ['nombre'];
@@ -77,8 +72,8 @@
 			return false;
 		}
 
-		function confirmDeleteMenu2(indexMenu1, indexMenu2){
-            var menu2Elegido = document.getElementById('idMenu2' + indexMenu1 + indexMenu2).selectedOptions[0];
+		function confirmDeleteMenu2(idSelect){
+            var menu2Elegido = idSelect.selectedOptions[0];
 			if(confirm("¿Seguro que desea eliminar " + menu2Elegido.text + "?")){
                 var relativeUrl = "adminMenu/menu2-remove/" + menu2Elegido.value;
                 var domain = getDomain(location.href);
@@ -127,13 +122,13 @@
                   <div class="col-xs-3 col-md-1">
                       <label for="nombre">Nombre:</label>
                   </div>
-                  <div class="col-xs-9 col-md-2">
+                  <div class="col-xs-7 col-md-2">
                       <input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="nombre" maxlength="30" />
                   </div>
-                  <div class="col-xs-12 col-md-1">
+                  <div class="col-xs-2 col-md-1 mb-1">
                       <button class="btn btn-success" type="submit">Alta</button>
                   </div>
-                  <div class="col-xs-5 col-md-1">
+                  <div class="col-xs-3 col-md-1">
                   </div>
                   <div class="col-xs-5 col-md-3">
                       <select id="idMenu1" class="form-control form-control-lg">
@@ -142,6 +137,8 @@
                   </div>
                   <div class="col-xs-2 col-md-1">
                       <button class="btn btn-danger" onclick="confirmDeleteMenu1()">Borrar</button>
+                  </div>
+                  <div class="col-xs-2 col-md-none">
                   </div>
               </div>
             </form>
@@ -162,15 +159,15 @@
 
 
 
-        <section sec:authorize="hasRole('ROLE_ROOT')" th:each="menu1, iStat : ${menu1List}">
+        <section sec:authorize="hasRole('ROLE_ROOT')" th:each="menu1, iStat : ${menu1List}" th:class="${iStat.odd} ? 'backgroundColorLightViolet' : 'backgroundColorLightOrange'">
 
-            <h1>Submenú de <span th:value="${menu1.nombre}"></span></h1>
+            <h1>Submenú de <span th:text="${menu1.nombre}"></span></h1>
 
             <form action="#" th:action="@{/adminMenu/menu2-add}" th:object="${menu2Model}" method="post" th:attr="onsubmit='return validarMenu2(' + ${iStat.index} + ')'">
 
                 <input type="hidden" name="idMenu1" th:value="${menu1.id}"/>
 
-                <div class="row mb-1">
+                <div class="row mb-3">
                     <div class="col-xs-3 col-md-1">
                         <label for="nombre">Nombre:</label>
                     </div>
@@ -186,37 +183,67 @@
                     <div class="col-xs-3 col-md-1">
                         <label th:attr="for='aviso' + ${iStat.index}">Aviso:</label>
                     </div>
-                    <div class="col-xs-9 col-md-2">
+                    <div class="col-xs-7 col-md-2">
                         <input type="text" th:field="*{aviso}" th:id="'aviso' + ${iStat.index}" class="form-control" placeholder="Aviso" maxlength="30" />
                     </div>
-                    <div class="col-xs-12 col-md-1">
+                    <div class="col-xs-2 col-md-3">
                         <button class="btn btn-success" type="submit">Alta</button>
-                    </div>
-                    <div class="col-xs-5 col-md-1">
-                    </div>
-                    <div class="col-xs-5 col-md-3">
-                        <select th:id="'idMenu2' + indexMenu1 + indexMenu2" class="form-control form-control-lg">
-                            <option th:each="unit : ${menu1.menu2ModelList}" th:value="${unit.id}" th:text="${unit.nombre}"></option>
-                        </select>
-                    </div>
-                    <div class="col-xs-2 col-md-1">
-                        <button class="btn btn-danger" onclick="confirmDeleteMenu2()">Borrar</button>
                     </div>
                 </div>
             </form>
-
-            <div class="row">
-                <div class="col-xs-3 col-md-4">
+            <div class="row mb-1">
+                <div class="col-xs-3 col-md-3">
                 </div>
                 <div class="col-xs-5 col-md-3">
-                    <ul id="sortable" class="s1 list-group mb-1">
-                        <li th:each="unit : ${menu1List}" th:value="${unit.id}" th:text="${unit.nombre}" class="list-group-item move">
+                    <select th:id="'idMenu2' + ${iStat.index}" class="form-control form-control-lg">
+                        <option th:if="${menu1.menu2ModelList != null}" th:each="unit : ${menu1.menu2ModelList}" th:value="${unit.id}" th:text="${unit.nombre}"></option>
+                    </select>
+                </div>
+                <div class="col-xs-2 col-md-3">
+                    <button class="btn btn-danger" th:attr="onclick='confirmDeleteMenu2(idMenu2' + ${iStat.index} + ')'">Borrar</button>
+                </div>
+                <div class="col-xs-2 col-md-3">
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function()
+                    {
+                        $("#sortable[[${menu1.id}]]").sortable(
+                        {
+                            start: function(e, ui) {
+                                $(this).attr('data-previndex', ui.item.index());
+                            },
+                            update: function(e, ui) {
+                                var newIndex = ui.item.index();
+                                var oldIndex = $(this).attr('data-previndex');
+                                var idMenu1 = $(':hidden#menu1id[[${menu1.id}]]').val();
+                                var relativeUrl = "adminMenu/menu2/" + idMenu1 + "/" + oldIndex + "/" + newIndex;
+                                var domain = getDomain(location.href);
+                                $(this).removeAttr('data-previndex');
+                                //console.log(idMenu1 + " - " + oldIndex + " - " + newIndex);
+                                location.href = domain + relativeUrl;
+                            }
+                        });
+                    }
+                );
+            </script>
+
+            <div class="row">
+                <div class="col-xs-5 col-md-4">
+                    <input type="hidden" th:id="'menu1id' + ${menu1.id}" th:value="${menu1.id}"/>
+                    <ul th:id="'sortable' + ${menu1.id}" class="s1 list-group mb-1">
+                        <li th:if="${menu1.menu2ModelList != null}" th:each="menu2 : ${menu1.menu2ModelList}" th:value="${menu2.id}" th:text="${menu2.nombre}" class="list-group-item move">
                         </li>
                     </ul>
                 </div>
-                <div class="col-xs-4 col-md-5">
+                <div class="col-xs-7 col-md-8">
+                    <ul class="list-group">
+                        <li th:if="${menu1.menu2ModelList != null}" th:each="menu2 : ${menu1.menu2ModelList}" class="list-group-item backgroundColorTransparent colorBlack boderNone" th:text="'URL: '+${menu2.url}+' ---- Aviso:'+${menu2.aviso}"></li>
+                    </ul>
                 </div>
             </div>
+
         </section>
 
         <div class="row">
