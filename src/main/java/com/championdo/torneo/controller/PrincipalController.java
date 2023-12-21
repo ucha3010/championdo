@@ -52,14 +52,14 @@ public class PrincipalController {
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
-    @GetMapping("/paginaPrincipalAntigua")
+    /*@GetMapping("/paginaPrincipalAntigua")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipalAntigua(ModelAndView modelAndView) {
         modelAndView.setViewName("principal");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         for (InscripcionTaekwondoModel inscripcionTaekwondoModel: inscripcionTaekwondoModelList) {
-            if (!inscripcionTaekwondoModel.isInscripcionFirmada() || (inscripcionTaekwondoModel.isDomiciliacionSEPA() && !inscripcionTaekwondoModel.isMandatoSEPAFirmado())) {
+            if (!inscripcionTaekwondoModel.isInscripcionFirmada() || (inscripcionTaekwondoModel.isDomiciliacionSEPA() && !inscripcionTaekwondoModel.isDomiciliacionSEPAFirmada())) {
                 modelAndView.addObject("inscripcionTaekwondo", "Documentación pendiente de firma");
             }
         }
@@ -69,7 +69,7 @@ public class PrincipalController {
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
-    }
+    }*/
 
     @GetMapping("/principalTorneo")
     @PreAuthorize("isAuthenticated()")

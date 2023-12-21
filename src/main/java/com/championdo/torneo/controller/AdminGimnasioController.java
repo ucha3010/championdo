@@ -37,7 +37,7 @@ public class AdminGimnasioController {
         return modelAndView;
     }
 
-    @GetMapping("/gimnasioList")
+/*    @GetMapping("/gimnasioList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gimnasioList(ModelAndView modelAndView) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
@@ -47,9 +47,9 @@ public class AdminGimnasioController {
         modelAndView.addObject("gimnasioList", gimnasioService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
-    }
+    }*/
 
-    @GetMapping("/gimnasio/{oldIndex}/{newIndex}")
+/*    @GetMapping("/gimnasio/{oldIndex}/{newIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragGimnasio(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
@@ -57,9 +57,9 @@ public class AdminGimnasioController {
         gimnasioService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return gimnasioList(modelAndView);
-    }
+    }*/
 
-    @PostMapping("/addGimnasio")
+/*    @PostMapping("/addGimnasio")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
@@ -69,7 +69,7 @@ public class AdminGimnasioController {
         gimnasioService.add(gimnasioModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return gimnasioList(modelAndView);
-    }
+    }*/
 
     @PostMapping("/updateGimnasio")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -86,7 +86,7 @@ public class AdminGimnasioController {
         return modelAndView;
     }
 
-    @GetMapping("/gimnasio/remove/{id}")
+/*    @GetMapping("/gimnasio/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeGimnasio(ModelAndView modelAndView, @PathVariable int id) {
         User user = userService.cargarUsuarioCompleto(modelAndView);
@@ -94,6 +94,6 @@ public class AdminGimnasioController {
         gimnasioService.delete(id);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return gimnasioList(modelAndView);
-    }
+    }*/
 
 }

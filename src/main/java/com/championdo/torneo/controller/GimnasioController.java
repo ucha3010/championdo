@@ -32,6 +32,8 @@ public class GimnasioController {
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
+    private Menu1Service menu1Service;
+    @Autowired
     private PdfService pdfService;
     @Autowired
     private SeguridadService seguridadService;
@@ -41,7 +43,8 @@ public class GimnasioController {
     @GetMapping("/tipoInscripcion")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView tipoInscripcion(ModelAndView modelAndView) {
-        modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
+//        modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
+        modelAndView.setViewName("gimnasio/formularioInscripcionSeleccionGimnasio");
         com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
@@ -52,7 +55,11 @@ public class GimnasioController {
             }
             modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
         }
+        modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
+        modelAndView.addObject("inscripcionA", "Taekwondo");
+        modelAndView.addObject("controller", "gimnasio");
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        modelAndView.addObject("menu1List", menu1Service.findAll());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -137,7 +144,7 @@ public class GimnasioController {
         LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", idInscripcion, getClass());
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(idInscripcion);
         if(pdfService.subirArchivo(pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel), file, Constantes.SECCION_NORMATIVA_SEPA_FIRMADO)) {
-            inscripcionTaekwondoModel.setMandatoSEPAFirmado(Boolean.TRUE);
+            inscripcionTaekwondoModel.setDomiciliacionSEPAFirmada(Boolean.TRUE);
             inscripcionTaekwondoModel.setExtensionSEPAFirmado(pdfService.getFileExtension(file));
             inscripcionTaekwondoService.update(inscripcionTaekwondoModel);
             try {

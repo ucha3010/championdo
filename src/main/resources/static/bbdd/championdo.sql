@@ -282,7 +282,7 @@ CREATE TABLE `inscripcion_taekwondo` (
   `swift` varchar(11) DEFAULT NULL,
   `notas` text DEFAULT NULL,
   `inscripcion_firmada` bit(1) NOT NULL,
-  `mandatosepafirmado` bit(1) NOT NULL,
+  `domiciliacionSEPAFirmada` bit(1) NOT NULL,
   `extensionsepafirmado` varchar(10) DEFAULT NULL,
   `codigo_gimnasio` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

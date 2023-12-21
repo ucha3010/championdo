@@ -136,7 +136,7 @@
 						<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
 					</td>
 					<td>
-						<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.mandatoSEPAFirmado}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
+						<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.domiciliacionSEPAFirmada}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
 						<a th:if="${!autorizacion.inscripcionFirmada}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionTaekwondo/__${autorizacion.id}__}">¡Inscripción no firmada! Toque aquí para firmar</a>
 					</td>
 				</tr>

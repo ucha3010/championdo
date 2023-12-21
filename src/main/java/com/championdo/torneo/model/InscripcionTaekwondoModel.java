@@ -52,6 +52,6 @@ public class InscripcionTaekwondoModel {
     private String swift;
     private String notas;
     private boolean inscripcionFirmada;
-    private boolean mandatoSEPAFirmado;
+    private boolean domiciliacionSEPAFirmada;
     private String extensionSEPAFirmado;
 }
