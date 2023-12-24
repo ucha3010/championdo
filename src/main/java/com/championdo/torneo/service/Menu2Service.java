@@ -13,7 +13,7 @@ public interface Menu2Service {
     void add(Menu2Model menu2Model);
     void update(Menu2Model menu2Model);
     void delete(int id) throws RemoveException;
-    void deleteByIdMenu1(int idMenu1);
     void dragOfPosition(int idMenu1, int initialPosition, int finalPosition);
     int findMaxPosition(int idMenu1);
+    Menu2Model findByUrl(String url);
 }

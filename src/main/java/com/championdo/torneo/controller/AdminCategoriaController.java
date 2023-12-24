@@ -2,11 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CategoriaModel;
-import com.championdo.torneo.service.CategoriaService;
-import com.championdo.torneo.service.CinturonService;
-import com.championdo.torneo.service.PoomsaeService;
-import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -29,12 +25,12 @@ public class AdminCategoriaController {
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/categoriaList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView categoriaList(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminCategoria/categoriaList");
         modelAndView.setViewName("torneo/adminCategoria");
         modelAndView.addObject("categoriaModel", new CategoriaModel());
@@ -48,7 +44,7 @@ public class AdminCategoriaController {
     @GetMapping("/categoria/{oldIndex}/{newIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragCategoria(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminCategoria/categoria/" + oldIndex + "/" + newIndex);
         categoriaService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -58,7 +54,7 @@ public class AdminCategoriaController {
     @PostMapping("/addCategoria")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addCategoria(ModelAndView modelAndView, @ModelAttribute("categoriaModel") CategoriaModel categoriaModel) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminCategoria/addCategoria");
         categoriaModel.setCodigoGimnasio(user.getCodigoGimnasio());
         categoriaModel.setPosition(categoriaService.findMaxPosition(user.getCodigoGimnasio()) + 1);
@@ -72,7 +68,7 @@ public class AdminCategoriaController {
     @GetMapping("/categoria/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeCategoria(ModelAndView modelAndView, @PathVariable int id) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminCategoria/remove/" + id);
         categoriaService.delete(id);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

@@ -1,11 +1,11 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.Menu1Model;
+import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.model.UtilModel;
-import com.championdo.torneo.service.GimnasioService;
-import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.UtilService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/adminUtil")
 public class AdminUtilController {
@@ -29,15 +31,17 @@ public class AdminUtilController {
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
+    private GimnasioRootService gimnasioRootService;
+    @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminUtil");
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
         modelAndView.addObject("gimnasioModel", gimnasioService.findByCodigoGimnasio(user.getCodigoGimnasio()));
@@ -46,6 +50,7 @@ public class AdminUtilController {
         modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", user.getCodigoGimnasio()).get(0));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
+        gimnasioRootService.fillMenu2Checked(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -53,7 +58,7 @@ public class AdminUtilController {
     @PostMapping("/updateUtil")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/updateUtil");
         utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
         utilService.update(utilModel);
@@ -65,7 +70,7 @@ public class AdminUtilController {
     @PostMapping("/updateHost")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateHost(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/updateHost");
         UtilModel utilPort = new UtilModel();
         for (EmailEnum emailEnum : EmailEnum.values()) {
@@ -86,7 +91,7 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView rootUtil(ModelAndView modelAndView) {
         modelAndView.setViewName("management/adminUtil");
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("utilModel", utilService.findByClave(Constantes.HOST_PAGE_NAME,0));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -95,7 +100,7 @@ public class AdminUtilController {
     @PostMapping("/root-update-util")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView rootUpdateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

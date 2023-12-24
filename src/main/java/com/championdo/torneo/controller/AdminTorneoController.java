@@ -4,11 +4,7 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.TorneoModel;
-import com.championdo.torneo.service.InscripcionService;
-import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.TorneoGimnasioService;
-import com.championdo.torneo.service.TorneoService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -33,13 +29,13 @@ public class AdminTorneoController {
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/torneoList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView torneoList(ModelAndView modelAndView) {
         modelAndView.setViewName("torneo/adminTorneoList");
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminTorneo/torneoList");
         modelAndView.addObject("torneoList", torneoService.findAll(user.getCodigoGimnasio()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -50,7 +46,7 @@ public class AdminTorneoController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView getTorneo(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/adminTorneo");
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminTorneo/torneo/" + id);
         TorneoModel torneoModel = torneoService.findById(id);
         if(torneoModel.getId() == 0) {
@@ -73,7 +69,7 @@ public class AdminTorneoController {
     @PostMapping("/addTorneo")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addTorneo(ModelAndView modelAndView, @ModelAttribute("torneoModel") TorneoModel torneoModel) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminTorneo/addTorneo");
         torneoModel.setCodigoGimnasio(user.getCodigoGimnasio());
         if (torneoModel.getId() == 0) {
@@ -91,7 +87,7 @@ public class AdminTorneoController {
     @GetMapping("/torneo/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeTorneo(ModelAndView modelAndView, @PathVariable int id) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminTorneo/torneo/remove/" + id);
         try {
             torneoService.delete(id);

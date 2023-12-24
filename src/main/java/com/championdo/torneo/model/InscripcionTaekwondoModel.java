@@ -14,6 +14,7 @@ public class InscripcionTaekwondoModel {
     private int id;
     private Date fechaInscripcion;
     private int codigoGimnasio;
+    private String nombreGimnasio;
 
     //Mayor
     private String mayorDni;

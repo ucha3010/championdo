@@ -15,5 +15,5 @@ public interface Menu2Repository extends JpaRepository<Menu2, Integer> {
 
     Menu2 findByIdMenu1AndPosition(int idMenu1, int position);
 
-    void deleteByIdMenu1(int idMenu1);
+    Menu2 findByUrl(String url);
 }

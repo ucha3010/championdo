@@ -1,14 +1,17 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PrincipalUserModel;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +22,10 @@ public class PrincipalServiceImpl implements PrincipalService {
 
     @Autowired
     private InscripcionService inscripcionService;
+    @Autowired
+    private Menu1Service menu1Service;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<PrincipalUserModel> findByDni(String dni) {
@@ -53,7 +60,10 @@ public class PrincipalServiceImpl implements PrincipalService {
     }
 
     @Override
-    public UtilModel getDeleteEnable(int codigoGimnasio) {
-        return inscripcionService.getDeleteEnable(codigoGimnasio);
+    public User cargaBasicaCompleta(ModelAndView modelAndView) {
+        com.championdo.torneo.entity.User usuario = userService.getLoggedUser();
+        modelAndView.addObject("usuario", usuario);
+        modelAndView.addObject("menu1List", menu1Service.findAll());
+        return usuario;
     }
 }

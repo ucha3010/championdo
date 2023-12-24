@@ -3,7 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.PaisModel;
 import com.championdo.torneo.service.PaisService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -21,12 +21,12 @@ public class AdminPaisController {
     private PaisService paisService;
 
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/paisList")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView paisList(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.setViewName("management/adminPais");
         modelAndView.addObject("paisModel", new PaisModel());
         modelAndView.addObject("paisList", paisService.findAll());

@@ -6,7 +6,7 @@ import com.championdo.torneo.model.Menu1Model;
 import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.Menu2Service;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -27,16 +27,15 @@ public class AdminMenuController {
     private Menu2Service menu2Service;
 
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/menuList")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView menuList(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.setViewName("management/adminMenu");
         modelAndView.addObject("menu1Model", new Menu1Model());
         modelAndView.addObject("menu2Model", new Menu2Model());
-        modelAndView.addObject("menu1List", menu1Service.findAll());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

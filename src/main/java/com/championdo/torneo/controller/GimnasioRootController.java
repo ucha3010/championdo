@@ -3,10 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
-import com.championdo.torneo.service.GimnasioRootService;
-import com.championdo.torneo.service.GimnasioService;
-import com.championdo.torneo.service.TorneoGimnasioService;
-import com.championdo.torneo.service.UtilService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.CargasInicialesClienteService;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -29,6 +26,8 @@ public class GimnasioRootController {
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
+    private PrincipalService principalService;
+    @Autowired
     private TorneoGimnasioService torneoGimnasioService;
     @Autowired
     private UserService userService;
@@ -40,7 +39,7 @@ public class GimnasioRootController {
     public ModelAndView customers(ModelAndView modelAndView) {
         LoggerMapper.methodIn(Level.INFO, "customers", "", this.getClass());
         modelAndView.setViewName("management/customers");
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customerList", gimnasioRootService.findAllOrderByNombreGimnasioAsc());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -51,7 +50,7 @@ public class GimnasioRootController {
     public ModelAndView customersId(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "customersId", "id: " + id, this.getClass());
         modelAndView.setViewName("management/updateCustomer");
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customer", gimnasioRootService.findById(id));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -61,7 +60,7 @@ public class GimnasioRootController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
         LoggerMapper.methodIn(Level.INFO, "updateCustomer", customer, this.getClass());
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         customer.setUsuarioModificacion(user.getUsername());
         try {
             gimnasioRootService.update(customer);
@@ -79,7 +78,7 @@ public class GimnasioRootController {
     public ModelAndView formNewCustomer(ModelAndView modelAndView) {
         LoggerMapper.methodIn(Level.INFO, "formNewCustomer", "", this.getClass());
         modelAndView.setViewName("management/addCustomer");
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customer", new GimnasioRootModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -89,7 +88,7 @@ public class GimnasioRootController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioRootModel customer) {
         LoggerMapper.methodIn(Level.INFO, "addCustomer", customer, this.getClass());
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         customer.setUsuarioModificacion(user.getUsername());
         int idCustomer = 0;
         try {
@@ -122,7 +121,7 @@ public class GimnasioRootController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView resetCintPoomCat(ModelAndView modelAndView, @PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "resetCintPoomCat", "", this.getClass());
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         cargasInicialesClienteService.cargasCintPoomCat(id);
         modelAndView.addObject("resetOk", "Reseteo realizado con éxito");
@@ -134,7 +133,7 @@ public class GimnasioRootController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView deleteCustomer(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "deleteCustomer", "id: " + id, this.getClass());
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
         userService.deleteFromRoot(id);

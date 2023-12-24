@@ -38,6 +38,8 @@ public class FormularioController {
     @Autowired
     private TorneoGimnasioService torneoGimnasioService;
     @Autowired
+    private PrincipalService principalService;
+    @Autowired
     private UserService userService;
 
     @GetMapping("/selectTournament/{tournamentType}")
@@ -72,7 +74,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView cargarFormulario(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int idTorneo, @PathVariable int idGimnasio) {
 
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         usuario.setIdTorneo(idTorneo);
         usuario.setIdTorneoGimnasio(idGimnasio);
         switch (tournamentType) {
@@ -103,7 +105,7 @@ public class FormularioController {
 
         LoggerMapper.methodIn(Level.INFO, "gaurdarPropia", userModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         userModel.setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("torneo/formularioInscFinalizada");
         PdfModel pdfModel;
@@ -136,7 +138,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getPropia(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/vistaInscPropia");
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
@@ -149,7 +151,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenorOInclisivo(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         userAutorizacionModel.getAutorizado().setCodigoGimnasio(user.getCodigoGimnasio());
         userAutorizacionModel.getMayorAutorizador().setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("torneo/formularioInscFinalizada");
@@ -184,7 +186,7 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/vistaInscMenorOInclisivo");
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         TorneoModel torneoModel = torneoService.findById(inscripcionModel.getIdTorneo());
         modelAndView.addObject("inscripcion", inscripcionModel);
@@ -217,11 +219,9 @@ public class FormularioController {
     @PreAuthorize("permitAll()")
     public ModelAndView alta(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
         boolean altaCorrecta = true;
-        User user = new User();
         if(userService.findByUsername(userModel.getUsername()) == null) {
             try {
-                user = userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER);
-                emailService.sendUserAdded(user);
+                emailService.sendUserAdded(userService.altaNuevoUsuario(userModel, Constantes.ROLE_USER));
             } catch (PersistenceException e) {
                 modelAndView.addObject("problemasAlta", "Problemas dando de alta usuario con DNI " + userModel.getUsername());
                 LoggerMapper.log(Level.ERROR, "alta", e.getMessage(), this.getClass());
@@ -249,7 +249,7 @@ public class FormularioController {
 
     private List<TorneoModel> selectTournamentCommon(ModelAndView modelAndView, String tournamentType) {
 
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.setViewName("torneo/formularioSeleccionTorneo");
         List<TorneoModel> torneoModelList = torneoService.findAllowed(new Date(), tournamentType);
         modelAndView.addObject("torneoModelList", torneoModelList);

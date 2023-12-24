@@ -1,10 +1,6 @@
 package com.championdo.torneo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -23,5 +19,6 @@ public class Menu2Model {
     private String url;
     private String aviso;
     private List<GimnasioRootModel> gimnasioRootModelList;
+    private boolean checked;
 
 }

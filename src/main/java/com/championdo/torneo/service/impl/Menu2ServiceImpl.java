@@ -1,13 +1,13 @@
 package com.championdo.torneo.service.impl;
 
-import com.championdo.torneo.entity.GimnasioRootMenu2;
 import com.championdo.torneo.entity.Menu2;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperMenu2;
+import com.championdo.torneo.model.GimnasioRootMenu2Model;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.Menu2Model;
-import com.championdo.torneo.repository.GimnasioRootMenu2Repository;
 import com.championdo.torneo.repository.Menu2Repository;
+import com.championdo.torneo.service.GimnasioRootMenu2Service;
 import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.Menu2Service;
 import com.championdo.torneo.util.Constantes;
@@ -28,7 +28,7 @@ public class Menu2ServiceImpl implements Menu2Service {
     @Autowired
     private MapperMenu2 mapperMenu2;
     @Autowired
-    private GimnasioRootMenu2Repository gimnasioRootMenu2Repository;
+    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
     @Autowired
     private GimnasioRootService gimnasioRootService;
 
@@ -46,7 +46,7 @@ public class Menu2ServiceImpl implements Menu2Service {
         try {
             Menu2Model menu2Model = mapperMenu2.entity2Model(menu2Repository.getById(id));
             List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
-            for(GimnasioRootMenu2 gimnasioRootMenu2: gimnasioRootMenu2Repository.findByIdMenu2(id)) {
+            for(GimnasioRootMenu2Model gimnasioRootMenu2: gimnasioRootMenu2Service.findByIdMenu2(id)) {
                 gimnasioRootModelList.add(gimnasioRootService.findById(gimnasioRootMenu2.getIdGimnasioRoot()));
             }
             menu2Model.setGimnasioRootModelList(gimnasioRootModelList);
@@ -78,21 +78,12 @@ public class Menu2ServiceImpl implements Menu2Service {
                     menu2Repository.save(menu2List.get(i));
                 }
             }
-            gimnasioRootMenu2Repository.deleteByIdMenu2(id);
+            gimnasioRootMenu2Service.deleteByIdMenu2(id);
         } catch (IllegalArgumentException e){
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
             throw new RemoveException(Constantes.ERROR_BORRAR_MENU, "Error al borrar el menú secundario");
         }
         LoggerMapper.methodOut(Level.INFO, "delete", menu2.getId(), getClass());
-    }
-
-    @Override
-    public void deleteByIdMenu1(int idMenu1) {
-        List<Menu2> menu2List = menu2Repository.findByIdMenu1OrderByPositionAsc(idMenu1);
-        menu2Repository.deleteByIdMenu1(idMenu1);
-        for (Menu2 menu2 : menu2List) {
-            gimnasioRootMenu2Repository.deleteByIdMenu2(menu2.getId());
-        }
     }
 
     @Override
@@ -120,6 +111,11 @@ public class Menu2ServiceImpl implements Menu2Service {
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public Menu2Model findByUrl(String url) {
+        return mapperMenu2.entity2Model(menu2Repository.findByUrl(url));
     }
 
     private void moveItem(int idMenu1, int position, boolean moveUp) {

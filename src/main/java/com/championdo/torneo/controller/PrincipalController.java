@@ -1,6 +1,5 @@
 package com.championdo.torneo.controller;
 
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.Menu1Service;
@@ -43,12 +42,11 @@ public class PrincipalController {
         modelAndView.setViewName("mainPage");
         String ruta = "src" + File.separator + "main" + File.separator + "resources" + File.separator
                 + "static" + File.separator + "imgs" + File.separator + File.separator + "principal";
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<String> fotosList = new ArrayList<>(Utils.obtenerNombresArchivos(ruta));
         modelAndView.addObject("fotoPrincipal", fotosList.get(0));
         fotosList.remove(0);
         modelAndView.addObject("listaFotos", fotosList);
-        modelAndView.addObject("menu1List", menu1Service.findAll());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -56,7 +54,7 @@ public class PrincipalController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipalAntigua(ModelAndView modelAndView) {
         modelAndView.setViewName("principal");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         for (InscripcionTaekwondoModel inscripcionTaekwondoModel: inscripcionTaekwondoModelList) {
             if (!inscripcionTaekwondoModel.isInscripcionFirmada() || (inscripcionTaekwondoModel.isDomiciliacionSEPA() && !inscripcionTaekwondoModel.isDomiciliacionSEPAFirmada())) {
@@ -75,7 +73,7 @@ public class PrincipalController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipalTorneo(ModelAndView modelAndView) {
         modelAndView.setViewName("torneo/principalTorneo");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("inscripciones", principalService.findByDni(usuario.getUsername()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;

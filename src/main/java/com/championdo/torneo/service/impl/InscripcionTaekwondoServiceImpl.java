@@ -30,6 +30,8 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     @Autowired
     private MapperInscripcionTaekwondo mapperInscripcionTaekwondo;
     @Autowired
+    private GimnasioRootService gimnasioRootService;
+    @Autowired
     private MandatoService mandatoService;
     @Autowired
     private PdfService pdfService;
@@ -185,6 +187,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
 
         inscripcionTaekwondoModel.setMayorDni(mayorAutorizador.getUsername());
         inscripcionTaekwondoModel.setCodigoGimnasio(mayorAutorizador.getCodigoGimnasio());
+        inscripcionTaekwondoModel.setNombreGimnasio(gimnasioRootService.findById(mayorAutorizador.getCodigoGimnasio()).getNombreGimnasio());
         inscripcionTaekwondoModel.setMayorNombre(mayorAutorizador.getName());
         inscripcionTaekwondoModel.setMayorApellido1(mayorAutorizador.getLastname());
         inscripcionTaekwondoModel.setMayorApellido2(mayorAutorizador.getSecondLastname());

@@ -4,10 +4,7 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.ClaveUsuarioModel;
 import com.championdo.torneo.model.UserModel;
-import com.championdo.torneo.service.EmailService;
-import com.championdo.torneo.service.FormularioService;
-import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.UserRoleService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -37,6 +34,8 @@ public class UsuarioController {
 	private EmailService emailService;
 	@Autowired
 	private FormularioService formularioService;
+	@Autowired
+	private PrincipalService principalService;
 	@Autowired
 	private SeguridadService seguridadService;
 	
@@ -69,7 +68,7 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView formularioCambioClave(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioCambioClave");
-		com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+		com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
 		ClaveUsuarioModel claveUsuarioModel = new ClaveUsuarioModel();
 		claveUsuarioModel.setUsername(usuario.getUsername());
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
@@ -100,7 +99,7 @@ public class UsuarioController {
 	@GetMapping("/remove/{username}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @PathVariable String username) {
-		com.championdo.torneo.entity.User user = userService.cargarUsuarioCompleto(modelAndView);
+		com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/remove/"+username);
 		if (userService.delete(username, user.getCodigoGimnasio())) {
 			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
@@ -114,7 +113,7 @@ public class UsuarioController {
 	@GetMapping("/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView users(ModelAndView modelAndView) {
-		User user = userService.cargarUsuarioCompleto(modelAndView);
+		User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users");
 		modelAndView.setViewName("gimnasio/adminUsers");
 		modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
@@ -127,7 +126,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView userDetail(ModelAndView modelAndView, @PathVariable String username) {
 		LoggerMapper.methodIn(Level.INFO, "/users/"+username, username, this.getClass());
-		User user = userService.cargarUsuarioCompleto(modelAndView);
+		User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users/"+username);
 		modelAndView.setViewName("gimnasio/adminUser");
 		UserModel userModel = userService.findModelByUsername(username);
@@ -141,7 +140,7 @@ public class UsuarioController {
 	@GetMapping("/enabled/{username}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
-		User user = userService.cargarUsuarioCompleto(modelAndView);
+		User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/enabled/" + username);
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
@@ -158,7 +157,7 @@ public class UsuarioController {
 	@GetMapping("/rol/{username}/{rol}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView update(ModelAndView modelAndView, @PathVariable String username, @PathVariable String rol) {
-		User user = userService.cargarUsuarioCompleto(modelAndView);
+		User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/rol/" + username + "/" + rol);
 		UserRole userRole = new UserRole();
 		com.championdo.torneo.entity.User usuario = userService.findByUsername(username);

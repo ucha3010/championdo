@@ -6,7 +6,6 @@ import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.*;
-import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -38,13 +37,13 @@ public class MandatoController {
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/mandatos")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView mandatos(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/principalMandato");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModelList", mandatoService.findByDniMandante(usuario.getCodigoGimnasio(), usuario.getUsername()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -55,7 +54,7 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView adulto(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
         modelAndView.addObject("titulo", "Mandato para licencia mayor de edad");
         formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
@@ -67,7 +66,7 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
         modelAndView.setViewName("gimnasio/formularioMandatoMenor");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         MandatoModel mandatoModel = fillMandatoModel(usuario);
         mandatoModel.setMenor(menor);
         modelAndView.addObject("mandatoModel", mandatoModel);
@@ -81,7 +80,7 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarAdulto(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         mandatoService.fillMandato(mandatoModel, true, usuario.getCodigoGimnasio());
         try {
             commonMandato(modelAndView, mandatoModel, usuario);
@@ -99,7 +98,7 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenor(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         mandatoService.fillMandato(mandatoModel, false, usuario.getCodigoGimnasio());
         try {
             commonMandato(modelAndView, mandatoModel, usuario);
@@ -133,7 +132,7 @@ public class MandatoController {
     @GetMapping("/remove/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         if (!mandatoService.findById(id).isMandatoFirmado()) {
             mandatoService.delete(id);
             modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");

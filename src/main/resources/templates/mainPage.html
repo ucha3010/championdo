@@ -1,68 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta th:replace="static/cabeceraMeta :: meta">
+        <link th:replace="static/cabeceraLink :: link">
+        <script th:replace="static/cabeceraScript :: script"></script>
 
-        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.3/components/navbars/navbar-1/assets/css/navbar-1.css" />
-        <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-        <link rel="stylesheet" href="#" th:href="@{/imgs/icons/icofont.min.css}" />
-
-        <script type="text/javascript" th:src="@{/js/utils.js}"></script>
-        <script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-        <title>Menú Desplegable con Bootstrap</title>
-
+        <title>Página principal</title>
     </head>
     <body>
-        <form th:action="@{/logout}" method="POST" id="formLogout"></form>
-        <div class="container">
-            <h1>
-                ¡Hola <span th:text="${usuario.name}"></span>!
-                <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="icofont-duotone icofont-manage-user"></span></a>
-            </h1>
-        </div>
-        <nav sec:authorize="isAuthenticated()" class="navbar navbar-expand-lg bg-light bsb-navbar bsb-navbar-hover bsb-navbar-caret">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="#" th:src="@{/imgs/MiLogo.jpg}" alt="" width="180">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                    </svg>
-                </button>
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body flex-grow-0 d-lg-inline">
-                        <ul class="navbar-nav justify-content-end">
-                            <li th:each="menu1, iStat : ${menu1List}" class="nav-item dropdown pe-2">
-                                <a class="nav-link dropdown-toggle" href="#!" th:id="'dropdown' + ${iStat.index}" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span th:text="${menu1.nombre}"></span></a>
-                                <ul class="dropdown-menu border-0 shadow bsb-zoomIn" th:attr="aria-labelledby='dropdown' + ${iStat.index}">
-                                    <li th:if="${menu1.menu2ModelList != null}" th:each="menu2 : ${menu1.menu2ModelList}"><a class="dropdown-item" href="#" th:href="@{__${menu2.url}__}"><span th:text="${menu2.nombre}"></span> <span th:if="${__${menu2.aviso}__ != null}" class="badge" th:text="${__${menu2.aviso}__}"></span></a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ayuda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Contacto</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" th:attr="onclick=|logout()|"><span class="icofont-logout" aria-hidden="true"></span> Salir</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <div th:replace="static/barraUsuario :: div"></div>
+        <div th:replace="static/barraNav :: nav"></div>
 
         <section sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
-
             <a href="#" th:href="@{/admin/adminList}" class="textDecoration-none">
                 <button class="btn btn-warning btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administración</button>
             </a>
@@ -94,7 +43,13 @@
 
         <!-- Contenido de la página -->
         <div class="container mt-3">
-            <h1 class="pageTitle">Transforma tu entrenamiento</h1>
+            <section>
+                <div class="row justify-content-center">
+                    <div class="col colorGreen">
+                        <h1>Transforma tu entrenamiento</h1>
+                    </div>
+                </div>
+            </section>
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="3000">
@@ -114,21 +69,8 @@
                 </button>
             </div>
         </div>
-
-
-
     </body>
-    <footer>
-        <nav class="navbar navbar-expand-lg bsb-navbar bsb-navbar-hover bsb-navbar-caret justify-content-end">
-            <button class="navbar-toggler mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                </svg>
-            </button>
-        </nav>
-        <div>
-            Lo que se escribe en el footer
-        </div>
-    </footer>
+
+    <footer th:replace="static/footer :: footer"></footer>
 
 </html>

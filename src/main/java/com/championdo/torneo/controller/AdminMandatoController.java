@@ -4,7 +4,7 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.service.MandatoService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -23,13 +23,13 @@ public class AdminMandatoController {
     @Autowired
     private MandatoService mandatoService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView mandatos(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminMandatoList");
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModelList", mandatoService.findAll(usuario.getCodigoGimnasio()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -40,7 +40,7 @@ public class AdminMandatoController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView mandato(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("gimnasio/adminMandato");
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModel", mandatoService.findById(id));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -49,7 +49,7 @@ public class AdminMandatoController {
     @GetMapping("/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         mandatoService.delete(id);
         modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -59,7 +59,7 @@ public class AdminMandatoController {
     @GetMapping("/pay/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView pay(ModelAndView modelAndView, @PathVariable int id) throws ValidationException {
-        User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         MandatoModel mandatoModel = mandatoService.findById(id);
         mandatoModel.setLicenciaAbonada(!mandatoModel.isLicenciaAbonada());
         mandatoService.update(mandatoModel);

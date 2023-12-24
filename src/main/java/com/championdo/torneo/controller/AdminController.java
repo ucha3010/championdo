@@ -2,8 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.service.GimnasioRootService;
-import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -18,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
     @Autowired
     private GimnasioRootService gimnasioRootService;
 
@@ -26,7 +25,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView adminList(ModelAndView modelAndView) {
         modelAndView.setViewName("adminList");
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(user.getCodigoGimnasio()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;

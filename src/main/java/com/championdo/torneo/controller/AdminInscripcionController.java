@@ -5,8 +5,8 @@ import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.PdfService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -32,12 +32,12 @@ public class AdminInscripcionController {
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/inscripcionList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView inscripcionList(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/inscripcionList");
         modelAndView.setViewName("adminInscripcion");
         modelAndView.addObject("inscripcionList", inscripcionService.findAll());
@@ -54,7 +54,7 @@ public class AdminInscripcionController {
     @GetMapping("/pay/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable int id) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/pay/" + id);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         inscripcionModel.setPagoRealizado(!inscripcionModel.isPagoRealizado());
@@ -71,7 +71,7 @@ public class AdminInscripcionController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView update(ModelAndView modelAndView, @ModelAttribute("inscripcionModel") InscripcionModel inscripcionModel) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/update");
         InscripcionModel inscripcionModelBBDD = inscripcionService.findById(inscripcionModel.getId());
         inscripcionModelBBDD.setFechaPago(inscripcionModel.getFechaPago());
@@ -105,7 +105,7 @@ public class AdminInscripcionController {
     @GetMapping("/deleteEnable")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteEnable(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteEnable");
         inscripcionService.changeValueDeleteEnable(user.getCodigoGimnasio());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -115,7 +115,7 @@ public class AdminInscripcionController {
     @GetMapping("/deleteAll")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteAll(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteAll");
         inscripcionService.deleteAll();
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

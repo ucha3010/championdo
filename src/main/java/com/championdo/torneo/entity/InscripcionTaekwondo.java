@@ -21,6 +21,8 @@ public class InscripcionTaekwondo {
     private int id;
     private Date fechaInscripcion;
     private int codigoGimnasio;
+    @Column(name = "nombreGimnasio", length = 100)
+    private String nombreGimnasio;
 
     //Mayor
     @Column(name = "mayorDni", nullable = false, length = 45)

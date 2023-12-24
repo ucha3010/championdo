@@ -1,12 +1,8 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.FirmaCodigoModel;
-import com.championdo.torneo.model.InscripcionTaekwondoModel;
-import com.championdo.torneo.model.PdfModel;
-import com.championdo.torneo.model.UserAutorizacionModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
-import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -19,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,20 +29,46 @@ public class GimnasioController {
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
-    private Menu1Service menu1Service;
+    private Menu2Service menu2Service;
     @Autowired
     private PdfService pdfService;
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
+    @Autowired
+    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
+    @Autowired
+    private GimnasioRootService gimnasioRootService;
 
     @GetMapping("/tipoInscripcion")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView tipoInscripcion(ModelAndView modelAndView) {
-//        modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
-        modelAndView.setViewName("gimnasio/formularioInscripcionSeleccionGimnasio");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        modelAndView.setViewName("formularioInscripcionSeleccionGimnasio");
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
+        if (!inscripcionTaekwondoModelList.isEmpty()) {
+            modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
+        }
+        modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
+        modelAndView.addObject("inscripcionA", "Taekwondo");
+        modelAndView.addObject("controller", "gimnasio");
+        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Service.findByUrl("/gimnasio/tipoInscripcion").getId());
+        List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
+        for (GimnasioRootMenu2Model gimnasioRootMenu2Model : gimnasioRootMenu2ModelList) {
+            gimnasioRootModelList.add(gimnasioRootService.findById(gimnasioRootMenu2Model.getIdGimnasioRoot()));
+        }
+        modelAndView.addObject("gimnasios", gimnasioRootModelList);
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @GetMapping("/tipoInscripcionConGimnasio/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView tipoInscripcionConGimnasio(ModelAndView modelAndView, @PathVariable Integer id) {
+        modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
             for (InscripcionTaekwondoModel inscripcionTaekwondoModel : inscripcionTaekwondoModelList) {
@@ -58,16 +81,17 @@ public class GimnasioController {
         modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
         modelAndView.addObject("inscripcionA", "Taekwondo");
         modelAndView.addObject("controller", "gimnasio");
+        modelAndView.addObject("gimnasio", gimnasioRootService.findById(id));
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        modelAndView.addObject("menu1List", menu1Service.findAll());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-    @GetMapping("/formularioInscripcion/{tipo}/{licencia}")
+    @GetMapping("/formularioInscripcion/{id}/{tipo}/{licencia}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable String tipo, @PathVariable String licencia) {
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+    public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable Integer id, @PathVariable String tipo, @PathVariable String licencia) {
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        usuario.setCodigoGimnasio(id);
         modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(usuario.getCodigoGimnasio()).getValor()));
         if ("infantil".equalsIgnoreCase(tipo)) {
             modelAndView.setViewName("gimnasio/formularioInscMenorGimnasio");
@@ -97,7 +121,7 @@ public class GimnasioController {
     @GetMapping("/getInscripcion/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getInscripcion(ModelAndView modelAndView, @PathVariable int id) {
-        userService.cargarUsuarioCompleto(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
         if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
             modelAndView.setViewName("gimnasio/vistaInscPropiaGimnasio");
@@ -130,7 +154,7 @@ public class GimnasioController {
     public ModelAndView normativaSepa(ModelAndView modelAndView, @PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", id, getClass());
         modelAndView.setViewName("gimnasio/normativaSepaGimnasio");
-        com.championdo.torneo.entity.User usuario = userService.cargarUsuarioCompleto(modelAndView);
+        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcion = inscripcionTaekwondoService.findById(id);
         modelAndView.addObject("inscripcion", inscripcion);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -167,8 +191,7 @@ public class GimnasioController {
         LoggerMapper.methodIn(Level.INFO, "gimnasio/" + recurso, userAutorizacionModel, getClass());
 
         ModelAndView modelAndView = new ModelAndView();
-        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
-        userAutorizacionModel.getMayorAutorizador().setCodigoGimnasio(userLogged.getCodigoGimnasio());
+        User userLogged = principalService.cargaBasicaCompleta(modelAndView);
         if (menor) {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
         }

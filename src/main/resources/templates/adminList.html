@@ -1,75 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<head>
+		<meta th:replace="static/cabeceraMeta :: meta">
+		<link th:replace="static/cabeceraLink :: link">
+		<script th:replace="static/cabeceraScript :: script"></script>
 
-	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+		<title>Administración</title>
+	</head>
+	<body>
+		<div th:replace="static/barraUsuario :: div"></div>
+		<div th:replace="static/barraNav :: nav"></div>
 
-	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
-
-	<title>Administración</title>
-</head>
-<body>
-	<div class="container">
-		<h1>
-			¡Hola <span th:text="${usuario.name}"></span>!
-			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
-		</h1>
-		<nav class="navbar navbar-default" role="navigation">
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-			</form>
-		</nav>
-
-		<section>
-			<div class="row">
-				<div class="col-xs-2 mb-1">
+		<div class="container text-center">
+			<section>
+				<div class="row align-items-center justify-content-end">
+					<div class="col-6 col-md-12 colorGreen">
+						<h1>Administración</h1>
+					</div>
+					<div class="col-3 d-md-none">
+						<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+					</div>
 				</div>
+			</section>
+			<section>
+				<h2 th:if="${not gimnasioAvailable}">Gimnasio deshabilitado, por favor contacte con administrador</h2>
+			</section>
+			<section th:if="${gimnasioAvailable}" sec:authorize="hasRole('ROLE_ADMIN')">
+				<a href="#" th:href="@{/adminTorneo/torneoList}" class="textDecoration-none">
+					<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Torneos</button>
+				</a>
+			</section>
+			<section th:if="${gimnasioAvailable}" sec:authorize="hasRole('ROLE_ADMIN')">
+				<a href="#" th:href="@{/adminGimnasio/}" class="textDecoration-none">
+					<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Gimnasio</button>
+				</a>
+			</section>
 
-				<div class="col-xs-8 mb-10 colorGreen">
-					<h1>Administración</h1>
-				</div>
+		</div>
+	</body>
 
-				<div class="col-xs-2 mb-1">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
-				</div>
-			</div>
-		</section>
-		<section>
-		    <h2 th:if="${not gimnasioAvailable}">Gimnasio deshabilitado, por favor contacte con administrador</h2>
-		</section>
-		<section th:if="${gimnasioAvailable}" sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
-			<a href="#" th:href="@{/adminTorneo/torneoList}" class="textDecoration-none">
-				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Torneos</button>
-			</a>
-		</section>
-		<section th:if="${gimnasioAvailable}" sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
-			<a href="#" th:href="@{/adminGimnasio/}" class="textDecoration-none">
-				<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Gimnasio</button>
-			</a>
-		</section>
-		
-	</div>
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
-</body>
+	<footer th:replace="static/footer :: footer"></footer>
 </html>

@@ -6,11 +6,7 @@ import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.MandatoModel;
-import com.championdo.torneo.service.FirmaCodigoService;
-import com.championdo.torneo.service.InscripcionTaekwondoService;
-import com.championdo.torneo.service.MandatoService;
-import com.championdo.torneo.service.SeguridadService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -34,7 +30,7 @@ public class SeguridadController {
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @PostMapping("/validarCodigo")
     @PreAuthorize("isAuthenticated()")
@@ -42,7 +38,7 @@ public class SeguridadController {
 
         LoggerMapper.methodIn(Level.INFO, "validarCodigo", firmaCodigoModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
-        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        User userLogged = principalService.cargaBasicaCompleta(modelAndView);
         try {
             seguridadService.validarIntentos(firmaCodigoModel.getIdOperacion());
             String codigoEnviadoPorUsuario = firmaCodigoModel.getCodigo();
@@ -80,7 +76,7 @@ public class SeguridadController {
     @GetMapping("/nuevoEnvioCodigo/{operativaOriginal}/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView nuevoEnvioCodigo(ModelAndView modelAndView, @PathVariable String operativaOriginal, @PathVariable int id) {
-        User userLogged = userService.cargarUsuarioCompleto(modelAndView);
+        User userLogged = principalService.cargaBasicaCompleta(modelAndView);
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel();
 
         // TODO INFORMACIÓN FIRMA Acá se agregan los procesos para un nuevo envío de código

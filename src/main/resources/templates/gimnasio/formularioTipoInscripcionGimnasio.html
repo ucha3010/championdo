@@ -1,157 +1,140 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<head>
+		<meta th:replace="static/cabeceraMeta :: meta">
+		<link th:replace="static/cabeceraLink :: link">
+		<script th:replace="static/cabeceraScript :: script"></script>
 
-	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
+		<title>Tipo de inscripción</title>
 
-	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
-
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-
-	<title>Tipo de inscripción</title>
-
-	<script>
-		$(document).ready(function() {
-			$("#submit").click(function() {
-				var value1 = $("input[type=radio][name=infantilAdultoRadio]:checked").val();
-				var value2 = $("input[type=radio][name=licenciaRadio]:checked").val();
-				var relativeUrl = "gimnasio/formularioInscripcion/" + value1 + "/" + value2;
+		<script>
+			function seleccionTipoInscripcion(){
+				var value1 = document.querySelector('input[name="infantilAdultoRadio"]:checked').value;
+				var value2 = document.querySelector('input[name="licenciaRadio"]:checked').value;
+				var iGimnasio = document.getElementById('idGimnasio').value;
+				var relativeUrl = "gimnasio/formularioInscripcion/" + idGimnasio.value + "/" + value1 + "/" + value2;
 				var domain = getDomain(location.href);
 				location.href = domain + relativeUrl;
-			})
-		});
-
-		function confirmDelete(id){
-			if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
-				var relativeUrl = "gimnasio/eliminarInscripcion/" + id;
-				var domain = getDomain(location.href);
-				location.href = domain + relativeUrl;
-				return true;
 			}
-			return false;
-		}
 
-        function goDetail(id){
-            var relativeUrl = "gimnasio/getInscripcion/" + id;
-            var domain = getDomain(location.href);
-            location.href = domain + relativeUrl;
-        }
-	</script>
-</head>
-<body>
-	<div class="container">
-		<h1>
-			¡Hola <span th:text="${usuario.name}"></span>!
-			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
-		</h1>
-		<nav class="navbar navbar-default" role="navigation">
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-			</form>
-		</nav>
 
-		<section>
-			<div class="row">
-				<div class="col-xs-2 mb-1">
+				function confirmDelete(controller, id){
+					if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
+						var relativeUrl = controller + "/eliminarInscripcion/" + id;
+						var domain = getDomain(location.href);
+						location.href = domain + relativeUrl;
+						return true;
+					}
+					return false;
+				}
+
+				function goDetail(controller, id){
+					var relativeUrl = controller + "/getInscripcion/" + id;
+					var domain = getDomain(location.href);
+					location.href = domain + relativeUrl;
+				}
+		</script>
+	</head>
+	<body>
+		<div th:replace="static/barraUsuario :: div"></div>
+		<div th:replace="static/barraNav :: nav"></div>
+
+		<div class="container text-center">
+			<div class="row align-items-center justify-content-end">
+				<div class="col-6 col-md-12 colorGreen">
+					<h1>Inscripción a <span th:text="${inscripcionA}"></span> en <span th:text="${gimnasio.nombreGimnasio}"></span></h1>
 				</div>
-
-				<div class="col-xs-8 mb-10 colorGreen">
-					<h1>Inscripción a Taekwondo</h1>
-				</div>
-
-				<div class="col-xs-2 mb-1">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				<div class="col-3 d-md-none">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 				</div>
 			</div>
-		</section>
 
 
-		<section class="text-center radioOption1 margenArribaAbajo3Porc">
-			<div class="form-check">
-				<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="infantil" value="infantil" checked>
-				<label class="form-check-label" for="infantil">
-					Infantil (hasta 13 años)
-				</label>
-			</div>
-			<div th:if="${ocultarAdulto == null}" class="form-check">
-				<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="adulto" value="adulto">
-				<label class="form-check-label" for="adulto">
-					Adulto (14 años o más)
-				</label>
-			</div>
-		</section>
+			<section class="text-center radioOption1 margenArribaAbajo3Porc">
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="infantil" value="infantil" checked>
+					<label class="form-check-label" for="infantil">
+						Infantil (hasta 13 años)
+					</label>
+				</div>
+				<div th:if="${ocultarAdulto == null}" class="form-check">
+					<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="adulto" value="adulto">
+					<label class="form-check-label" for="adulto">
+						Adulto (14 años o más)
+					</label>
+				</div>
+			</section>
 
-		<section class="text-center radioOption2 margenArribaAbajo3Porc">
-			<div class="form-check">
-				<input class="form-check-input" type="radio" name="licenciaRadio" id="conLicencia" value="con licencia" checked>
-				<label class="form-check-label" for="conLicencia">
-					Con Licencia Federativa
-				</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="radio" name="licenciaRadio" id="sinLicencia" value="sin licencia">
-				<label class="form-check-label" for="sinLicencia">
-					Sin Licencia Federativa
-				</label>
-			</div>
-		</section>
+			<section class="text-center radioOption2 margenArribaAbajo3Porc">
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="licenciaRadio" id="conLicencia" value="con licencia" checked>
+					<label class="form-check-label" for="conLicencia">
+						Con Licencia Federativa
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="licenciaRadio" id="sinLicencia" value="sin licencia">
+					<label class="form-check-label" for="sinLicencia">
+						Sin Licencia Federativa
+					</label>
+				</div>
+			</section>
 
-		<section class="text-center margenArribaAbajo3Porc">
-			<div class="col-xs-5">
-			</div>
-			<div class="col-xs-2">
-				<button class="btn btn-success" type="submit" id="submit">Continuar</button>
-			</div>
-			<div class="col-xs-5">
-			</div>
-		</section>
+			<section class="text-center margenArribaAbajo3Porc">
+				<div class="col-5">
+					<input type="hidden" id="idGimnasio" th:value="${gimnasio.id}"/>
+				</div>
+				<div class="col-2">
+					<button class="btn btn-success" type="submit" onclick="seleccionTipoInscripcion()">Continuar</button>
+				</div>
+				<div class="col-5">
+				</div>
+			</section>
 
-		<section>
-			<table class="table table-striped table-hover">
-				<thead>
-				<tr>
-					<th>Fecha de realización</th>
-					<th>Inscripción de</th>
-					<th></th>
-					<th></th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr th:each="autorizacion : ${inscripciones}">
-					<td th:attr="onclick=|goDetail('${autorizacion.id}')|">
-						<span th:text="${#calendars.format(autorizacion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span>
-					</td>
-					<td th:attr="onclick=|goDetail('${autorizacion.id}')|">
-						<span th:if="${autorizacion.autorizadoNombre != null}" th:text="${autorizacion.autorizadoNombre+' '+autorizacion.autorizadoApellido1+' '+autorizacion.autorizadoApellido2}"></span>
-						<span th:if="${autorizacion.autorizadoNombre == null}" th:text="${autorizacion.mayorNombre+' '+autorizacion.mayorApellido1+' '+autorizacion.mayorApellido2}"></span>
-					</td>
-					<td>
-						<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${autorizacion.id}')|"><span class="glyphicon glyphicon-trash textDecoration-none"></span></a>
-					</td>
-					<td>
-						<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.domiciliacionSEPAFirmada}" class="colorRed" href="#" th:href="@{/gimnasio/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
-						<a th:if="${!autorizacion.inscripcionFirmada}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionTaekwondo/__${autorizacion.id}__}">¡Inscripción no firmada! Toque aquí para firmar</a>
-					</td>
-				</tr>
-				</tbody>
-			</table>
-		</section>
+			<section sec:authorize="isAuthenticated()">
+				<table class="table table-striped table-hover">
+					<thead>
+					<tr>
+						<th>Fecha de realización</th>
+						<th>Inscripción de</th>
+						<th>Gimnasio</th>
+						<th></th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="autorizacion : ${inscripciones}">
+						<td th:attr="onclick=|goDetail('${controller}','${autorizacion.id}')|">
+							<span th:text="${#calendars.format(autorizacion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span>
+						</td>
+						<td th:attr="onclick=|goDetail('${controller}','${autorizacion.id}')|">
+							<span th:if="${autorizacion.autorizadoNombre != null}" th:text="${autorizacion.autorizadoNombre+' '+autorizacion.autorizadoApellido1+' '+autorizacion.autorizadoApellido2}"></span>
+							<span th:if="${autorizacion.autorizadoNombre == null}" th:text="${autorizacion.mayorNombre+' '+autorizacion.mayorApellido1+' '+autorizacion.mayorApellido2}"></span>
+						</td>
+						<td th:attr="onclick=|goDetail('${controller}','${autorizacion.id}')|">
+							<span th:text="${autorizacion.nombreGimnasio}"></span>
+						</td>
+						<td>
+							<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${controller}','${autorizacion.id}')|"><span class="icofont-bin textDecoration-none"></span></a>
+						</td>
+						<td>
+							<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.domiciliacionSEPAFirmada}" class="colorRed" href="#" th:href="@{/__${controller}__/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>
+							<a th:if="${!autorizacion.inscripcionFirmada}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/__${operativaOriginal}__/__${autorizacion.id}__}">¡Inscripción no firmada! Toque aquí para firmar</a>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</section>
 
-		<section th:if="${inscripciones != null}" class="text-center margenArribaAbajo3Porc">
-			<div class="col-xs-10">
+			<div th:if="${inscripciones != null}" class="row align-items-center justify-content-end">
+				<div class="col-9">
+				</div>
+				<div class="col-3">
+					<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
+				</div>
 			</div>
+		</div>
+	</body>
 
-			<div class="col-xs-2">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
-			</div>
-		</section>
-	</div>
-</body>
+	<footer th:replace="static/footer :: footer"></footer>
 </html>

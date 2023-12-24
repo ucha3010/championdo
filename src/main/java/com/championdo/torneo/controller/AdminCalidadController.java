@@ -3,7 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CalidadModel;
 import com.championdo.torneo.service.CalidadService;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -21,12 +21,12 @@ public class AdminCalidadController {
     private CalidadService calidadService;
 
     @Autowired
-    private UserService userService;
+    private PrincipalService principalService;
 
     @GetMapping("/calidadList")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView calidadList(ModelAndView modelAndView) {
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.setViewName("management/adminCalidad");
         modelAndView.addObject("calidadModel", new CalidadModel());
         modelAndView.addObject("calidadList", calidadService.findAll());
@@ -46,7 +46,7 @@ public class AdminCalidadController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addCalidad(ModelAndView modelAndView, @ModelAttribute("calidadModel") CalidadModel calidadModel) {
         calidadModel.setPosition(calidadService.findMaxPosition() + 1);
-        User user = userService.cargarUsuarioCompleto(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         calidadService.add(calidadModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return calidadList(modelAndView);

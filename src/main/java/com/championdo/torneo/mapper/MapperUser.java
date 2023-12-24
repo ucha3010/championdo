@@ -55,7 +55,8 @@ public class MapperUser {
             localObject.setTelefono(externObject.getTelefono());
             localObject.setIdTorneo(externObject.getIdTorneo());
             localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
-            localObject.setCodigoGimnasio(localObject.getGimnasio().getCodigoGimnasio());
+//            localObject.setCodigoGimnasio(localObject.getGimnasio().getCodigoGimnasio());
+            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
         }
 
@@ -75,14 +76,14 @@ public class MapperUser {
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             if (externObject.getGimnasio() != null) {
                 localObject.setIdGimnasio(externObject.getGimnasio().getId());
-                if (externObject.getGimnasio().getCodigoGimnasio() != 0) {
+/*                if (externObject.getGimnasio().getCodigoGimnasio() != 0) {
                     localObject.setCodigoGimnasio(externObject.getGimnasio().getCodigoGimnasio());
                 } else {
                     localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
-                }
-            } else {
+                }*/
+            } /*else {*/
                 localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
-            }
+/*            }*/
             if (externObject.getCalidad() != null) {
                 localObject.setIdCalidad(externObject.getCalidad().getId());
             }
