@@ -51,43 +51,49 @@
 
 
 			<section class="text-center radioOption1 margenArribaAbajo3Porc">
-				<div class="form-check">
-					<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="infantil" value="infantil" checked>
-					<label class="form-check-label" for="infantil">
-						Infantil (hasta 13 años)
-					</label>
-				</div>
-				<div th:if="${ocultarAdulto == null}" class="form-check">
-					<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="adulto" value="adulto">
-					<label class="form-check-label" for="adulto">
-						Adulto (14 años o más)
-					</label>
+				<div class="row justify-content-center">
+					<div class="col-8 col-md-4">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="infantil" value="infantil" checked>
+							<label class="form-check-label" for="infantil">
+								Infantil (hasta 13 años)
+							</label>
+						</div>
+						<div th:if="${ocultarAdulto == null}" class="form-check">
+							<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="adulto" value="adulto">
+							<label class="form-check-label" for="adulto">
+								Adulto (14 años o más)
+							</label>
+						</div>
+					</div>
 				</div>
 			</section>
 
 			<section class="text-center radioOption2 margenArribaAbajo3Porc">
-				<div class="form-check">
-					<input class="form-check-input" type="radio" name="licenciaRadio" id="conLicencia" value="con licencia" checked>
-					<label class="form-check-label" for="conLicencia">
-						Con Licencia Federativa
-					</label>
-				</div>
-				<div class="form-check">
-					<input class="form-check-input" type="radio" name="licenciaRadio" id="sinLicencia" value="sin licencia">
-					<label class="form-check-label" for="sinLicencia">
-						Sin Licencia Federativa
-					</label>
+				<div class="row justify-content-center">
+					<div class="col-8 col-md-4">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="licenciaRadio" id="conLicencia" value="con licencia" checked>
+							<label class="form-check-label" for="conLicencia">
+								Con Licencia Federativa
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="licenciaRadio" id="sinLicencia" value="sin licencia">
+							<label class="form-check-label" for="sinLicencia">
+								Sin Licencia Federativa
+							</label>
+						</div>
+					</div>
 				</div>
 			</section>
 
 			<section class="text-center margenArribaAbajo3Porc">
-				<div class="col-5">
-					<input type="hidden" id="idGimnasio" th:value="${gimnasio.id}"/>
-				</div>
-				<div class="col-2">
-					<button class="btn btn-success" type="submit" onclick="seleccionTipoInscripcion()">Continuar</button>
-				</div>
-				<div class="col-5">
+				<div class="row justify-content-center">
+					<div class="col-4">
+						<input type="hidden" id="idGimnasio" th:value="${gimnasio.id}"/>
+						<button class="btn btn-success" type="submit" onclick="seleccionTipoInscripcion()">Continuar</button>
+					</div>
 				</div>
 			</section>
 

@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-
-	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
 
 	<title>Inscripción propia</title>
 
@@ -74,14 +67,10 @@
 
 </head>
 <body>
-	<div class="container">
-		<h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
+	<div th:replace="static/barraUsuario :: div"></div>
+	<div th:replace="static/barraNav :: nav"></div>
 
-		<nav class="navbar navbar-default" role="navigation">
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-			</form>
-		</nav>
+	<div class="container">
 		
 		<form action="#" th:action="@{/gimnasio/gaurdarPropia}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
 
@@ -90,11 +79,11 @@
 			<input type="hidden" name="mayorAutorizador.codigoGimnasio" th:value="*{mayorAutorizador.codigoGimnasio}"/>
 			<input type="hidden" name="mayorAutorizador.licencia" th:value="${licencia}"/>
 
-			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+			<div class="row mt-2 mb-1">
+				<div class="col-3 col-md-2">
 					<label for="nombre">Nombre*</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.name}" id="nombre" class="form-control" placeholder="Nombre" size="60"/>
 				</div>
 				<div class="col-md-2">
@@ -102,10 +91,10 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="apellido1">Primer apellido*</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.lastname}" id="apellido1" class="form-control" placeholder="Primer apellido" size="60"/>
 				</div>
 				<div class="col-md-2">
@@ -113,10 +102,10 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="apellido2">Segundo apellido</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.secondLastname}" id="apellido2" class="form-control" placeholder="Segundo apellido" size="60"/>
 				</div>
 				<div class="col-md-2">
@@ -124,129 +113,129 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="sexo">Sexo*</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{mayorAutorizador.sexo}" id="sexo" class="form-control form-control-lg">
+				<div class="col-4 col-md-3">
+					<select th:field="*{mayorAutorizador.sexo}" id="sexo" class="form-select">
 						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}" />
 					</select>
 				</div>
-				<div class="col-xs-5 col-md-7">
+				<div class="col-5 col-md-7">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="dni">DNI</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-4 col-md-3">
 					<input type="text" th:field="*{mayorAutorizador.username}" id="dni" class="form-control" disabled	/>
 				</div>
-				<div class="col-xs-5 col-md-7">
+				<div class="col-5 col-md-7">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="telefono">Teléfono*</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-4 col-md-3">
 					<input type="text" th:field="*{mayorAutorizador.telefono}" id="telefono" class="form-control" placeholder="Teléfono" size="20"/>
 				</div>
-				<div class="col-xs-5 col-md-7 form-check">
+				<div class="col-5 col-md-7 form-check">
 					<input class="form-check-input" type="checkbox" id="whatsappCheck" th:field="*{mayorAutorizador.autorizaWhatsApp}">
 					<label class="form-check-label" for="whatsappCheck"> Incluir mi número en grupo de WhatsApp</label>
 				</div>
 			</div>
 
 			<div class="row mb-3">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="fechaNacimiento">Fecha de nacimiento*</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-4 col-md-3">
 					<input type="date" th:field="*{mayorAutorizador.fechaNacimiento}" id="fechaNacimiento" class="form-control" placeholder="Fecha nacimiento"/>
 				</div>
-				<div class="col-xs-5 col-md-7">
+				<div class="col-5 col-md-7">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<span>Domicilio</span>
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioCalle">Tipo y nombre vía*</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-6 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioCalle}" id="domicilioCalle" class="form-control" placeholder="Tipo y nombre de vía" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioNumero">Número</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-6 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioNumero}" id="domicilioNumero" class="form-control" placeholder="Número" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioOtros">Otros datos</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-6 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioOtros}" id="domicilioOtros" class="form-control" placeholder="Otros datos (piso, escalera, etc.)" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioLocalidad">Localidad*</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-6 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioLocalidad}" id="domicilioLocalidad" class="form-control" placeholder="Localidad" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioCp">Código postal*</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-6 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-3">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="idPais">País de residencia*</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{mayorAutorizador.pais.id}" id="idPais" class="form-control form-control-lg">
+				<div class="col-4 col-md-3">
+					<select th:field="*{mayorAutorizador.pais.id}" id="idPais" class="form-select">
 						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}" />
 					</select>
 				</div>
-				<div class="col-xs-2 col-md-5">
+				<div class="col-2 col-md-5">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="correo">Correo electrónico</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.correo}" id="correo" class="form-control" placeholder="Email" size="100" disabled />
 				</div>
 				<div class="col-md-2">
@@ -254,20 +243,22 @@
 			</div>
 
 			<div class="row mb-3">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="idCinturon">Cinturón actual*</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{mayorAutorizador.cinturon.id}" id="idCinturon" class="form-control form-control-lg">
+				<div class="col-4 col-md-3">
+					<select th:field="*{mayorAutorizador.cinturon.id}" id="idCinturon" class="form-select">
 						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}" />
 					</select>
 				</div>
-				<div class="col-xs-5 col-md-7">
+				<div class="col-5 col-md-7">
 				</div>
 			</div>
 
 			<div th:if="${accountBoxEnable}" class="row mb-1">
-				<div class="col-xs-12 apartado">
+				<div class="col-lg-2">
+				</div>
+				<div class="col-12 col-lg-10 apartado">
 					<input class="form-check-input" type="checkbox" id="domiciliacionCheck" onchange="visibilidadDomiciliacion()" name="mayorAutorizador.domiciliacion" checked="checked">
 					<label class="form-check-label" for="domiciliacionCheck"><span>Cuenta domiciliación de cuota</span></label>
 				</div>
@@ -275,43 +266,43 @@
 
 			<div th:if="${accountBoxEnable}" id="domiciliacion">
 				<div class="row mb-1">
-					<div class="col-md-2">
+					<div class="col-lg-2">
 					</div>
-					<div class="col-xs-3 col-md-2 text-center">
+					<div class="col-3 col-sm-2 col-lg-1">
 						<label for="titular">Titular*</label>
 					</div>
-					<div class="col-xs-9 col-md-8">
+					<div class="col-9 col-sm-10 col-lg-9">
 						<input type="text" th:field="*{cuentaBancaria.titular}" id="titular" class="form-control" placeholder="Nombre completo del titular de la cuenta" size="100"/>
 					</div>
 				</div>
 
 				<div class="row mb-1">
-					<div class="col-md-2">
+					<div class="col-lg-2">
 					</div>
-					<div class="col-xs-3 col-md-2 text-center">
+					<div class="col-3 col-sm-2 col-lg-1">
 						<label for="iban">IBAN*</label>
 					</div>
-					<div class="col-xs-9 col-md-8">
+					<div class="col-9 col-sm-10 col-lg-9">
 						<input type="text" th:field="*{cuentaBancaria.iban}" id="iban" class="form-control" placeholder="IBAN de la cuenta" size="34"/>
 					</div>
 				</div>
 
 				<div class="row mb-3">
-					<div class="col-md-2">
+					<div class="col-lg-2">
 					</div>
-					<div class="col-xs-3 col-md-2 text-center">
+					<div class="col-3 col-sm-2 col-lg-1">
 						<label for="swift">SWIFT/BIC</label>
 					</div>
-					<div class="col-xs-9 col-md-8">
+					<div class="col-9 col-sm-10 col-lg-9">
 						<input type="text" th:field="*{cuentaBancaria.swift}" id="swift" class="form-control" placeholder="Código SWIFT o BIC (no necesario para cuentas españolas)" size="11"/>
 					</div>
 				</div>
 			</div>
 
 			<div class="row mb-3">
-				<div class="col-xs-1 col-md-6">
+				<div class="col-1 col-md-6">
 				</div>
-				<div class="col-xs-11 col-md-6 form-check">
+				<div class="col-11 col-md-6 form-check">
 					<input class="form-check-input" type="checkbox" id="gridCheck">
 					<label class="form-check-label" for="gridCheck"> Acepta los <a href="http://www.championdo.es/POLITICA-DE-PRIVACIDAD.html" target="_blank">términos y condiciones</a></label>
 					<br>
@@ -320,42 +311,31 @@
 			</div>
 
 			<div class="row">
-				<div class="col-xs-2">
+				<div class="col-2">
 				</div>
-				<div class="col-xs-2">
+				<div class="col-2">
 					<a class="btn btn-default pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 				</div>
-				<div class="col-xs-2">
+				<div class="col-2">
 				</div>
-				<div class="col-xs-2">
+				<div class="col-2">
 					<button class="btn btn-success" id="continueButton" type="submit">Continuar</button>
 				</div>
-				<div class="col-xs-4">
+				<div class="col-4">
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="col-xs-6 mb-3">
+				<div class="col-6 mb-3">
 				</div>
-				<div class="col-xs-6 mb-3">
+				<div class="col-6 mb-3">
 					<span id="hayError" class="colorRed"></span>
 				</div>
 			</div>
 
 		</form>
 	</div>
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>
