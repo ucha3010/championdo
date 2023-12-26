@@ -141,6 +141,7 @@ public class GimnasioController {
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
+    //TODO DAMIAN cuando un usuario elimine una inscripción habría que enviar un correo al administrador del gimnasio
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
