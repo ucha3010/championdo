@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 	<meta th:replace="static/cabeceraMeta :: meta">
 	<link th:replace="static/cabeceraLink :: link">
@@ -118,7 +118,7 @@
 
 	<div class="container">
 		
-		<form action="#" th:action="@{/gimnasio/guardarMenor}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
+		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/gimnasio/guardarMenor}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
 		
 			<input type="hidden" name="mayorAutorizador.username" th:value="*{mayorAutorizador.username}"/>
 			<input type="hidden" name="mayorAutorizador.correo" th:value="*{mayorAutorizador.correo}"/>
