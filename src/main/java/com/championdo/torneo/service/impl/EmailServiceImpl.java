@@ -6,8 +6,10 @@ import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.SendMessage;
 import com.mysql.cj.util.StringUtils;
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,9 @@ import java.util.List;
 public class EmailServiceImpl implements EmailService {
     @Autowired
     private SendMessage sendMessage;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UtilService utilService;
@@ -153,6 +158,20 @@ public class EmailServiceImpl implements EmailService {
                     textMessageConfirmAdminNewMandato(mandatoModel), null, host, port, mandatoModel.getCodigoGimnasio()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void confirmAdminDelete(int codigoGimnasio, String actividad, String username, String nombreMenor) {
+        try {
+            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, codigoGimnasio).getValor();
+            String host = utilService.findByClave(Constantes.HOST_CORREO, codigoGimnasio).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, codigoGimnasio).getValor();
+            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, correoGimnasio, "Eliminación de usuario de " + actividad,
+                    textMessageConfirmAdminDelete(actividad, username, nombreMenor), null, host, port, codigoGimnasio));
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "confirmAdminDelete", e.getMessage(), getClass());
         }
 
     }
@@ -336,6 +355,29 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<p>El cliente ").append(mandatoModel.getNombreMandante()).append(" acaba de subir un mandato de licencia firmado.</p>");
         if (!StringUtils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
             stringBuilder.append("<p>El mandato es para ").append(mandatoModel.getNombreAutorizado()).append(".</p>");
+        }
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>¡Que pases un buen día!</p>");
+        stringBuilder.append("</BODY></HTML>");
+        return stringBuilder.toString();
+    }
+
+    private String textMessageConfirmAdminDelete(String actividad, String username, String nombreMenor) {
+
+        User user = userService.findByUsername(username);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>");
+        stringBuilder.append("<HTML><BODY>");
+        stringBuilder.append("<h1>Hola!</h1><br>");
+        stringBuilder.append("<p>El usuario ").append(user.getName()).append(" ").append(user.getLastname());
+        if(!StringUtils.isNullOrEmpty(user.getSecondLastname())) {
+            stringBuilder.append(" ").append(user.getSecondLastname());
+        }
+        stringBuilder.append(" acaba de eliminar la suscripción a ").append(actividad);
+        if (!StringUtils.isNullOrEmpty(nombreMenor)) {
+            stringBuilder.append(" a nombre de ").append(nombreMenor).append(".</p>");
+        } else {
+            stringBuilder.append(" que estaba a su nombre.</p>");
         }
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");

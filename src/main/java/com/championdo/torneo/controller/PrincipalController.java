@@ -1,9 +1,7 @@
 package com.championdo.torneo.controller;
 
-import com.championdo.torneo.service.InscripcionTaekwondoService;
-import com.championdo.torneo.service.MandatoService;
-import com.championdo.torneo.service.Menu1Service;
-import com.championdo.torneo.service.PrincipalService;
+import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -27,13 +25,11 @@ public class PrincipalController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private InscripcionTaekwondoService inscripcionTaekwondoService;
-    @Autowired
-    private MandatoService mandatoService;
-    @Autowired
     private Menu1Service menu1Service;
     @Autowired
-    private UserService userService;
+    private InscripcionService inscripcionService;
+    @Autowired
+    private EmailService emailService;
     // TODO DAMIAN hay que permitir, en la página de login, un alta a torneo sin necesidad de ser usuario
     // TODO DAMIAN hacer la validación de usuario
     @GetMapping("/")
@@ -79,10 +75,14 @@ public class PrincipalController {
         return modelAndView;
     }
 
+    //TODO DAMIAN este método (y lo que tenga que ver con las inscripciones) deberían irse a otro controlador
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
-        principalService.deleteInscripcion(id);
+        InscripcionModel inscripcionModel = inscripcionService.findById(id);
+        principalService.deleteInscripcion(inscripcionModel);
+        emailService.confirmAdminDelete(inscripcionModel.getCodigoGimnasio(), "torneo",
+                inscripcionModel.getDniAutorizador(), !inscripcionModel.isInscripcionPropia() ? inscripcionModel.getNombreInscripto() : null);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return paginaPrincipalTorneo(modelAndView);
     }

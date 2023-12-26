@@ -91,13 +91,12 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     }
 
     @Override
-    public void delete(int idInscripcionTaekwondo) {
+    public void delete(InscripcionTaekwondoModel inscripcion) {
         try {
-            InscripcionTaekwondo inscripcion = inscripcionTaekwondoRepository.getById(idInscripcionTaekwondo);
-            inscripcionTaekwondoRepository.delete(inscripcion);
+            inscripcionTaekwondoRepository.delete(mapperInscripcionTaekwondo.model2Entity(inscripcion));
             LoggerMapper.methodOut(Level.INFO, "delete", inscripcion, getClass());
         } catch (EntityNotFoundException e) {
-            LoggerMapper.log(Level.ERROR, "delete", "id " + idInscripcionTaekwondo + " no encontrado", this.getClass());
+            LoggerMapper.log(Level.ERROR, "delete", inscripcion, this.getClass());
         }
     }
 
@@ -106,7 +105,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         LoggerMapper.methodIn(Level.INFO, "deleteByDni", "DNI: " + dni, getClass());
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = findByMayorDni(dni);
         for(InscripcionTaekwondoModel inscripcion : inscripcionTaekwondoModelList) {
-            delete(inscripcion.getId());
+            delete(inscripcion);
         }
         LoggerMapper.methodOut(Level.INFO, "deleteByDni", "", getClass());
 

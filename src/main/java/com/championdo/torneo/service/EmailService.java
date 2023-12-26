@@ -30,4 +30,6 @@ public interface EmailService {
     void sendNewMandato(MandatoModel mandatoModel, List<File> files) throws SenderException;
 
     void confirmAdminNewMandato(MandatoModel mandatoModel) throws SenderException;
+
+    void confirmAdminDelete(int codigoGimnasio, String actividad, String username, String nombreMenor);
 }

@@ -24,7 +24,7 @@ public interface InscripcionService {
 
     void update(InscripcionModel inscripcionModel);
 
-    void delete(int idInscripcion);
+    void delete(InscripcionModel inscripcion);
 
     void deleteByDni(String dni);
 

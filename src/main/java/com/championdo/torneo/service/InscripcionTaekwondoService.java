@@ -23,7 +23,7 @@ public interface InscripcionTaekwondoService {
 
     void update(InscripcionTaekwondoModel inscripcionModel);
 
-    void delete(int idInscripcion);
+    void delete(InscripcionTaekwondoModel inscripcion);
 
     void deleteByDni(String dni);
 

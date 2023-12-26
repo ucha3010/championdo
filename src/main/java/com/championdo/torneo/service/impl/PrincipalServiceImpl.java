@@ -3,7 +3,6 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.InscripcionModel;
 import com.championdo.torneo.model.PrincipalUserModel;
-import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.PrincipalService;
@@ -54,9 +53,9 @@ public class PrincipalServiceImpl implements PrincipalService {
     }
 
     @Override
-    public void deleteInscripcion(int id) {
-        inscripcionService.delete(id);
-        LoggerMapper.methodOut(Level.INFO, "deleteInscripcion", "id: " + id, getClass());
+    public void deleteInscripcion(InscripcionModel inscripcionModel) {
+        inscripcionService.delete(inscripcionModel);
+        LoggerMapper.methodOut(Level.INFO, "deleteInscripcion", inscripcionModel, getClass());
     }
 
     @Override

@@ -130,13 +130,12 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public void delete(int idInscripcion) {
+    public void delete(InscripcionModel inscripcion) {
         try {
-            Inscripcion inscripcion = inscripcionRepository.getById(idInscripcion);
-            inscripcionRepository.delete(inscripcion);
+            inscripcionRepository.delete(mapperInscripcion.model2Entity(inscripcion));
             LoggerMapper.methodOut(Level.INFO, "delete", inscripcion, getClass());
         } catch (EntityNotFoundException e) {
-            LoggerMapper.log(Level.ERROR, "delete", "id " + idInscripcion + " no encontrado", this.getClass());
+            LoggerMapper.log(Level.ERROR, "delete", inscripcion, this.getClass());
         }
     }
 
@@ -146,7 +145,7 @@ public class InscripcionServiceImpl implements InscripcionService {
         List<InscripcionModel> inscripcionModelList = findByDniAutorizador(dni);
         inscripcionModelList.addAll(findByDniInscripto(dni));
         for(InscripcionModel inscripcion : inscripcionModelList) {
-            delete(inscripcion.getId());
+            delete(inscripcion);
         }
         LoggerMapper.methodOut(Level.INFO, "deleteByDni", "", getClass());
     }
