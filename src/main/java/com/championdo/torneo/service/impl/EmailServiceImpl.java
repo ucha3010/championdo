@@ -23,9 +23,6 @@ public class EmailServiceImpl implements EmailService {
     private SendMessage sendMessage;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private UtilService utilService;
     @Override
     public void sendChangePassword(UserModel userModel, TokenModel tokenModel) throws SenderException {
@@ -163,13 +160,13 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void confirmAdminDelete(int codigoGimnasio, String actividad, String username, String nombreMenor) {
+    public void confirmAdminDelete(int codigoGimnasio, String actividad, User user, String nombreMenor) {
         try {
             String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, codigoGimnasio).getValor();
             String host = utilService.findByClave(Constantes.HOST_CORREO, codigoGimnasio).getValor();
             String port = utilService.findByClave(Constantes.PORT_CORREO, codigoGimnasio).getValor();
             sendMessage.enviarCorreo(new EmailModel(correoGimnasio, correoGimnasio, "Eliminación de usuario de " + actividad,
-                    textMessageConfirmAdminDelete(actividad, username, nombreMenor), null, host, port, codigoGimnasio));
+                    textMessageConfirmAdminDelete(actividad, user, nombreMenor), null, host, port, codigoGimnasio));
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, "confirmAdminDelete", e.getMessage(), getClass());
         }
@@ -362,9 +359,8 @@ public class EmailServiceImpl implements EmailService {
         return stringBuilder.toString();
     }
 
-    private String textMessageConfirmAdminDelete(String actividad, String username, String nombreMenor) {
+    private String textMessageConfirmAdminDelete(String actividad, User user, String nombreMenor) {
 
-        User user = userService.findByUsername(username);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");

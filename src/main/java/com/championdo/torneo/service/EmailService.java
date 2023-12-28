@@ -31,5 +31,5 @@ public interface EmailService {
 
     void confirmAdminNewMandato(MandatoModel mandatoModel) throws SenderException;
 
-    void confirmAdminDelete(int codigoGimnasio, String actividad, String username, String nombreMenor);
+    void confirmAdminDelete(int codigoGimnasio, String actividad, User user, String nombreMenor);
 }

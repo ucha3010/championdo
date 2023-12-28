@@ -45,7 +45,7 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView tipoInscripcion(ModelAndView modelAndView) {
         modelAndView.setViewName("formularioInscripcionSeleccionGimnasio");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
             modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
@@ -68,7 +68,7 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView tipoInscripcionConGimnasio(ModelAndView modelAndView, @PathVariable Integer id) {
         modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
             for (InscripcionTaekwondoModel inscripcionTaekwondoModel : inscripcionTaekwondoModelList) {
@@ -90,7 +90,7 @@ public class GimnasioController {
     @GetMapping("/formularioInscripcion/{id}/{tipo}/{licencia}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable Integer id, @PathVariable String tipo, @PathVariable String licencia) {
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         usuario.setCodigoGimnasio(id);
         modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(usuario.getCodigoGimnasio()).getValor()));
         if ("infantil".equalsIgnoreCase(tipo)) {
@@ -144,10 +144,11 @@ public class GimnasioController {
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
         inscripcionTaekwondoService.delete(inscripcionTaekwondoModel);
         emailService.confirmAdminDelete(inscripcionTaekwondoModel.getCodigoGimnasio(), "gimnasio",
-                inscripcionTaekwondoModel.getMayorDni(), inscripcionTaekwondoModel.getAutorizadoNombre());
+                usuario, inscripcionTaekwondoModel.getAutorizadoNombre());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return tipoInscripcion(modelAndView);
     }
@@ -157,7 +158,7 @@ public class GimnasioController {
     public ModelAndView normativaSepa(ModelAndView modelAndView, @PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", id, getClass());
         modelAndView.setViewName("gimnasio/normativaSepaGimnasio");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcion = inscripcionTaekwondoService.findById(id);
         modelAndView.addObject("inscripcion", inscripcion);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

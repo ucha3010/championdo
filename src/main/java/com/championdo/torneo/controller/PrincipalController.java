@@ -1,8 +1,10 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.InscripcionModel;
-import com.championdo.torneo.service.*;
-import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.service.EmailService;
+import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -25,8 +27,6 @@ public class PrincipalController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private Menu1Service menu1Service;
-    @Autowired
     private InscripcionService inscripcionService;
     @Autowired
     private EmailService emailService;
@@ -38,7 +38,7 @@ public class PrincipalController {
         modelAndView.setViewName("mainPage");
         String ruta = "src" + File.separator + "main" + File.separator + "resources" + File.separator
                 + "static" + File.separator + "imgs" + File.separator + File.separator + "principal";
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<String> fotosList = new ArrayList<>(Utils.obtenerNombresArchivos(ruta));
         modelAndView.addObject("fotoPrincipal", fotosList.get(0));
         fotosList.remove(0);
@@ -69,7 +69,7 @@ public class PrincipalController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView paginaPrincipalTorneo(ModelAndView modelAndView) {
         modelAndView.setViewName("torneo/principalTorneo");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("inscripciones", principalService.findByDni(usuario.getUsername()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -79,10 +79,11 @@ public class PrincipalController {
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         principalService.deleteInscripcion(inscripcionModel);
         emailService.confirmAdminDelete(inscripcionModel.getCodigoGimnasio(), "torneo",
-                inscripcionModel.getDniAutorizador(), !inscripcionModel.isInscripcionPropia() ? inscripcionModel.getNombreInscripto() : null);
+                usuario, !inscripcionModel.isInscripcionPropia() ? inscripcionModel.getNombreInscripto() : null);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return paginaPrincipalTorneo(modelAndView);
     }
