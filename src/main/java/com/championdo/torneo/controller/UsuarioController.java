@@ -43,6 +43,7 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView formularioUsuario(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioUsuario");
+		principalService.cargaBasicaCompleta(modelAndView);
 		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
 		formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

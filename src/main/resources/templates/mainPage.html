@@ -17,27 +17,21 @@
             </a>
         </section>
 
-        <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
+        <section sec:authorize="hasRole('ROLE_ROOT')" class="margenArribaAbajo3Porc text-center">
             <a href="#" th:href="@{/gimnasioRoot/customers}" class="textDecoration-none">
-                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Listado de clientes</button>
+                <button class="btn btn-primary btn-lg" type="button">Listado de clientes</button>
             </a>
-        </section>
-
-        <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
             <a href="#" th:href="@{/adminCalidad/calidadList}" class="textDecoration-none">
-                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Calidad</button>
+                <button class="btn btn-danger btn-lg margenArribaAbajo3Porc" type="button">Calidad</button>
             </a>
             <a href="#" th:href="@{/adminPais/paisList}" class="textDecoration-none">
-                <button class="btn btn-primary btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">País</button>
+                <button class="btn btn-primary btn-lg" type="button">País</button>
             </a>
-        </section>
-
-        <section sec:authorize="hasRole('ROLE_ROOT')" class="text-center">
             <a href="#" th:href="@{/adminUtil/root-util}" class="textDecoration-none">
-                <button class="btn btn-primary btn-lg" type="button">Configuración</button>
+                <button class="btn btn-danger btn-lg margenArribaAbajo3Porc" type="button">Configuración</button>
             </a>
             <a href="#" th:href="@{/adminMenu/menuList}" class="textDecoration-none">
-                <button class="btn btn-warning btn-lg" type="button">Barra menú</button>
+                <button class="btn btn-primary btn-lg" type="button">Barra menú</button>
             </a>
         </section>
 

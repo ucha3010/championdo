@@ -23,7 +23,7 @@ import java.util.Date;
 
 @Controller
 @RequestMapping("/adminInscripcion")
-public class AdminInscripcionController {
+public class borrar_AdminInscripcionController {
 
     @Autowired
     private InscripcionService inscripcionService;

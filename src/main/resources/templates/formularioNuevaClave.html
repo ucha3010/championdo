@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport"
-		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	
-	<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
 	
 	<title>Nueva contraseña</title>
 
@@ -58,6 +51,8 @@
 	</script>
 </head>
 <body>
+	<div th:replace="static/barraNavNotAuthenticated :: nav"></div>
+
 	<div class="container">
 
 		<h1>Hola <span th:text="${tokenModel.name}"></span> <span th:text="${tokenModel.lastname}"></span> <span th:text="${tokenModel.secondLastname}"></span></h1>
@@ -67,67 +62,62 @@
 			<input type="hidden" th:field="*{id}" />
 			<input type="hidden" th:field="*{username}" />
 
-			<div class="row">
-				<div class="col-xs-6 mb-3">
+			<div class="row mt-2 mb-1">
+				<div class="col-md-3">
+				</div>
+				<div class="col-3 col-md-2">
 					<label for="nuevaClave">Nueva contraseña:</label>
+				</div>
+				<div class="col-9 col-md-3">
 					<input type="password" th:field="*{password}" id="nuevaClave" class="form-control" placeholder="Nueva contraseña"/>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-md-3">
+				</div>
+				<div class="col-12 col-md-9">
 					<span id="nuevaClaveError" name="errorSpan"></span>
 				</div>
-
-				<div class="col-xs-6 mb-3">
-				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-xs-6 mb-3">
+			<div class="row mb-3">
+				<div class="col-md-3">
+				</div>
+				<div class="col-3 col-md-2">
 					<label for="nuevaClaveRepeticion">Repetir nueva contraseña:</label>
-					<input type="password" id="nuevaClaveRepeticion" class="form-control" placeholder="Repetir nueva contraseña"/>
-					<span id="nuevaClaveRepeticionError" name="errorSpan"></span>
 				</div>
-
-				<div class="col-xs-6 mb-3">
+				<div class="col-9 col-md-3">
+					<input type="password" id="nuevaClaveRepeticion" class="form-control" placeholder="Repetir nueva contraseña"/>
+				</div>
+				<div class="col-md-4">
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-xs-2 mb-3">
+			<div class="row mb-3">
+				<div class="col-3 col-md-5">
+				</div>
+				<div class="col-5 col-md-3">
 					<button class="btn btn-primary" type="submit">Actualizar</button>
 				</div>
-
-				<div class="col-xs-2 mb-3">
-				</div>
-
-				<div class="col-xs-8 mb-3">
+				<div class="col-4">
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-xs-6 mb-3">
-					<span id="hayError" name="errorSpan" class="colorRed"></span>
+			<div class="row mb-3">
+				<div class="col-6">
+					<span id="hayError" name="errorSpan" style="color:red"></span>
 				</div>
-
-				<div class="col-xs-6 mb-3">
+				<div class="col-6">
 				</div>
 			</div>
 
 		</form>
 
 	</div>
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-			crossorigin="anonymous"></script>
-	<script
-			src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-			crossorigin="anonymous"></script>
-	<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-			integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-			crossorigin="anonymous"></script>
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>

@@ -159,7 +159,7 @@
 
 
 
-        <section sec:authorize="hasRole('ROLE_ROOT')" th:each="menu1, iStat : ${menu1List}" th:class="${iStat.odd} ? 'backgroundColorLightViolet' : 'backgroundColorLightOrange'">
+        <section sec:authorize="hasRole('ROLE_ROOT')" th:each="menu1, iStat : ${menu1List}" th:class="${iStat.odd} ? 'backgroundColorLightViolet' : 'backgroundColorPink'">
 
             <h1>Submenú de <span th:text="${menu1.nombre}"></span></h1>
 
@@ -239,7 +239,11 @@
                 </div>
                 <div class="col-xs-7 col-md-8">
                     <ul class="list-group">
-                        <li th:if="${menu1.menu2ModelList != null}" th:each="menu2 : ${menu1.menu2ModelList}" class="list-group-item backgroundColorTransparent colorBlack boderNone" th:text="'URL: '+${menu2.url}+' ---- Aviso:'+${menu2.aviso}"></li>
+                        <li th:if="${menu1.menu2ModelList != null}" th:each="menu2 : ${menu1.menu2ModelList}" class="list-group-item backgroundColorTransparent colorBlack p-0">
+                            <span th:text="'URL: '+${menu2.url}"></span>
+                            <br>
+                            <span th:text="'Aviso:'+${menu2.aviso}"></span>
+                        </li>
                     </ul>
                 </div>
             </div>

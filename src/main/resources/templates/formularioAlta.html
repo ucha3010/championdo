@@ -72,12 +72,16 @@
 
 </head>
 <body>
+	<div th:replace="static/barraNavNotAuthenticated :: nav"></div>
+
 	<div class="container">
 		<h1>Formulario alta autorizador</h1>
 		<h4>La persona que se dé de alta debe ser mayor de edad. Luego podrá inscribirse a sí mismo en el gimnasio/torneo o bien autorizar a otra persona.</h4>
 
-		<div th:if="${dniDadoDeAlta != null}" class="alert alert-danger" role="alert"><span th:text="${dniDadoDeAlta}"></span></div>
-		<div th:if="${problemasAlta != null}" class="alert alert-danger" role="alert"><span th:text="${problemasAlta}"></span></div>
+		<section class="margenArribaAbajo3Porc text-center">
+			<div th:if="${dniDadoDeAlta != null}" class="alert alert-danger" role="alert"><span th:text="${dniDadoDeAlta}"></span></div>
+			<div th:if="${problemasAlta != null}" class="alert alert-danger" role="alert"><span th:text="${problemasAlta}"></span></div>
+		</section>
 
 		<form action="#" th:action="@{/formulario/alta}" th:object="${userModel}" method="post" onsubmit="return validar()">
 

@@ -5,19 +5,21 @@
     <link th:replace="static/cabeceraLink :: link">
     <script th:replace="static/cabeceraScript :: script"></script>
 
+    <script async src='//www.google-analytics.com/analytics.js'></script>
     <link rel="stylesheet" href="#" th:href="@{/css/login.css}" />
 
     <title>Torneo - Acceso</title>
   </head>
 
   <body>
+    <div th:replace="static/barraNavNotAuthenticated :: nav"></div>
 
     <div class="container">
-      <section class="text-center">
+      <section class="mt-5 text-center">
         <h1 class="alert alert-info" role="alert">Página de acceso</h1>
       </section>
 
-      <section class="text-center mt-4">
+      <section class="margenArribaAbajo3Porc text-center">
         <div th:if="${altaUsuarioOK != null}" class="alert alert-success" role="alert"><span th:text="${altaUsuarioOK}"></span></div>
         <div th:if="${avisoOK != null}" class="alert alert-success" role="alert"><span th:text="${avisoOK}"></span></div>
         <div th:if="${avisoKO != null}" class="alert alert-warning" role="alert"><span th:text="${avisoKO}"></span></div>

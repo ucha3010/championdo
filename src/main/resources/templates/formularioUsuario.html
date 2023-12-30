@@ -1,16 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport"
-		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	
-	<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
 	
 	<title>Formulario usuario</title>
 	
@@ -50,44 +43,40 @@
 	</script>
 </head>
 <body>
-	<div class="container">
-		<h1>
-			¡Hola <span th:text="${usuario.name}"></span>!
-		</h1>
-		<nav class="navbar navbar-default" role="navigation">
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-			</form>
-		</nav>
+	<div th:replace="static/barraUsuario :: div"></div>
+	<div th:replace="static/barraNav :: nav"></div>
 
-		<div th:if="${actualizacionError != null}" class="alert alert-danger" role="alert">Hubo problemas al guardar la información</div>
-		<div th:if="${actualizacionCorrecta != null}" class="alert alert-success" role="alert">Información actualizada correctamente</div>
+	<div class="container">
+
+		<section class="margenArribaAbajo3Porc text-center">
+			<div th:if="${actualizacionError != null}" class="alert alert-danger" role="alert">Hubo problemas al guardar la información</div>
+			<div th:if="${actualizacionCorrecta != null}" class="alert alert-success" role="alert">Información actualizada correctamente</div>
+		</section>
 		
-		<form action="#" th:action="@{/usuario/actualizarUsuario}" th:object="${usuario}" method="post" onsubmit="return validar()">
+		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/usuario/actualizarUsuario}" th:object="${usuario}" method="post" onsubmit="return validar()">
 		
 			<input type="hidden" name="enabled" th:value="${usuario.enabled}"/>
 			<input type="hidden" name="username" th:value="${usuario.username}"/>
 			<input type="hidden" name="codigoGimnasio" th:value="${usuario.codigoGimnasio}"/>
 			<input th:if="${usuario.fechaAlta != null}" type="hidden" name="fechaAlta" th:value="${#dates.format(usuario.fechaAlta, 'yyyy/MM/dd HH:mm:ss')}"/>
 
-			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+			<div class="row mt-2 mb-1">
+				<div class="col-3 col-md-2">
 					<label for="dni">DNI:</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-9 col-md-3">
 					<input type="text" th:field="*{username}" id="dni" class="form-control" disabled/>
 				</div>
 
-				<div class="col-xs-5 col-md-7">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				<div class="col-md-7">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="name">Nombre:</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Nombre" size="60"/>
 				</div>
 				<div class="col-md-2">
@@ -95,10 +84,10 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="lastname">Primer apellido:</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{lastname}" id="lastname" class="form-control" placeholder="Primer apellido" size="60"/>
 				</div>
 				<div class="col-md-2">
@@ -106,10 +95,10 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="secondLastname">Segundo apellido:</label>
 				</div>
-				<div class="col-xs-9 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{secondLastname}" id="secondLastname" class="form-control" placeholder="Segundo apellido" size="60"/>
 				</div>
 				<div class="col-md-2">
@@ -117,188 +106,158 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="secondLastname">Teléfono:</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-7 col-md-3">
 					<input type="text" th:field="*{telefono}" id="telefono" class="form-control" placeholder="Teléfono" size="20"/>
 				</div>
-				<div class="col-xs-5 col-md-7">
-					<span id="telefonoError" name="errorSpan"></span>
+				<div class="col-2 col-md-7">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="sexo">Sexo:</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{sexo}" id="sexo" class="form-control form-control-lg">
+				<div class="col-9 col-md-3">
+					<select th:field="*{sexo}" id="sexo" class="form-select">
 						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}" />
 					</select>
 				</div>
-				<div class="col-xs-5 col-md-7">
+				<div class="col-md-7">
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="fechaNacimiento">Fecha de nacimiento:</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-9 col-md-3">
 					<input type="date" th:field="*{fechaNacimiento}" id="fechaNacimiento" class="form-control" placeholder="Fecha nacimiento"/>
 				</div>
-				<div class="col-xs-5 col-md-7">
+				<div class="col-md-7">
 					<span id="fechaNacimientoError" name="errorSpan"></span>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="correo">Dirección de correo electrónico*:</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
+				<div class="col-9 col-md-3">
 					<input type="text" th:field="*{correo}" id="correo" class="form-control" placeholder="Email" size="100"/>
 				</div>
-				<div class="col-xs-5 col-md-7">
-					<span id="correoError" name="errorSpan"></span>
+				<div class="col-md-7">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-12">
+					<span id="correoError" name="errorSpan" class="colorRed"></span>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
-					<span>Domicilio</span>
+				<div class="col-12 col-md-2">
+					<strong>Domicilio</strong>
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioCalle">Tipo y nombre vía</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{domicilioCalle}" id="domicilioCalle" class="form-control" placeholder="Tipo y nombre de vía" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioNumero">Número</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{domicilioNumero}" id="domicilioNumero" class="form-control" placeholder="Número" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioOtros">Otros datos</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{domicilioOtros}" id="domicilioOtros" class="form-control" placeholder="Otros datos (piso, escalera, etc.)" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioLocalidad">Localidad</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{domicilioLocalidad}" id="domicilioLocalidad" class="form-control" placeholder="Localidad" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-3">
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-md-2">
 				</div>
-				<div class="col-xs-3 col-md-2 text-center">
+				<div class="col-3 col-md-2">
 					<label for="domicilioCp">Código postal</label>
 				</div>
-				<div class="col-xs-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" size="60"/>
 				</div>
 			</div>
 
-			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
+			<div class="row mb-3">
+				<div class="col-3 col-md-2">
 					<label for="idPais">País:</label>
 				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{pais.id}" id="idPais" class="form-control form-control-lg">
+				<div class="col-9 col-md-3">
+					<select th:field="*{pais.id}" id="idPais" class="form-select">
 						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}" />
 					</select>
 				</div>
-				<div class="col-xs-5 col-md-7">
-				</div>
-			</div>
-
-			<div class="row mb-1">
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="idGimnasio">Gimnasio:</label>
-				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{gimnasio.id}" id="idGimnasio" class="form-control form-control-lg">
-						<option th:each="g : ${listaGimnasios}" th:value="${g.id}" th:text="${g.nombre}" />
-					</select>
-				</div>
-				<div class="col-xs-5 col-md-7">
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<div class="col-xs-3 col-md-2 text-center">
-					<label for="idCinturon">Cinturón actual:</label>
-				</div>
-				<div class="col-xs-4 col-md-3">
-					<select th:field="*{cinturon.id}" id="idCinturon" class="form-control form-control-lg">
-						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}" />
-					</select>
-				</div>
-				<div class="col-xs-5 col-md-7">
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<div class="col-xs-4">
-					<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
-				</div>
-
-				<div class="col-xs-5">
-					<a class="btn btn-warning" href="#" th:href="@{/usuario/formularioCambioClave}">Cambiar Contraseña</a>
-				</div>
-
-				<div class="col-xs-3">
-					<button class="btn btn-success" type="submit">Actualizar</button>
+				<div class="col-md-7">
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="col-xs-6 mb-3">
+				<div class="col-1 p-0">
 				</div>
-				<div class="col-xs-6 mb-3">
+				<div class="col-2 p-0">
+					<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
+				</div>
+				<div class="col-1 p-0">
+				</div>
+				<div class="col-4 p-0">
+					<a class="btn btn-warning" href="#" th:href="@{/usuario/formularioCambioClave}">Cambiar Contraseña</a>
+				</div>
+				<div class="col-1 p-0">
+				</div>
+				<div class="col-2 p-0">
+					<button class="btn btn-success" type="submit">Actualizar</button>
+				</div>
+				<div class="col-1 p-0">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-6">
+				</div>
+				<div class="col-6">
 					<span id="hayError" name="errorSpan" class="colorRed"></span>
 				</div>
 			</div>
 
 		</form>
 	</div>
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>
