@@ -13,14 +13,16 @@
 
 		<div sec:authorize="isAuthenticated()" class="container mt-5">
 
-			<div th:if="${inscripcionCorrecta != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${inscripcionCorrecta}"></span></div>
+			<section class="margenArribaAbajo3Porc text-center">
+				<div th:if="${inscripcionError != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${inscripcionError}"></span></div>
+				<div th:if="${inscripcionCorrecta != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${inscripcionCorrecta}"></span></div>
+			</section>
 
 			<section class="text-center">
 				<a href="#" th:href="@{/principal/}" class="textDecoration-none">
 					<button class="btn btn-primary btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Volver a página principal</button><br>
 				</a>
 			</section>
-
 
 		</div>
 	</body>

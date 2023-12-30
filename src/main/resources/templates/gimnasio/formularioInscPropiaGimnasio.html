@@ -118,7 +118,7 @@
 				</div>
 				<div class="col-9 col-md-3">
 					<select th:field="*{mayorAutorizador.sexo}" id="sexo" class="form-select">
-						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}" />
+						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}"></option>
 					</select>
 				</div>
 				<div class="col-md-7">
@@ -161,73 +161,71 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-3 col-md-2">
-					<span>Domicilio</span>
+				<div class="col-12 col-md-2">
+					<strong>Domicilio</strong>
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="domicilioCalle">Tipo y nombre vía*</label>
 				</div>
-				<div class="col-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioCalle}" id="domicilioCalle" class="form-control" placeholder="Tipo y nombre de vía" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-3 col-md-2">
+				<div class="col-md-2">
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="domicilioNumero">Número</label>
 				</div>
-				<div class="col-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioNumero}" id="domicilioNumero" class="form-control" placeholder="Número" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-3 col-md-2">
+				<div class="col-md-2">
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="domicilioOtros">Otros datos</label>
 				</div>
-				<div class="col-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioOtros}" id="domicilioOtros" class="form-control" placeholder="Otros datos (piso, escalera, etc.)" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-3 col-md-2">
+				<div class="col-md-2">
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="domicilioLocalidad">Localidad*</label>
 				</div>
-				<div class="col-6 col-md-8">
+				<div class="col-9 col-md-8">
 					<input type="text" th:field="*{mayorAutorizador.domicilioLocalidad}" id="domicilioLocalidad" class="form-control" placeholder="Localidad" size="60"/>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-md-2">
+				</div>
+				<div class="col-3 col-md-2">
+					<label for="domicilioCp">Código postal*</label>
+				</div>
+				<div class="col-9 col-md-8">
+					<input type="text" th:field="*{mayorAutorizador.domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" size="60"/>
 				</div>
 			</div>
 
 			<div class="row mb-1">
 				<div class="col-3 col-md-2">
+					<label for="idPais">País*</label>
 				</div>
-				<div class="col-3 col-md-2">
-					<label for="domicilioCp">Código postal*</label>
-				</div>
-				<div class="col-6 col-md-8">
-					<input type="text" th:field="*{mayorAutorizador.domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" size="60"/>
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<div class="col-3 col-md-2">
-				</div>
-				<div class="col-3 col-md-2">
-					<label for="idPais">País de residencia*</label>
-				</div>
-				<div class="col-4 col-md-3">
+				<div class="col-9 col-md-3">
 					<select th:field="*{mayorAutorizador.pais.id}" id="idPais" class="form-select">
-						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}" />
+						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}"></option>
 					</select>
 				</div>
-				<div class="col-2 col-md-5">
+				<div class="col-md-7">
 				</div>
 			</div>
 
@@ -246,12 +244,12 @@
 				<div class="col-3 col-md-2">
 					<label for="idCinturon">Cinturón actual*</label>
 				</div>
-				<div class="col-4 col-md-3">
+				<div class="col-9 col-md-3">
 					<select th:field="*{mayorAutorizador.cinturon.id}" id="idCinturon" class="form-select">
-						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}" />
+						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}"></option>
 					</select>
 				</div>
-				<div class="col-5 col-md-7">
+				<div class="col-md-7">
 				</div>
 			</div>
 
@@ -306,7 +304,7 @@
 					<input class="form-check-input" type="checkbox" id="gridCheck">
 					<label class="form-check-label" for="gridCheck"> Acepta los <a href="http://www.championdo.es/POLITICA-DE-PRIVACIDAD.html" target="_blank">términos y condiciones</a></label>
 					<br>
-					<span id="gridCheckError" name="errorSpan" style="color:red"></span>
+					<span id="gridCheckError" name="errorSpan" class="colorRed"></span>
 				</div>
 			</div>
 

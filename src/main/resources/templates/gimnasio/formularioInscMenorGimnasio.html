@@ -197,7 +197,7 @@
 
 			<div class="row mb-1">
 				<div class="col-md-2 apartado">
-					<span>Domicilio</span>
+					<strong>Domicilio</strong>
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="domicilioCalle">Tipo y nombre vía*</label>
@@ -285,8 +285,8 @@
 						<option th:each="c : ${listaCalidad}" th:value="${c.id}" th:text="${c.nombre}"></option>
 					</select>
 				</div>
-				<div class="col-3 col-md-3">
-					<input type="text" th:field="*{mayorAutorizador.calidad.otro}" id="calidadOtro" placeholder="rellenar si selecciona 'Otro'" class="form-control displayNone" size="60"/>
+				<div class="col-4 col-md-3">
+					<input type="text" th:field="*{mayorAutorizador.calidad.otro}" id="calidadOtro" placeholder="especifique" class="form-control displayNone" size="60"/>
 				</div>
 				<div class="col-md-1">
 				</div>
@@ -338,12 +338,12 @@
 				<div class="col-3 col-md-2">
 					<label for="menorSexo">Sexo*</label>
 				</div>
-				<div class="col-8 col-md-4">
+				<div class="col-9 col-md-4">
 					<select th:field="*{autorizado.sexo}" id="menorSexo" class="form-select">
 						<option th:each="s : ${listaSexo}" th:value="${s}" th:text="${s}"></option>
 					</select>
 				</div>
-				<div class="col-1 col-md-4">
+				<div class="col-md-4">
 				</div>
 			</div>
 
@@ -353,10 +353,10 @@
 				<div class="col-3 col-md-2">
 					<label for="menorDni">DNI</label>
 				</div>
-				<div class="col-8 col-md-3">
+				<div class="col-9 col-md-3">
 					<input type="text" th:field="*{autorizado.dniMenor}" id="menorDni" class="form-control" placeholder="DNI del autorizado" size="15"	/>
 				</div>
-				<div class="col-1 col-md-5">
+				<div class="col-md-5">
 				</div>
 			</div>
 
@@ -366,10 +366,10 @@
 				<div class="col-3 col-md-2">
 					<label for="fechaNacimiento">Fecha de nacimiento*</label>
 				</div>
-				<div class="col-8 col-md-3">
+				<div class="col-9 col-md-3">
 					<input type="date" th:field="*{autorizado.fechaNacimiento}" id="fechaNacimiento" class="form-control" placeholder="Fecha nacimiento"/>
 				</div>
-				<div class="col-1 col-md-5">
+				<div class="col-md-5">
 				</div>
 			</div>
 
@@ -385,12 +385,12 @@
 				<div class="col-3 col-md-2">
 					<label for="idPais">País de residencia*</label>
 				</div>
-				<div class="col-8 col-md-3">
+				<div class="col-9 col-md-3">
 					<select th:field="*{autorizado.pais.id}" id="idPais" class="form-select">
 						<option th:each="p : ${listaPaises}" th:value="${p.id}" th:text="${p.nombre}"></option>
 					</select>
 				</div>
-				<div class="col-1 col-md-5">
+				<div class="col-md-5">
 				</div>
 			</div>
 
@@ -400,12 +400,12 @@
 				<div class="col-3 col-md-2">
 					<label for="idCinturon">Cinturón actual*</label>
 				</div>
-				<div class="col-8 col-md-3">
+				<div class="col-9 col-md-3">
 					<select th:field="*{autorizado.cinturon.id}" id="idCinturon" class="form-select">
 						<option th:each="c : ${listaCinturones}" th:value="${c.id}" th:text="${c.color}"></option>
 					</select>
 				</div>
-				<div class="col-1 col-md-5">
+				<div class="col-md-5">
 				</div>
 			</div>
 
@@ -460,7 +460,7 @@
 					<input class="form-check-input" type="checkbox" id="gridCheck">
 					<label class="form-check-label" for="gridCheck"> Acepta los <a href="http://www.championdo.es/POLITICA-DE-PRIVACIDAD.html" target="_blank">términos y condiciones</a></label>
 					<br>
-					<span id="gridCheckError" name="errorSpan" style="color:red"></span>
+					<span id="gridCheckError" name="errorSpan" class="colorRed"></span>
 				</div>
 			</div>
 

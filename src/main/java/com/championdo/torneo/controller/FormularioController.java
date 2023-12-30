@@ -87,7 +87,7 @@ public class FormularioController {
                 modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
                 break;
             case Constantes.INCLUSIVO_MINUSCULAS:
-                modelAndView.setViewName("torneo/formularioInscInclusivo");
+                modelAndView.setViewName("torneo/formularioInscMenor");
                 modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, false));
                 break;
             default:
@@ -107,7 +107,7 @@ public class FormularioController {
         ModelAndView modelAndView = new ModelAndView();
         User user = principalService.cargaBasicaCompleta(modelAndView);
         userModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        modelAndView.setViewName("torneo/formularioInscFinalizada");
+        modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {
             formularioService.fillObjects(userModel);
@@ -122,12 +122,11 @@ public class FormularioController {
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
-            modelAndView.addObject("inscripcionError", "inscripcionError");
+            modelAndView.addObject("inscripcionError", "Hubo problemas al guardar la información");
             modelAndView.addObject("inscripcionCorrecta", "");
         }
         if (pdfModel != null) {
-            modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
-            modelAndView.addObject("inscripcionError", "");
+            modelAndView.addObject("inscripcionCorrecta", "¡La inscripción se realizó con éxito!");
             modelAndView.addObject("pdfModel", pdfModel);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -154,7 +153,7 @@ public class FormularioController {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         userAutorizacionModel.getAutorizado().setCodigoGimnasio(user.getCodigoGimnasio());
         userAutorizacionModel.getMayorAutorizador().setCodigoGimnasio(user.getCodigoGimnasio());
-        modelAndView.setViewName("torneo/formularioInscFinalizada");
+        modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
@@ -169,12 +168,11 @@ public class FormularioController {
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
-            modelAndView.addObject("inscripcionError", "inscripcionError");
+            modelAndView.addObject("inscripcionError", "Hubo problemas al guardar la información");
             modelAndView.addObject("inscripcionCorrecta", "");
         }
         if (pdfModel != null) {
-            modelAndView.addObject("inscripcionCorrecta", "inscripcionCorrecta");
-            modelAndView.addObject("inscripcionError", "");
+            modelAndView.addObject("inscripcionCorrecta", "¡La inscripción se realizó con éxito!");
             modelAndView.addObject("pdfModel", pdfModel);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -250,6 +248,7 @@ public class FormularioController {
     private List<TorneoModel> selectTournamentCommon(ModelAndView modelAndView, String tournamentType) {
 
         com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        modelAndView.addObject("inscripciones", principalService.findByDni(usuario.getUsername()));
         modelAndView.setViewName("torneo/formularioSeleccionTorneo");
         List<TorneoModel> torneoModelList = torneoService.findAllowed(new Date(), tournamentType);
         modelAndView.addObject("torneoModelList", torneoModelList);

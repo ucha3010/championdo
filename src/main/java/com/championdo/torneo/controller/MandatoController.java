@@ -171,7 +171,7 @@ public class MandatoController {
         mandatoModel = mandatoService.add(mandatoModel);
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                 seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
-                "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
+                "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO);
         seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
     }
 

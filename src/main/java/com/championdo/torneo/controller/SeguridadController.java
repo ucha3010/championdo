@@ -84,12 +84,12 @@ public class SeguridadController {
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                     seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_TAEKWONDO);
+                    "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO);
         } else if (Constantes.INSCRIPCION_MANDATO.equals(operativaOriginal)) {
             MandatoModel mandatoModel = mandatoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                     seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
-                    "gimnasio/formularioInscFinalizadaGimnasio", Constantes.INSCRIPCION_MANDATO);
+                    "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO);
         }
 
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
