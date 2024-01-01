@@ -143,7 +143,7 @@ public class MandatoServiceImpl implements MandatoService {
             } else if (mandatoModel.isAdulto() && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_UN_MENOR, "Con el DNI " + mandatoModel.getDniMandante()
                         + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " para un menor o inclusivo."
-                        + " Por favor contacte con el gimnasio para realizar la modificación necesaria.");
+                        + " Es necesario que cada mandato vaya asociado a un DNI diferente.");
             } else if (!mandatoModel.isAdulto() && StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado())
                     && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_OTRO_MENOR, "Con el DNI " + mandatoModel.getDniMandante()
@@ -154,11 +154,12 @@ public class MandatoServiceImpl implements MandatoService {
                         + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " para "
                         + mandatoModel.getNombreMandante() + " " + mandatoModel.getApellido1Mandante()
                         + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : "")
-                        + ". Por favor contacte con el gimnasio para realizar la modificación necesaria.");
+                        + ". Es necesario que cada mandato vaya asociado a un DNI diferente.");
             } else if (!StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && !StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
                     && mandatoModel.getDniAutorizado().equals(mandato.getDniAutorizado())) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_MENOR_YA_EXISTE, "Ya existe un mandato de menor o inclusivo con el DNI "
-                        + " " + mandatoModel.getDniAutorizado() + " para la temporada " + mandatoModel.getTemporada());
+                        + " " + mandatoModel.getDniAutorizado() + " para la temporada " + mandatoModel.getTemporada()
+                        + ". Es necesario que cada mandato vaya asociado a un DNI diferente.");
             }
         }
     }

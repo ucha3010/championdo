@@ -117,6 +117,12 @@
 	<div th:replace="static/barraNav :: nav"></div>
 
 	<div class="container">
+
+		<h1 th:text="${titulo}"></h1>
+
+		<section th:if="${addKO != null}" class="margenArribaAbajo3Porc text-center">
+			<div class="alert alert-danger" role="alert"><span th:text="${addKO}"></span></div>
+		</section>
 		
 		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/gimnasio/guardarMenor}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
 		
@@ -129,7 +135,7 @@
 
 			<div class="row mt-2 mb-1">
 				<div class="col-md-2 apartado">
-					<span>Datos del adulto</span>
+					<strong>Datos del adulto</strong>
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="nombre">Nombre*</label>
@@ -196,7 +202,7 @@
 			</div>
 
 			<div class="row mb-1">
-				<div class="col-md-2 apartado">
+				<div class="col-12 col-md-2">
 					<strong>Domicilio</strong>
 				</div>
 				<div class="col-3 col-md-2">
@@ -294,7 +300,7 @@
 
 			<div class="row mb-1">
 				<div class="col-md-2 apartado">
-					<span>Datos del autorizado</span>
+					<strong>Datos del autorizado</strong>
 				</div>
 				<div class="col-3 col-md-2">
 					<label for="menorNombre">Nombre*</label>
@@ -383,7 +389,7 @@
 				<div class="col-md-2">
 				</div>
 				<div class="col-3 col-md-2">
-					<label for="idPais">País de residencia*</label>
+					<label for="idPais">País*</label>
 				</div>
 				<div class="col-9 col-md-3">
 					<select th:field="*{autorizado.pais.id}" id="idPais" class="form-select">

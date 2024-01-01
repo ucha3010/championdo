@@ -1,36 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-
-	<title>Inscripción propia gimnasio</title>
+	<title>Adjuntar archivo</title>
 
 </head>
 <body>
-	<section>
+	<div th:replace="static/barraUsuario :: div"></div>
+	<div th:replace="static/barraNav :: nav"></div>
+
+	<section class="margenArribaAbajo3Porc text-center">
 		<div th:if="${subidaError != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${subidaError}"></span></div>
 	</section>
 	<div class="container">
-		<h1>¡Hola <span th:text="${usuario.name}"></span>! <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a></h1>
 
-		<nav class="navbar navbar-default" role="navigation">
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-			</form>
-		</nav>
-
-		<section>
-			<div class="row mb-3">
-				<div class="col-md-2">
-				</div>
-				<div class="col-md-6 text-center">
+		<section sec:authorize="isAuthenticated()">
+			<div class="row text-center mb-5">
+				<div class="col-12">
 					<form action="#" th:action="@{/gimnasio/descargarPdf}" th:object="${pdfModel}" method="POST">
 						<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
 						<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
@@ -40,61 +29,41 @@
 						<button class="btn btn-info pull-right" type="submit">Descargar formulario domiciliación sin firmar</button>
 					</form>
 				</div>
-				<div class="col-md-4">
-				</div>
 			</div>
 
-			<div class="row mb-1">
-				<div class="col-md-2">
+			<form action="#" th:action="@{/gimnasio/normativa-sepa-firmado}" method="post" enctype="multipart/form-data">
+				<div class="row text-center mb-5">
+					<div class="col-12">
+							<input type="file" name="file" accept=".jpg, .jpeg, .pdf, .doc, .docx">
+							<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
+					</div>
 				</div>
-				<div class="col-md-6 text-center">
-					<form action="#" th:action="@{/gimnasio/normativa-sepa-firmado}" method="post" enctype="multipart/form-data">
-						<input type="file" name="file" accept=".jpg, .jpeg, .pdf, .doc, .docx">
-						<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
-						<button class="btn btn-success" type="submit">Subir formulario domiciliación firmado</button>
-					</form>
+				<div class="row text-center mb-3">
+					<div class="col-12">
+							<button class="btn btn-success" type="submit">Subir formulario domiciliación firmado</button>
+					</div>
 				</div>
-				<div class="col-md-4">
-				</div>
-			</div>
+			</form>
 
-			<div class="row mb-3">
-				<div class="col-md-2">
-				</div>
-				<div class="col-md-10">
+			<div class="row text-center mb-3">
+				<div class="col-12">
 					<h3>Extensiones de archivo aceptadas: .jpg, .jpeg, .pdf, .doc, .docx</h3>
 				</div>
 			</div>
 		</section>
 
 
-		<div class="row">
-			<div class="col-xs-2">
+		<div class="row mb-3">
+			<div class="col-5">
 			</div>
-
-			<div class="col-xs-2">
+			<div class="col-2">
 				<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 			</div>
-
-			<div class="col-xs-8">
+			<div class="col-5">
 			</div>
 		</div>
 	</div>
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>
