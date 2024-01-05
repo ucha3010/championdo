@@ -12,7 +12,7 @@
 	<div th:replace="static/barraUsuario :: div"></div>
 	<div th:replace="static/barraNav :: nav"></div>
 
-	<div class="container">
+	<div sec:authorize="isAuthenticated()" class="container">
 
 		<section class="margenArribaAbajo3Porc">
 			<div th:if="${!inscripcion.inscripcionFirmada}" class="alert alert-danger" role="alert"><h2>¡Inscripción no firmada!</h2></div>
@@ -33,10 +33,10 @@
 			<div class="col-3 col-md-2">
 				<label for="nombre">Nombre</label>
 			</div>
-			<div class="col-9 col-md-4">
+			<div class="col-9 col-md-6">
 				<input type="text" th:field="*{inscripcion.mayorNombre}" id="nombre" class="form-control" disabled/>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-2">
 			</div>
 		</div>
 
@@ -50,7 +50,7 @@
 				<input type="text" th:field="*{inscripcion.mayorApellido1}" id="apellido1" class="form-control" disabled/>
 			</div>
 			<div th:if="${inscripcion.inscripcionFirmada}" class="col-12 col-md-2 d-flex justify-content-end">
-				<form action="#" th:action="@{/gimnasio/descargarPdf}"th:object="${pdfModel}" method="POST">
+				<form action="#" th:action="@{/gimnasio/descargarPdf}" th:object="${pdfModel}" method="POST">
 					<input type="hidden" name="dni" th:value="${inscripcion.mayorDni}"/>
 					<input type="hidden" name="dniMenor" th:value="${inscripcion.autorizadoDni}"/>
 					<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
@@ -242,10 +242,10 @@
 			<div class="col-3 col-md-2">
 				<label for="menorSexo">Sexo</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-5 col-md-4">
 				<input type="text" th:field="*{inscripcion.autorizadoSexo}" id="menorSexo" class="form-control" disabled/>
 			</div>
-			<div class="col-5">
+			<div class="col-4">
 			</div>
 		</div>
 
@@ -255,10 +255,10 @@
 			<div class="col-3 col-md-2">
 				<label for="menorDni">DNI</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-5 col-md-4">
 				<input type="text" th:field="*{inscripcion.autorizadoDni}" id="menorDni" class="form-control" disabled/>
 			</div>
-			<div class="col-5">
+			<div class="col-4">
 			</div>
 		</div>
 
@@ -268,10 +268,10 @@
 			<div class="col-3 col-md-2">
 				<label for="fechaNacimiento">Fecha de nacimiento</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-5 col-md-4">
 				<span th:text="${#calendars.format(inscripcion.autorizadoFechaNacimiento,'dd/MM/yyyy')}" id="fechaNacimiento"></span>
 			</div>
-			<div class="col-5">
+			<div class="col-4">
 			</div>
 		</div>
 
@@ -279,12 +279,12 @@
 			<div class="col-md-2">
 			</div>
 			<div class="col-3 col-md-2">
-				<label for="idPais">País de residencia</label>
+				<label for="idPais">País</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-5 col-md-4">
 				<input type="text" th:field="*{inscripcion.autorizadoPais}" id="idPais" class="form-control" disabled />
 			</div>
-			<div class="col-5">
+			<div class="col-4">
 			</div>
 		</div>
 
@@ -294,10 +294,10 @@
 			<div class="col-3 col-md-2">
 				<label for="idCinturon">Cinturón actual</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-5 col-md-4">
 				<input type="text" th:field="*{inscripcion.autorizadoCinturon}" id="idCinturon" class="form-control" disabled />
 			</div>
-			<div class="col-5">
+			<div class="col-4">
 			</div>
 		</div>
 
@@ -307,10 +307,10 @@
 			<div class="col-3 col-md-2">
 				<label for="fecha">Fecha de inscripción</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-5 col-md-4">
 				<span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy HH:mm')}" id="fecha"></span>
 			</div>
-			<div class="col-5">
+			<div class="col-4">
 				<span th:if="${inscripcion.mayorLicencia}">Autorizo mandato de licencia Federativa</span>
 			</div>
 		</div>

@@ -82,7 +82,7 @@
 			<div class="col-4 col-md-3">
 				<input type="text" th:field="*{inscripcion.mayorSexo}" id="sexo" class="form-control" disabled/>
 			</div>
-			<div class="col-3 col-md-5">
+			<div class="col-5 col-md-5">
 			</div>
 			<div th:if="${inscripcion.inscripcionFirmada and inscripcion.domiciliacionSEPA and inscripcion.domiciliacionSEPAFirmada}" class="col-12 col-md-2 d-flex justify-content-end">
 				<form action="#" th:action="@{/gimnasio/descargarPdf}" th:object="${pdfModel}" method="POST">
@@ -104,9 +104,7 @@
 			<div class="col-4 col-md-3">
 				<input type="text" th:field="*{inscripcion.mayorDni}" id="dni" class="form-control" disabled/>
 			</div>
-			<div class="col-3 col-md-5">
-			</div>
-			<div class="col-md-2">
+			<div class="col-5 col-md-7">
 			</div>
 		</div>
 
@@ -126,10 +124,10 @@
 			<div class="col-3 col-md-2">
 				<label for="fechaNacimiento">Fecha de nacimiento</label>
 			</div>
-			<div class="col-4 col-md-3">
+			<div class="col-9 col-md-3">
 				<span th:text="${#calendars.format(inscripcion.mayorFechaNacimiento,'dd/MM/yyyy')}" id="fechaNacimiento"></span>
 			</div>
-			<div class="col-5 col-md-7">
+			<div class="col-md-7">
 			</div>
 		</div>
 
