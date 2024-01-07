@@ -28,7 +28,7 @@
 
 		<section class="margenArribaAbajo3Porc text-center">
 			<div th:if="${inscripcionError != null}" class="alert alert-danger" role="alert"><span th:text="${inscripcionError}"></span></div>
-			<div th:if="${inscripcionCorrecta != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${inscripcionCorrecta}"></span></div>
+			<div th:if="${inscripcionCorrecta != null}" class="alert alert-success" role="alert"><span th:text="${inscripcionCorrecta}"></span></div>
 		</section>
 
 		<div class="row align-items-center justify-content-end">
@@ -38,7 +38,7 @@
 				<h1>Inscripción a torneos</h1>
 			</div>
 			<div class="col-3 col-md-2">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
 			</div>
 		</div>
 
