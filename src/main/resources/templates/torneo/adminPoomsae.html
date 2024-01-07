@@ -1,22 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta th:replace="static/cabeceraMeta :: meta">
+    <link th:replace="static/cabeceraLink :: link">
+    <script th:replace="static/cabeceraScript :: script"></script>
+    <script th:replace="static/cabeceraScriptJquery :: script"></script>
 
     <title>Poomsaes</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-
-    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
-
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
     <script type="text/javascript">
     $(document).ready(function()
@@ -80,83 +70,75 @@
 
 </head>
 <body>
-    <section>
-        <div th:if="${removeProblem != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${removeProblem}"></span></div>
-    </section>
+    <div th:replace="static/barraUsuario :: div"></div>
+    <div th:replace="static/barraNav :: nav"></div>
+
     <div class="container">
-        <h1>
-            ¡Hola <span th:text="${usuario.name}"></span>!
-            <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
-        </h1>
-        <nav class="navbar navbar-default" role="navigation">
-            <form th:action="@{/logout}" method="POST">
-                <button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-            </form>
-        </nav>
+        <section class="margenArribaAbajo3Porc text-center">
+            <div th:if="${removeProblem != null}" class="alert alert-danger" role="alert"><span th:text="${removeProblem}"></span></div>
+        </section>
 
         <section>
-            <div class="row">
-                <div class="col-xs-2 mb-1">
+            <div class="row align-items-center justify-content-end">
+                <div class="col-3 col-md-2">
+                    <a class="btn btn-info" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
                 </div>
-
-                <div class="col-xs-8 mb-10 colorGreen">
+            </div>
+            <div class="row mb-1 text-center">
+                <div class="col-12 colorGreen">
                     <h1>Poomsaes</h1>
-                </div>
-
-                <div class="col-xs-2 mb-1">
-                    <a class="btn btn-info pull-right" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
                 </div>
             </div>
         </section>
 
-        <section  sec:authorize="hasRole('ROLE_ADMIN')">
+        <section sec:authorize="hasRole('ROLE_ADMIN')">
             <form action="#" th:action="@{/adminPoomsae/addPoomsae}" th:object="${poomsaeModel}" method="post" onsubmit="return validar()">
 
-              <div class="row mb-1">
-                  <div class="col-xs-3 col-md-1">
-                      <label for="nombre">Nombre:</label>
-                  </div>
-                  <div class="col-xs-9 col-md-2">
-                      <input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="nombre" maxlength="50" />
-                  </div>
-                  <div class="col-xs-12 col-md-1">
-                      <button class="btn btn-success" type="submit">Alta</button>
-                  </div>
-                  <div class="col-xs-5 col-md-1">
-                  </div>
-                  <div class="col-xs-5 col-md-3">
-                      <select id="idPoomsae" class="form-control form-control-lg">
-                          <option th:each="unit : ${poomsaeList}" th:value="${unit.id}" th:text="${unit.nombre}" />
-                      </select>
-                  </div>
-                  <div class="col-xs-2 col-md-1">
-                      <button class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
-                  </div>
+                <div class="row mb-3">
+                    <div class="col-12 col-md-2">
+                        <label for="nombre">Nombre:</label>
+                    </div>
+                    <div class="col-9 col-md-2 mb-3">
+                        <input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="nombre" maxlength="50" />
+                    </div>
+                    <div class="col-3 col-md-1 mb-3">
+                        <button class="btn btn-success" type="submit">Alta</button>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-7 col-md-3">
+                        <select id="idPoomsae" class="form-select">
+                            <option th:each="unit : ${poomsaeList}" th:value="${unit.id}" th:text="${unit.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="col-3 col-md-1">
+                        <button class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
+                    </div>
               </div>
             </form>
 
             <div class="row">
-              <div class="col-xs-3 col-md-4">
+              <div class="col-3 col-md-4">
               </div>
-              <div class="col-xs-5 col-md-3">
-                  <ul id="sortable" class="s1 list-group mb-1">
+              <div class="col-5 col-md-3">
+                  <ul id="sortable" class="list-group mb-1">
                       <li th:each="unit : ${poomsaeList}" th:value="${unit.id}" th:text="${unit.nombre}" class="list-group-item move">
                       </li>
                   </ul>
               </div>
-              <div class="col-xs-4 col-md-5">
+              <div class="col-4 col-md-5">
               </div>
             </div>
         </section>
 
-        <div class="row">
-            <div class="col-xs-10">
-            </div>
-            <div class="col-xs-2">
-                <a class="btn btn-info pull-right" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
+        <div class="row align-items-center justify-content-end">
+            <div class="col-3 col-md-2">
+                <a class="btn btn-info" href="#" th:href="@{/adminTorneo/torneoList}">Volver</a>
             </div>
         </div>
     </div>
 
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>

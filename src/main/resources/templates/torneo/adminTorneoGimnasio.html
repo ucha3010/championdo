@@ -6,6 +6,8 @@
     <script th:replace="static/cabeceraScript :: script"></script>
     <script th:replace="static/cabeceraScriptJquery :: script"></script>
 
+    <title>Gimnasio de torneo</title>
+
     <script type="text/javascript">
     $(document).ready(function()
     {
@@ -74,7 +76,7 @@
     
     <div class="container">
         <section class="margenArribaAbajo3Porc text-center">
-            <div th:if="${removeProblem != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${removeProblem}"></span></div>
+            <div th:if="${removeProblem != null}" class="alert alert-danger" role="alert"><span th:text="${removeProblem}"></span></div>
         </section>
 
         <section>
@@ -90,7 +92,7 @@
             </div>
         </section>
 
-        <section  sec:authorize="hasRole('ROLE_ADMIN')">
+        <section sec:authorize="hasRole('ROLE_ADMIN')">
             <form action="#" th:action="@{/adminTorneoGimnasio/addTorneoGimnasio}" th:object="${torneoGimnasioModel}" method="post" onsubmit="return validar()">
 
                 <input type="hidden" name="idTorneo" id="idTorneo" th:value="${torneo.id}"/>
