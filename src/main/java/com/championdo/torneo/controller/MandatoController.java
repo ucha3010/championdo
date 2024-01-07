@@ -50,6 +50,7 @@ public class MandatoController {
         return modelAndView;
     }
 
+    //TODO DAMIAN en adulto y menor se debe poder elegir gimnasio al cual enviar el mandato
     @GetMapping("/adulto")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView adulto(ModelAndView modelAndView) {
