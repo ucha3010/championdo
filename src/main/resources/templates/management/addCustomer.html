@@ -1,24 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport"
-		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
 
-	<title>Cliente</title>
-
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-	<link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-
-	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
-	<script type="text/javascript" th:src="@{/js/table.js}"></script>
-	<script type="text/javascript" th:src="@{/js/validaciones.js}"></script>
-
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+	<title>Alta cliente</title>
 
 	<script type="text/javascript">
 		function validar(){
@@ -45,7 +32,7 @@
 			}
 
 			if(!mayorEdad(document.getElementById('fechaNacimiento').value, 18)){
-				document.getElementById('correoError').innerHTML = "El responsable debe ser mayor de edad";
+				document.getElementById('fechaNacimientoError').innerHTML = "El responsable debe ser mayor de edad";
 				validado = false;
 			}
 
@@ -72,31 +59,24 @@
 
 </head>
 <body>
+	<div th:replace="static/barraUsuario :: div"></div>
+	<div th:replace="static/barraNav :: nav"></div>
+	
 	<div class="container">
-
-		<div th:if="${addProblem != null}" class="alert alert-danger" role="alert"><span th:text="${addProblem}"></span></div>
-		<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
-		<h1>
-			¡Hola <span th:text="${usuario.name}"></span>!
-			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
-		</h1>
-		<nav class="navbar navbar-default" role="navigation">
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-			</form>
-		</nav>
+		<section class="margenArribaAbajo3Porc">
+			<div th:if="${addProblem != null}" class="alert alert-danger" role="alert"><span th:text="${addProblem}"></span></div>
+			<div th:if="${updateProblem != null}" class="alert alert-danger" role="alert"><span th:text="${updateProblem}"></span></div>
+		</section>
 
 		<section>
-			<div class="row">
-				<div class="col-xs-2 mb-1">
+			<div class="row align-items-center justify-content-end">
+				<div class="col-3 col-md-2">
+					<a class="btn btn-info" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
 				</div>
-
-				<div class="col-xs-8 mb-10 colorGreen">
+			</div>
+			<div class="row mb-1">
+				<div class="col-12 colorGreen">
 					<h1 th:text="${customer.nombreGimnasio}"></h1>
-				</div>
-
-				<div class="col-xs-2 mb-1">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
 				</div>
 			</div>
 		</section>
@@ -108,10 +88,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="nombreGimnasio">Nombre gimnasio*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{nombreGimnasio}" id="nombreGimnasio" class="form-control" placeholder="Nombre gimnasio"/>
 					</div>
 					<div class="col-md-2">
@@ -122,10 +102,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="nombreResponsable">Nombre responsable*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{nombreResponsable}" id="nombreResponsable" class="form-control" placeholder="Nombre responsable"/>
 					</div>
 					<div class="col-md-2">
@@ -136,10 +116,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="apellido1Responsable">Primer apellido responsable*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{apellido1Responsable}" id="apellido1Responsable" class="form-control" placeholder="Primer apellido responsable" />
 					</div>
 					<div class="col-md-2">
@@ -150,10 +130,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="apellido2Responsable">Segundo apellido responsable</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{apellido2Responsable}" id="apellido2Responsable" class="form-control" placeholder="Segundo apellido responsable" />
 					</div>
 					<div class="col-md-2">
@@ -163,10 +143,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="fechaNacimiento">Fecha de nacimiento responsable*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="date" th:field="*{fechaNacimiento}" id="fechaNacimiento" class="form-control" placeholder="Fecha de nacimiento" />
 					</div>
 					<div class="col-md-2">
@@ -177,10 +157,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="telefono">Teléfono*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{telefono}" id="telefono" class="form-control" placeholder="Teléfono" />
 					</div>
 					<div class="col-md-2">
@@ -191,10 +171,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="correo">Correo*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{correo}" id="correo" class="form-control" placeholder="Correo" />
 					</div>
 					<div class="col-md-2">
@@ -205,10 +185,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="domicilioCalle">Calle gimnasio*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{domicilioCalle}" id="domicilioCalle" class="form-control" placeholder="Calle" />
 					</div>
 					<div class="col-md-2">
@@ -219,10 +199,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="domicilioNumero">Número</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{domicilioNumero}" id="domicilioNumero" class="form-control" placeholder="Número" />
 					</div>
 					<div class="col-md-2">
@@ -232,10 +212,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="domicilioOtros">Más datos</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{domicilioOtros}" id="domicilioOtros" class="form-control" placeholder="Más datos" />
 					</div>
 					<div class="col-md-2">
@@ -245,10 +225,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="domicilioLocalidad">Localidad*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{domicilioLocalidad}" id="domicilioLocalidad" class="form-control" placeholder="Localidad" />
 					</div>
 					<div class="col-md-2">
@@ -259,10 +239,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="domicilioCp">Código postal*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" />
 					</div>
 					<div class="col-md-2">
@@ -273,10 +253,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="cifNif">CIF / NIF*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{cifNif}" id="cifNif" class="form-control" placeholder="CIF NIF" />
 					</div>
 					<div class="col-md-2">
@@ -287,10 +267,10 @@
 				<div class="row mb-1">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="visibilidadContratada">Visibilidad contratada*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{visibilidadContratada}" id="visibilidadContratada" class="form-control" placeholder="Visibilidad contratada" />
 					</div>
 					<div class="col-md-2">
@@ -301,10 +281,10 @@
 				<div class="row mb-3">
 					<div class="col-md-2">
 					</div>
-					<div class="col-xs-4 col-md-4 text-center">
+					<div class="col-4 col-md-4">
 						<label for="cantidadRegistrosContratados">Cantidad registros contratados*</label>
 					</div>
-					<div class="col-xs-8 col-md-4">
+					<div class="col-8 col-md-4">
 						<input type="text" th:field="*{cantidadRegistrosContratados}" id="cantidadRegistrosContratados" class="form-control" placeholder="Cantidad registros contratados" />
 					</div>
 					<div class="col-md-2">
@@ -312,25 +292,17 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
-					<div class="col-md-1">
-					</div>
-					<div class="col-xs-8 col-md-4">
+				<div class="row align-items-center justify-content-end mb-3">
+					<div class="col-3">
 						<a class="btn btn-info" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
 					</div>
-					<div class="col-xs-8 col-md-4">
-					</div>
-					<div class="col-xs-8 col-md-4">
-						<button class="btn btn-success pull-right" id="continueButton" type="submit">Dar de alta</button>
-					</div>
-					<div class="col-md-2">
+					<div class="col-4 col-md-2">
+						<button class="btn btn-success" id="continueButton" type="submit">Dar de alta</button>
 					</div>
 				</div>
 
-				<div class="row mb-3">
-					<div class="col-xs-6 mb-3">
-					</div>
-					<div class="col-xs-6 mb-3">
+				<div class="row align-items-center justify-content-end text-center mb-3">
+					<div class="col-12">
 						<span id="hayError" name="errorSpan" class="colorRed"></span>
 					</div>
 				</div>
@@ -338,18 +310,7 @@
 			</form>
 		</section>
 	</div>
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>

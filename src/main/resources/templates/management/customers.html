@@ -1,23 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta th:replace="static/cabeceraMeta :: meta">
+    <link th:replace="static/cabeceraLink :: link">
+    <script th:replace="static/cabeceraScript :: script"></script>
+    <script th:replace="static/cabeceraScriptJquery :: script"></script>
+    <script th:replace="static/cabeceraScriptTable :: script"></script>
 
     <title>Clientes</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="#" th:href="@{/css/style.css}" />
-
-    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
-    <script type="text/javascript" th:src="@{/js/table.js}"></script>
-
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
     <script>
         function viewDetail(id){
@@ -29,97 +19,84 @@
 
 </head>
 <body>
-    <section>
-        <div th:if="${updateOK != null}" class="alert alert-success textAlignCenter" role="alert"><span th:text="${updateOK}"></span></div>
-    </section>
+    <div th:replace="static/barraUsuario :: div"></div>
+    <div th:replace="static/barraNav :: nav"></div>
+
     <div class="container">
-        <h1>
-            ¡Hola <span th:text="${usuario.name}"></span>!
-            <a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
-        </h1>
-        <nav class="navbar navbar-default" role="navigation">
-            <form th:action="@{/logout}" method="POST">
-                <button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
-            </form>
-        </nav>
+        <section class="margenArribaAbajo3Porc text-center">
+            <div th:if="${updateOK != null}" class="alert alert-success" role="alert"><span th:text="${updateOK}"></span></div>
+        </section>
 
         <section>
-            <div class="row">
-                <div class="col-xs-2 mb-1">
+            <div class="row align-items-center justify-content-end">
+                <div class="col-3 col-md-2">
+                    <a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
                 </div>
-
-                <div class="col-xs-8 mb-10 colorGreen">
+            </div>
+            <div class="row mb-1 text-center">
+                <div class="col-12 colorGreen">
                     <h1>Clientes</h1>
-                </div>
-
-                <div class="col-xs-2 mb-1">
-                    <a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
                 </div>
             </div>
         </section>
     </div>
 
-    <section>
-        <div class="row mb-3">
-            <div class="col-xs-9">
-            </div>
-            <div class="col-xs-2">
+    <section sec:authorize="hasRole('ROLE_ROOT')">
+        <div class="row align-items-center justify-content-end mb-3">
+            <div class="col-3">
                 <a class="btn btn-success" href="#" th:href="@{/gimnasioRoot/formNewCustomer}">Alta cliente</a>
-            </div>
-            <div class="col-xs-1">
             </div>
         </div>
     </section>
     <section sec:authorize="hasRole('ROLE_ROOT')">
-        <table class="table table-hover sortable">
+        <table class="table table-striped table-hover sortable">
             <thead>
             <tr>
-                <th>ID</th>
+                <th class="d-none d-lg-table-cell"><button>ID<span aria-hidden="true"></span></button></th>
                 <th>Habilitado</th>
-                <th>NIF/CIF</th>
-                <th>Nombre Gimnasio</th>
-                <th>Nombre Responsable</th>
-                <th>Primer apellido Responsable</th>
-                <th>Segundo apellido Responsable</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Visib. contratada</th>
-                <th>Reg. contratados</th>
-                <th>Fecha alta</th>
-                <th>Fecha Modificación</th>
+                <th class="d-none d-lg-table-cell"><button>NIF/CIF<span aria-hidden="true"></span></button></th>
+                <th><button>Nombre Gimnasio<span aria-hidden="true"></span></button></th>
+                <th><button>Nombre Responsable<span aria-hidden="true"></span></button></th>
+                <th><button>Primer apellido Responsable<span aria-hidden="true"></span></button></th>
+                <th class="d-none d-lg-table-cell"><button>Segundo apellido Responsable<span aria-hidden="true"></span></button></th>
+                <th class="d-none d-lg-table-cell"><button>Correo<span aria-hidden="true"></span></button></th>
+                <th class="d-none d-lg-table-cell">Teléfono</th>
+                <th class="d-none d-lg-table-cell"><button>Visib. contratada<span aria-hidden="true"></span></button></th>
+                <th class="d-none d-lg-table-cell"><button>Reg. contratados<span aria-hidden="true"></span></button></th>
+                <th class="d-none d-lg-table-cell"><button>Fecha alta<span aria-hidden="true"></span></button></th>
+                <th class="d-none d-lg-table-cell">Fecha Modificación</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="customer : ${customerList}" th:attr="onclick=|viewDetail('${customer.id}')|">
-                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.id}" class="d-none d-lg-table-cell"></td>
                 <td>
                     <img th:if="${customer.enabled}" class="check-img" src="#" th:src="@{/imgs/ok.png}" alt="Habilitado">
                     <img th:if="${!customer.enabled}" class="check-img" src="#" th:src="@{/imgs/ko.png}" alt="Deshabilitado">
                 </td>
-                <td th:text="${customer.cifNif}"></td>
+                <td th:text="${customer.cifNif}" class="d-none d-lg-table-cell"></td>
                 <td th:text="${customer.nombreGimnasio}"></td>
                 <td th:text="${customer.nombreResponsable}"></td>
                 <td th:text="${customer.apellido1Responsable}"></td>
-                <td th:text="${customer.apellido2Responsable}"></td>
-                <td th:text="${customer.correo}"></td>
-                <td th:text="${customer.telefono}"></td>
-                <td th:text="${customer.visibilidadContratada}"></td>
-                <td th:text="${customer.cantidadRegistrosContratados}"></td>
-                <td th:text="${#calendars.format(customer.fechaAlta,'dd/MM/yyyy')}"></td>
-                <td th:text="${#calendars.format(customer.fechaModificacion,'dd/MM/yyyy HH:mm:ss')}"></td>
+                <td th:text="${customer.apellido2Responsable}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${customer.correo}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${customer.telefono}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${customer.visibilidadContratada}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${customer.cantidadRegistrosContratados}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${#calendars.format(customer.fechaAlta,'dd/MM/yyyy')}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${#calendars.format(customer.fechaModificacion,'dd/MM/yyyy HH:mm:ss')}" class="d-none d-lg-table-cell"></td>
             </tr>
             </tbody>
         </table>
     </section>
 
-    <section>
-        <div class="row">
-            <div class="col-xs-10">
-            </div>
-            <div class="col-xs-2">
-                <a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
-            </div>
+    <div class="row align-items-center justify-content-end">
+        <div class="col-3 col-md-2">
+            <a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
         </div>
-    </section>
+    </div>
+
 </body>
+
+<footer th:replace="static/footer :: footer"></footer>
 </html>
