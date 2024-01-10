@@ -37,11 +37,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/formulario/alta").permitAll()
 		.anyRequest().authenticated()
 		.and()
-		.formLogin().loginPage("/loginTorneo").loginProcessingUrl("/logincheck")
+		.formLogin().loginPage("/loginPage").loginProcessingUrl("/logincheck")
 		.usernameParameter("username").passwordParameter("password")
 		.defaultSuccessUrl("/principal/").permitAll()
 		.and()
-		.logout().logoutUrl("/logout").logoutSuccessUrl("/loginTorneo?logout").permitAll();
+		.logout().logoutUrl("/logout").logoutSuccessUrl("/loginPage?logout").permitAll();
 	}
 
 }

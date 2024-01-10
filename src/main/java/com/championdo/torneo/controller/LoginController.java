@@ -41,7 +41,7 @@ public class LoginController {
 		return Constantes.LOGIN;
 	}
 
-	@GetMapping("/loginTorneo")
+	@GetMapping("/loginPage")
 	@PreAuthorize("permitAll()")
 	public String showLoginTorneoForm(Model model,
 								@RequestParam(name = "error", required = false) String error,

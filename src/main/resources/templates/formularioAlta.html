@@ -290,19 +290,6 @@
 				</div>
 			</div>
 
-			<div class="row mb-1">
-				<div class="col-3 col-md-2">
-					<label for="codigoGimnasio">Gimnasio</label>
-				</div>
-				<div class="col-4 col-md-3">
-					<select th:field="*{codigoGimnasio}" id="codigoGimnasio" class="form-control form-control-lg">
-						<option th:each="g : ${listaGimnasios}" th:value="${g.id}" th:text="${g.nombreGimnasio}"></option>
-					</select>
-				</div>
-				<div class="col-5 col-md-7">
-				</div>
-			</div>
-
 			<div class="row mb-3">
 				<div class="col-1 col-md-6">
 				</div>

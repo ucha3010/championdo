@@ -3,7 +3,7 @@ package com.championdo.torneo.util;
 public class Constantes {
 
 	// vistas
-	public static final String LOGIN = "loginTorneo";
+	public static final String LOGIN = "loginPage";
 	public static final String ADULTO = "adulto";
 	public static final String MENOR = "menor";
 	public static final String INCLUSIVO_MINUSCULAS = "inclusivo";
