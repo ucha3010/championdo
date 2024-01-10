@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
+
+	<title th:text="'Detalle ' + ${gimnasio.nombreGimnasio}"></title>
+
+</head>
+<body>
+	<div th:replace="static/barraUsuario :: div"></div>
+	<div th:replace="static/barraNav :: nav"></div>
+
+	<div class="container">
+		<div class="row align-items-center justify-content-end">
+			<div class="col-9 d-md-none">
+			</div>
+			<div class="col-3 d-md-none">
+				<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
+			</div>
+		</div>
+
+		<div class="row align-items-center margenArribaAbajo3Porc">
+			<div class="col-12">
+				<h1 th:text="${gimnasio.nombreGimnasio}"></h1>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-md-2">
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="telefono">Teléfono</label>
+			</div>
+			<div class="col-4 col-md-3">
+				<input type="text" th:field="*{gimnasio.telefono}" id="telefono" class="form-control" disabled/>
+			</div>
+			<div class="col-5 col-md-5">
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-md-2">
+			</div>
+			<div class="col-12 col-md-2">
+				<strong>Domicilio</strong>
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="domicilioCalle">Tipo y nombre vía</label>
+			</div>
+			<div class="col-9 col-md-6">
+				<input type="text" th:field="*{gimnasio.domicilioCalle}" id="domicilioCalle" class="form-control" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-md-4">
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="domicilioNumero">Número</label>
+			</div>
+			<div class="col-9 col-md-6">
+				<input type="text" th:field="*{gimnasio.domicilioNumero}" id="domicilioNumero" class="form-control" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-md-4">
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="domicilioOtros">Otros datos</label>
+			</div>
+			<div class="col-9 col-md-6">
+				<input type="text" th:field="*{gimnasio.domicilioOtros}" id="domicilioOtros" class="form-control" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-md-4">
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="domicilioLocalidad">Localidad</label>
+			</div>
+			<div class="col-9 col-md-6">
+				<input type="text" th:field="*{gimnasio.domicilioLocalidad}" id="domicilioLocalidad" class="form-control" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-md-4">
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="domicilioCp">Código postal</label>
+			</div>
+			<div class="col-9 col-md-6">
+				<input type="text" th:field="*{gimnasio.domicilioCp}" id="domicilioCp" class="form-control" disabled/>
+			</div>
+		</div>
+
+		<div class="row mb-1">
+			<div class="col-md-2">
+			</div>
+			<div class="col-3 col-md-2">
+				<label for="correo">Correo electrónico</label>
+			</div>
+			<div class="col-9 col-md-8">
+				<input type="text" th:field="*{gimnasio.correo}" id="correo" class="form-control" disabled />
+			</div>
+		</div>
+
+		<div class="row align-items-center justify-content-end">
+			<div class="col-3 col-md-2">
+				<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
+			</div>
+		</div>
+	</div>
+</body>
+
+<footer th:replace="static/footer :: footer"></footer>
+</html>

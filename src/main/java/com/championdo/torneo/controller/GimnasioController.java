@@ -189,6 +189,18 @@ public class GimnasioController {
         }
     }
 
+    @GetMapping("/detalle/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView detalle(ModelAndView modelAndView, @PathVariable int id) {
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/detalle", id, getClass());
+        modelAndView.setViewName("gimnasio/detalle");
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(id);
+        modelAndView.addObject("gimnasio", gimnasioRootModel);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+    }
+
     private ModelAndView logicaComunGuardar (UserAutorizacionModel userAutorizacionModel, boolean menor) {
 
         String recurso = (menor ? "guardarMenor" : "gaurdarPropia");
