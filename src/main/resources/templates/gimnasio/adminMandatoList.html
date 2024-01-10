@@ -65,7 +65,7 @@
 					<td th:if="${mandato.mandatoFirmado}" class="d-none d-lg-table-cell">
 						<form action="#" method="POST" th:action="@{/mandato/descargarPdf}" th:object="${mandatoModel}">
 							<input type="hidden" name="id" th:value="${mandato.id}"/>
-							<button class="btn btn-success pull-right" type="submit">Descarga</button>
+							<button class="btn btn-success" type="submit">Descarga</button>
 						</form>
 					</td>
 					<td th:if="${!mandato.mandatoFirmado}" th:attr="onclick=|goDetail('${mandato.id}')|" class="d-none d-lg-table-cell">

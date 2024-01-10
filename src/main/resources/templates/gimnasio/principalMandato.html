@@ -47,7 +47,7 @@
 				<h1>Mandatos para tramitación de Licencia Federativa</h1>
 			</div>
 			<div class="col-3 col-md-2">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
 			</div>
 		</div>
 
@@ -102,7 +102,7 @@
 					<td class="d-none d-sm-table-cell">
 						<form th:if="${mandato.mandatoFirmado}" action="#" method="POST" th:action="@{/mandato/descargarPdf}" th:object="${mandatoModel}">
 							<input type="hidden" name="id" th:value="${mandato.id}"/>
-							<button class="btn btn-success pull-right" type="submit">Descarga</button>
+							<button class="btn btn-success" type="submit">Descarga</button>
 						</form>
 						<a th:if="${!mandato.mandatoFirmado}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionMandato/__${mandato.id}__}">¡Mandato no firmado! Toque aquí para firmar</a>
 					</td>

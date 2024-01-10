@@ -26,7 +26,7 @@
 						<input type="hidden" name="idInscripcion" th:value="${inscripcion.id}"/>
 						<input type="hidden" name="mayorEdad" th:value="!${inscripcion.autorizadoMenor}"/>
 						<input type="hidden" name="seccion" th:value="normativaSEPA"/>
-						<button class="btn btn-info pull-right" type="submit">Descargar formulario domiciliación sin firmar</button>
+						<button class="btn btn-infoform-select" type="submit">Descargar formulario domiciliación sin firmar</button>
 					</form>
 				</div>
 			</div>
@@ -52,12 +52,9 @@
 			</div>
 		</section>
 
-
-		<div class="row mb-3">
-			<div class="col-5">
-			</div>
-			<div class="col-2">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
+		<div class="row align-items-center justify-content-end">
+			<div class="col-3 col-md-2">
+				<a class="btn btn-info" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 			</div>
 			<div class="col-5">
 			</div>

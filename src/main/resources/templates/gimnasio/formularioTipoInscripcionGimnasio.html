@@ -45,7 +45,7 @@
 					<h1>Inscripción a <span th:text="${inscripcionA}"></span> en <span th:text="${gimnasio.nombreGimnasio}"></span></h1>
 				</div>
 				<div class="col-3 d-md-none">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 				</div>
 			</div>
 
@@ -133,10 +133,8 @@
 			</section>
 
 			<div th:if="${inscripciones != null}" class="row align-items-center justify-content-end">
-				<div class="col-9">
-				</div>
-				<div class="col-3">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
+				<div class="col-3 col-md-2">
+					<a class="btn btn-info" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 				</div>
 			</div>
 		</div>

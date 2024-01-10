@@ -25,10 +25,14 @@
         <div th:if="${avisoKO != null}" class="alert alert-warning" role="alert"><span th:text="${avisoKO}"></span></div>
       </section>
 
-      <section class="margenArribaAbajo3Porc d-md-flex justify-content-end">
-        <a href="#" th:href="@{/formulario/alta}" class="textDecoration-none">
-          <button class="btn btn-success pull-right" type="submit">Alta nuevo usuario</button>
-        </a>
+      <section class="margenArribaAbajo3Porc">
+        <div class="row align-items-center justify-content-end">
+          <div class="col-5">
+            <a href="#" th:href="@{/formulario/alta}" class="textDecoration-none">
+              <button class="btn btn-success" type="submit">Alta nuevo usuario</button>
+            </a>
+          </div>
+        </div>
       </section>
 
       <section class="margenArribaAbajo3Porc">

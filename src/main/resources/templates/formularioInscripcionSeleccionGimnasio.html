@@ -42,7 +42,7 @@
 					<h1>Inscripción a <span th:text="${inscripcionA}"></span></h1>
 				</div>
 				<div class="col-3 col-md-2">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
 				</div>
 			</div>
 
@@ -111,11 +111,10 @@
 					</tbody>
 				</table>
 			</section>
+
 			<div th:if="${inscripciones != null}" class="row align-items-center justify-content-end">
-				<div class="col-9">
-				</div>
-				<div class="col-3">
-					<a class="btn btn-info pull-right" href="#" th:href="@{/principal/}">Volver</a>
+				<div class="col-3 col-md-2">
+					<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
 				</div>
 			</div>
 		</div>

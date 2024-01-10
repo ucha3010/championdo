@@ -26,11 +26,9 @@
 	
 	<div sec:authorize="isAuthenticated()" class="container">
 
-		<div class="row align-items-center justify-content-end">
-			<div class="col-9 d-md-none">
-			</div>
-			<div class="col-3 d-md-none">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
+		<div class="row align-items-center justify-content-end mt-2">
+			<div class="col-3 col-md-2">
+				<a class="btn btn-info" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
 			</div>
 		</div>
 
@@ -62,7 +60,7 @@
 					<input type="hidden" name="fechaCampeonato" th:value="*{fechaCampeonato}"/>
 					<input type="hidden" name="idInscripcion" th:value="*{idInscripcion}"/>
 					<input type="hidden" name="mayorEdad" th:value="*{mayorEdad}"/>
-					<button class="btn btn-success pull-right" type="submit">Descargar</button>
+					<button class="btn btn-success" type="submit">Descargar</button>
 				</form>
 			</div>
 		</div>
@@ -330,14 +328,14 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row align-items-center justify-content-end">
 			<div class="col-5">
 				<button th:if="${deleteEnable}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${inscripcion.id}')|">Borrar Inscripción</button>
 			</div>
 			<div class="col-3">
 			</div>
-			<div class="col-4">
-				<a class="btn btn-info pull-right" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
+			<div class="col-3 col-md-2">
+				<a class="btn btn-info" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
 			</div>
 		</div>
 		
