@@ -52,8 +52,8 @@ public class MandatoServiceImpl implements MandatoService {
     }
 
     @Override
-    public List<MandatoModel> findByDniMandante(int codigoGimnasio, String dniMandante) {
-        return fillModelList(mandatoRepository.findByCodigoGimnasioAndDniMandanteOrderByFechaAltaDesc(codigoGimnasio, dniMandante));
+    public List<MandatoModel> findByDniMandante(String dniMandante) {
+        return fillModelList(mandatoRepository.findByDniMandanteOrderByFechaAltaDesc(dniMandante));
     }
 
     @Override
@@ -81,18 +81,17 @@ public class MandatoServiceImpl implements MandatoService {
     }
 
     @Override
-    public void fillMandato(MandatoModel mandatoModel, boolean adulto, int codigoGimnasio) {
+    public void fillMandato(MandatoModel mandatoModel, boolean adulto) {
         Calendar calendar = GregorianCalendar.getInstance();
         mandatoModel.setFechaAlta(calendar.getTime());
         mandatoModel.setTemporada(Utils.calculateSeason(calendar.getTime()));
         mandatoModel.setAdulto(adulto);
-        mandatoModel.setCodigoGimnasio(codigoGimnasio);
     }
 
     @Override
     public MandatoModel fromInscripcionTaekwondoToMandato(InscripcionTaekwondoModel inscripcionTaekwondoModel) {
         MandatoModel mandatoModel = new MandatoModel();
-        fillMandato(mandatoModel, inscripcionTaekwondoModel.isMayorLicencia(), inscripcionTaekwondoModel.getCodigoGimnasio());
+        fillMandato(mandatoModel, inscripcionTaekwondoModel.isMayorLicencia());
         mandatoModel.setNombreMandante(inscripcionTaekwondoModel.getMayorNombre());
         mandatoModel.setApellido1Mandante(inscripcionTaekwondoModel.getMayorApellido1());
         mandatoModel.setApellido2Mandante(inscripcionTaekwondoModel.getMayorApellido2());

@@ -26,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
     private UtilService utilService;
     @Override
     public void sendChangePassword(UserModel userModel, TokenModel tokenModel) throws SenderException {
+        //TODO DAMIAN este emial debería salir desde el host de la plataforma y no de un gimnasio
         try {
             String host = utilService.findByClave(Constantes.HOST_CORREO, userModel.getCodigoGimnasio()).getValor();
             String port = utilService.findByClave(Constantes.PORT_CORREO, userModel.getCodigoGimnasio()).getValor();
@@ -82,12 +83,13 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendCodeValidation(User user, String code) throws SenderException {
+    public void sendCodeValidation(User user, String code, int codigoGimnasio) throws SenderException {
+        //TODO DAMIAN este emial debería salir desde el host de la plataforma y no de un gimnasio
         try {
-            String host = utilService.findByClave(Constantes.HOST_CORREO, user.getCodigoGimnasio()).getValor();
-            String port = utilService.findByClave(Constantes.PORT_CORREO, user.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(utilService.findByClave(Constantes.CORREO_GIMNASIO, user.getCodigoGimnasio()).getValor(), user.getCorreo(),
-                    "Código de validación", textMessageCodeValidation(user, code), null, host, port, user.getCodigoGimnasio()));
+            String host = utilService.findByClave(Constantes.HOST_CORREO, codigoGimnasio).getValor();
+            String port = utilService.findByClave(Constantes.PORT_CORREO, codigoGimnasio).getValor();
+            sendMessage.enviarCorreo(new EmailModel(utilService.findByClave(Constantes.CORREO_GIMNASIO, codigoGimnasio).getValor(), user.getCorreo(),
+                    "Código de validación", textMessageCodeValidation(user, code), null, host, port, codigoGimnasio));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -120,6 +122,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendUserAdded(User user) throws SenderException {
+        //TODO DAMIAN este emial debería salir desde el host de la plataforma y no de un gimnasio
         try {
             String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, user.getCodigoGimnasio()).getValor();
             String host = utilService.findByClave(Constantes.HOST_CORREO, user.getCodigoGimnasio()).getValor();

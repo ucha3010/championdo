@@ -58,13 +58,15 @@ public class SeguridadController {
         } catch (ValidationException ve) {
             LoggerMapper.log(Level.ERROR, "seguridad/validarCodigo", ve.getMessage(), getClass());
             modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
-                    null, null, null, firmaCodigoModel.getOperativaOriginal()));
+                    null, null, null, firmaCodigoModel.getOperativaOriginal(),
+                    firmaCodigoService.findByIdOperacion(firmaCodigoModel.getIdOperacion()).getCodigoGimnasio()));
             modelAndView.addObject("inscripcionError", ve.getMessage());
             modelAndView.setViewName("firma/envioCodigo");
         } catch (SenderException se) {
             LoggerMapper.log(Level.ERROR, "seguridad/validarCodigo", se.getMessage(), getClass());
             modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
-                    null, null, null, firmaCodigoModel.getOperativaOriginal()));
+                    null, null, null, firmaCodigoModel.getOperativaOriginal(),
+                    firmaCodigoService.findByIdOperacion(firmaCodigoModel.getIdOperacion()).getCodigoGimnasio()));
             modelAndView.addObject("inscripcionError", "Hubo un problema en el envío del correo " +
                     "electrónico. Por favor contacte con soporte técnico. Gracias.");
             modelAndView.setViewName("firma/envioCodigo");
@@ -84,12 +86,12 @@ public class SeguridadController {
             InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                     seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                    "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO);
+                    "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, inscripcionTaekwondoModel.getCodigoGimnasio());
         } else if (Constantes.INSCRIPCION_MANDATO.equals(operativaOriginal)) {
             MandatoModel mandatoModel = mandatoService.findById(id);
             firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                     seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
-                    "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO);
+                    "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO, mandatoModel.getCodigoGimnasio());
         }
 
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);

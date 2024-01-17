@@ -19,7 +19,7 @@ public interface InscripcionTaekwondoService {
 
     InscripcionTaekwondoModel add(InscripcionTaekwondoModel inscripcionModel);
 
-    InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel);
+    InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel, int codigoGimnasio);
 
     void update(InscripcionTaekwondoModel inscripcionModel);
 

@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.MandatoModel;
@@ -24,14 +25,17 @@ public class AdminMandatoController {
     private MandatoService mandatoService;
     @Autowired
     private PrincipalService principalService;
+    @Autowired
+    private SessionData sessionData;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView mandatos(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminMandatoList");
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("mandatoModelList", mandatoService.findAll(usuario.getCodigoGimnasio()));
+        modelAndView.addObject("mandatoModelList", mandatoService.findAll(sessionData.getGimnasioRootModel().getId()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

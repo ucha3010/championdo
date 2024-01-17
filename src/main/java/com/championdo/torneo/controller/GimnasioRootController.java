@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.CargasInicialesClienteService;
 import com.championdo.torneo.service.impl.UserService;
@@ -14,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/gimnasioRoot")
@@ -37,7 +40,6 @@ public class GimnasioRootController {
     @GetMapping("/customers")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView customers(ModelAndView modelAndView) {
-        LoggerMapper.methodIn(Level.INFO, "customers", "", this.getClass());
         modelAndView.setViewName("management/customers");
         principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customerList", gimnasioRootService.findAllOrderByNombreGimnasioAsc());
@@ -76,7 +78,6 @@ public class GimnasioRootController {
     @GetMapping("/formNewCustomer")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView formNewCustomer(ModelAndView modelAndView) {
-        LoggerMapper.methodIn(Level.INFO, "formNewCustomer", "", this.getClass());
         modelAndView.setViewName("management/addCustomer");
         principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customer", new GimnasioRootModel());
@@ -94,8 +95,17 @@ public class GimnasioRootController {
         try {
             customer = gimnasioRootService.add(customer);
             idCustomer = customer.getId();
-            GimnasioModel gimnasioModel = gimnasioService.addFromRoot(customer);
-            userService.addFromRoot(customer, gimnasioModel);
+            boolean userExist = false;
+            for (UserModel userModel: userService.findAll()) {
+                if (userModel.getUsername().equalsIgnoreCase(customer.getCifNif())){
+                    userExist = true;
+                    break;
+                }
+            }
+            if (!userExist) {
+                userService.addFromRoot(customer);
+            }
+            //gimnasioService.addFromRoot(customer);
             utilService.addFromRoot(customer);
             cargasInicialesClienteService.cargasCintPoomCat(idCustomer);
             LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -105,7 +115,7 @@ public class GimnasioRootController {
                 cargasInicialesClienteService.eliminacionesCatPoomCint(idCustomer);
                 utilService.deleteFromRoot(idCustomer);
                 userService.deleteFromRoot(idCustomer);
-                gimnasioService.deleteFromRoot(idCustomer);
+                //gimnasioService.deleteFromRoot(idCustomer);
                 gimnasioRootService.delete(idCustomer);
             }
             modelAndView.setViewName("management/addCustomer");
@@ -120,7 +130,7 @@ public class GimnasioRootController {
     @GetMapping("/resetCintPoomCat/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView resetCintPoomCat(ModelAndView modelAndView, @PathVariable int id) {
-        LoggerMapper.methodIn(Level.INFO, "resetCintPoomCat", "", this.getClass());
+        LoggerMapper.methodIn(Level.INFO, "resetCintPoomCat", "id: " + id, this.getClass());
         principalService.cargaBasicaCompleta(modelAndView);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         cargasInicialesClienteService.cargasCintPoomCat(id);
@@ -136,11 +146,14 @@ public class GimnasioRootController {
         principalService.cargaBasicaCompleta(modelAndView);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
-        userService.deleteFromRoot(id);
-        gimnasioService.deleteFromRoot(id);
+        if (userService.findAll(id).size() == 1) {
+            userService.deleteFromRoot(id);
+        }
+        //gimnasioService.deleteFromRoot(id);
         torneoGimnasioService.deleteByCodigoGimnasio(id);
         gimnasioRootService.enableDisable(id, Boolean.FALSE);
         //Deshabilito el cliente pero no lo borro ya que Torneo (que tampoco se borran los torneos) tira del id y para que no se eliminen las inscripciones a los usuarios
+        //TODO DAMIAN esto está mal pensado. Primero creo que se borran los torneos arriba. Segundo, si llego a volver a habilitar el gimnasio se eliminaron sus CatPoomCint
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return customers(modelAndView);
     }

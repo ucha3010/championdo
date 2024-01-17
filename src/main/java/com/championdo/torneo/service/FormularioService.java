@@ -21,5 +21,5 @@ public interface FormularioService {
 
     void cargarDesplegables(ModelAndView modelAndView, int codigoGimnasio);
 
-    void cargarDesplegablesAltaUsuario(ModelAndView modelAndView);
+    void cargarDesplegablesBasicos(ModelAndView modelAndView);
 }

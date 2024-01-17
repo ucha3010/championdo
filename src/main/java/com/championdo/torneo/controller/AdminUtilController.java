@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.Menu1Model;
@@ -36,20 +37,23 @@ public class AdminUtilController {
     private SeguridadService seguridadService;
     @Autowired
     private PrincipalService principalService;
+    @Autowired
+    private SessionData sessionData;
 
     @GetMapping("/utilList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/utilList");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
-        modelAndView.addObject("gimnasioModel", gimnasioService.findByCodigoGimnasio(user.getCodigoGimnasio()));
-        modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", user.getCodigoGimnasio()));
-        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", user.getCodigoGimnasio()));
-        modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", user.getCodigoGimnasio()).get(0));
+        modelAndView.addObject("gimnasioModel", gimnasioService.findByCodigoGimnasio(sessionData.getGimnasioRootModel().getId()));
+        modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", sessionData.getGimnasioRootModel().getId()));
+        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", sessionData.getGimnasioRootModel().getId()));
+        modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", sessionData.getGimnasioRootModel().getId()).get(0));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
         gimnasioRootService.fillMenu2Checked(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -59,8 +63,8 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/updateUtil");
-        utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminUtil/updateUtil");
+        utilModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -71,15 +75,15 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateHost(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminUtil/updateHost");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminUtil/updateHost");
         UtilModel utilPort = new UtilModel();
         for (EmailEnum emailEnum : EmailEnum.values()) {
             if (emailEnum.getHost().equals(utilModel.getValor())) {
-                utilPort = new UtilModel(Constantes.PORT_CORREO, emailEnum.getPort(), user.getCodigoGimnasio());
+                utilPort = new UtilModel(Constantes.PORT_CORREO, emailEnum.getPort(), sessionData.getGimnasioRootModel().getId());
                 break;
             }
         }
-        utilModel.setCodigoGimnasio(user.getCodigoGimnasio());
+        utilModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
         utilService.update(utilModel);
         utilService.update(utilPort);
         modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");

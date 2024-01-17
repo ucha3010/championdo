@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.model.ClaveUsuarioModel;
@@ -38,6 +39,8 @@ public class UsuarioController {
 	private PrincipalService principalService;
 	@Autowired
 	private SeguridadService seguridadService;
+	@Autowired
+	private SessionData sessionData;
 	
 	@GetMapping("/formularioUsuario")
 	@PreAuthorize("isAuthenticated()")
@@ -45,7 +48,7 @@ public class UsuarioController {
 		modelAndView.setViewName("formularioUsuario");
 		principalService.cargaBasicaCompleta(modelAndView);
 		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
-		formularioService.cargarDesplegables(modelAndView, userModel.getCodigoGimnasio());
+		formularioService.cargarDesplegablesBasicos(modelAndView);
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
@@ -101,8 +104,8 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @PathVariable String username) {
 		com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/remove/"+username);
-		if (userService.delete(username, user.getCodigoGimnasio())) {
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/remove/"+username);
+		if (userService.delete(username, sessionData.getGimnasioRootModel().getId())) {
 			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
 		} else {
 			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
@@ -115,10 +118,11 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView users(ModelAndView modelAndView) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users");
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/users");
 		modelAndView.setViewName("gimnasio/adminUsers");
-		modelAndView.addObject("userList", userService.findAll(user.getCodigoGimnasio()));
+		modelAndView.addObject("userList", userService.findAll(sessionData.getGimnasioRootModel().getId()));
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
+		modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
@@ -128,7 +132,7 @@ public class UsuarioController {
 	public ModelAndView userDetail(ModelAndView modelAndView, @PathVariable String username) {
 		LoggerMapper.methodIn(Level.INFO, "/users/"+username, username, this.getClass());
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/users/"+username);
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/users/"+username);
 		modelAndView.setViewName("gimnasio/adminUser");
 		UserModel userModel = userService.findModelByUsername(username);
 		modelAndView.addObject("user", userModel);
@@ -142,7 +146,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/enabled/" + username);
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/enabled/" + username);
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
 		usuario.setUsernameModificacione(user.getUsername());
@@ -159,7 +163,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView update(ModelAndView modelAndView, @PathVariable String username, @PathVariable String rol) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/usuario/rol/" + username + "/" + rol);
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/rol/" + username + "/" + rol);
 		UserRole userRole = new UserRole();
 		com.championdo.torneo.entity.User usuario = userService.findByUsername(username);
 		userRole.setUser(usuario);

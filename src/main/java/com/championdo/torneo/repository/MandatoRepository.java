@@ -9,7 +9,7 @@ import java.util.List;
 @Repository("MandatoRepository")
 public interface MandatoRepository extends JpaRepository<Mandato, Integer> {
     List<Mandato> findByCodigoGimnasioOrderByFechaAltaDesc(int codigoGimnasio);
-    List<Mandato> findByCodigoGimnasioAndDniMandanteOrderByFechaAltaDesc(int codigoGimnasio, String dniMandante);
+    List<Mandato> findByDniMandanteOrderByFechaAltaDesc(String dniMandante);
     List<Mandato> findByCodigoGimnasioAndDniMandanteAndMandatoFirmadoFalseOrderByFechaAltaDesc(int codigoGimnasio, String dniMandante);
     List<Mandato> findByDniMandanteAndTemporadaAndMandatoFirmadoTrue(String dniMandante, String temporada);
 }

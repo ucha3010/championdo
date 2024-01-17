@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.model.PoomsaeModel;
@@ -25,15 +26,18 @@ public class AdminPoomsaeController {
     private SeguridadService seguridadService;
     @Autowired
     private PrincipalService principalService;
+    @Autowired
+    private SessionData sessionData;
 
     @GetMapping("/poomsaeList")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView poomsaeList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsaeList");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminPoomsae/poomsaeList");
         modelAndView.setViewName("torneo/adminPoomsae");
         modelAndView.addObject("poomsaeModel", new PoomsaeModel());
-        modelAndView.addObject("poomsaeList", poomsaeService.findAll(user.getCodigoGimnasio()));
+        modelAndView.addObject("poomsaeList", poomsaeService.findAll(sessionData.getGimnasioRootModel().getId()));
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -42,8 +46,8 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragPoomsae(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsae/" + oldIndex + "/" + newIndex);
-        poomsaeService.dragOfPosition(user.getCodigoGimnasio(), oldIndex, newIndex);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminPoomsae/poomsae/" + oldIndex + "/" + newIndex);
+        poomsaeService.dragOfPosition(sessionData.getGimnasioRootModel().getId(), oldIndex, newIndex);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return poomsaeList(modelAndView);
     }
@@ -52,9 +56,9 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addPoomsae(ModelAndView modelAndView, @ModelAttribute("poomsaeModel") PoomsaeModel poomsaeModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/addPoomsae");
-        poomsaeModel.setCodigoGimnasio(user.getCodigoGimnasio());
-        poomsaeModel.setPosition(poomsaeService.findMaxPosition(user.getCodigoGimnasio()) + 1);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminPoomsae/addPoomsae");
+        poomsaeModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
+        poomsaeModel.setPosition(poomsaeService.findMaxPosition(sessionData.getGimnasioRootModel().getId()) + 1);
         poomsaeService.add(poomsaeModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return poomsaeList(modelAndView);
@@ -64,7 +68,7 @@ public class AdminPoomsaeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removePoomsae(ModelAndView modelAndView, @PathVariable int id) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminPoomsae/poomsae/remove/" + id);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminPoomsae/poomsae/remove/" + id);
         try {
             poomsaeService.delete(id);
         } catch (RemoveException re) {

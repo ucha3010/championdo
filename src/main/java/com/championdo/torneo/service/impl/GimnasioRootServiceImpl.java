@@ -57,6 +57,15 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
     }
 
     @Override
+    public List<GimnasioRootModel> findByCifNif(String cifNif) {
+        List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
+        for (GimnasioRoot gimnasioRoot: gimnasioRootRepository.findByCifNif(cifNif)) {
+            gimnasioRootModelList.add(mapperGimnasioRoot.entity2Model(gimnasioRoot));
+        }
+        return gimnasioRootModelList;
+    }
+
+    @Override
     public GimnasioRootModel findById(int id) {
         try {
             GimnasioRootModel gimnasioRootModel = mapperGimnasioRoot.entity2Model(gimnasioRootRepository.getById(id));
@@ -124,5 +133,15 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
             }
         }
         modelAndView.addObject("menu1List", menu1ModelList);
+    }
+
+    @Override
+    public List<GimnasioRootModel> findByMenu2Url(String url) {
+        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Repository.findByUrl("/gimnasio/tipoInscripcion").getId());
+        List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
+        for (GimnasioRootMenu2Model gimnasioRootMenu2Model : gimnasioRootMenu2ModelList) {
+            gimnasioRootModelList.add(findById(gimnasioRootMenu2Model.getIdGimnasioRoot()));
+        }
+        return gimnasioRootModelList;
     }
 }

@@ -24,7 +24,7 @@ public interface GimnasioService {
 
     int findMaxPosition(int codigoGimnasio);
 
-    GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel);
+/*    GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel);
 
-    void deleteFromRoot (int idGimnasioRootModel);
+    void deleteFromRoot (int idGimnasioRootModel);*/
 }

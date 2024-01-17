@@ -154,7 +154,7 @@ public class UserService implements UserDetailsService {
 		return userModel;
 	}
 
-	public void addFromRoot (GimnasioRootModel gimnasioRootModel, GimnasioModel gimnasioModel) {
+	public void addFromRoot (GimnasioRootModel gimnasioRootModel) {
 		UserModel userModel = new UserModel();
 		userModel.setUsername(gimnasioRootModel.getCifNif().toUpperCase());
 		userModel.setPassword(encodePassword(gimnasioRootModel.getCifNif().toUpperCase()));
@@ -164,10 +164,9 @@ public class UserService implements UserDetailsService {
 		userModel.setCorreo(gimnasioRootModel.getCorreo());
 		userModel.setTelefono(gimnasioRootModel.getTelefono());
 		userModel.setFechaNacimiento(gimnasioRootModel.getFechaNacimiento());
-		userModel.setGimnasio(gimnasioModel);
 		userModel.setEnabled(true);
 		userModel.setFechaAlta(new Date());
-		userModel.setCodigoGimnasio(gimnasioModel.getId());
+		userModel.setCodigoGimnasio(gimnasioRootModel.getId());
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, Constantes.ROLE_ADMIN));
 	}

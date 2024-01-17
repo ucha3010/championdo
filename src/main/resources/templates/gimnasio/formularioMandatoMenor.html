@@ -155,6 +155,24 @@
 				</div>
 			</div>
 
+			<div class="row mb-3">
+				<div class="col-md-2">
+				</div>
+				<div class="col-3 col-md-2">
+					<label for="idCalidad">En calidad de*</label>
+				</div>
+				<div class="col-5 col-md-3">
+					<select th:field="*{calidad}" id="idCalidad" class="form-select" onchange="confirmarCalidad()">
+						<option th:each="c : ${listaCalidad}" th:value="${c.nombre}" th:text="${c.nombre}"></option>
+					</select>
+				</div>
+				<div class="col-4 col-md-4">
+					<input type="text" th:field="*{calidadOtro}" id="calidadOtro" placeholder="rellenar si selecciona 'Otro'" class="form-control displayNone" size="60"/>
+				</div>
+				<div class="col-md-1">
+				</div>
+			</div>
+
 			<div class="row mb-1">
 				<div class="col-12 col-md-2">
 					<strong>Domicilio</strong>
@@ -221,21 +239,18 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1">
 				<div class="col-md-2">
 				</div>
 				<div class="col-3 col-md-2">
-					<label for="idCalidad">En calidad de*</label>
+					<label for="idPais">País*</label>
 				</div>
-				<div class="col-5 col-md-4">
-					<select th:field="*{calidad}" id="idCalidad" class="form-select" onchange="confirmarCalidad()">
-						<option th:each="c : ${listaCalidad}" th:value="${c.nombre}" th:text="${c.nombre}"></option>
+				<div class="col-9 col-md-3">
+					<select th:field="*{pais}" id="idPais" class="form-select">
+						<option th:each="p : ${listaPaises}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
 					</select>
 				</div>
-				<div class="col-4 col-md-3">
-					<input type="text" th:field="*{calidadOtro}" id="calidadOtro" placeholder="rellenar si selecciona 'Otro'" class="form-control displayNone" size="60"/>
-				</div>
-				<div class="col-md-1">
+				<div class="col-md-5">
 				</div>
 			</div>
 
@@ -292,18 +307,18 @@
 				</div>
 			</div>
 
-			<div class="row mb-1">
+			<div class="row mb-3">
 				<div class="col-md-2">
 				</div>
 				<div class="col-3 col-md-2">
-					<label for="idPais">País*</label>
+					<label for="idGimnasio">Gimnasio*</label>
 				</div>
-				<div class="col-9 col-md-3">
-					<select th:field="*{pais}" id="idPais" class="form-select">
-						<option th:each="p : ${listaPaises}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
+				<div class="col-9 col-md-4">
+					<select th:field="*{codigoGimnasio}" id="idGimnasio" class="form-select">
+						<option th:each="p : ${gimnasios}" th:value="${p.id}" th:text="${p.nombreGimnasio}"></option>
 					</select>
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-4">
 				</div>
 			</div>
 

@@ -46,7 +46,7 @@ public class SeguridadServiceImpl implements SeguridadService {
         modelAndView.setViewName("firma/envioCodigo");
         try {
             firmaCodigoModel = firmaCodigoService.add(firmaCodigoModel);
-            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo(), firmaCodigoModel.getCodigoGimnasio());
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, firmaCodigoModel.getOperativaOriginal(), e.getMessage(), getClass());
         }
@@ -54,7 +54,7 @@ public class SeguridadServiceImpl implements SeguridadService {
         if (firmaCodigoModel.getId() != 0) {
             modelAndView.addObject("direccionCorreo", Utils.ofuscar(userLogged.getCorreo()));
             modelAndView.addObject("firmaCodigoModel", new FirmaCodigoModel(firmaCodigoModel.getIdOperacion(),
-                    null, null, null, firmaCodigoModel.getOperativaOriginal()));
+                    null, null, null, firmaCodigoModel.getOperativaOriginal(), firmaCodigoModel.getCodigoGimnasio()));
         } else {
             modelAndView.addObject("inscripcionError", "Ha ocurrido un error. Por favor contacte con el soporte técnico.");
         }

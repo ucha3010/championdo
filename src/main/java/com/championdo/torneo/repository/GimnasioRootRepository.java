@@ -10,5 +10,5 @@ import java.util.List;
 public interface GimnasioRootRepository extends JpaRepository<GimnasioRoot, Integer> {
 
     List<GimnasioRoot> findAllByOrderByNombreGimnasioAsc();
-
+    List<GimnasioRoot> findByCifNif(String cifNif);
 }

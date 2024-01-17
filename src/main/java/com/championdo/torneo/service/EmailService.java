@@ -19,7 +19,7 @@ public interface EmailService {
 
     void confirmAdminGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException;
 
-    void sendCodeValidation(User userModel, String code) throws SenderException;
+    void sendCodeValidation(User userModel, String code, int codigoGimnasio) throws SenderException;
 
     void sendAttachedFile(UserModel userModel, String messageSubject, String messageBody, List<File> files) throws SenderException;
 

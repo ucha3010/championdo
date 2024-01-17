@@ -44,13 +44,12 @@ public class MandatoController {
     public ModelAndView mandatos(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/principalMandato");
         com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("mandatoModelList", mandatoService.findByDniMandante(usuario.getCodigoGimnasio(), usuario.getUsername()));
+        modelAndView.addObject("mandatoModelList", mandatoService.findByDniMandante(usuario.getUsername()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-    //TODO DAMIAN en adulto y menor se debe poder elegir gimnasio al cual enviar el mandato
     @GetMapping("/adulto")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView adulto(ModelAndView modelAndView) {
@@ -58,7 +57,8 @@ public class MandatoController {
         com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
         modelAndView.addObject("titulo", "Mandato para licencia mayor de edad");
-        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+        modelAndView.addObject("gimnasios", gimnasioRootService.findByMenu2Url("/mandato/mandatos"));
+        formularioService.cargarDesplegablesBasicos(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -71,7 +71,8 @@ public class MandatoController {
         MandatoModel mandatoModel = fillMandatoModel(usuario);
         mandatoModel.setMenor(menor);
         modelAndView.addObject("mandatoModel", mandatoModel);
-        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+        modelAndView.addObject("gimnasios", gimnasioRootService.findByMenu2Url("/mandato/mandatos"));
+        formularioService.cargarDesplegablesBasicos(modelAndView);
         titulo(modelAndView, menor);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -82,14 +83,14 @@ public class MandatoController {
     public ModelAndView gaurdarAdulto(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        mandatoService.fillMandato(mandatoModel, true, usuario.getCodigoGimnasio());
+        mandatoService.fillMandato(mandatoModel, true);
         try {
             commonMandato(modelAndView, mandatoModel, usuario);
         } catch (ValidationException e) {
             modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
             modelAndView.addObject("addKO", e.getMessage());
             modelAndView.addObject("mandatoModel", mandatoModel);
-            formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+            formularioService.cargarDesplegablesBasicos(modelAndView);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -100,7 +101,7 @@ public class MandatoController {
     public ModelAndView guardarMenor(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        mandatoService.fillMandato(mandatoModel, false, usuario.getCodigoGimnasio());
+        mandatoService.fillMandato(mandatoModel, false);
         try {
             commonMandato(modelAndView, mandatoModel, usuario);
         } catch (ValidationException e) {
@@ -108,7 +109,7 @@ public class MandatoController {
             titulo(modelAndView, mandatoModel.isMenor());
             modelAndView.addObject("addKO", e.getMessage());
             modelAndView.addObject("mandatoModel", mandatoModel);
-            formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+            formularioService.cargarDesplegablesBasicos(modelAndView);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -172,7 +173,7 @@ public class MandatoController {
         mandatoModel = mandatoService.add(mandatoModel);
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                 seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
-                "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO);
+                "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO, mandatoModel.getCodigoGimnasio());
         seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
     }
 

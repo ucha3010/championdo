@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
@@ -40,6 +41,8 @@ public class GimnasioController {
     private GimnasioRootMenu2Service gimnasioRootMenu2Service;
     @Autowired
     private GimnasioRootService gimnasioRootService;
+    @Autowired
+    private SessionData sessionData;
 
     @GetMapping("/tipoInscripcion")
     @PreAuthorize("isAuthenticated()")
@@ -53,12 +56,8 @@ public class GimnasioController {
         modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
         modelAndView.addObject("inscripcionA", "Taekwondo");
         modelAndView.addObject("controller", "gimnasio");
-        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Service.findByUrl("/gimnasio/tipoInscripcion").getId());
-        List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
-        for (GimnasioRootMenu2Model gimnasioRootMenu2Model : gimnasioRootMenu2ModelList) {
-            gimnasioRootModelList.add(gimnasioRootService.findById(gimnasioRootMenu2Model.getIdGimnasioRoot()));
-        }
-        modelAndView.addObject("gimnasios", gimnasioRootModelList);
+        modelAndView.addObject("gimnasios", gimnasioRootService.findByMenu2Url("/gimnasio/tipoInscripcion"));
+        //TODO DAMIAN usuario viene sin codigoGimnasio. Hay que habilitar para borrado SOLO las inscripciones del gimnasio que traigo acá en id
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -69,6 +68,7 @@ public class GimnasioController {
     public ModelAndView tipoInscripcionConGimnasio(ModelAndView modelAndView, @PathVariable Integer id) {
         modelAndView.setViewName("gimnasio/formularioTipoInscripcionGimnasio");
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        sessionData.setGimnasioRootModel(gimnasioRootService.findById(id));
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
             for (InscripcionTaekwondoModel inscripcionTaekwondoModel : inscripcionTaekwondoModelList) {
@@ -82,7 +82,8 @@ public class GimnasioController {
         modelAndView.addObject("inscripcionA", "Taekwondo");
         modelAndView.addObject("controller", "gimnasio");
         modelAndView.addObject("gimnasio", gimnasioRootService.findById(id));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        //TODO DAMIAN usuario viene sin codigoGimnasio. Hay que habilitar para borrado SOLO las inscripciones del gimnasio que traigo acá en id
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(sessionData.getGimnasioRootModel().getId()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -91,8 +92,8 @@ public class GimnasioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable Integer id, @PathVariable String tipo, @PathVariable String licencia) {
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        usuario.setCodigoGimnasio(id);
-        modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(usuario.getCodigoGimnasio()).getValor()));
+//        usuario.setCodigoGimnasio(id);
+        modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(sessionData.getGimnasioRootModel().getId()).getValor()));
         if ("infantil".equalsIgnoreCase(tipo)) {
             modelAndView.setViewName("gimnasio/formularioInscMenorGimnasio");
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
@@ -101,7 +102,7 @@ public class GimnasioController {
             modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(usuario));
         }
         modelAndView.addObject("licencia", "con licencia".equals(licencia));
-        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+        formularioService.cargarDesplegables(modelAndView, sessionData.getGimnasioRootModel().getId());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -212,10 +213,10 @@ public class GimnasioController {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
         }
         formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel);
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioRootModel().getId());
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                 seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO);
+                "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, sessionData.getGimnasioRootModel().getId());
         modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;

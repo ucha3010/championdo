@@ -11,6 +11,7 @@ public interface GimnasioRootService {
     List<GimnasioRootModel> findAll();
 
     List<GimnasioRootModel> findAllOrderByNombreGimnasioAsc();
+    List<GimnasioRootModel> findByCifNif(String cifNif);
 
     GimnasioRootModel findById(int id);
 
@@ -25,5 +26,7 @@ public interface GimnasioRootService {
     boolean verifyEnable(int idGimnasioRootModel);
 
     void fillMenu2Checked(ModelAndView modelAndView);
+
+    List<GimnasioRootModel> findByMenu2Url(String url);
 
 }

@@ -11,12 +11,13 @@ import java.util.Date;
 @ToString
 public class FirmaCodigoModel {
 
-    public FirmaCodigoModel (int idOperacion, String codigo, String dni, String paginaFirmaOk, String operativaOriginal) {
+    public FirmaCodigoModel (int idOperacion, String codigo, String dni, String paginaFirmaOk, String operativaOriginal, int codigoGimnasio) {
         this.idOperacion = idOperacion;
         this.codigo = codigo;
         this.dni = dni;
         this.paginaFirmaOk = paginaFirmaOk;
         this.operativaOriginal = operativaOriginal;
+        this.codigoGimnasio = codigoGimnasio;
     }
 
     private int id;

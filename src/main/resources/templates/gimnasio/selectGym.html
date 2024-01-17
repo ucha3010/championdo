@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta th:replace="static/cabeceraMeta :: meta">
+		<link th:replace="static/cabeceraLink :: link">
+		<script th:replace="static/cabeceraScript :: script"></script>
+
+		<title>Selección de gimnasio</title>
+
+		<script type="text/javascript">
+			function goDetail(id){
+				var relativeUrl = "admin/adminGymList/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+			}
+		</script>
+	</head>
+	<body>
+		<div th:replace="static/barraUsuario :: div"></div>
+		<div th:replace="static/barraNav :: nav"></div>
+
+		<div class="container text-center">
+			<section>
+				<div class="row align-items-center justify-content-end">
+					<div class="col-md-2">
+					</div>
+					<div class="col-6 col-md-8 colorGreen">
+						<h1>Selección de gimnasio</h1>
+					</div>
+					<div class="col-3 col-md-2">
+						<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
+					</div>
+				</div>
+			</section>
+			<section sec:authorize="hasRole('ROLE_ADMIN')" th:each="unit : ${gyms}">
+				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button" th:text="${unit.nombreGimnasio}" th:attr="onclick=|goDetail('${unit.id}')|"></button>
+			</section>
+
+		</div>
+	</body>
+
+	<footer th:replace="static/footer :: footer"></footer>
+</html>

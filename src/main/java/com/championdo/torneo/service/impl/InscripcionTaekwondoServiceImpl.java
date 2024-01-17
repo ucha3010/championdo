@@ -79,8 +79,8 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     }
 
     @Override
-    public InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel) {
-        InscripcionTaekwondoModel inscripcionTaekwondoModel = add(fillInscripcionTaekwondoModel(userAutorizacionModel));
+    public InscripcionTaekwondoModel add(UserAutorizacionModel userAutorizacionModel, int codigoGimnasio) {
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = add(fillInscripcionTaekwondoModel(userAutorizacionModel, codigoGimnasio));
         LoggerMapper.methodOut(Level.INFO, "add", inscripcionTaekwondoModel, getClass());
         return inscripcionTaekwondoModel;
     }
@@ -177,7 +177,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         return utilService.findByClave(Constantes.HABILITAR_CUENTA_BANCARIA, codigoGimnasio);
     }
 
-    private InscripcionTaekwondoModel fillInscripcionTaekwondoModel(UserAutorizacionModel userAutorizacionModel) {
+    private InscripcionTaekwondoModel fillInscripcionTaekwondoModel(UserAutorizacionModel userAutorizacionModel, int codigoGimnasio) {
 
         InscripcionTaekwondoModel inscripcionTaekwondoModel = new InscripcionTaekwondoModel();
 
@@ -185,8 +185,8 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         UserModel autorizado = userAutorizacionModel.getAutorizado();
 
         inscripcionTaekwondoModel.setMayorDni(mayorAutorizador.getUsername());
-        inscripcionTaekwondoModel.setCodigoGimnasio(mayorAutorizador.getCodigoGimnasio());
-        inscripcionTaekwondoModel.setNombreGimnasio(gimnasioRootService.findById(mayorAutorizador.getCodigoGimnasio()).getNombreGimnasio());
+        inscripcionTaekwondoModel.setCodigoGimnasio(codigoGimnasio);
+        inscripcionTaekwondoModel.setNombreGimnasio(gimnasioRootService.findById(codigoGimnasio).getNombreGimnasio());
         inscripcionTaekwondoModel.setMayorNombre(mayorAutorizador.getName());
         inscripcionTaekwondoModel.setMayorApellido1(mayorAutorizador.getLastname());
         inscripcionTaekwondoModel.setMayorApellido2(mayorAutorizador.getSecondLastname());

@@ -95,7 +95,7 @@ public class GimnasioServiceImpl implements GimnasioService {
         }
     }
 
-    @Override
+    /*@Override
     public GimnasioModel addFromRoot (GimnasioRootModel customer) {
         GimnasioModel gimnasioModel = new GimnasioModel();
         gimnasioModel.setCodigoGimnasio(customer.getId());
@@ -116,7 +116,7 @@ public class GimnasioServiceImpl implements GimnasioService {
     @Override
     public void deleteFromRoot (int idGimnasioRootModel) {
         gimnasioRepository.delete(gimnasioRepository.findByCodigoGimnasio(idGimnasioRootModel));
-    }
+    }*/
 
     private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
         Gimnasio gimnasio = gimnasioRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);

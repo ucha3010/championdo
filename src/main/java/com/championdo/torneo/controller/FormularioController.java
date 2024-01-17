@@ -205,7 +205,7 @@ public class FormularioController {
     @PreAuthorize("permitAll()")
     public ModelAndView getAlta(ModelAndView modelAndView) {
         modelAndView.setViewName("formularioAlta");
-        formularioService.cargarDesplegablesAltaUsuario(modelAndView);
+        formularioService.cargarDesplegablesBasicos(modelAndView);
         if (modelAndView.isEmpty() || !modelAndView.getModel().containsKey("userModel")) {
             modelAndView.addObject("userModel", new UserModel());
         }

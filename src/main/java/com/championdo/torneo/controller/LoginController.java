@@ -72,7 +72,7 @@ public class LoginController {
 			tokenModel.setId(UUID.randomUUID().toString());
 			tokenModel.setUsername(claveUsuarioModel.getUsername());
 			tokenModel.setExpiration(Utils.sumaRestaMinutos(15));
-			tokenModel.setCodigoGimnasio(usuario.getCodigoGimnasio());
+//			tokenModel.setCodigoGimnasio(usuario.getCodigoGimnasio());
 			tokenService.add(tokenModel);
 			emailService.sendChangePassword(usuario, tokenModel);
 			modelAndView.addObject("emailEnvio", "Se ha enviado un correo para el cambio de " +
@@ -99,7 +99,7 @@ public class LoginController {
 		UserModel userModel = userService.findModelByUsername(username);
 		if (tokenModel.getId() == null || tokenService.isExpired(tokenModel.getExpiration())
 				|| userModel.getUsername() == null || !userModel.getUsername().equals(tokenModel.getUsername())
-				|| userModel.getCodigoGimnasio() != tokenModel.getCodigoGimnasio()) {
+				/*|| userModel.getCodigoGimnasio() != tokenModel.getCodigoGimnasio()*/) {
 			modelAndView.addObject("avisoKO", "El intento de cambio de contraseña expiró o superó su límite");
 			modelAndView.setViewName(Constantes.LOGIN);
 			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -126,7 +126,7 @@ public class LoginController {
 		UserModel userModel = userService.findModelByUsername(tokenModel.getUsername());
 		if (tokenModelBBDD.getId() == null || tokenService.isExpired(tokenModelBBDD.getExpiration())
 				|| userModel.getUsername() == null || !userModel.getUsername().equals(tokenModelBBDD.getUsername())
-				|| userModel.getCodigoGimnasio() != tokenModelBBDD.getCodigoGimnasio()) {
+				/*|| userModel.getCodigoGimnasio() != tokenModelBBDD.getCodigoGimnasio()*/) {
 			modelAndView.addObject("avisoKO", "El intento de cambio de contraseña expiró o superó su límite");
 			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 			return modelAndView;
