@@ -72,7 +72,6 @@ public class LoginController {
 			tokenModel.setId(UUID.randomUUID().toString());
 			tokenModel.setUsername(claveUsuarioModel.getUsername());
 			tokenModel.setExpiration(Utils.sumaRestaMinutos(15));
-//			tokenModel.setCodigoGimnasio(usuario.getCodigoGimnasio());
 			tokenService.add(tokenModel);
 			emailService.sendChangePassword(usuario, tokenModel);
 			modelAndView.addObject("emailEnvio", "Se ha enviado un correo para el cambio de " +

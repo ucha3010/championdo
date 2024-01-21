@@ -1029,9 +1029,9 @@ public class PdfServiceImpl implements PdfService {
     private List<String> organizaRenglones(List<String> parrafoList, String parrafo, int tamanioFuente, 
                                            Double anchoParrafoMlimetros, boolean negrita, boolean agrego) throws EmptyException {
 
-        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafoList: " + parrafoList + " - parrafo: " + 
+/*        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafoList: " + parrafoList + " - parrafo: " +
                 parrafo + " - tamanioFuente: " + tamanioFuente + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros + 
-                " - agrego: " + agrego, PdfServiceImpl.class);
+                " - agrego: " + agrego, PdfServiceImpl.class);*/
         if(!agrego) {
             parrafoList = new ArrayList<>();
         }
@@ -1073,7 +1073,7 @@ public class PdfServiceImpl implements PdfService {
             renglon.append(palabra.concat(" "));
         }
         parrafoList.add(renglon.toString());
-        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafoList: " + parrafoList + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros, PdfServiceImpl.class);
+//        LoggerMapper.log(Level.INFO, "organizaRenglones", "parrafoList: " + parrafoList + " - anchoParrafoMlimetros: " + anchoParrafoMlimetros, PdfServiceImpl.class);
         return parrafoList;
     }
 

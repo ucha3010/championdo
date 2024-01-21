@@ -2,10 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.GimnasioRootModel;
-import com.championdo.torneo.model.Menu1Model;
-import com.championdo.torneo.model.Menu2Model;
-import com.championdo.torneo.model.UtilModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
@@ -29,6 +26,8 @@ public class AdminUtilController {
 
     @Autowired
     private UtilService utilService;
+    @Autowired
+    private UtilManagerService utilManagerService;
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
@@ -54,7 +53,7 @@ public class AdminUtilController {
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
         modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
-        gimnasioRootService.fillMenu2Checked(modelAndView);
+        gimnasioRootService.fillMenu2Checked(modelAndView, sessionData.getGimnasioRootModel().getId());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -96,17 +95,52 @@ public class AdminUtilController {
     public ModelAndView rootUtil(ModelAndView modelAndView) {
         modelAndView.setViewName("management/adminUtil");
         principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("utilModel", utilService.findByClave(Constantes.HOST_PAGE_NAME,0));
+//        modelAndView.addObject("utilModel", utilService.findByClave(Constantes.HOST_PAGE_NAME,0));
+        UtilManagerModel utilManagerModel = utilManagerService.get();
+        modelAndView.addObject("utilManagerModel", utilManagerModel);
+        modelAndView.addObject("existsPass", utilManagerModel.getPassword() != null);
+        modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
+    //TODO DAMIAN para borrar una vez adaptada la página util del root
     @PostMapping("/root-update-util")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView rootUpdateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         principalService.cargaBasicaCompleta(modelAndView);
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return rootUtil(modelAndView);
+    }
+
+    @PostMapping("/update-util-manager")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView updateUtilManager(ModelAndView modelAndView, @ModelAttribute("utilManagerModel") UtilManagerModel utilManagerModel) {
+        LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo(), utilManagerModel, getClass());
+        principalService.cargaBasicaCompleta(modelAndView);
+        utilManagerModel.setPassword(utilManagerService.get().getPassword());
+        for (EmailEnum emailEnum : EmailEnum.values()) {
+            if (emailEnum.getHost().equals(utilManagerModel.getEmailHost())) {
+                utilManagerModel.setEmailPort(emailEnum.getPort());
+                break;
+            }
+        }
+        utilManagerService.update(utilManagerModel);
+        modelAndView.addObject("updateOK", "Actualización realizada con éxito");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return rootUtil(modelAndView);
+    }
+
+    @PostMapping("/update-util-manager/connection")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView updateUtilManagerConnection(ModelAndView modelAndView, @ModelAttribute("utilManagerModel") UtilManagerModel utilManagerModel) {
+        principalService.cargaBasicaCompleta(modelAndView);
+        UtilManagerModel utilManagerModelAux = utilManagerService.get();
+        utilManagerModelAux.setPassword(utilManagerModel.getPassword());
+        utilManagerService.update(utilManagerModelAux);
+        modelAndView.addObject("updateOK", "Contraseña actualizada con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return rootUtil(modelAndView);
     }

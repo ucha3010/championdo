@@ -20,7 +20,7 @@ public interface CategoriaService {
 
     void delete(int idCategoria);
 
-    CategoriaModel calcularCategoria(UserModel usuarioInscripto);
+    CategoriaModel calcularCategoria(UserModel usuarioInscripto, int codigoGimnasio);
 
     void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
 

@@ -45,24 +45,6 @@ public class PrincipalController {
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
-    /*@GetMapping("/paginaPrincipalAntigua")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView paginaPrincipalAntigua(ModelAndView modelAndView) {
-        modelAndView.setViewName("principal");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
-        for (InscripcionTaekwondoModel inscripcionTaekwondoModel: inscripcionTaekwondoModelList) {
-            if (!inscripcionTaekwondoModel.isInscripcionFirmada() || (inscripcionTaekwondoModel.isDomiciliacionSEPA() && !inscripcionTaekwondoModel.isDomiciliacionSEPAFirmada())) {
-                modelAndView.addObject("inscripcionTaekwondo", "Documentación pendiente de firma");
-            }
-        }
-        if(!mandatoService.findByDniMandanteAndMandatoFirmadoFalse(usuario.getCodigoGimnasio(), usuario.getUsername()).isEmpty()) { //TODO DAMIAN esto debería cambiar
-            modelAndView.addObject("licenciaTaekwondo", "Documentación pendiente de firma");
-        }
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(principalService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return modelAndView;
-    }*/
 
     @GetMapping("/principalTorneo")
     @PreAuthorize("isAuthenticated()")

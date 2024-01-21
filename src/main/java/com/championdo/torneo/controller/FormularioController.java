@@ -1,5 +1,6 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.*;
@@ -41,6 +42,10 @@ public class FormularioController {
     private PrincipalService principalService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SessionData sessionData;
+    @Autowired
+    private GimnasioRootService gimnasioRootService;
 
     @GetMapping("/selectTournament/{tournamentType}")
     @PreAuthorize("isAuthenticated()")
@@ -70,13 +75,15 @@ public class FormularioController {
         return modelAndView;
     }
 
-    @GetMapping("/cargar-formulario/{tournamentType}/{idTorneo}/{idGimnasio}")
+    @GetMapping("/cargar-formulario/{tournamentType}/{idTorneo}/{idTorneoGimnasio}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView cargarFormulario(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int idTorneo, @PathVariable int idGimnasio) {
+    public ModelAndView cargarFormulario(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int idTorneo, @PathVariable int idTorneoGimnasio) {
 
         com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        TorneoModel torneoModel = torneoService.findById(idTorneo);
+        sessionData.setGimnasioRootModel(gimnasioRootService.findById(torneoModel.getCodigoGimnasio()));
         usuario.setIdTorneo(idTorneo);
-        usuario.setIdTorneoGimnasio(idGimnasio);
+        usuario.setIdTorneoGimnasio(idTorneoGimnasio);
         switch (tournamentType) {
             case Constantes.ADULTO:
                 modelAndView.setViewName("torneo/formularioInscPropia");
@@ -94,7 +101,7 @@ public class FormularioController {
                 LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
                 return selectTournament(modelAndView, tournamentType);
         }
-        formularioService.cargarDesplegables(modelAndView, usuario.getCodigoGimnasio());
+        formularioService.cargarDesplegables(modelAndView, sessionData.getGimnasioRootModel().getId());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -106,19 +113,18 @@ public class FormularioController {
         LoggerMapper.methodIn(Level.INFO, "gaurdarPropia", userModel, getClass());
         ModelAndView modelAndView = new ModelAndView();
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        userModel.setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {
             formularioService.fillObjects(userModel);
             pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
-            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel, pdfModel);
+            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel, pdfModel, sessionData.getGimnasioRootModel().getId());
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendTournamentRegistration(userModel, file);
-            emailService.confirmAdminTournamentRegistration(new UserAutorizacionModel(userModel));
+            emailService.sendTournamentRegistration(userModel, file, inscripcionModel);
+            emailService.confirmAdminTournamentRegistration(new UserAutorizacionModel(userModel), inscripcionModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -151,20 +157,18 @@ public class FormularioController {
     public ModelAndView guardarMenorOInclisivo(@ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
         ModelAndView modelAndView = new ModelAndView();
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        userAutorizacionModel.getAutorizado().setCodigoGimnasio(user.getCodigoGimnasio());
-        userAutorizacionModel.getMayorAutorizador().setCodigoGimnasio(user.getCodigoGimnasio());
         modelAndView.setViewName("formularioInscFinalizada");
         PdfModel pdfModel;
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
-            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel, pdfModel);
+            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel, pdfModel, sessionData.getGimnasioRootModel().getId());
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file);
-            emailService.confirmAdminTournamentRegistration(userAutorizacionModel);
+            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file, inscripcionModel);
+            emailService.confirmAdminTournamentRegistration(userAutorizacionModel, inscripcionModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -189,6 +193,7 @@ public class FormularioController {
         TorneoModel torneoModel = torneoService.findById(inscripcionModel.getIdTorneo());
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
+        //TODO DAMIAN el borrar debería depender del gimnasio
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(torneoModel.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;

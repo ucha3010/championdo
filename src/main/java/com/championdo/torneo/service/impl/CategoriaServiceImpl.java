@@ -89,10 +89,10 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public CategoriaModel calcularCategoria(UserModel usuarioInscripto) {
+    public CategoriaModel calcularCategoria(UserModel usuarioInscripto, int codigoGimnasio) {
         Categoria categoria;
         if(usuarioInscripto.isInclusivo()) {
-            categoria = categoriaRepository.findByCodigoGimnasioAndNombre(usuarioInscripto.getCodigoGimnasio(), Constantes.INCLUSIVO);
+            categoria = categoriaRepository.findByCodigoGimnasioAndNombre(codigoGimnasio, Constantes.INCLUSIVO);
         } else {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(usuarioInscripto.getFechaNacimiento());
@@ -104,12 +104,12 @@ public class CategoriaServiceImpl implements CategoriaService {
             if ((edad <= 6) ||
                     (edad <= 8 && (!StringUtils.isNullOrEmpty(usuarioInscripto.getMenorEntreCategorias())
                              && usuarioInscripto.getMenorEntreCategorias().equalsIgnoreCase("Kicho")))) {
-                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPreinfantilTrue(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+                categoria = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndPreinfantilTrue(codigoGimnasio, edad, edad);
             } else if (edad <= 15) {
-                List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilTrue(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+                List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndInfantilTrue(codigoGimnasio, edad, edad);
                 categoria = findCategoria(categoriaList, positionCinturonUser);
             } else {
-                List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndAdultoTrue(usuarioInscripto.getCodigoGimnasio(), edad, edad);
+                List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasioAndEdadInicioLessThanEqualAndEdadFinGreaterThanEqualAndAdultoTrue(codigoGimnasio, edad, edad);
                 categoria = findCategoria(categoriaList, positionCinturonUser);
             }
         }

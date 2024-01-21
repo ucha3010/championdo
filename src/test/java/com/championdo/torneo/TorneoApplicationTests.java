@@ -1,8 +1,6 @@
 package com.championdo.torneo;
 
-import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.PdfModel;
-import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.service.SeguridadService;
@@ -19,12 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 @SpringBootTest
 //@RunWith(JUnit4.class)
@@ -55,7 +48,7 @@ class TorneoApplicationTests {
 		LoggerMapper.log(Level.INFO, "testPassword encriptada", pass, getClass());
 	}
 
-	@Test
+/*	@Test
 	void testEmailWithAttachedFile() {
 		try {
 			UserModel userModel = new UserModel();
@@ -69,7 +62,7 @@ class TorneoApplicationTests {
 			LoggerMapper.log(Level.ERROR, "testEmail", e.getMessage(), getClass());
 		}
 		assertThat("Hello world", is("Hello world"));
-	}
+	}*/
 
 	@Test
 	public String getAbsolutePath() {

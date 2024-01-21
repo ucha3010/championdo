@@ -25,7 +25,7 @@ public interface GimnasioRootService {
 
     boolean verifyEnable(int idGimnasioRootModel);
 
-    void fillMenu2Checked(ModelAndView modelAndView);
+    void fillMenu2Checked(ModelAndView modelAndView, int codigoGimnasio);
 
     List<GimnasioRootModel> findByMenu2Url(String url);
 

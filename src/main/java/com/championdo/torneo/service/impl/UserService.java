@@ -58,8 +58,6 @@ public class UserService implements UserDetailsService {
 		userModel.setFechaAlta(new Date());
 		userModel.setUsername(userModel.getUsername().toUpperCase());
 		userModel.setPassword(encodePassword(userModel.getPassword()));
-		GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(userModel.getCodigoGimnasio()); //TODO DAMIAN esto no debería estar
-		userModel.setGimnasio(gimnasioService.findByCodigoGimnasio(gimnasioRootModel.getId())); //TODO DAMIAN esto no debería estar
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, rol));
 		return user;
@@ -91,18 +89,14 @@ public class UserService implements UserDetailsService {
 		boolean respuesta = true;
 		try {
 			com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
-			if (codigoGimnasio == user.getCodigoGimnasio()) {
-				inscripcionService.deleteByDni(username);
-				inscripcionTaekwondoService.deleteByDni(username);
-				Set<UserRole> userRoles = userRoleRepository.findByUser(user);
-				for (UserRole userRole : userRoles) {
-					userRoleRepository.delete(userRole);
-				}
-				user.setUserRole(null);
-				userRepository.delete(user);
-			} else {
-				respuesta = false;
+			inscripcionService.deleteByDni(username);
+			inscripcionTaekwondoService.deleteByDni(username);
+			Set<UserRole> userRoles = userRoleRepository.findByUser(user);
+			for (UserRole userRole : userRoles) {
+				userRoleRepository.delete(userRole);
 			}
+			user.setUserRole(null);
+			userRepository.delete(user);
 		} catch (Exception e) {
 			respuesta = false;
 		}
@@ -174,7 +168,7 @@ public class UserService implements UserDetailsService {
 	public void deleteFromRoot (int idGimnasioRootModel) {
 		List<com.championdo.torneo.entity.User> userList = userRepository.findByCodigoGimnasioOrderByLastnameDesc(idGimnasioRootModel);
 		for (com.championdo.torneo.entity.User user : userList) {
-			delete(user.getUsername(), user.getCodigoGimnasio());
+			delete(user.getUsername(), idGimnasioRootModel);
 		}
 	}
 

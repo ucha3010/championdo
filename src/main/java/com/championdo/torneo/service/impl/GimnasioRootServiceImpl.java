@@ -119,10 +119,10 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
     }
 
     @Override
-    public void fillMenu2Checked(ModelAndView modelAndView) {
+    public void fillMenu2Checked(ModelAndView modelAndView, int codigoGimnasio) {
         List<Menu1Model> menu1ModelList = (List<Menu1Model>) modelAndView.getModel().get("menu1List");
-        User usuario = (User) modelAndView.getModel().get("usuario");
-        GimnasioRootModel gimnasioRootModel = findById(usuario.getCodigoGimnasio());
+//        User usuario = (User) modelAndView.getModel().get("usuario");
+        GimnasioRootModel gimnasioRootModel = findById(codigoGimnasio);
         List<Integer> idList = new ArrayList<>();
         for (Menu2Model menu2ModelAux: gimnasioRootModel.getMenu2ModelList()){
             idList.add(menu2ModelAux.getId());
@@ -137,7 +137,7 @@ public class GimnasioRootServiceImpl implements GimnasioRootService {
 
     @Override
     public List<GimnasioRootModel> findByMenu2Url(String url) {
-        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Repository.findByUrl("/gimnasio/tipoInscripcion").getId());
+        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Repository.findByUrl(url).getId());
         List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
         for (GimnasioRootMenu2Model gimnasioRootMenu2Model : gimnasioRootMenu2ModelList) {
             gimnasioRootModelList.add(findById(gimnasioRootMenu2Model.getIdGimnasioRoot()));

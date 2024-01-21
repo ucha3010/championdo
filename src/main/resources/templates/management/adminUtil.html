@@ -5,7 +5,67 @@
 	<link th:replace="static/cabeceraLink :: link">
 	<script th:replace="static/cabeceraScript :: script"></script>
 	
-	<title>Parámetros</title>
+	<title th:text="#{parametros}"></title>
+
+	<script type="text/javascript">
+		function validar(){
+
+			var campo = ['hostPageName','email','emailHost'];
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+				if(nombreRol.value==''){
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+			if(validado){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		function validarClave(){
+
+			var campo = ['nuevaClave','nuevaClaveRepeticion'];
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+				if(nombreRol.value==''){
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+    		var pass1 = document.getElementById('nuevaClave').value;
+	    	var pass2 = document.getElementById('nuevaClaveRepeticion').value;
+	    	if(pass1.length > 0 && pass1 != pass2){
+	    		document.getElementById('nuevaClaveError').innerHTML = "Claves no iguales";
+	    		document.getElementById('nuevaClave').style.borderColor="red";
+	    		document.getElementById('nuevaClaveRepeticion').style.borderColor="red";
+	    		validado = false;
+	    	}
+
+			if(validado){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		function restablecer(){
+			var campos = document.getElementsByClassName("form-control");
+			for (var i = 0; i < campos.length; i++) {
+				campos[i].style.borderColor="#ced4da";
+			}
+			var camposselect = document.getElementsByClassName("form-select");
+			for (var i = 0; i < camposselect.length; i++) {
+				camposselect[i].style.borderColor="#ced4da";
+			}
+		}
+	</script>
 
 </head>
 <body>
@@ -20,43 +80,119 @@
 		<section>
 			<div class="row align-items-center justify-content-end">
 				<div class="col-3 col-md-2">
-					<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/principal/}" th:text="#{volver}"></a>
 				</div>
 			</div>
 			<div class="row mb-1 text-center">
 				<div class="col-12 colorGreen">
-					<h1>Parámetros</h1>
+					<h1 th:text="#{parametros}"></h1>
 				</div>
 			</div>
 		</section>
 
-		<section sec:authorize="hasRole('ROLE_ROOT')">
-			<form action="#" th:action="@{/adminUtil/root-update-util}" th:object="${utilModel}" method="post">
-				<input type="hidden" th:field="*{clave}" />
+		<section sec:authorize="hasRole('ROLE_ROOT')" class="margenArribaAbajo3Porc">
+			<form action="#" th:action="@{/adminUtil/update-util-manager}" th:object="${utilManagerModel}" method="post" onsubmit="return validar()">
+				<input type="hidden" th:field="*{id}" />
 
-				<div class="row mb-3">
+				<div class="row mb-1">
 					<div class="col-5 col-sm-3">
-						<label th:for="${utilModel.clave}">
-							<span th:text="#{${utilModel.clave}}"></span>
+						<label th:for="hostPageName">
+							<span th:text="#{host.page.name}"></span>
 						</label>
 					</div>
-					<div class="col-7 col-sm-6 mb-3">
-						<input type="text" th:field="*{valor}" class="form-control" />
+					<div class="col-7 col-sm-6">
+						<input type="text" id="hostPageName" th:field="*{hostPageName}" class="form-control" />
 					</div>
-					<div class="col-6 d-sm-none">
-					</div>
-					<div class="col-6 col-sm-3">
-						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
+					<div class="col-sm-3">
 					</div>
 				</div>
 
-			</form>
+				<div class="row mb-1">
+					<div class="col-5 col-sm-3">
+						<label th:for="email">
+							<span th:text="#{correo.electronico}"></span>
+						</label>
+					</div>
+					<div class="col-7 col-sm-6">
+						<input type="text" id="email" th:field="*{email}" class="form-control" />
+					</div>
+					<div class="col-sm-3">
+					</div>
+				</div>
 
+				<div class="row mb-3">
+					<div class="col-5 col-sm-3">
+						<label th:for="emailHost"><span th:text="#{host.name}"></span></label>
+					</div>
+					<div class="col-7 col-sm-6">
+						<select th:field="*{emailHost}" id="emailHost" class="form-select">
+							<option th:each="unitHost : ${utilListHost}" th:value="${unitHost.valor}" th:text="${unitHost.clave}" th:selected="${unitHost.valor == utilManagerModel.emailHost}"></option>
+						</select>
+					</div>
+					<div class="col-sm-3">
+					</div>
+				</div>
+
+				<div class="row align-items-center justify-content-end mb-3">
+					<div class="col-6">
+						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
+					</div>
+				</div>
+			</form>
 		</section>
+
+		<section sec:authorize="hasRole('ROLE_ROOT')" class="backgroundColorLightOrange margenAbajo2Porc">
+			<form action="#" th:action="@{/adminUtil/update-util-manager/connection}" th:object="${utilManagerModel}" method="post" onsubmit="return validarClave()">
+				<input type="hidden" th:field="*{id}" />
+
+
+				<div class="row text-center mb-3">
+					<div class="col-12">
+						<label th:for="clave.correo">
+							<span th:if="${!existsPass}" th:text="#{asignar.clave.correo}" class="colorRed"></span>
+							<span th:if="${existsPass}" th:text="#{cambiar.clave.correo}"></span>
+						</label>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-sm-3">
+					</div>
+					<div class="col-12 col-sm-6">
+						<input type="password" id="nuevaClave" th:field="*{password}" class="form-control"/>
+					</div>
+					<div class="col-sm-3">
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-5 col-sm-3">
+					</div>
+					<div class="col-7 col-sm-6">
+						<input type="password" id="nuevaClaveRepeticion" class="form-control" th:placeholder="#{repetir.clave}"/>
+					</div>
+					<div class="col-sm-3">
+					</div>
+				</div>
+
+				<div class="row text-center mb-3">
+					<div class="col-12">
+						<span id="nuevaClaveError"></span>
+					</div>
+				</div>
+
+				<div class="row align-items-center justify-content-end mb-3">
+					<div class="col-6">
+						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
+					</div>
+				</div>
+			</form>
+		</section>
+
 
 		<div class="row align-items-center justify-content-end">
 			<div class="col-3 col-md-2">
-				<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
+				<a class="btn btn-info" href="#" th:href="@{/principal/}" th:text="#{volver}"></a>
 			</div>
 		</div>
 	</div>

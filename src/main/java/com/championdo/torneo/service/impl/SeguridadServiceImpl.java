@@ -46,7 +46,7 @@ public class SeguridadServiceImpl implements SeguridadService {
         modelAndView.setViewName("firma/envioCodigo");
         try {
             firmaCodigoModel = firmaCodigoService.add(firmaCodigoModel);
-            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo(), firmaCodigoModel.getCodigoGimnasio());
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, firmaCodigoModel.getOperativaOriginal(), e.getMessage(), getClass());
         }

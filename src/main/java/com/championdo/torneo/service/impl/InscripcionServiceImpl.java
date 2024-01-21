@@ -93,33 +93,33 @@ public class InscripcionServiceImpl implements InscripcionService {
     }
 
     @Override
-    public InscripcionModel addPropia(UserModel userModel, PdfModel pdfModel) {
-        InscripcionModel inscripcionModel = fillInscripcionModel(userModel, null, pdfModel);
+    public InscripcionModel addPropia(UserModel userModel, PdfModel pdfModel, int codigoGimnasio) {
+        InscripcionModel inscripcionModel = fillInscripcionModel(userModel, null, pdfModel, codigoGimnasio);
         inscripcionModel.setInscripcionPropia(true);
         return add(inscripcionModel);
     }
 
     @Override
-    public InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel, PdfModel pdfModel) {
+    public InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel, PdfModel pdfModel, int codigoGimnasio) {
         UserModel usuarioAutorizador = userAutorizacionModel.getMayorAutorizador();
         UserModel usuarioInscripto = userAutorizacionModel.getAutorizado();
 
         if (usuarioInscripto.isInclusivo()) {
-            return addInclusivo(usuarioAutorizador, usuarioInscripto, pdfModel);
+            return addInclusivo(usuarioAutorizador, usuarioInscripto, pdfModel, codigoGimnasio);
         } else if (usuarioInscripto.isMenor()) {
-            return addMenor(usuarioAutorizador, usuarioInscripto, pdfModel);
+            return addMenor(usuarioAutorizador, usuarioInscripto, pdfModel, codigoGimnasio);
         }
         return null;
     }
 
-    private InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto, PdfModel pdfModel) {
-        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador, pdfModel);
+    private InscripcionModel addMenor(UserModel usuarioAutorizador, UserModel usuarioInscripto, PdfModel pdfModel, int codigoGimnasio) {
+        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador, pdfModel, codigoGimnasio);
         inscripcionModel.setInscripcionMenor(true);
         return add(inscripcionModel);
     }
 
-    private InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto, PdfModel pdfModel) {
-        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador, pdfModel);
+    private InscripcionModel addInclusivo(UserModel usuarioAutorizador, UserModel usuarioInscripto, PdfModel pdfModel, int codigoGimnasio) {
+        InscripcionModel inscripcionModel = fillInscripcionModel(usuarioInscripto, usuarioAutorizador, pdfModel, codigoGimnasio);
         inscripcionModel.setInscripcionInclusiva(true);
         return add(inscripcionModel);
     }
@@ -172,13 +172,13 @@ public class InscripcionServiceImpl implements InscripcionService {
         utilService.update(utilModel);
     }
 
-    private InscripcionModel fillInscripcionModel(UserModel usuarioInscripto, UserModel usuarioAutorizador, PdfModel pdfModel) {
+    private InscripcionModel fillInscripcionModel(UserModel usuarioInscripto, UserModel usuarioAutorizador, PdfModel pdfModel, int codigoGimnasio) {
         InscripcionModel inscripcionModel = new InscripcionModel();
-        CategoriaModel categoriaModel = categoriaService.calcularCategoria(usuarioInscripto);
+        CategoriaModel categoriaModel = categoriaService.calcularCategoria(usuarioInscripto, codigoGimnasio);
 
         inscripcionModel.setFechaInscripcion(new Date());
         inscripcionModel.setCategoria(categoriaModel.getNombre());
-        inscripcionModel.setCodigoGimnasio(usuarioInscripto.getCodigoGimnasio());
+        inscripcionModel.setCodigoGimnasio(codigoGimnasio);
 
         inscripcionModel.setNombreInscripto(usuarioInscripto.getName());
         inscripcionModel.setApellido1Inscripto(usuarioInscripto.getLastname());

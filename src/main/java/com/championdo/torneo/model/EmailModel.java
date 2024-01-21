@@ -19,6 +19,6 @@ public class EmailModel {
     private List<File> files;
     private String host;
     private String port;
-    private int codigoGimnasio;
+    private String password;
 
 }

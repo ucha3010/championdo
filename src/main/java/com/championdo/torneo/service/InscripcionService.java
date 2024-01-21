@@ -18,9 +18,9 @@ public interface InscripcionService {
 
     InscripcionModel add(InscripcionModel inscripcionModel);
 
-    InscripcionModel addPropia(UserModel userModel, PdfModel pdfModel);
+    InscripcionModel addPropia(UserModel userModel, PdfModel pdfModel, int codigoGimnasio);
 
-    InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel, PdfModel pdfModel);
+    InscripcionModel addMenorOInclusivo(UserAutorizacionModel userAutorizacionModel, PdfModel pdfModel, int codigoGimnasio);
 
     void update(InscripcionModel inscripcionModel);
 

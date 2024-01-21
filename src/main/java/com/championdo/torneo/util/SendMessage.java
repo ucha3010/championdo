@@ -1,9 +1,7 @@
 package com.championdo.torneo.util;
 
 import com.championdo.torneo.model.EmailModel;
-import com.championdo.torneo.service.UtilService;
 import org.apache.logging.log4j.Level;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.activation.DataHandler;
@@ -20,9 +18,6 @@ import java.util.Properties;
 
 @Component
 public class SendMessage {
-
-    @Autowired
-    private UtilService utilService;
 
     /**
      * Primero ir a la configuración de la cuenta de Google.
@@ -72,7 +67,7 @@ public class SendMessage {
 
         //Enviar el correo
         Transport transport = session.getTransport("smtp");
-        transport.connect(emailModel.getFromEmailAddress(), utilService.findByClave(Constantes.CLAVE_CORREO, emailModel.getCodigoGimnasio()).getValor());
+        transport.connect(emailModel.getFromEmailAddress(), emailModel.getPassword());
         transport.sendMessage(email, email.getRecipients(javax.mail.Message.RecipientType.TO));
         transport.close();
 
