@@ -27,7 +27,7 @@ public class MandatoController {
     @Autowired
     private FormularioService formularioService;
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
@@ -57,7 +57,7 @@ public class MandatoController {
         com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
         modelAndView.addObject("titulo", "Mandato para licencia mayor de edad");
-        modelAndView.addObject("gimnasios", gimnasioRootService.findByMenu2Url("/mandato/mandatos"));
+        modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/mandato/mandatos"));
         formularioService.cargarDesplegablesBasicos(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -71,7 +71,7 @@ public class MandatoController {
         MandatoModel mandatoModel = fillMandatoModel(usuario);
         mandatoModel.setMenor(menor);
         modelAndView.addObject("mandatoModel", mandatoModel);
-        modelAndView.addObject("gimnasios", gimnasioRootService.findByMenu2Url("/mandato/mandatos"));
+        modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/mandato/mandatos"));
         formularioService.cargarDesplegablesBasicos(modelAndView);
         titulo(modelAndView, menor);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

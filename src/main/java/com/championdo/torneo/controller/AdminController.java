@@ -2,8 +2,8 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.GimnasioRootModel;
-import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.model.GimnasioModel;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -24,7 +24,7 @@ public class AdminController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
     @Autowired
     private SessionData sessionData;
 
@@ -33,15 +33,15 @@ public class AdminController {
     public ModelAndView adminList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         //TODO DAMIAN cada gimnasio seguirá teniendo una persona responsable pero tengo que hacer una tabla nueva para poder asignar varias personas a un gimnasio o varios gimnasios a una persona
-        List<GimnasioRootModel> gimnasioRootModelList = gimnasioRootService.findByCifNif(user.getUsername());
-        if (gimnasioRootModelList.size() == 1) {
-            sessionData.setGimnasioRootModel(gimnasioRootModelList.get(0));
+        List<GimnasioModel> gimnasioModelList = gimnasioService.findByCifNif(user.getUsername());
+        if (gimnasioModelList.size() == 1) {
+            sessionData.setGimnasioModel(gimnasioModelList.get(0));
             modelAndView.setViewName("gimnasio/adminList");
-            modelAndView.addObject("gimnasio", gimnasioRootModelList.get(0));
-            modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(sessionData.getGimnasioRootModel().getId()));
+            modelAndView.addObject("gimnasio", gimnasioModelList.get(0));
+            modelAndView.addObject("gimnasioAvailable", gimnasioService.verifyEnable(sessionData.getGimnasioModel().getId()));
         } else {
             modelAndView.setViewName("gimnasio/selectGym");
-            modelAndView.addObject("gyms", gimnasioRootModelList);
+            modelAndView.addObject("gyms", gimnasioModelList);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -51,10 +51,10 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView adminList(ModelAndView modelAndView, @PathVariable int gymCode) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        sessionData.setGimnasioRootModel(gimnasioRootService.findById(gymCode));
+        sessionData.setGimnasioModel(gimnasioService.findById(gymCode));
         modelAndView.setViewName("gimnasio/adminList");
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
-        modelAndView.addObject("gimnasioAvailable", gimnasioRootService.verifyEnable(sessionData.getGimnasioRootModel().getId()));
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
+        modelAndView.addObject("gimnasioAvailable", gimnasioService.verifyEnable(sessionData.getGimnasioModel().getId()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

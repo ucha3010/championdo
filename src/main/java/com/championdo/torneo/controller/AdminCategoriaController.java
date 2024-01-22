@@ -34,13 +34,13 @@ public class AdminCategoriaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView categoriaList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCategoria/categoriaList");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCategoria/categoriaList");
         modelAndView.setViewName("torneo/adminCategoria");
         modelAndView.addObject("categoriaModel", new CategoriaModel());
-        modelAndView.addObject("categoriaList", categoriaService.findAllNameExtended(sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("cinturonList", cinturonService.findAll(sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("poomsaeList", poomsaeService.findAll(sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
+        modelAndView.addObject("categoriaList", categoriaService.findAllNameExtended(sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("cinturonList", cinturonService.findAll(sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("poomsaeList", poomsaeService.findAll(sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -49,8 +49,8 @@ public class AdminCategoriaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragCategoria(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCategoria/categoria/" + oldIndex + "/" + newIndex);
-        categoriaService.dragOfPosition(sessionData.getGimnasioRootModel().getId(), oldIndex, newIndex);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCategoria/categoria/" + oldIndex + "/" + newIndex);
+        categoriaService.dragOfPosition(sessionData.getGimnasioModel().getId(), oldIndex, newIndex);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return categoriaList(modelAndView);
     }
@@ -59,9 +59,9 @@ public class AdminCategoriaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addCategoria(ModelAndView modelAndView, @ModelAttribute("categoriaModel") CategoriaModel categoriaModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCategoria/addCategoria");
-        categoriaModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
-        categoriaModel.setPosition(categoriaService.findMaxPosition(sessionData.getGimnasioRootModel().getId()) + 1);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCategoria/addCategoria");
+        categoriaModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
+        categoriaModel.setPosition(categoriaService.findMaxPosition(sessionData.getGimnasioModel().getId()) + 1);
         categoriaModel.setCinturonInicio(cinturonService.findById(categoriaModel.getCinturonInicio().getId()));
         categoriaModel.setCinturonFin(cinturonService.findById(categoriaModel.getCinturonFin().getId()));
         categoriaService.add(categoriaModel);
@@ -73,7 +73,7 @@ public class AdminCategoriaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeCategoria(ModelAndView modelAndView, @PathVariable int id) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCategoria/remove/" + id);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCategoria/remove/" + id);
         categoriaService.delete(id);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return categoriaList(modelAndView);

@@ -2,7 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Util;
 import com.championdo.torneo.mapper.MapperUtil;
-import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.repository.UtilRepository;
 import com.championdo.torneo.service.UtilService;
@@ -64,7 +64,7 @@ public class UtilServiceImpl implements UtilService {
     }
 
     @Override
-    public void addFromRoot(GimnasioRootModel customer) {
+    public void addFromRoot(GimnasioModel customer) {
         List<Util> utilList = new ArrayList<>();
         utilList.add(new Util(Constantes.DIRECCION_CAMPEONATO,"",customer.getId()));
         utilList.add(new Util(Constantes.FECHA_CAMPEONATO, "",customer.getId()));

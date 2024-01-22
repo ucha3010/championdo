@@ -6,7 +6,7 @@ import com.championdo.torneo.mapper.MapperTorneo;
 import com.championdo.torneo.model.TorneoGimnasioModel;
 import com.championdo.torneo.model.TorneoModel;
 import com.championdo.torneo.repository.TorneoRepository;
-import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
@@ -32,7 +32,7 @@ public class TorneoServiceImpl implements TorneoService {
     @Autowired
     private InscripcionService inscripcionService;
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
     @Autowired
     private TorneoGimnasioService torneoGimnasioService;
 
@@ -60,7 +60,7 @@ public class TorneoServiceImpl implements TorneoService {
         torneoModel = mapperTorneo.entity2Model(torneoRepository.save(mapperTorneo.model2Entity(torneoModel)));
         TorneoGimnasioModel torneoGimnasioModel = new TorneoGimnasioModel();
         torneoGimnasioModel.setIdTorneo(torneoModel.getId());
-        torneoGimnasioModel.setNombreGimnasio(gimnasioRootService.findById(torneoModel.getCodigoGimnasio()).getNombreGimnasio());
+        torneoGimnasioModel.setNombreGimnasio(gimnasioService.findById(torneoModel.getCodigoGimnasio()).getNombreGimnasio());
         torneoGimnasioModel.setCodigoGimnasio(torneoModel.getCodigoGimnasio());
         torneoGimnasioService.add(torneoGimnasioModel);
     }

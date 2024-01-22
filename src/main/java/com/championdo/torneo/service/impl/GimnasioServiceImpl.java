@@ -2,15 +2,24 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.Gimnasio;
 import com.championdo.torneo.mapper.MapperGimnasio;
+import com.championdo.torneo.mapper.MapperMenu2;
 import com.championdo.torneo.model.GimnasioModel;
-import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.GimnasioRootMenu2Model;
+import com.championdo.torneo.model.Menu1Model;
+import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.repository.GimnasioRepository;
+import com.championdo.torneo.repository.Menu2Repository;
+import com.championdo.torneo.service.GimnasioRootMenu2Service;
 import com.championdo.torneo.service.GimnasioService;
+import com.championdo.torneo.util.LoggerMapper;
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service()
@@ -18,14 +27,39 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Autowired
     private GimnasioRepository gimnasioRepository;
-
     @Autowired
     private MapperGimnasio mapperGimnasio;
+    @Autowired
+    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
+    @Autowired
+    private Menu2Repository menu2Repository;
+    @Autowired
+    private MapperMenu2 mapperMenu2;
+
+
 
     @Override
-    public List<GimnasioModel> findAll(int codigoGimnasio) {
+    public List<GimnasioModel> findAll() {
         List<GimnasioModel> gimnasioModelList = new ArrayList<>();
-        for (Gimnasio gimnasio: gimnasioRepository.findByCodigoGimnasioOrderByPositionAsc(codigoGimnasio)) {
+        for (Gimnasio gimnasio: gimnasioRepository.findAll()) {
+            gimnasioModelList.add(mapperGimnasio.entity2Model(gimnasio));
+        }
+        return gimnasioModelList;
+    }
+
+    @Override
+    public List<GimnasioModel> findAllOrderByNombreGimnasioAsc() {
+        List<GimnasioModel> gimnasioModelList = new ArrayList<>();
+        for (Gimnasio gimnasio: gimnasioRepository.findAllByOrderByNombreGimnasioAsc()) {
+            gimnasioModelList.add(mapperGimnasio.entity2Model(gimnasio));
+        }
+        return gimnasioModelList;
+    }
+
+    @Override
+    public List<GimnasioModel> findByCifNif(String cifNif) {
+        List<GimnasioModel> gimnasioModelList = new ArrayList<>();
+        for (Gimnasio gimnasio: gimnasioRepository.findByCifNif(cifNif)) {
             gimnasioModelList.add(mapperGimnasio.entity2Model(gimnasio));
         }
         return gimnasioModelList;
@@ -34,93 +68,79 @@ public class GimnasioServiceImpl implements GimnasioService {
     @Override
     public GimnasioModel findById(int id) {
         try {
-            return mapperGimnasio.entity2Model(gimnasioRepository.getById(id));
+            GimnasioModel gimnasioModel = mapperGimnasio.entity2Model(gimnasioRepository.getById(id));
+            List<Menu2Model> menu2ModelList = new ArrayList<>();
+            for(GimnasioRootMenu2Model gimnasioRootMenu2: gimnasioRootMenu2Service.findByIdGimnasioRoot(id)) {
+                menu2ModelList.add(mapperMenu2.entity2Model(menu2Repository.getById(gimnasioRootMenu2.getIdMenu2())));
+            }
+            gimnasioModel.setMenu2ModelList(menu2ModelList);
+            return gimnasioModel;
         } catch (EntityNotFoundException e) {
             return new GimnasioModel();
         }
     }
 
     @Override
-    public GimnasioModel findByCodigoGimnasio(int codigoGimnasio) {
-        return mapperGimnasio.entity2Model(gimnasioRepository.findByCodigoGimnasio(codigoGimnasio));
-    }
-
-    @Override
     public GimnasioModel add(GimnasioModel gimnasioModel) {
+        Date now = new Date();
+        gimnasioModel.setFechaAlta(now);
+        gimnasioModel.setFechaModificacion(now);
+        gimnasioModel.setEnabled(Boolean.TRUE);
         return mapperGimnasio.entity2Model(gimnasioRepository.save(mapperGimnasio.model2Entity(gimnasioModel)));
     }
 
     @Override
     public GimnasioModel update(GimnasioModel gimnasioModel) {
-        return add(gimnasioModel);
+        gimnasioModel.setFechaModificacion(new Date());
+        return mapperGimnasio.entity2Model(gimnasioRepository.save(mapperGimnasio.model2Entity(gimnasioModel)));
     }
 
     @Override
     public void delete(int idGimnasio) {
-        GimnasioModel gimnasioModel = findById(idGimnasio);
         gimnasioRepository.deleteById(idGimnasio);
-        List<Gimnasio> gimnasioList = gimnasioRepository.findByCodigoGimnasioOrderByPositionAsc(gimnasioModel.getCodigoGimnasio());
-        for (int i = 0; i < gimnasioList.size(); i++) {
-            if (gimnasioList.get(i).getPosition() != i) {
-                gimnasioList.get(i).setPosition(i);
-                gimnasioRepository.save(gimnasioList.get(i));
-            }
+        gimnasioRootMenu2Service.deleteByIdGimnasioRoot(idGimnasio);
+    }
+
+    @Override
+    public void enableDisable(int idGimnasioModel, boolean enableDisable) {
+        GimnasioModel gimnasioModel = findById(idGimnasioModel);
+        gimnasioModel.setEnabled(enableDisable);
+        try {
+            update(gimnasioModel);
+        } catch (Exception e) {
+            LoggerMapper.log(Level.ERROR, "enableDisable", e.getMessage(), this.getClass());
         }
     }
 
     @Override
-    public void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition) {
-        Gimnasio gimnasio = gimnasioRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, initialPosition);
-        if (initialPosition > finalPosition) {
-            for (int i = initialPosition - 1; i >= finalPosition; i--) {
-                moveItem(codigoGimnasio, i, true);
-            }
-        }
-        if (initialPosition < finalPosition) {
-            for (int i = initialPosition + 1; i <= finalPosition; i++) {
-                moveItem(codigoGimnasio, i, false);
-            }
-        }
-        gimnasio.setPosition(finalPosition);
-        gimnasioRepository.save(gimnasio);
+    public boolean verifyEnable(int idGimnasioModel) {
+        GimnasioModel gimnasioModel = findById(idGimnasioModel);
+        return gimnasioModel.getId() != 0 && gimnasioModel.isEnabled();
     }
 
     @Override
-    public int findMaxPosition(int codigoGimnasio) {
-        Gimnasio gimnasio = gimnasioRepository.findTopByCodigoGimnasioOrderByPositionDesc(codigoGimnasio);
-        if (gimnasio != null) {
-            return gimnasio.getPosition();
-        } else {
-          return -1;
+    public void fillMenu2Checked(ModelAndView modelAndView, int codigoGimnasio) {
+        List<Menu1Model> menu1ModelList = (List<Menu1Model>) modelAndView.getModel().get("menu1List");
+        GimnasioModel gimnasioModel = findById(codigoGimnasio);
+        List<Integer> idList = new ArrayList<>();
+        for (Menu2Model menu2ModelAux: gimnasioModel.getMenu2ModelList()){
+            idList.add(menu2ModelAux.getId());
         }
-    }
-
-    /*@Override
-    public GimnasioModel addFromRoot (GimnasioRootModel customer) {
-        GimnasioModel gimnasioModel = new GimnasioModel();
-        gimnasioModel.setCodigoGimnasio(customer.getId());
-        gimnasioModel.setNombre(customer.getNombreGimnasio());
-        StringBuilder address = new StringBuilder(customer.getDomicilioCalle());
-        if(!customer.getDomicilioNumero().isEmpty()){
-            address.append(" ").append(customer.getDomicilioNumero());
+        for (Menu1Model menu1Model : menu1ModelList) {
+            for (Menu2Model menu2Model : menu1Model.getMenu2ModelList()) {
+                menu2Model.setChecked(idList.contains(menu2Model.getId()));
+            }
         }
-        if(!customer.getDomicilioOtros().isEmpty()){
-            address.append(" ").append(customer.getDomicilioOtros());
-        }
-        address.append(" (").append(customer.getDomicilioCp()).append(") ").append(customer.getDomicilioLocalidad());
-        gimnasioModel.setDireccion(address.toString());
-        gimnasioModel.setPosition(0);
-        return add(gimnasioModel);
+        modelAndView.addObject("menu1List", menu1ModelList);
     }
 
     @Override
-    public void deleteFromRoot (int idGimnasioRootModel) {
-        gimnasioRepository.delete(gimnasioRepository.findByCodigoGimnasio(idGimnasioRootModel));
-    }*/
-
-    private void moveItem(int codigoGimnasio, int position, boolean moveUp) {
-        Gimnasio gimnasio = gimnasioRepository.findByCodigoGimnasioAndPosition(codigoGimnasio, position);
-        gimnasio.setPosition(position + (moveUp ? 1 : -1));
-        gimnasioRepository.save(gimnasio);
+    public List<GimnasioModel> findByMenu2Url(String url) {
+        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Repository.findByUrl(url).getId());
+        List<GimnasioModel> gimnasioModelList = new ArrayList<>();
+        for (GimnasioRootMenu2Model gimnasioRootMenu2Model : gimnasioRootMenu2ModelList) {
+            gimnasioModelList.add(findById(gimnasioRootMenu2Model.getIdGimnasioRoot()));
+        }
+        return gimnasioModelList;
     }
 }

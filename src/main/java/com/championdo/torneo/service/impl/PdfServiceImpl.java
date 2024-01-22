@@ -2,7 +2,7 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.model.*;
-import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
@@ -32,7 +32,7 @@ import java.util.*;
 public class PdfServiceImpl implements PdfService {
 
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
 
     @Override
     public File generarPdfTorneo(PdfModel pdfModel) {
@@ -859,7 +859,7 @@ public class PdfServiceImpl implements PdfService {
     public PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel) {
 
         PdfModel pdfModel = new PdfModel();
-        GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(inscripcionTaekwondoModel.getCodigoGimnasio());
+        GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionTaekwondoModel.getCodigoGimnasio());
         pdfModel.setIdInscripcion(inscripcionTaekwondoModel.getId());
         pdfModel.setNombre(inscripcionTaekwondoModel.getMayorNombre() + " " + inscripcionTaekwondoModel.getMayorApellido1()
                 + (inscripcionTaekwondoModel.getMayorApellido2() != null ? " " + inscripcionTaekwondoModel.getMayorApellido2() : ""));
@@ -867,11 +867,11 @@ public class PdfServiceImpl implements PdfService {
         pdfModel.setTelefono(inscripcionTaekwondoModel.getMayorTelefono());
         pdfModel.setCorreo(inscripcionTaekwondoModel.getMayorCorreo());
         pdfModel.setFechaNacimiento(Utils.date2String(inscripcionTaekwondoModel.getMayorFechaNacimiento()));
-        pdfModel.setGimnasio(gimnasioRootModel.getNombreGimnasio());
-        pdfModel.setDireccionGimnasio(gimnasioRootModel.getDomicilioCalle() + " "
-                + (StringUtils.isNullOrEmpty(gimnasioRootModel.getDomicilioNumero()) ? "" : gimnasioRootModel.getDomicilioNumero() + " ")
-                + (StringUtils.isNullOrEmpty(gimnasioRootModel.getDomicilioOtros()) ? "" : gimnasioRootModel.getDomicilioOtros() + " ")
-                + gimnasioRootModel.getDomicilioLocalidad() + " (" + gimnasioRootModel.getDomicilioCp() + ")");
+        pdfModel.setGimnasio(gimnasioModel.getNombreGimnasio());
+        pdfModel.setDireccionGimnasio(gimnasioModel.getDomicilioCalle() + " "
+                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
+                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
+                + gimnasioModel.getDomicilioLocalidad() + " (" + gimnasioModel.getDomicilioCp() + ")");
         if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorDomicilioCalle())) {
             pdfModel.setDomicilio(inscripcionTaekwondoModel.getMayorDomicilioCalle() + " " + inscripcionTaekwondoModel.getMayorDomicilioNumero()
                     + " " + inscripcionTaekwondoModel.getMayorDomicilioOtros());
@@ -899,17 +899,17 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public PdfModel getPdfMandato(MandatoModel mandatoModel) {
         PdfModel pdfModel = new PdfModel();
-        GimnasioRootModel gimnasioRootModel = gimnasioRootService.findById(mandatoModel.getCodigoGimnasio());
+        GimnasioModel gimnasioModel = gimnasioService.findById(mandatoModel.getCodigoGimnasio());
         pdfModel.setIdInscripcion(mandatoModel.getId());
         pdfModel.setNombre(mandatoModel.getNombreMandante() + " " + mandatoModel.getApellido1Mandante()
                 + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : ""));
         pdfModel.setDni(mandatoModel.getDniMandante());
         pdfModel.setCorreo(mandatoModel.getCorreoMandante());
-        pdfModel.setGimnasio(gimnasioRootModel.getNombreGimnasio());
-        pdfModel.setDireccionGimnasio(gimnasioRootModel.getDomicilioCalle() + " "
-                + (StringUtils.isNullOrEmpty(gimnasioRootModel.getDomicilioNumero()) ? "" : gimnasioRootModel.getDomicilioNumero() + " ")
-                + (StringUtils.isNullOrEmpty(gimnasioRootModel.getDomicilioOtros()) ? "" : gimnasioRootModel.getDomicilioOtros() + " ")
-                + gimnasioRootModel.getDomicilioLocalidad() + " (" + gimnasioRootModel.getDomicilioCp() + ")");
+        pdfModel.setGimnasio(gimnasioModel.getNombreGimnasio());
+        pdfModel.setDireccionGimnasio(gimnasioModel.getDomicilioCalle() + " "
+                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
+                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
+                + gimnasioModel.getDomicilioLocalidad() + " (" + gimnasioModel.getDomicilioCp() + ")");
         pdfModel.setMayorEdad(mandatoModel.isAdulto());
         if (!StringUtils.isNullOrEmpty(mandatoModel.getDomicilioCalle())) {
             pdfModel.setDomicilio(mandatoModel.getDomicilioCalle() + " " + mandatoModel.getDomicilioNumero()

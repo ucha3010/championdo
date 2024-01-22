@@ -2,7 +2,8 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.UtilManagerModel;
+import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/adminUtil")
 public class AdminUtilController {
@@ -30,8 +29,6 @@ public class AdminUtilController {
     private UtilManagerService utilManagerService;
     @Autowired
     private GimnasioService gimnasioService;
-    @Autowired
-    private GimnasioRootService gimnasioRootService;
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
@@ -44,16 +41,16 @@ public class AdminUtilController {
     public ModelAndView utilList(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminUtil/utilList");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
-        modelAndView.addObject("gimnasioModel", gimnasioService.findByCodigoGimnasio(sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", sessionData.getGimnasioRootModel().getId()).get(0));
+        modelAndView.addObject("gimnasioModel", gimnasioService.findById(sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", sessionData.getGimnasioModel().getId()).get(0));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
-        gimnasioRootService.fillMenu2Checked(modelAndView, sessionData.getGimnasioRootModel().getId());
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
+        gimnasioService.fillMenu2Checked(modelAndView, sessionData.getGimnasioModel().getId());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -62,8 +59,8 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminUtil/updateUtil");
-        utilModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/updateUtil");
+        utilModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -74,15 +71,15 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateHost(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminUtil/updateHost");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/updateHost");
         UtilModel utilPort = new UtilModel();
         for (EmailEnum emailEnum : EmailEnum.values()) {
             if (emailEnum.getHost().equals(utilModel.getValor())) {
-                utilPort = new UtilModel(Constantes.PORT_CORREO, emailEnum.getPort(), sessionData.getGimnasioRootModel().getId());
+                utilPort = new UtilModel(Constantes.PORT_CORREO, emailEnum.getPort(), sessionData.getGimnasioModel().getId());
                 break;
             }
         }
-        utilModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
+        utilModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
         utilService.update(utilModel);
         utilService.update(utilPort);
         modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");

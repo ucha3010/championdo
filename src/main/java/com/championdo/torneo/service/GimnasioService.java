@@ -2,29 +2,21 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.model.GimnasioModel;
-import com.championdo.torneo.model.GimnasioRootModel;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 public interface GimnasioService {
 
-    List<GimnasioModel> findAll(int codigoGimnasio);
-
+    List<GimnasioModel> findAll();
     GimnasioModel findById(int id);
-
-    GimnasioModel findByCodigoGimnasio(int codigoGimnasio);
-
     GimnasioModel add(GimnasioModel gimnasioModel);
-
     GimnasioModel update(GimnasioModel gimnasioModel);
-
     void delete(int idGimnasio);
-
-    void dragOfPosition(int codigoGimnasio, int initialPosition, int finalPosition);
-
-    int findMaxPosition(int codigoGimnasio);
-
-/*    GimnasioModel addFromRoot (GimnasioRootModel gimnasioRootModel);
-
-    void deleteFromRoot (int idGimnasioRootModel);*/
+    List<GimnasioModel> findAllOrderByNombreGimnasioAsc();
+    List<GimnasioModel> findByCifNif(String cifNif);
+    void enableDisable(int idGimnasioModel, boolean enableDisable);
+    boolean verifyEnable(int idGimnasioModel);
+    void fillMenu2Checked(ModelAndView modelAndView, int codigoGimnasio);
+    List<GimnasioModel> findByMenu2Url(String url);
 }

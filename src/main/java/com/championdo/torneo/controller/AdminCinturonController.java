@@ -34,11 +34,11 @@ public class AdminCinturonController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView cinturonList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCinturon/cinturonList");
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturonList");
         modelAndView.setViewName("gimnasio/adminCinturon");
         modelAndView.addObject("cinturonModel", new CinturonModel());
-        modelAndView.addObject("cinturonList", cinturonService.findAll(sessionData.getGimnasioRootModel().getId()));
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
+        modelAndView.addObject("cinturonList", cinturonService.findAll(sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -47,10 +47,10 @@ public class AdminCinturonController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView dragCinturon(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCinturon/cinturon/" + oldIndex + "/" + newIndex);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturon/" + oldIndex + "/" + newIndex);
         try {
-            cinturonService.verifyDragOfPositionAvailable(sessionData.getGimnasioRootModel().getId(), oldIndex, newIndex);
-            cinturonService.dragOfPosition(sessionData.getGimnasioRootModel().getId(), oldIndex, newIndex);
+            cinturonService.verifyDragOfPositionAvailable(sessionData.getGimnasioModel().getId(), oldIndex, newIndex);
+            cinturonService.dragOfPosition(sessionData.getGimnasioModel().getId(), oldIndex, newIndex);
         } catch (PositionException pe) {
             modelAndView.addObject("dragPositionProblem", pe.getMessage());
         }
@@ -62,9 +62,9 @@ public class AdminCinturonController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView addCinturon(ModelAndView modelAndView, @ModelAttribute("cinturonModel") CinturonModel cinturonModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCinturon/addCinturon");
-        cinturonModel.setCodigoGimnasio(sessionData.getGimnasioRootModel().getId());
-        cinturonModel.setPosition(cinturonService.findMaxPosition(sessionData.getGimnasioRootModel().getId()) + 1);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/addCinturon");
+        cinturonModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
+        cinturonModel.setPosition(cinturonService.findMaxPosition(sessionData.getGimnasioModel().getId()) + 1);
         cinturonService.add(cinturonModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return cinturonList(modelAndView);
@@ -74,7 +74,7 @@ public class AdminCinturonController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeCinturon(ModelAndView modelAndView, @PathVariable int id) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/adminCinturon/cinturon/remove/" + id);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturon/remove/" + id);
         try {
             cinturonService.delete(id);
         } catch (RemoveException re) {

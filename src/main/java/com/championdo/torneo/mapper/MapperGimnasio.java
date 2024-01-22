@@ -11,10 +11,25 @@ public class MapperGimnasio {
         GimnasioModel localObject = new GimnasioModel();
         if (externObject != null) {
             localObject.setId(externObject.getId());
-            localObject.setNombre(externObject.getNombre());
-            localObject.setDireccion(externObject.getDireccion());
-            localObject.setPosition(externObject.getPosition());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setEnabled(externObject.isEnabled());
+            localObject.setNombreGimnasio(externObject.getNombreGimnasio());
+            localObject.setNombreResponsable(externObject.getNombreResponsable());
+            localObject.setApellido1Responsable(externObject.getApellido1Responsable());
+            localObject.setApellido2Responsable(externObject.getApellido2Responsable());
+            localObject.setFechaNacimiento(externObject.getFechaNacimiento());
+            localObject.setDomicilioCalle(externObject.getDomicilioCalle());
+            localObject.setDomicilioNumero(externObject.getDomicilioNumero());
+            localObject.setDomicilioOtros(externObject.getDomicilioOtros());
+            localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
+            localObject.setDomicilioCp(externObject.getDomicilioCp());
+            localObject.setCifNif(externObject.getCifNif());
+            localObject.setVisibilidadContratada(externObject.getVisibilidadContratada());
+            localObject.setCantidadRegistrosContratados(externObject.getCantidadRegistrosContratados());
+            localObject.setFechaAlta(externObject.getFechaAlta());
+            localObject.setFechaModificacion(externObject.getFechaModificacion());
+            localObject.setUsuarioModificacion(externObject.getUsuarioModificacion());
+            localObject.setTelefono(externObject.getTelefono());
+            localObject.setCorreo(externObject.getCorreo());
         }
         return localObject;
     }
@@ -22,10 +37,25 @@ public class MapperGimnasio {
         Gimnasio localObject = new Gimnasio();
         if (externObject != null) {
             localObject.setId(externObject.getId());
-            localObject.setNombre(externObject.getNombre());
-            localObject.setDireccion(externObject.getDireccion());
-            localObject.setPosition(externObject.getPosition());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setEnabled(externObject.isEnabled());
+            localObject.setNombreGimnasio(externObject.getNombreGimnasio());
+            localObject.setNombreResponsable(externObject.getNombreResponsable());
+            localObject.setApellido1Responsable(externObject.getApellido1Responsable());
+            localObject.setApellido2Responsable(externObject.getApellido2Responsable());
+            localObject.setFechaNacimiento(externObject.getFechaNacimiento());
+            localObject.setDomicilioCalle(externObject.getDomicilioCalle());
+            localObject.setDomicilioNumero(externObject.getDomicilioNumero());
+            localObject.setDomicilioOtros(externObject.getDomicilioOtros());
+            localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
+            localObject.setDomicilioCp(externObject.getDomicilioCp());
+            localObject.setCifNif(externObject.getCifNif());
+            localObject.setVisibilidadContratada(externObject.getVisibilidadContratada());
+            localObject.setCantidadRegistrosContratados(externObject.getCantidadRegistrosContratados());
+            localObject.setFechaAlta(externObject.getFechaAlta());
+            localObject.setFechaModificacion(externObject.getFechaModificacion());
+            localObject.setUsuarioModificacion(externObject.getUsuarioModificacion());
+            localObject.setTelefono(externObject.getTelefono());
+            localObject.setCorreo(externObject.getCorreo());
         }
         return localObject;
     }

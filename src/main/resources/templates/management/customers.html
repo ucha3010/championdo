@@ -11,7 +11,7 @@
 
     <script>
         function viewDetail(id){
-            var relativeUrl = "gimnasioRoot/customers/" + id;
+            var relativeUrl = "gimnasio/customers/" + id;
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;
         }
@@ -44,7 +44,7 @@
     <section sec:authorize="hasRole('ROLE_ROOT')">
         <div class="row align-items-center justify-content-end mb-3">
             <div class="col-3">
-                <a class="btn btn-success" href="#" th:href="@{/gimnasioRoot/formNewCustomer}">Alta cliente</a>
+                <a class="btn btn-success" href="#" th:href="@{/gimnasio/formNewCustomer}">Alta cliente</a>
             </div>
         </div>
     </section>

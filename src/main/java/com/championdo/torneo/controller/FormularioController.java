@@ -48,7 +48,7 @@ public class FormularioController {
     @Autowired
     private SessionData sessionData;
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
 
     @GetMapping("/selectTournament/{tournamentType}")
     @PreAuthorize("isAuthenticated()")
@@ -87,7 +87,7 @@ public class FormularioController {
         userModel.setIdTorneo(idTorneo);
         userModel.setIdTorneoGimnasio(idTorneoGimnasio);
         TorneoModel torneoModel = torneoService.findById(idTorneo);
-        sessionData.setGimnasioRootModel(gimnasioRootService.findById(torneoModel.getCodigoGimnasio()));
+        sessionData.setGimnasioModel(gimnasioService.findById(torneoModel.getCodigoGimnasio()));
         switch (tournamentType) {
             case Constantes.ADULTO:
                 modelAndView.setViewName("torneo/formularioInscPropia");
@@ -105,7 +105,7 @@ public class FormularioController {
                 LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
                 return selectTournament(modelAndView, tournamentType);
         }
-        formularioService.cargarDesplegables(modelAndView, sessionData.getGimnasioRootModel().getId());
+        formularioService.cargarDesplegables(modelAndView, sessionData.getGimnasioModel().getId());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -122,7 +122,7 @@ public class FormularioController {
         try {
             formularioService.fillObjects(userModel);
             pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
-            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel, pdfModel, sessionData.getGimnasioRootModel().getId());
+            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel, pdfModel, sessionData.getGimnasioModel().getId());
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());
@@ -167,7 +167,7 @@ public class FormularioController {
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
-            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel, pdfModel, sessionData.getGimnasioRootModel().getId());
+            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel, pdfModel, sessionData.getGimnasioModel().getId());
             pdfModel.setIdInscripcion(inscripcionModel.getId());
             pdfModel.setCategoria(inscripcionModel.getCategoria());
             pdfModel.setPoomsae(inscripcionModel.getPoomsae());

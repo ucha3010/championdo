@@ -1,7 +1,7 @@
 package com.championdo.torneo.service;
 
 
-import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.UtilModel;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface UtilService {
 
     void update(UtilModel utilModel);
 
-    void addFromRoot(GimnasioRootModel customer);
+    void addFromRoot(GimnasioModel customer);
 
     void deleteFromRoot (int idGimnasioRootModel);
 }

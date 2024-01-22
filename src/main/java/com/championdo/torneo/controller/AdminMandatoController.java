@@ -33,9 +33,9 @@ public class AdminMandatoController {
     public ModelAndView mandatos(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/adminMandatoList");
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("mandatoModelList", mandatoService.findAll(sessionData.getGimnasioRootModel().getId()));
+        modelAndView.addObject("mandatoModelList", mandatoService.findAll(sessionData.getGimnasioModel().getId()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

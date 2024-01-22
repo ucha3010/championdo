@@ -58,7 +58,7 @@
 
 		function confirmDelete(id,nombre){
 			if(confirm("¿Seguro que desea eliminar " + nombre + "?")){
-				var relativeUrl = "gimnasioRoot/deleteCustomer/" + id;
+				var relativeUrl = "gimnasio/deleteCustomer/" + id;
 				var domain = getDomain(location.href);
 				location.href = domain + relativeUrl;
 				return true;
@@ -68,7 +68,7 @@
 
 		function confirmReset(id,nombre){
 			if(confirm("¿Seguro que desea resetear todos los Cinturones, Poomsaes y Categorías de " + nombre + "?")){
-				var relativeUrl = "gimnasioRoot/resetCintPoomCat/" + id;
+				var relativeUrl = "gimnasio/resetCintPoomCat/" + id;
 				var domain = getDomain(location.href);
 				location.href = domain + relativeUrl;
 				return true;
@@ -92,7 +92,7 @@
 		<section>
 			<div class="row align-items-center justify-content-end">
 				<div class="col-3 col-md-2">
-					<a class="btn btn-info" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/gimnasio/customers}">Volver</a>
 				</div>
 			</div>
 			<div class="row mb-1">
@@ -104,7 +104,7 @@
 
 		<section sec:authorize="hasRole('ROLE_ROOT')">
 
-			<form action="#" th:action="@{/gimnasioRoot/updateCustomer}" th:object="${customer}" method="post" onsubmit="return validar()">
+			<form action="#" th:action="@{/gimnasio/updateCustomer}" th:object="${customer}" method="post" onsubmit="return validar()">
 
 				<input type="hidden" th:field="*{id}" />
 				<input type="hidden" th:field="*{fechaAlta}" />
@@ -388,7 +388,7 @@
 					<div class="col-2 col-md-3">
 					</div>
 					<div class="col-3">
-						<a class="btn btn-info" href="#" th:href="@{/gimnasioRoot/customers}">Volver</a>
+						<a class="btn btn-info" href="#" th:href="@{/gimnasio/customers}">Volver</a>
 					</div>
 					<div class="col-4 col-md-2">
 						<button class="btn btn-success" id="continueButton" type="submit">Actualizar</button>

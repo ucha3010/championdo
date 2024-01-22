@@ -27,7 +27,7 @@ public class SeguridadServiceImpl implements SeguridadService {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
 
     @Override
     public String obtenerCodigo() {
@@ -99,7 +99,7 @@ public class SeguridadServiceImpl implements SeguridadService {
 
     @Override
     public void gimnasioHabilitadoAdministracion(int codigoGimnasio, String uri) throws AccessDeniedException {
-        if (!gimnasioRootService.verifyEnable(codigoGimnasio)) {
+        if (!gimnasioService.verifyEnable(codigoGimnasio)) {
             throw new AccessDeniedException(uri);
         }
     }

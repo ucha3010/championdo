@@ -18,7 +18,7 @@ public class Menu2Model {
     private int position;
     private String url;
     private String aviso;
-    private List<GimnasioRootModel> gimnasioRootModelList;
+    private List<GimnasioModel> gimnasioModelList;
     private boolean checked;
 
 }

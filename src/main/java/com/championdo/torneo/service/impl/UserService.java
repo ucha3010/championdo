@@ -2,11 +2,10 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.mapper.MapperUser;
-import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
-import com.championdo.torneo.service.GimnasioRootService;
 import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.InscripcionService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
@@ -38,8 +37,6 @@ public class UserService implements UserDetailsService {
 	private MapperUser mapperUser;
 	@Autowired
 	private GimnasioService gimnasioService;
-	@Autowired
-	private GimnasioRootService gimnasioRootService;
 	@Autowired
 	private InscripcionService inscripcionService;
 	@Autowired
@@ -136,19 +133,19 @@ public class UserService implements UserDetailsService {
 		return userModel;
 	}
 
-	public void addFromRoot (GimnasioRootModel gimnasioRootModel) {
+	public void addFromRoot (GimnasioModel gimnasioModel) {
 		UserModel userModel = new UserModel();
-		userModel.setUsername(gimnasioRootModel.getCifNif().toUpperCase());
-		userModel.setPassword(encodePassword(gimnasioRootModel.getCifNif().toUpperCase()));
-		userModel.setName(gimnasioRootModel.getNombreResponsable());
-		userModel.setLastname(gimnasioRootModel.getApellido1Responsable());
-		userModel.setSecondLastname(gimnasioRootModel.getApellido2Responsable());
-		userModel.setCorreo(gimnasioRootModel.getCorreo());
-		userModel.setTelefono(gimnasioRootModel.getTelefono());
-		userModel.setFechaNacimiento(gimnasioRootModel.getFechaNacimiento());
+		userModel.setUsername(gimnasioModel.getCifNif().toUpperCase());
+		userModel.setPassword(encodePassword(gimnasioModel.getCifNif().toUpperCase()));
+		userModel.setName(gimnasioModel.getNombreResponsable());
+		userModel.setLastname(gimnasioModel.getApellido1Responsable());
+		userModel.setSecondLastname(gimnasioModel.getApellido2Responsable());
+		userModel.setCorreo(gimnasioModel.getCorreo());
+		userModel.setTelefono(gimnasioModel.getTelefono());
+		userModel.setFechaNacimiento(gimnasioModel.getFechaNacimiento());
 		userModel.setEnabled(true);
 		userModel.setFechaAlta(new Date());
-		userModel.setCodigoGimnasio(gimnasioRootModel.getId());
+		userModel.setCodigoGimnasio(gimnasioModel.getId());
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, Constantes.ROLE_ADMIN));
 	}

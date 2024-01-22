@@ -4,11 +4,11 @@ import com.championdo.torneo.entity.Menu2;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperMenu2;
 import com.championdo.torneo.model.GimnasioRootMenu2Model;
-import com.championdo.torneo.model.GimnasioRootModel;
+import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.repository.Menu2Repository;
 import com.championdo.torneo.service.GimnasioRootMenu2Service;
-import com.championdo.torneo.service.GimnasioRootService;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.Menu2Service;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
@@ -30,7 +30,7 @@ public class Menu2ServiceImpl implements Menu2Service {
     @Autowired
     private GimnasioRootMenu2Service gimnasioRootMenu2Service;
     @Autowired
-    private GimnasioRootService gimnasioRootService;
+    private GimnasioService gimnasioService;
 
     @Override
     public List<Menu2Model> findAll(int idMenu1) {
@@ -45,11 +45,11 @@ public class Menu2ServiceImpl implements Menu2Service {
     public Menu2Model findById(int id) {
         try {
             Menu2Model menu2Model = mapperMenu2.entity2Model(menu2Repository.getById(id));
-            List<GimnasioRootModel> gimnasioRootModelList = new ArrayList<>();
+            List<GimnasioModel> gimnasioModelList = new ArrayList<>();
             for(GimnasioRootMenu2Model gimnasioRootMenu2: gimnasioRootMenu2Service.findByIdMenu2(id)) {
-                gimnasioRootModelList.add(gimnasioRootService.findById(gimnasioRootMenu2.getIdGimnasioRoot()));
+                gimnasioModelList.add(gimnasioService.findById(gimnasioRootMenu2.getIdGimnasioRoot()));
             }
-            menu2Model.setGimnasioRootModelList(gimnasioRootModelList);
+            menu2Model.setGimnasioModelList(gimnasioModelList);
             return menu2Model;
         } catch (EntityNotFoundException e) {
             return new Menu2Model();

@@ -24,9 +24,6 @@ public class FormularioServiceImpl implements FormularioService {
     private GimnasioService gimnasioService;
 
     @Autowired
-    private GimnasioRootService gimnasioRootService;
-
-    @Autowired
     private PaisService paisService;
 
     @Autowired
@@ -114,7 +111,7 @@ public class FormularioServiceImpl implements FormularioService {
         modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
         modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
         modelAndView.addObject("listaPaises", paisService.findAll());
-        modelAndView.addObject("listaGimnasios", gimnasioService.findAll(codigoGimnasio));
+        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
         modelAndView.addObject("listaCinturones", cinturonService.findAll(codigoGimnasio));
         modelAndView.addObject("listaCalidad", calidadService.findAll());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
@@ -125,7 +122,7 @@ public class FormularioServiceImpl implements FormularioService {
         modelAndView.addObject("listaSexo", Arrays.asList("Masculino","Femenino"));
         modelAndView.addObject("listaMenorConKicho", Arrays.asList("Poomsae","Kicho"));
         modelAndView.addObject("listaPaises", paisService.findAll());
-        modelAndView.addObject("listaGimnasios", gimnasioRootService.findAll());
+        modelAndView.addObject("listaGimnasios", gimnasioService.findAll());
         modelAndView.addObject("listaCalidad", calidadService.findAll());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
     }
