@@ -1,7 +1,6 @@
 package com.championdo.torneo.service;
 
 
-import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.model.UserAutorizacionModel;
 import com.championdo.torneo.model.UserModel;
@@ -9,11 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 public interface FormularioService {
 
-    UserModel formularioInscPropia(User user);
+    UserAutorizacionModel formularioInscPropiaGimnasio(UserModel userModel);
 
-    UserAutorizacionModel formularioInscPropiaGimnasio(User user);
-
-    UserAutorizacionModel formularioInscMenorOInclusivo(User user, boolean menorOInclusivo);
+    UserAutorizacionModel formularioInscMenorOInclusivo(UserModel userModel, boolean menorOInclusivo);
 
     PdfModel getPdfModelTorneo(UserAutorizacionModel userAutorizacionModel);
 

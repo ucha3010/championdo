@@ -32,6 +32,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView adminList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        //TODO DAMIAN cada gimnasio seguirá teniendo una persona responsable pero tengo que hacer una tabla nueva para poder asignar varias personas a un gimnasio o varios gimnasios a una persona
         List<GimnasioRootModel> gimnasioRootModelList = gimnasioRootService.findByCifNif(user.getUsername());
         if (gimnasioRootModelList.size() == 1) {
             sessionData.setGimnasioRootModel(gimnasioRootModelList.get(0));

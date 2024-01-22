@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapperUser {
 
-    @Autowired
+/*    @Autowired
     private CinturonService cinturonService;
 
     @Autowired
-    private CalidadService calidadService;
+    private CalidadService calidadService;*/
 
     @Autowired
     private GimnasioService gimnasioService;
@@ -36,27 +36,27 @@ public class MapperUser {
             localObject.setSexo(externObject.getSexo());
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
             localObject.setGimnasio(gimnasioService.findById(externObject.getIdGimnasio()));
-            localObject.setCalidad(calidadService.findById(externObject.getIdCalidad()));
+//            localObject.setCalidad(calidadService.findById(externObject.getIdCalidad()));
             localObject.setPais(paisService.findById(externObject.getIdPais()));
-            localObject.setCinturon(cinturonService.findById(externObject.getIdCinturon()));
+//            localObject.setCinturon(cinturonService.findById(externObject.getIdCinturon()));
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setFechaModificacion(externObject.getFechaModificacion());
             localObject.setUsernameModificacione(externObject.getUsernameModificacione());
             localObject.setCorreo(externObject.getCorreo());
-            localObject.setMenor(externObject.isMenor());
-            localObject.setDniMenor(externObject.getDniMenor());
-            localObject.setUsernameACargo(externObject.getUsernameACargo());
+//            localObject.setMenor(externObject.isMenor());
+//            localObject.setDniMenor(externObject.getDniMenor());
+//            localObject.setUsernameACargo(externObject.getUsernameACargo());
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
             localObject.setDomicilioOtros(externObject.getDomicilioOtros());
             localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
             localObject.setDomicilioCp(externObject.getDomicilioCp());
-            localObject.setInclusivo(externObject.isInclusivo());
+//            localObject.setInclusivo(externObject.isInclusivo());
             localObject.setTelefono(externObject.getTelefono());
-            localObject.setIdTorneo(externObject.getIdTorneo());
-            localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
-//            localObject.setCodigoGimnasio(localObject.getGimnasio().getCodigoGimnasio());
-            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+//            localObject.setIdTorneo(externObject.getIdTorneo());
+//            localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
+            localObject.setCodigoGimnasio(localObject.getGimnasio().getCodigoGimnasio());
+//            localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
             localObject.setUserRoles(userRoleService.findByUsername(externObject.getUsername()));
         }
 
@@ -82,33 +82,33 @@ public class MapperUser {
                     localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
                 }*/
             } /*else {*/
-                localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+//                localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
 /*            }*/
-            if (externObject.getCalidad() != null) {
+/*            if (externObject.getCalidad() != null) {
                 localObject.setIdCalidad(externObject.getCalidad().getId());
-            }
+            }*/
             if (externObject.getPais() != null) {
                 localObject.setIdPais(externObject.getPais().getId());
             }
-            if (externObject.getCinturon() != null) {
+/*            if (externObject.getCinturon() != null) {
                 localObject.setIdCinturon(externObject.getCinturon().getId());
-            }
+            }*/
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setFechaModificacion(externObject.getFechaModificacion());
             localObject.setUsernameModificacione(externObject.getUsernameModificacione());
             localObject.setCorreo(externObject.getCorreo());
-            localObject.setMenor(externObject.isMenor());
-            localObject.setDniMenor(externObject.getDniMenor());
-            localObject.setUsernameACargo(externObject.getUsernameACargo());
+//            localObject.setMenor(externObject.isMenor());
+//            localObject.setDniMenor(externObject.getDniMenor());
+//            localObject.setUsernameACargo(externObject.getUsernameACargo());
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
             localObject.setDomicilioOtros(externObject.getDomicilioOtros());
             localObject.setDomicilioLocalidad(externObject.getDomicilioLocalidad());
             localObject.setDomicilioCp(externObject.getDomicilioCp());
-            localObject.setInclusivo(externObject.isInclusivo());
+//            localObject.setInclusivo(externObject.isInclusivo());
             localObject.setTelefono(externObject.getTelefono());
-            localObject.setIdTorneo(externObject.getIdTorneo());
-            localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
+//            localObject.setIdTorneo(externObject.getIdTorneo());
+//            localObject.setIdTorneoGimnasio(externObject.getIdTorneoGimnasio());
         }
         return localObject;
     }

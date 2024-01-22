@@ -39,9 +39,7 @@ public class User {
 	private String sexo;
 	private Date fechaNacimiento;
 	private int idGimnasio;
-	private int idCalidad;
 	private int idPais;
-	private int idCinturon;
 	private Date fechaAlta;
 	private Date fechaModificacion;
 
@@ -50,15 +48,6 @@ public class User {
 
 	@Column(name = "correo", length = 100)
 	private String correo;
-
-	@Column(name = "menor", nullable = false)
-	private boolean menor;
-
-	@Column(name = "dniMenor", length = 15)
-	private String dniMenor;
-
-	@Column(name = "usernameACargo", length = 45)
-	private String usernameACargo;
 
 	@Column(name = "domicilioCalle", length = 100)
 	private String domicilioCalle;
@@ -75,26 +64,11 @@ public class User {
 	@Column(name = "domicilioCp", length = 10)
 	private String domicilioCp;
 
-	@Column(name = "inclusivo", nullable = false)
-	private boolean inclusivo;
-
 	@Column(name = "telefono", length = 20)
 	private String telefono;
-	private int idTorneo;
-	private int idTorneoGimnasio;
-	private int codigoGimnasio;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	private Set<UserRole> userRole = new HashSet<>();
-
-	public User(String username, String password, boolean enabled, boolean menor, Set<UserRole> userRole) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-		this.menor = menor;
-		this.userRole = userRole;
-	}
 
 	@Override
 	public String toString() {
@@ -107,24 +81,17 @@ public class User {
 				", sexo='" + sexo + '\'' +
 				", fechaNacimiento=" + fechaNacimiento +
 				", idGimnasio=" + idGimnasio +
-				", idCalidad=" + idCalidad +
 				", idPais=" + idPais +
-				", idCinturon=" + idCinturon +
 				", fechaAlta=" + fechaAlta +
 				", fechaModificacion=" + fechaModificacion +
 				", usernameModificacione='" + usernameModificacione + '\'' +
 				", correo='" + correo + '\'' +
-				", menor=" + menor +
-				", dniMenor='" + dniMenor + '\'' +
-				", usernameACargo='" + usernameACargo + '\'' +
 				", domicilioCalle='" + domicilioCalle + '\'' +
 				", domicilioNumero='" + domicilioNumero + '\'' +
 				", domicilioOtros='" + domicilioOtros + '\'' +
 				", domicilioLocalidad='" + domicilioLocalidad + '\'' +
 				", domicilioCp='" + domicilioCp + '\'' +
-				", inclusivo=" + inclusivo +
 				", telefono='" + telefono + '\'' +
-				", codigoGimnasio=" + codigoGimnasio +
 				", userRole=" + userRole +
 				'}';
 	}

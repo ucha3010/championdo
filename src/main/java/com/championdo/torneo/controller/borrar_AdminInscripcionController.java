@@ -38,15 +38,15 @@ public class borrar_AdminInscripcionController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView inscripcionList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/inscripcionList");
+//        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/inscripcionList");
         modelAndView.setViewName("adminInscripcion");
         modelAndView.addObject("inscripcionList", inscripcionService.findAll());
         modelAndView.addObject("inscripcionModel", new InscripcionModel());
-        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable(user.getCodigoGimnasio()).getValor())) {
+/*        if(Boolean.parseBoolean(inscripcionService.getDeleteEnable(user.getCodigoGimnasio()).getValor())) {
             modelAndView.addObject("deleteEnable", "Deshabilitar borrar");
         } else {
             modelAndView.addObject("deleteEnable", "Habilitar borrar");
-        }
+        }*/
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -55,7 +55,7 @@ public class borrar_AdminInscripcionController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable int id) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/pay/" + id);
+//        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/pay/" + id);
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         inscripcionModel.setPagoRealizado(!inscripcionModel.isPagoRealizado());
         inscripcionModel.setFechaPago(new Date());
@@ -72,7 +72,7 @@ public class borrar_AdminInscripcionController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView update(ModelAndView modelAndView, @ModelAttribute("inscripcionModel") InscripcionModel inscripcionModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/update");
+//        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/update");
         InscripcionModel inscripcionModelBBDD = inscripcionService.findById(inscripcionModel.getId());
         inscripcionModelBBDD.setFechaPago(inscripcionModel.getFechaPago());
         inscripcionModelBBDD.setNotas(inscripcionModel.getNotas());
@@ -106,8 +106,8 @@ public class borrar_AdminInscripcionController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteEnable(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteEnable");
-        inscripcionService.changeValueDeleteEnable(user.getCodigoGimnasio());
+//        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteEnable");
+//        inscripcionService.changeValueDeleteEnable(user.getCodigoGimnasio());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return inscripcionList(modelAndView);
     }
@@ -116,7 +116,7 @@ public class borrar_AdminInscripcionController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteAll(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteAll");
+//        seguridadService.gimnasioHabilitadoAdministracion(user.getCodigoGimnasio(), "/adminInscripcion/deleteAll");
         inscripcionService.deleteAll();
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return inscripcionList(modelAndView);

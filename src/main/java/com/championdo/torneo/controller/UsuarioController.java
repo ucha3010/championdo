@@ -105,7 +105,7 @@ public class UsuarioController {
 	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @PathVariable String username) {
 		com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/remove/"+username);
-		if (userService.delete(username, sessionData.getGimnasioRootModel().getId())) {
+		if (userService.delete(username)) {//TODO DAMIAN los admin sólo deben poder eliminar a un usuario de todas las inscripciones en su gimnasio
 			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
 		} else {
 			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
@@ -120,7 +120,8 @@ public class UsuarioController {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
 		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioRootModel().getId(), "/usuario/users");
 		modelAndView.setViewName("gimnasio/adminUsers");
-		modelAndView.addObject("userList", userService.findAll(sessionData.getGimnasioRootModel().getId()));
+		//TODO DAMIAN la búsqueda de usuarios inscriptos en algo de un gimnasio se debe hacer de otra forma
+//		modelAndView.addObject("userList", userService.findAll(sessionData.getGimnasioRootModel().getId()));
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
 		modelAndView.addObject("gimnasio", sessionData.getGimnasioRootModel());
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -136,6 +137,7 @@ public class UsuarioController {
 		modelAndView.setViewName("gimnasio/adminUser");
 		UserModel userModel = userService.findModelByUsername(username);
 		modelAndView.addObject("user", userModel);
+		//TODO DAMIAN el rol se lo deberían cambiar sólo para el gimnasio del Admin, para los demás gimnasios no
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
 		modelAndView.addObject("loggedUser", userService.isLoggedUser(user.getUsername(), userModel.getUsername()));
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

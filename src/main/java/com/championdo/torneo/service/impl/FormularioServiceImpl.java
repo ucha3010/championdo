@@ -1,7 +1,5 @@
 package com.championdo.torneo.service.impl;
 
-import com.championdo.torneo.entity.User;
-import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
@@ -15,9 +13,6 @@ import java.util.Arrays;
 
 @Service()
 public class FormularioServiceImpl implements FormularioService {
-
-    @Autowired
-    private MapperUser mapperUser;
 
     @Autowired
     private CalidadService calidadService;
@@ -43,24 +38,18 @@ public class FormularioServiceImpl implements FormularioService {
     @Autowired
     private UtilService utilService;
 
-
     @Override
-    public UserModel formularioInscPropia(User user) {
-        return mapperUser.entity2Model(user);
-    }
-
-    @Override
-    public UserAutorizacionModel formularioInscPropiaGimnasio(User user) {
+    public UserAutorizacionModel formularioInscPropiaGimnasio(UserModel userModel) {
         UserAutorizacionModel userAutorizacionModel = new UserAutorizacionModel();
-        userAutorizacionModel.setMayorAutorizador(mapperUser.entity2Model(user));
+        userAutorizacionModel.setMayorAutorizador(userModel);
         userAutorizacionModel.setCuentaBancaria(new CuentaBancariaModel());
         return userAutorizacionModel;
     }
 
     @Override
-    public UserAutorizacionModel formularioInscMenorOInclusivo(User user, boolean menorOInclusivo) {
+    public UserAutorizacionModel formularioInscMenorOInclusivo(UserModel userModel, boolean menorOInclusivo) {
         UserAutorizacionModel userAutorizacionModel = new UserAutorizacionModel();
-        userAutorizacionModel.setMayorAutorizador(mapperUser.entity2Model(user));
+        userAutorizacionModel.setMayorAutorizador(userModel);
         UserModel autorizado = new UserModel();
         if (menorOInclusivo) {
             autorizado.setMenor(true);

@@ -1,7 +1,6 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
@@ -15,8 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/gimnasioRoot")
@@ -114,7 +111,7 @@ public class GimnasioRootController {
             if(idCustomer != 0) {
                 cargasInicialesClienteService.eliminacionesCatPoomCint(idCustomer);
                 utilService.deleteFromRoot(idCustomer);
-                userService.deleteFromRoot(idCustomer);
+//                userService.deleteFromRoot(idCustomer);
                 //gimnasioService.deleteFromRoot(idCustomer);
                 gimnasioRootService.delete(idCustomer);
             }
@@ -146,9 +143,9 @@ public class GimnasioRootController {
         principalService.cargaBasicaCompleta(modelAndView);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
-        if (userService.findAll(id).size() == 1) {
+/*        if (userService.findAll(id).size() == 1) {
             userService.deleteFromRoot(id);
-        }
+        }*/
         //gimnasioService.deleteFromRoot(id);
         torneoGimnasioService.deleteByCodigoGimnasio(id);
         gimnasioRootService.enableDisable(id, Boolean.FALSE);

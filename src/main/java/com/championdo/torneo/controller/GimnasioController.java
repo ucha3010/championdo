@@ -2,6 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
@@ -43,6 +44,8 @@ public class GimnasioController {
     private GimnasioRootService gimnasioRootService;
     @Autowired
     private SessionData sessionData;
+    @Autowired
+    private MapperUser mapperUser;
 
     @GetMapping("/tipoInscripcion")
     @PreAuthorize("isAuthenticated()")
@@ -58,7 +61,7 @@ public class GimnasioController {
         modelAndView.addObject("controller", "gimnasio");
         modelAndView.addObject("gimnasios", gimnasioRootService.findByMenu2Url("/gimnasio/tipoInscripcion"));
         //TODO DAMIAN usuario viene sin codigoGimnasio. Hay que habilitar para borrado SOLO las inscripciones del gimnasio que traigo acá en id
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(0).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -91,15 +94,15 @@ public class GimnasioController {
     @GetMapping("/formularioInscripcion/{id}/{tipo}/{licencia}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable Integer id, @PathVariable String tipo, @PathVariable String licencia) {
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
-//        usuario.setCodigoGimnasio(id);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        UserModel userModel = mapperUser.entity2Model(user);
         modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(sessionData.getGimnasioRootModel().getId()).getValor()));
         if ("infantil".equalsIgnoreCase(tipo)) {
             modelAndView.setViewName("gimnasio/formularioInscMenorGimnasio");
-            modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
+            modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(userModel, true));
         } else {
             modelAndView.setViewName("gimnasio/formularioInscPropiaGimnasio");
-            modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(usuario));
+            modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(userModel));
         }
         modelAndView.addObject("licencia", "con licencia".equals(licencia));
         formularioService.cargarDesplegables(modelAndView, sessionData.getGimnasioRootModel().getId());

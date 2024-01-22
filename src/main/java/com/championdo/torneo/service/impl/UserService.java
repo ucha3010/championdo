@@ -2,7 +2,6 @@ package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.mapper.MapperUser;
-import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.GimnasioRootModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
@@ -85,7 +84,7 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public boolean delete(String username, int codigoGimnasio) {
+	public boolean delete(String username) {
 		boolean respuesta = true;
 		try {
 			com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
@@ -118,11 +117,6 @@ public class UserService implements UserDetailsService {
 		return getModelList(userList);
 	}
 
-	public List<UserModel> findAll(int codigoGimnasio) {
-		List<com.championdo.torneo.entity.User> userList = userRepository.findByCodigoGimnasioOrderByLastnameDesc(codigoGimnasio);
-		return getModelList(userList);
-	}
-
 	public com.championdo.torneo.entity.User findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
@@ -133,12 +127,6 @@ public class UserService implements UserDetailsService {
 			throw new NoResultException();
 		}
 		return mapperUser.entity2Model(user);
-	}
-
-	public com.championdo.torneo.entity.User cargarUsuarioCompleto(ModelAndView modelAndView) {
-		com.championdo.torneo.entity.User usuario = getLoggedUser();
-		modelAndView.addObject("usuario", usuario);
-		return usuario;
 	}
 
 	public UserModel cargarUserModelCompleto(ModelAndView modelAndView) {
@@ -163,13 +151,6 @@ public class UserService implements UserDetailsService {
 		userModel.setCodigoGimnasio(gimnasioRootModel.getId());
 		com.championdo.torneo.entity.User user = addOrUpdate(userModel);
 		userRoleRepository.save(new UserRole(user, Constantes.ROLE_ADMIN));
-	}
-
-	public void deleteFromRoot (int idGimnasioRootModel) {
-		List<com.championdo.torneo.entity.User> userList = userRepository.findByCodigoGimnasioOrderByLastnameDesc(idGimnasioRootModel);
-		for (com.championdo.torneo.entity.User user : userList) {
-			delete(user.getUsername(), idGimnasioRootModel);
-		}
 	}
 
 	public com.championdo.torneo.entity.User getLoggedUser() {

@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
+import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
@@ -43,6 +44,8 @@ public class FormularioController {
     @Autowired
     private UserService userService;
     @Autowired
+    private MapperUser mapperUser;
+    @Autowired
     private SessionData sessionData;
     @Autowired
     private GimnasioRootService gimnasioRootService;
@@ -79,23 +82,24 @@ public class FormularioController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView cargarFormulario(ModelAndView modelAndView, @PathVariable String tournamentType, @PathVariable int idTorneo, @PathVariable int idTorneoGimnasio) {
 
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
+        UserModel userModel = mapperUser.entity2Model(user);
+        userModel.setIdTorneo(idTorneo);
+        userModel.setIdTorneoGimnasio(idTorneoGimnasio);
         TorneoModel torneoModel = torneoService.findById(idTorneo);
         sessionData.setGimnasioRootModel(gimnasioRootService.findById(torneoModel.getCodigoGimnasio()));
-        usuario.setIdTorneo(idTorneo);
-        usuario.setIdTorneoGimnasio(idTorneoGimnasio);
         switch (tournamentType) {
             case Constantes.ADULTO:
                 modelAndView.setViewName("torneo/formularioInscPropia");
-                modelAndView.addObject("userModel", formularioService.formularioInscPropia(usuario));
+                modelAndView.addObject("userModel", userModel);
                 break;
             case Constantes.MENOR:
                 modelAndView.setViewName("torneo/formularioInscMenor");
-                modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, true));
+                modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(userModel, true));
                 break;
             case Constantes.INCLUSIVO_MINUSCULAS:
                 modelAndView.setViewName("torneo/formularioInscMenor");
-                modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(usuario, false));
+                modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscMenorOInclusivo(userModel, false));
                 break;
             default:
                 LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -147,7 +151,8 @@ public class FormularioController {
         InscripcionModel inscripcionModel = inscripcionService.findById(id);
         modelAndView.addObject("inscripcion", inscripcionModel);
         modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(usuario.getCodigoGimnasio()).getValor()));
+        //TODO DAMIAN usuario viene sin codigoGimnasio. Hay que habilitar para borrado SOLO las inscripciones del gimnasio que traigo acá en id
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(0).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
