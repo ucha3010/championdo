@@ -1,15 +1,19 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
-import com.championdo.torneo.entity.GimnasioRootMenu2;
+import com.championdo.torneo.entity.GimnasioMenu2;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
-import com.championdo.torneo.service.GimnasioRootMenu2Service;
+import com.championdo.torneo.model.UtilModel;
+import com.championdo.torneo.service.GimnasioMenu2Service;
 import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.SeguridadService;
+import com.championdo.torneo.util.Constantes;
+import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +32,7 @@ public class AdminGimnasioController {
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
-    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
+    private GimnasioMenu2Service gimnasioMenu2Service;
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
@@ -88,36 +92,72 @@ public class AdminGimnasioController {
     public ModelAndView updateGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateGimnasio");
-        gimnasioService.update(gimnasioModel);
-        modelAndView.addObject("updateOK", "Dato gimnasio actualizado con éxito");
+        GimnasioModel gimnasioModelBBDD = gimnasioService.findById(gimnasioModel.getId());
+        gimnasioModelBBDD.setNombreGimnasio(gimnasioModel.getNombreGimnasio());
+        gimnasioModelBBDD.setDomicilioCalle(gimnasioModel.getDomicilioCalle());
+        gimnasioModelBBDD.setDomicilioNumero(gimnasioModel.getDomicilioNumero());
+        gimnasioModelBBDD.setDomicilioOtros(gimnasioModel.getDomicilioOtros());
+        gimnasioModelBBDD.setDomicilioLocalidad(gimnasioModel.getDomicilioLocalidad());
+        gimnasioModelBBDD.setDomicilioCp(gimnasioModel.getDomicilioCp());
+        gimnasioModelBBDD.setUsuarioModificacion(user.getUsername());
+        sessionData.setGimnasioModel(gimnasioService.update(gimnasioModelBBDD));
+        modelAndView.addObject("updateOK", "Datos del gimnasio actualizados con éxito");
         adminUtilController.utilList(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-/*    @GetMapping("/gimnasio/remove/{id}")
+    @PostMapping("/updateEmail")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView removeGimnasio(ModelAndView modelAndView, @PathVariable int id) {
+    public ModelAndView updateEmail(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/gimnasio/remove/" + id);
-        gimnasioService.delete(id);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateEmail");
+        GimnasioModel gimnasioModelBBDD = gimnasioService.findById(gimnasioModel.getId());
+        if (!StringUtils.isNullOrEmpty(gimnasioModel.getCorreo())) {
+            gimnasioModelBBDD.setCorreo(gimnasioModel.getCorreo());
+        }
+        if (!StringUtils.isNullOrEmpty(gimnasioModel.getEmailPassword())) {
+            gimnasioModelBBDD.setEmailPassword(gimnasioModel.getEmailPassword());
+        }
+        if (!StringUtils.isNullOrEmpty(gimnasioModel.getEmailHost())) {
+            gimnasioModelBBDD.setEmailHost(gimnasioModel.getEmailHost());
+            for (EmailEnum emailEnum : EmailEnum.values()) {
+                if (emailEnum.getHost().equals(gimnasioModel.getEmailHost())) {
+                    gimnasioModelBBDD.setEmailPort(emailEnum.getPort());
+                    break;
+                }
+            }
+        }
+        sessionData.setGimnasioModel(gimnasioService.update(gimnasioModelBBDD));
+        modelAndView.addObject("updateOK", "Datos del correo del gimnasio actualizados con éxito");
+        adminUtilController.utilList(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return gimnasioList(modelAndView);
-    }*/
+        return modelAndView;
+    }
+
+    @GetMapping("/changePass")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView changePass(ModelAndView modelAndView) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/changePass");
+        modelAndView.setViewName("gimnasio/adminChangePass");
+        modelAndView.addObject("gimnasioModel", sessionData.getGimnasioModel());
+        return modelAndView;
+    }
 
     @PostMapping("/updateMenu")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateMenu(ModelAndView modelAndView, @RequestParam(name = "selectedData", required = false) List<Integer> selectedData) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/procesar");
-        gimnasioRootMenu2Service.deleteByIdGimnasioRoot(sessionData.getGimnasioModel().getId());
-        List<GimnasioRootMenu2> gimnasioRootMenu2List = new ArrayList<>();
+        gimnasioMenu2Service.deleteByIdGimnasio(sessionData.getGimnasioModel().getId());
+        List<GimnasioMenu2> gimnasioMenu2List = new ArrayList<>();
         if (selectedData != null) {
             for (Integer idMenu2 : selectedData) {
-                gimnasioRootMenu2List.add(new GimnasioRootMenu2(0, sessionData.getGimnasioModel().getId(), idMenu2, user.getUsername(), new Date()));
+                gimnasioMenu2List.add(new GimnasioMenu2(0, sessionData.getGimnasioModel().getId(), idMenu2, user.getUsername(), new Date()));
             }
         }
-        gimnasioRootMenu2Service.addList(gimnasioRootMenu2List);
+        gimnasioMenu2Service.addList(gimnasioMenu2List);
         modelAndView.addObject("updateOK", "Asginación de Gimnasio a los submenú realizada correctamente");
         adminUtilController.utilList(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());

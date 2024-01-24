@@ -16,19 +16,19 @@ import javax.persistence.Column;
 import java.util.Date;
 
 @Entity
-@Table(name = "gimnasio_root_menu2")
+@Table(name = "gimnasio_menu2")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class GimnasioRootMenu2 {
+public class GimnasioMenu2 {
 
     @Id
-    @SequenceGenerator(name = "gimnasioRootMenu2Generator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gimnasioRootMenu2Generator")
+    @SequenceGenerator(name = "gimnasioMenu2Generator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gimnasioMenu2Generator")
     private int id;
-    private int idGimnasioRoot;
+    private int idGimnasio;
     private int idMenu2;
     @Column(name = "usernameAlta", length = 45)
     private String usernameAlta;

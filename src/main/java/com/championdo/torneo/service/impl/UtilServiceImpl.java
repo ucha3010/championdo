@@ -66,13 +66,6 @@ public class UtilServiceImpl implements UtilService {
     @Override
     public void addFromRoot(GimnasioModel customer) {
         List<Util> utilList = new ArrayList<>();
-        utilList.add(new Util(Constantes.DIRECCION_CAMPEONATO,"",customer.getId()));
-        utilList.add(new Util(Constantes.FECHA_CAMPEONATO, "",customer.getId()));
-        utilList.add(new Util(Constantes.NOMBRE_CAMPEONATO,"",customer.getId()));
-        utilList.add(new Util(Constantes.CLAVE_CORREO,"",customer.getId()));
-        utilList.add(new Util(Constantes.CORREO_GIMNASIO, customer.getCorreo(),customer.getId()));
-        utilList.add(new Util(Constantes.HOST_CORREO, EmailEnum.GMAIL.getHost(),customer.getId()));//pongo GMAIL por defecto
-        utilList.add(new Util(Constantes.PORT_CORREO, EmailEnum.GMAIL.getPort(), customer.getId()));
         utilList.add(new Util(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO,Constantes.TRUE,customer.getId()));
         utilList.add(new Util(Constantes.HABILITAR_CUENTA_BANCARIA,Constantes.TRUE,customer.getId()));
         utilList.add(new Util(Constantes.HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO,Constantes.TRUE,customer.getId()));
@@ -82,8 +75,8 @@ public class UtilServiceImpl implements UtilService {
     }
 
     @Override
-    public void deleteFromRoot(int idGimnasioRootModel) {
-        List<Util> utilList = utilRepository.findByCodigoGimnasio(idGimnasioRootModel);
+    public void deleteFromRoot(int idGimnasioModel) {
+        List<Util> utilList = utilRepository.findByCodigoGimnasio(idGimnasioModel);
         utilRepository.deleteAll(utilList);
     }
 }

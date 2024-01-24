@@ -3,11 +3,11 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.Menu2;
 import com.championdo.torneo.exception.RemoveException;
 import com.championdo.torneo.mapper.MapperMenu2;
-import com.championdo.torneo.model.GimnasioRootMenu2Model;
+import com.championdo.torneo.model.GimnasioMenu2Model;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.repository.Menu2Repository;
-import com.championdo.torneo.service.GimnasioRootMenu2Service;
+import com.championdo.torneo.service.GimnasioMenu2Service;
 import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.Menu2Service;
 import com.championdo.torneo.util.Constantes;
@@ -28,7 +28,7 @@ public class Menu2ServiceImpl implements Menu2Service {
     @Autowired
     private MapperMenu2 mapperMenu2;
     @Autowired
-    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
+    private GimnasioMenu2Service gimnasioMenu2Service;
     @Autowired
     private GimnasioService gimnasioService;
 
@@ -46,8 +46,8 @@ public class Menu2ServiceImpl implements Menu2Service {
         try {
             Menu2Model menu2Model = mapperMenu2.entity2Model(menu2Repository.getById(id));
             List<GimnasioModel> gimnasioModelList = new ArrayList<>();
-            for(GimnasioRootMenu2Model gimnasioRootMenu2: gimnasioRootMenu2Service.findByIdMenu2(id)) {
-                gimnasioModelList.add(gimnasioService.findById(gimnasioRootMenu2.getIdGimnasioRoot()));
+            for(GimnasioMenu2Model gimnasioMenu2: gimnasioMenu2Service.findByIdMenu2(id)) {
+                gimnasioModelList.add(gimnasioService.findById(gimnasioMenu2.getIdGimnasio()));
             }
             menu2Model.setGimnasioModelList(gimnasioModelList);
             return menu2Model;
@@ -78,7 +78,7 @@ public class Menu2ServiceImpl implements Menu2Service {
                     menu2Repository.save(menu2List.get(i));
                 }
             }
-            gimnasioRootMenu2Service.deleteByIdMenu2(id);
+            gimnasioMenu2Service.deleteByIdMenu2(id);
         } catch (IllegalArgumentException e){
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
             throw new RemoveException(Constantes.ERROR_BORRAR_MENU, "Error al borrar el menú secundario");

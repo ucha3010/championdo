@@ -26,93 +26,93 @@ public class CargasInicialesClienteService {
     @Autowired
     private PoomsaeRepository poomsaeRepository;
 
-    public void cargasCintPoomCat(int idGimnasioRoot) {
-        cargaCinturones(idGimnasioRoot);
-        cargaPoomsaes(idGimnasioRoot);
-        cargaCategorias(idGimnasioRoot);
+    public void cargasCintPoomCat(int idGimnasio) {
+        cargaCinturones(idGimnasio);
+        cargaPoomsaes(idGimnasio);
+        cargaCategorias(idGimnasio);
     }
 
-    public void eliminacionesCatPoomCint (int idGimnasioRoot) {
-        eliminarCategorias(idGimnasioRoot);
-        eliminarPoomsaes(idGimnasioRoot);
-        eliminarCinturones(idGimnasioRoot);
+    public void eliminacionesCatPoomCint (int idGimnasio) {
+        eliminarCategorias(idGimnasio);
+        eliminarPoomsaes(idGimnasio);
+        eliminarCinturones(idGimnasio);
     }
 
-    public void eliminarCategorias (int idGimnasioRoot) {
-        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasio(idGimnasioRoot);
+    public void eliminarCategorias (int idGimnasio) {
+        List<Categoria> categoriaList = categoriaRepository.findByCodigoGimnasio(idGimnasio);
         categoriaRepository.deleteAll(categoriaList);
     }
 
-    public void eliminarPoomsaes (int idGimnasioRoot) {
-        List<Poomsae> poomsaeList = poomsaeRepository.findByCodigoGimnasio(idGimnasioRoot);
+    public void eliminarPoomsaes (int idGimnasio) {
+        List<Poomsae> poomsaeList = poomsaeRepository.findByCodigoGimnasio(idGimnasio);
         poomsaeRepository.deleteAll(poomsaeList);
     }
 
-    public void eliminarCinturones (int idGimnasioRoot){
-        List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasio(idGimnasioRoot);
+    public void eliminarCinturones (int idGimnasio){
+        List<Cinturon> cinturonList = cinturonRepository.findByCodigoGimnasio(idGimnasio);
         cinturonRepository.deleteAll(cinturonList);
     }
 
-    private void cargaCinturones(int idGimnasioRoot) {
+    private void cargaCinturones(int idGimnasio) {
         List<Cinturon> cinturonList = new ArrayList<>();
-        cinturonList.add(new Cinturon(Constantes.BLANCO, 0, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Blanco Amarillo", 1, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Amarillo", 2, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Amarillo Naranja", 3, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Naranja", 4, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Naranja Verde", 5, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Verde", 6, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Verde Azul", 7, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Azul", 8, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Azul Rojo", 9, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Azul Marrón", 10, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Marrón", 11, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Marrón Rojo", 12, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Rojo", 13, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Rojo Negro", 14, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Rojo Negro 1º PUM", 15, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Rojo Negro 2º PUM", 16, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Rojo Negro 3º PUM", 17, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Rojo Negro 4º PUM", 18, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 1º DAN", 19, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 2º DAN", 20, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 3º DAN", 21, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 4º DAN", 22, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 5º DAN", 23, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 6º DAN", 24, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 7º DAN", 25, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 8º DAN", 26, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 9º DAN", 27, idGimnasioRoot));
-        cinturonList.add(new Cinturon("Negro 10º DAN", 28, idGimnasioRoot));
+        cinturonList.add(new Cinturon(Constantes.BLANCO, 0, idGimnasio));
+        cinturonList.add(new Cinturon("Blanco Amarillo", 1, idGimnasio));
+        cinturonList.add(new Cinturon("Amarillo", 2, idGimnasio));
+        cinturonList.add(new Cinturon("Amarillo Naranja", 3, idGimnasio));
+        cinturonList.add(new Cinturon("Naranja", 4, idGimnasio));
+        cinturonList.add(new Cinturon("Naranja Verde", 5, idGimnasio));
+        cinturonList.add(new Cinturon("Verde", 6, idGimnasio));
+        cinturonList.add(new Cinturon("Verde Azul", 7, idGimnasio));
+        cinturonList.add(new Cinturon("Azul", 8, idGimnasio));
+        cinturonList.add(new Cinturon("Azul Rojo", 9, idGimnasio));
+        cinturonList.add(new Cinturon("Azul Marrón", 10, idGimnasio));
+        cinturonList.add(new Cinturon("Marrón", 11, idGimnasio));
+        cinturonList.add(new Cinturon("Marrón Rojo", 12, idGimnasio));
+        cinturonList.add(new Cinturon("Rojo", 13, idGimnasio));
+        cinturonList.add(new Cinturon("Rojo Negro", 14, idGimnasio));
+        cinturonList.add(new Cinturon("Rojo Negro 1º PUM", 15, idGimnasio));
+        cinturonList.add(new Cinturon("Rojo Negro 2º PUM", 16, idGimnasio));
+        cinturonList.add(new Cinturon("Rojo Negro 3º PUM", 17, idGimnasio));
+        cinturonList.add(new Cinturon("Rojo Negro 4º PUM", 18, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 1º DAN", 19, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 2º DAN", 20, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 3º DAN", 21, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 4º DAN", 22, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 5º DAN", 23, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 6º DAN", 24, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 7º DAN", 25, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 8º DAN", 26, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 9º DAN", 27, idGimnasio));
+        cinturonList.add(new Cinturon("Negro 10º DAN", 28, idGimnasio));
         cinturonRepository.saveAll(cinturonList);
     }
 
-    private void cargaPoomsaes(int idGimnasioRoot) {
+    private void cargaPoomsaes(int idGimnasio) {
         List<Poomsae> poomsaeList = new ArrayList<>();
-        poomsaeList.add(new Poomsae(Constantes.KICHO,0,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE1,1,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE2,2,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE3,3,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE4,4,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE5,5,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE6,6,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE7,7,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.POOMSAE8,8,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.KORYO,9,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.KUMGANG,10,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.TAEBEK,11,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.PYONGWON,12,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.SYPCCHIN,13,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.CHITAE,14,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.CHUNGKWON,15,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.JANSU,16,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.ILIO,17,idGimnasioRoot));
-        poomsaeList.add(new Poomsae(Constantes.INCLUSIVO,18,idGimnasioRoot));
+        poomsaeList.add(new Poomsae(Constantes.KICHO,0,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE1,1,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE2,2,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE3,3,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE4,4,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE5,5,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE6,6,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE7,7,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.POOMSAE8,8,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.KORYO,9,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.KUMGANG,10,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.TAEBEK,11,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.PYONGWON,12,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.SYPCCHIN,13,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.CHITAE,14,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.CHUNGKWON,15,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.JANSU,16,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.ILIO,17,idGimnasio));
+        poomsaeList.add(new Poomsae(Constantes.INCLUSIVO,18,idGimnasio));
         poomsaeRepository.saveAll(poomsaeList);
     }
 
 
-    private void cargaCategorias(int idGimnasioRoot) {
+    private void cargaCategorias(int idGimnasio) {
 
         List<Categoria> categoriaList = new ArrayList<>();
         int position = 0;
@@ -123,7 +123,7 @@ public class CargasInicialesClienteService {
         int positionCinturonFin = 28;
         String poomsae = Constantes.INCLUSIVO;
         List<Boolean> categorias = Arrays.asList(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -134,42 +134,42 @@ public class CargasInicialesClienteService {
         positionCinturonFin = 18;
         poomsae = Constantes.KICHO;
         categorias = Arrays.asList(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
         edadInicio = 4;
         edadFin = 4;
         nombreCategoria = "B";
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
         edadInicio = 5;
         edadFin = 5;
         nombreCategoria = "C";
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
         edadInicio = 6;
         edadFin = 6;
         nombreCategoria = "D";
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
         edadInicio = 7;
         edadFin = 7;
         nombreCategoria = "E";
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
         edadInicio = 8;
         edadFin = 8;
         nombreCategoria = "F";
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -180,7 +180,7 @@ public class CargasInicialesClienteService {
         positionCinturonFin = 2;
         poomsae = Constantes.POOMSAE1;
         categorias = Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -188,7 +188,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 3;
         positionCinturonFin = 5;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -196,7 +196,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 6;
         positionCinturonFin = 18;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -206,7 +206,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 3;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -214,7 +214,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 7;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -222,7 +222,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 18;
         poomsae = Constantes.POOMSAE3;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -232,7 +232,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 3;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -240,7 +240,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 7;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -248,7 +248,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE3;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -256,7 +256,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 14;
         positionCinturonFin = 18;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -266,7 +266,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 3;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -274,7 +274,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 7;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -282,7 +282,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE5;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -290,7 +290,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 14;
         positionCinturonFin = 18;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -300,7 +300,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 3;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -308,7 +308,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 7;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -316,7 +316,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE5;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -324,7 +324,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 14;
         positionCinturonFin = 18;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -335,7 +335,7 @@ public class CargasInicialesClienteService {
         positionCinturonFin = 2;
         poomsae = Constantes.POOMSAE1;
         categorias = Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -343,7 +343,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 6;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -351,7 +351,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE4;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -359,7 +359,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 19;
         positionCinturonFin = 28;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -369,7 +369,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 2;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -377,7 +377,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 6;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -385,7 +385,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE4;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -393,7 +393,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 19;
         positionCinturonFin = 28;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -403,7 +403,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 2;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -411,7 +411,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 6;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -419,7 +419,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE4;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -427,7 +427,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 19;
         positionCinturonFin = 28;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -437,7 +437,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 2;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -445,7 +445,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 6;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -453,7 +453,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE4;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -461,7 +461,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 19;
         positionCinturonFin = 28;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -471,7 +471,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 0;
         positionCinturonFin = 2;
         poomsae = Constantes.POOMSAE1;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -479,7 +479,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 4;
         positionCinturonFin = 6;
         poomsae = Constantes.POOMSAE2;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -487,7 +487,7 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 8;
         positionCinturonFin = 13;
         poomsae = Constantes.POOMSAE4;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
         position++;
 
@@ -495,21 +495,21 @@ public class CargasInicialesClienteService {
         positionCinturonInicio = 19;
         positionCinturonFin = 28;
         poomsae = Constantes.KORYO;
-        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasioRoot,
+        cargoLista(categoriaList, edadInicio, edadFin, nombreCategoria, positionCinturonInicio, positionCinturonFin, idGimnasio,
                 poomsae, categorias, position);
 
         categoriaRepository.saveAll(categoriaList);
     }
 
     private void cargoLista(List<Categoria> categoriaList, int edadInicio, int edadFin, String nombreCategoria,
-                            int positionCinturonInicio, int positionCinturonFin, int idGimnasioRoot,
+                            int positionCinturonInicio, int positionCinturonFin, int idGimnasio,
                             String poomsae, List<Boolean> categorias, int position) {
         Categoria categoria = new Categoria(0,edadInicio,edadFin,nombreCategoria,
                 positionCinturonInicio,positionCinturonFin,
-                cinturonRepository.findByCodigoGimnasioAndPosition(idGimnasioRoot, positionCinturonInicio).getId(),
-                cinturonRepository.findByCodigoGimnasioAndPosition(idGimnasioRoot, positionCinturonFin).getId(),
-                poomsaeRepository.findByCodigoGimnasioAndNombre(idGimnasioRoot, poomsae).getId(),
-                categorias.get(0),categorias.get(1),categorias.get(2),categorias.get(3),position,idGimnasioRoot);
+                cinturonRepository.findByCodigoGimnasioAndPosition(idGimnasio, positionCinturonInicio).getId(),
+                cinturonRepository.findByCodigoGimnasioAndPosition(idGimnasio, positionCinturonFin).getId(),
+                poomsaeRepository.findByCodigoGimnasioAndNombre(idGimnasio, poomsae).getId(),
+                categorias.get(0),categorias.get(1),categorias.get(2),categorias.get(3),position,idGimnasio);
         categoriaList.add(categoria);
     }
 }

@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class UsuarioController {
 
 	/**
-	 * TODO INFORMACIÓN MUY IMPORTANTE
+	 * INFORMACIÓN MUY IMPORTANTE
 	 * Los usuario dueños de gimnasio (y clientes para mi) tendrán rol ROLE_ADMIN
 	 * Los usuario clientes del gimnasio tendrán ROLE_USER
 	 * Yo tendré ROLE_ROOT y tendré una consola especial con acceso a absolutamente toda la información

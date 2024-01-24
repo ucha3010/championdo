@@ -18,5 +18,5 @@ public interface UtilService {
 
     void addFromRoot(GimnasioModel customer);
 
-    void deleteFromRoot (int idGimnasioRootModel);
+    void deleteFromRoot (int idGimnasioModel);
 }

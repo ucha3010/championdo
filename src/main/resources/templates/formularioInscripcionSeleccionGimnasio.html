@@ -7,16 +7,6 @@
 
 		<title>Selección gimnasio</title>
 		<script>
-			function confirmDelete(controller, id){
-				if(confirm("¿Seguro que desea eliminar la inscripción seleccionada?")){
-					var relativeUrl = controller + "/eliminarInscripcion/" + id;
-					var domain = getDomain(location.href);
-					location.href = domain + relativeUrl;
-					return true;
-				}
-				return false;
-			}
-
 			function goDetail(controller, id){
 				var relativeUrl = controller + "/getInscripcion/" + id;
 				var domain = getDomain(location.href);
@@ -85,7 +75,6 @@
 						<th>Inscripción de</th>
 						<th>Gimnasio</th>
 						<th></th>
-						<th></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -99,9 +88,6 @@
 						</td>
 						<td th:attr="onclick=|goDetail('${controller}','${autorizacion.id}')|">
 							<span th:text="${autorizacion.nombreGimnasio}"></span>
-						</td>
-						<td>
-							<a th:if="${deleteEnable}" th:attr="onclick=|return confirmDelete('${controller}','${autorizacion.id}')|"><span class="icofont-bin textDecoration-none"></span></a>
 						</td>
 						<td>
 							<a th:if="${autorizacion.inscripcionFirmada and autorizacion.domiciliacionSEPA and not autorizacion.domiciliacionSEPAFirmada}" class="colorRed" href="#" th:href="@{/__${controller}__/normativa-sepa/__${autorizacion.id}__}">¡Toque aquí para adjuntar documentación faltante!</a>

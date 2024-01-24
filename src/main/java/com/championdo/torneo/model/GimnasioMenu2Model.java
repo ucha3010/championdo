@@ -14,10 +14,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class GimnasioRootMenu2Model {
+public class GimnasioMenu2Model {
 
     private int id;
-    private int idGimnasioRoot;
+    private int idGimnasio;
     private int idMenu2;
     private String usernameAlta;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

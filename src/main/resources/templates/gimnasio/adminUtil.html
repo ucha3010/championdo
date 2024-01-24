@@ -8,6 +8,63 @@
 	<title>Parámetros</title>
 
 	<script th:inline="javascript">
+		function validarUpdateGimnasio(){
+
+			var campo = ['nombreGimnasio','domicilioCalle','domicilioLocalidad','domicilioCp'];
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+			    var nombreRolError = document.getElementById(campo[i]+'Error');
+				if(nombreRol.value==''){
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+			if(validado){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function validarUpdateEmail(emptyPass){
+
+			if(emptyPass){
+				var campo = ['correo','emailHost','emailPassword'];
+			} else {
+				var campo = ['correo','emailHost'];
+			}
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+			    var nombreRolError = document.getElementById(campo[i]+'Error');
+				if(nombreRol.value==''){
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+			if(validado){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function restablecer(){
+			var campos = document.getElementsByClassName("form-control");
+			for (var i = 0; i < campos.length; i++) {
+				campos[i].style.borderColor="#ced4da";
+			}
+			var camposSelect = document.getElementsByClassName("form-select");
+			for (var i = 0; i < camposSelect.length; i++) {
+				camposSelect[i].style.borderColor="#ced4da";
+			}
+		}
+
 		function mostrarClave() {
 			var x = document.getElementById("clave.correo");
 				if (x.type === "password") {
@@ -31,75 +88,161 @@
 		<section>
 			<div class="row align-items-center justify-content-end">
 				<div class="col-3 col-md-2">
-					<a class="btn btn-info" href="#" th:href="@{/adminGimnasio/}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/adminGimnasio/}"><span th:text="#{volver}"></span></a>
 				</div>
 			</div>
 			<div class="row mb-1 text-center">
 				<div class="col-12 colorGreen">
-					<h1>Parámetros <span th:text="${gimnasio.nombreGimnasio}"></span></h1>
+					<h1>Parámetros <span th:text="${gimnasioModel.nombreGimnasio}"></span></h1>
 				</div>
 			</div>
 		</section>
 
-		<section sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorLightOrange margenAbajo2Porc">
-			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post" th:each="unit : ${utilListCorreo}">
-				<div class="row mb-3">
+		<section sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorAquamarine p-3">
+			<form action="#" th:action="@{/adminGimnasio/updateGimnasio}" th:object="${gimnasioModel}" method="post" onsubmit="return validarUpdateGimnasio()">
 
-					<input type="hidden" name="clave" th:value="${unit.clave}"/>
+				<input type="hidden" th:field="*{id}"/>
 
-					<div th:if="${unit.clave == 'clave.correo' and unit.codigoGimnasio == -1}" class="col-12 col-md-4">
-						<label th:for="${unit.clave}">
-							<span th:text="#{${unit.clave}}"></span>
-							<span th:text="#{ya.existe.clave}" class="text-success"></span>
-						</label>
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<label for="nombreGimnasio">Nombre gimnasio*</label>
 					</div>
-
-					<div th:if="${unit.clave == 'clave.correo' and unit.codigoGimnasio != -1}" class="col-12 col-md-4">
-						<label th:for="${unit.clave}">
-							<span th:text="#{${unit.clave}}"></span>
-							<span th:text="#{no.existe.clave}" class="text-danger"></span>
-						</label>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{nombreGimnasio}" id="nombreGimnasio" class="form-control" placeholder="Nombre gimnasio"/>
 					</div>
-
-					<div th:if="${unit.clave != 'clave.correo'}" class="col-12 col-md-4">
-						<label th:for="${unit.clave}">
-							<span th:text="#{${unit.clave}}"></span>
-						</label>
+					<div class="col-md-3">
 					</div>
+				</div>
 
-					<div class="col-8 col-md-5">
-						<input th:if="${unit.clave} != clave.correo" type="text" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" />
-						<input th:if="${unit.clave} == clave.correo" type="password" th:value="${unit.valor}" name="valor" th:id="${unit.clave}" class="form-control" />
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<strong>Dirección gimnasio</strong>
 					</div>
+					<div class="col-7 col-md-9">
+					</div>
+				</div>
 
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<label for="domicilioCalle">Calle gimnasio*</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{domicilioCalle}" id="domicilioCalle" class="form-control" placeholder="Calle" />
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<label for="domicilioNumero">Número</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{domicilioNumero}" id="domicilioNumero" class="form-control" placeholder="Número" />
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<label for="domicilioOtros">Más datos</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{domicilioOtros}" id="domicilioOtros" class="form-control" placeholder="Más datos" />
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<label for="domicilioLocalidad">Localidad*</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{domicilioLocalidad}" id="domicilioLocalidad" class="form-control" placeholder="Localidad" />
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-5 col-md-3">
+						<label for="domicilioCp">Código postal*</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{domicilioCp}" id="domicilioCp" class="form-control" placeholder="Código postal" />
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+
+				<div class="row mb-1">
+					<div class="col-8 col-md-9">
+					</div>
 					<div class="col-4 col-md-3">
 						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
 					</div>
+				</div>
 
-					<div th:if="${unit.clave} == clave.correo" class="col-12">
+			</form>
+		</section>
+
+		<section sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorLightOrange p-3">
+			<form action="#" th:action="@{/adminGimnasio/updateEmail}" th:object="${gimnasioModel}" method="post" th:attr="onsubmit='return validarUpdateEmail(' + ${emptyPass} + ')'">
+				<input type="hidden" th:field="*{id}"/>
+				<div class="row mb-3">
+					<div class="col-5 col-md-3">
+						<label for="correo">Correo electrónico gimnasio</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="text" th:field="*{correo}" id="correo" class="form-control" placeholder="Nombre gimnasio"/>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div th:if="${emptyPass}" class="row mb-3">
+					<div class="col-5 col-md-3">
+						<label for="emailPassword">Contraseña correo electrónico gimnasio</label>
+					</div>
+					<div class="col-7 col-md-6">
+						<input type="password" th:field="*{emailPassword}" id="emailPassword" class="form-control" placeholder="Nombre gimnasio"/>
+					</div>
+					<div class="col-md-3">
+					</div>
+					<div class="col-12">
 						<input type="checkbox" onclick="mostrarClave()"><span th:text="#{mostrar.clave}"></span>
 					</div>
 				</div>
-			</form>
-
-			<form action="#" th:action="@{/adminUtil/updateHost}" th:object="${utilModel}" method="post">
-				<input type="hidden" name="clave" th:value="${utilHost.clave}"/>
+				<div th:if="${!emptyPass}" class="row mb-3">
+					<div class="col-12">
+						<a class="btn btn-danger" href="#" th:href="@{/adminGimnasio/changePass}"><span th:text="#{cambiar.clave.correo}"></span></a>
+					</div>
+				</div>
 				<div class="row mb-3">
 					<div class="col-6 col-md-4">
-						<label th:for="host.email"><span th:text="#{host.name}"></span></label>
+						<label th:for="emailHost"><span th:text="#{host.name}"></span></label>
 					</div>
 					<div class="col-6 col-md-5">
-						<select name="valor" id="host.email" class="form-select" onchange="this.form.submit()">
-							<option th:each="unitHost : ${utilListHost}" th:value="${unitHost.valor}" th:text="${unitHost.clave}" th:selected="${unitHost.valor == utilHost.valor}"></option>
+						<select th:field="*{emailHost}" id="emailHost" class="form-select">
+							<option th:each="unitHost : ${utilListHost}" th:value="${unitHost.valor}" th:text="${unitHost.clave}" th:selected="${unitHost.valor == gimnasioModel.emailHost}"></option>
 						</select>
 					</div>
 					<div class="col-md-3">
 					</div>
 				</div>
+
+				<div class="row mb-1">
+					<div class="col-8 col-md-9">
+					</div>
+					<div class="col-4 col-md-3">
+						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
+					</div>
+				</div>
 			</form>
 		</section>
 
-		<section sec:authorize="hasRole('ROLE_ADMIN')" class="margenAbajo2Porc" th:each="unitInscripciones : ${utilListInscripciones}">
+		<section sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorAquamarine p-3" th:each="unitInscripciones : ${utilListInscripciones}">
 
 			<form action="#" th:action="@{/adminUtil/updateUtil}" th:object="${utilModel}" method="post">
 				<input type="hidden" name="clave" th:value="${unitInscripciones.clave}"/>
@@ -117,46 +260,6 @@
 				</div>
 			</form>
 		</section>
-
-<!-- TODO DAMIAN esto está mal!!! no debe apuntar a adminGimnasio/updateGimnasio -->
-		<section sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorAquamarine margenAbajo2Porc">
-			<form action="#" th:action="@{/adminGimnasio/updateGimnasio}" th:object="${gimnasioModel}" method="post">
-
-				<input type="hidden" name="id" th:value="${gimnasioModel.id}"/>
-
-				<div class="row mb-1">
-					<div class="col-5 col-md-3">
-						<label for="nombreGimnasio">Nombre gimnasio</label>
-					</div>
-					<div class="col-7 col-md-6">
-						<input type="text" th:field="*{nombre}" id="nombreGimnasio" class="form-control" placeholder="Nombre gimnasio"/>
-					</div>
-					<div class="col-md-3">
-					</div>
-				</div>
-
-				<div class="row mb-1">
-					<div class="col-8 col-md-9">
-					</div>
-					<div class="col-4 col-md-3">
-						<button class="btn btn-primary" type="submit">Actualizar</button>
-					</div>
-				</div>
-
-				<div class="row mb-3">
-					<div class="col-5 col-md-3">
-						<label for="direccionGimnasio">Dirección gimnasio</label>
-					</div>
-					<div class="col-7 col-md-6">
-						<input type="text" th:field="*{direccion}" id="direccionGimnasio" class="form-control" placeholder="Dirección gimnasio"/>
-					</div>
-					<div class="col-md-3">
-					</div>
-				</div>
-
-			</form>
-		</section>
-
 
 		<section sec:authorize="hasRole('ROLE_ADMIN')" class="backgroundColorLightOrange margenAbajo2Porc">
 			<form th:id="formMenu2" action="#" th:action="@{/adminGimnasio/updateMenu}" method="post">
@@ -194,7 +297,7 @@
 
 				<div class="row align-items-center justify-content-end mb-3">
 					<div class="col-4 col-md-6">
-						<button class="btn btn-primary" type="submit">Actualizar</button>
+						<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
 					</div>
 				</div>
 			</form>
@@ -202,7 +305,7 @@
 
 		<div class="row align-items-center justify-content-end">
 			<div class="col-3 col-md-2">
-				<a class="btn btn-info" href="#" th:href="@{/adminGimnasio/}">Volver</a>
+				<a class="btn btn-info" href="#" th:href="@{/adminGimnasio/}"><span th:text="#{volver}"></span></a>
 			</div>
 		</div>
 	</div>

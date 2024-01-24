@@ -10,7 +10,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class GimnasioModel {
 
     private int id;
@@ -36,5 +35,37 @@ public class GimnasioModel {
     private String usuarioModificacion;
     private String telefono;
     private String correo;
+    private String emailPassword;
+    private String emailHost;
+    private String emailPort;
     private List<Menu2Model> menu2ModelList;
+
+    @Override
+    public String toString() {
+        return "GimnasioModel{" +
+                "id=" + id +
+                ", enabled=" + enabled +
+                ", nombreGimnasio='" + nombreGimnasio + '\'' +
+                ", nombreResponsable='" + nombreResponsable + '\'' +
+                ", apellido1Responsable='" + apellido1Responsable + '\'' +
+                ", apellido2Responsable='" + apellido2Responsable + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                ", domicilioCalle='" + domicilioCalle + '\'' +
+                ", domicilioNumero='" + domicilioNumero + '\'' +
+                ", domicilioOtros='" + domicilioOtros + '\'' +
+                ", domicilioLocalidad='" + domicilioLocalidad + '\'' +
+                ", domicilioCp='" + domicilioCp + '\'' +
+                ", cifNif='" + cifNif + '\'' +
+                ", visibilidadContratada=" + visibilidadContratada +
+                ", cantidadRegistrosContratados=" + cantidadRegistrosContratados +
+                ", fechaAlta=" + fechaAlta +
+                ", fechaModificacion=" + fechaModificacion +
+                ", usuarioModificacion='" + usuarioModificacion + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", correo='" + correo + '\'' +
+                ", emailHost='" + emailHost + '\'' +
+                ", emailPort='" + emailPort + '\'' +
+                ", menu2ModelList=" + menu2ModelList +
+                '}';
+    }
 }

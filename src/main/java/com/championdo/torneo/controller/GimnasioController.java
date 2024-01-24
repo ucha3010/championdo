@@ -40,7 +40,7 @@ public class GimnasioController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
+    private GimnasioMenu2Service gimnasioMenu2Service;
     @Autowired
     private SessionData sessionData;
     @Autowired
@@ -72,8 +72,6 @@ public class GimnasioController {
         modelAndView.addObject("inscripcionA", "Taekwondo");
         modelAndView.addObject("controller", "gimnasio");
         modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/gimnasio/tipoInscripcion"));
-        //TODO DAMIAN usuario viene sin codigoGimnasio. Hay que habilitar para borrado SOLO las inscripciones del gimnasio que traigo acá en id
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(0).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -97,8 +95,6 @@ public class GimnasioController {
         modelAndView.addObject("inscripcionA", "Taekwondo");
         modelAndView.addObject("controller", "gimnasio");
         modelAndView.addObject("gimnasio", gimnasioService.findById(id));
-        //TODO DAMIAN usuario viene sin codigoGimnasio. Hay que habilitar para borrado SOLO las inscripciones del gimnasio que traigo acá en id
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(sessionData.getGimnasioModel().getId()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -139,6 +135,7 @@ public class GimnasioController {
     public ModelAndView getInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(inscripcionTaekwondoModel.getCodigoGimnasio()).getValor()));
         if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
             modelAndView.setViewName("gimnasio/vistaInscPropiaGimnasio");
         } else {
@@ -310,7 +307,6 @@ public class GimnasioController {
             if (!userExist) {
                 userService.addFromRoot(customer);
             }
-            //gimnasioService.addFromRoot(customer);
             utilService.addFromRoot(customer);
             cargasInicialesClienteService.cargasCintPoomCat(idCustomer);
             LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -319,8 +315,6 @@ public class GimnasioController {
             if(idCustomer != 0) {
                 cargasInicialesClienteService.eliminacionesCatPoomCint(idCustomer);
                 utilService.deleteFromRoot(idCustomer);
-//                userService.deleteFromRoot(idCustomer);
-                //gimnasioService.deleteFromRoot(idCustomer);
                 gimnasioService.delete(idCustomer);
             }
             modelAndView.setViewName("management/addCustomer");
@@ -351,10 +345,6 @@ public class GimnasioController {
         principalService.cargaBasicaCompleta(modelAndView);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
-/*        if (userService.findAll(id).size() == 1) {
-            userService.deleteFromRoot(id);
-        }*/
-        //gimnasioService.deleteFromRoot(id);
         torneoGimnasioService.deleteByCodigoGimnasio(id);
         gimnasioService.enableDisable(id, Boolean.FALSE);
         //Deshabilito el cliente pero no lo borro ya que Torneo (que tampoco se borran los torneos) tira del id y para que no se eliminen las inscripciones a los usuarios

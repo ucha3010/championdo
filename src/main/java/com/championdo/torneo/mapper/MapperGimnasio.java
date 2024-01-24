@@ -30,6 +30,9 @@ public class MapperGimnasio {
             localObject.setUsuarioModificacion(externObject.getUsuarioModificacion());
             localObject.setTelefono(externObject.getTelefono());
             localObject.setCorreo(externObject.getCorreo());
+            localObject.setEmailPassword(externObject.getEmailPassword());
+            localObject.setEmailHost(externObject.getEmailHost());
+            localObject.setEmailPort(externObject.getEmailPort());
         }
         return localObject;
     }
@@ -56,6 +59,9 @@ public class MapperGimnasio {
             localObject.setUsuarioModificacion(externObject.getUsuarioModificacion());
             localObject.setTelefono(externObject.getTelefono());
             localObject.setCorreo(externObject.getCorreo());
+            localObject.setEmailPassword(externObject.getEmailPassword());
+            localObject.setEmailHost(externObject.getEmailHost());
+            localObject.setEmailPort(externObject.getEmailPort());
         }
         return localObject;
     }

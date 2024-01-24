@@ -4,8 +4,8 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.EmailService;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.UtilManagerService;
-import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.SendMessage;
@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private SendMessage sendMessage;
     @Autowired
-    private UtilService utilService;
+    private GimnasioService gimnasioService;
     @Autowired
     private UtilManagerService utilManagerService;
 
@@ -45,12 +45,9 @@ public class EmailServiceImpl implements EmailService {
         List<File> files = new ArrayList<>();
         files.add(inscripcion);
         try {
-            String email = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionModel.getCodigoGimnasio()).getValor();
-            String host = utilService.findByClave(Constantes.HOST_CORREO, inscripcionModel.getCodigoGimnasio()).getValor();
-            String port = utilService.findByClave(Constantes.PORT_CORREO, inscripcionModel.getCodigoGimnasio()).getValor();
-            String password = utilService.findByClave(Constantes.CLAVE_CORREO, inscripcionModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(email, userModel.getCorreo(), "Confirmación inscripción torneo taekwondo"
-                    , textMessageTournamentRegistration(userModel), files, host, port, password));
+            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(gimnasioModel.getCorreo(), userModel.getCorreo(), "Confirmación inscripción torneo taekwondo"
+                    , textMessageTournamentRegistration(userModel), files, gimnasioModel.getEmailHost(), gimnasioModel.getEmailPort(), gimnasioModel.getEmailPassword()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL_ARCHIVO_ADJUNTO,e.getMessage());
         }
@@ -60,8 +57,8 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminTournamentRegistration(UserAutorizacionModel userAutorizacionModel, InscripcionModel inscripcionModel) throws SenderException {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
-            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), correoGimnasio, "Nueva inscripción en torneo",
+            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), gimnasioModel.getCorreo(), "Nueva inscripción en torneo",
                     textMessageConfirmAdminTournamentRegistration(userAutorizacionModel), null, utilManagerModel.getEmailHost(),
                     utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));
         } catch (Exception e) {
@@ -73,12 +70,9 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel, List<File> files) throws SenderException {// envía gimnasio
         try {
-            String email = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            String host = utilService.findByClave(Constantes.HOST_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            String port = utilService.findByClave(Constantes.PORT_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            String password = utilService.findByClave(Constantes.CLAVE_CORREO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(email, inscripcionTaekwondoModel.getMayorCorreo(), "Confirmación inscripción gimnasio",
-                    textMessageGymJoining(inscripcionTaekwondoModel), files, host, port, password));
+            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionTaekwondoModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(gimnasioModel.getCorreo(), inscripcionTaekwondoModel.getMayorCorreo(), "Confirmación inscripción gimnasio",
+                    textMessageGymJoining(inscripcionTaekwondoModel), files, gimnasioModel.getEmailHost(), gimnasioModel.getEmailPort(), gimnasioModel.getEmailPassword()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL_ARCHIVO_ADJUNTO,e.getMessage());
         }
@@ -88,8 +82,8 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
-            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), correoGimnasio, "Nueva inscripción en el gimnasio",
+            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionTaekwondoModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), gimnasioModel.getCorreo(), "Nueva inscripción en el gimnasio",
                     textMessageConfirmAdminGymJoining(inscripcionTaekwondoModel), null,
                     utilManagerModel.getEmailHost(), utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));
         } catch (Exception e) {
@@ -113,8 +107,8 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminSepaSigned(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
-            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, inscripcionTaekwondoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), correoGimnasio, "Nuevo formulario de domiciliación firmado",
+            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionTaekwondoModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), gimnasioModel.getCorreo(), "Nuevo formulario de domiciliación firmado",
                     textMessageConfirmAdminSepaSigned(inscripcionTaekwondoModel), null, utilManagerModel.getEmailHost(),
                     utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));
         } catch (Exception e) {
@@ -137,13 +131,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendNewMandato(MandatoModel mandatoModel, List<File> files) throws SenderException {// envía gimnasio
         try {
-            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, mandatoModel.getCodigoGimnasio()).getValor();
-            String host = utilService.findByClave(Constantes.HOST_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
-            String port = utilService.findByClave(Constantes.PORT_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
-            String password = utilService.findByClave(Constantes.CLAVE_CORREO, mandatoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(correoGimnasio, mandatoModel.getCorreoMandante(),
+            GimnasioModel gimnasioModel = gimnasioService.findById(mandatoModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(gimnasioModel.getCorreo(), mandatoModel.getCorreoMandante(),
                     "Mandato para licencia solicitada por ".concat(mandatoModel.getNombreMandante()),
-                    textMessageSendNewMandato(mandatoModel), files, host, port, password));
+                    textMessageSendNewMandato(mandatoModel), files, gimnasioModel.getEmailHost(), gimnasioModel.getEmailPort(), gimnasioModel.getEmailPassword()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
         }
@@ -154,8 +145,8 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminNewMandato(MandatoModel mandatoModel) throws SenderException {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
-            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, mandatoModel.getCodigoGimnasio()).getValor();
-            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), correoGimnasio, "Nuevo mandato firmado",
+            GimnasioModel gimnasioModel = gimnasioService.findById(mandatoModel.getCodigoGimnasio());
+            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), gimnasioModel.getCorreo(), "Nuevo mandato firmado",
                     textMessageConfirmAdminNewMandato(mandatoModel), null, utilManagerModel.getEmailHost(),
                     utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));
         } catch (Exception e) {
@@ -168,8 +159,8 @@ public class EmailServiceImpl implements EmailService {
     public void confirmAdminDelete(int codigoGimnasio, String actividad, User user, String nombreMenor) {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
-            String correoGimnasio = utilService.findByClave(Constantes.CORREO_GIMNASIO, codigoGimnasio).getValor();
-            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), correoGimnasio, "Eliminación de usuario de " + actividad,
+            GimnasioModel gimnasioModel = gimnasioService.findById(codigoGimnasio);
+            sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), gimnasioModel.getCorreo(), "Eliminación de usuario de " + actividad,
                     textMessageConfirmAdminDelete(actividad, user, nombreMenor), null, utilManagerModel.getEmailHost(),
                     utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));
         } catch (Exception e) {

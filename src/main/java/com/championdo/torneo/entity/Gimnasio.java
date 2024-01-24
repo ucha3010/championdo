@@ -13,7 +13,6 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class Gimnasio {
 
     @Id
@@ -52,5 +51,38 @@ public class Gimnasio {
     private String telefono;
     @Column(name = "correo", length = 100)
     private String correo;
+    @Column(name = "emailPassword", length = 60)
+    private String emailPassword;
+    @Column(name = "emailHost", length = 200)
+    private String emailHost;
+    @Column(name = "emailPort", length = 5)
+    private String emailPort;
 
+    @Override
+    public String toString() {
+        return "Gimnasio{" +
+                "id=" + id +
+                ", enabled=" + enabled +
+                ", nombreGimnasio='" + nombreGimnasio + '\'' +
+                ", nombreResponsable='" + nombreResponsable + '\'' +
+                ", apellido1Responsable='" + apellido1Responsable + '\'' +
+                ", apellido2Responsable='" + apellido2Responsable + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                ", domicilioCalle='" + domicilioCalle + '\'' +
+                ", domicilioNumero='" + domicilioNumero + '\'' +
+                ", domicilioOtros='" + domicilioOtros + '\'' +
+                ", domicilioLocalidad='" + domicilioLocalidad + '\'' +
+                ", domicilioCp='" + domicilioCp + '\'' +
+                ", cifNif='" + cifNif + '\'' +
+                ", visibilidadContratada=" + visibilidadContratada +
+                ", cantidadRegistrosContratados=" + cantidadRegistrosContratados +
+                ", fechaAlta=" + fechaAlta +
+                ", fechaModificacion=" + fechaModificacion +
+                ", usuarioModificacion='" + usuarioModificacion + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", correo='" + correo + '\'' +
+                ", emailHost='" + emailHost + '\'' +
+                ", emailPort='" + emailPort + '\'' +
+                '}';
+    }
 }

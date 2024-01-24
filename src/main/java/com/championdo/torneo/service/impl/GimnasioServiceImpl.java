@@ -3,13 +3,13 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.Gimnasio;
 import com.championdo.torneo.mapper.MapperGimnasio;
 import com.championdo.torneo.mapper.MapperMenu2;
+import com.championdo.torneo.model.GimnasioMenu2Model;
 import com.championdo.torneo.model.GimnasioModel;
-import com.championdo.torneo.model.GimnasioRootMenu2Model;
 import com.championdo.torneo.model.Menu1Model;
 import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.repository.GimnasioRepository;
 import com.championdo.torneo.repository.Menu2Repository;
-import com.championdo.torneo.service.GimnasioRootMenu2Service;
+import com.championdo.torneo.service.GimnasioMenu2Service;
 import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.util.LoggerMapper;
 import org.apache.logging.log4j.Level;
@@ -30,7 +30,7 @@ public class GimnasioServiceImpl implements GimnasioService {
     @Autowired
     private MapperGimnasio mapperGimnasio;
     @Autowired
-    private GimnasioRootMenu2Service gimnasioRootMenu2Service;
+    private GimnasioMenu2Service gimnasioMenu2Service;
     @Autowired
     private Menu2Repository menu2Repository;
     @Autowired
@@ -70,8 +70,8 @@ public class GimnasioServiceImpl implements GimnasioService {
         try {
             GimnasioModel gimnasioModel = mapperGimnasio.entity2Model(gimnasioRepository.getById(id));
             List<Menu2Model> menu2ModelList = new ArrayList<>();
-            for(GimnasioRootMenu2Model gimnasioRootMenu2: gimnasioRootMenu2Service.findByIdGimnasioRoot(id)) {
-                menu2ModelList.add(mapperMenu2.entity2Model(menu2Repository.getById(gimnasioRootMenu2.getIdMenu2())));
+            for(GimnasioMenu2Model gimnasioMenu2: gimnasioMenu2Service.findByIdGimnasio(id)) {
+                menu2ModelList.add(mapperMenu2.entity2Model(menu2Repository.getById(gimnasioMenu2.getIdMenu2())));
             }
             gimnasioModel.setMenu2ModelList(menu2ModelList);
             return gimnasioModel;
@@ -98,7 +98,7 @@ public class GimnasioServiceImpl implements GimnasioService {
     @Override
     public void delete(int idGimnasio) {
         gimnasioRepository.deleteById(idGimnasio);
-        gimnasioRootMenu2Service.deleteByIdGimnasioRoot(idGimnasio);
+        gimnasioMenu2Service.deleteByIdGimnasio(idGimnasio);
     }
 
     @Override
@@ -136,10 +136,14 @@ public class GimnasioServiceImpl implements GimnasioService {
 
     @Override
     public List<GimnasioModel> findByMenu2Url(String url) {
-        List<GimnasioRootMenu2Model> gimnasioRootMenu2ModelList = gimnasioRootMenu2Service.findByIdMenu2(menu2Repository.findByUrl(url).getId());
+        List<GimnasioMenu2Model> gimnasioMenu2ModelList = gimnasioMenu2Service.findByIdMenu2(menu2Repository.findByUrl(url).getId());
         List<GimnasioModel> gimnasioModelList = new ArrayList<>();
-        for (GimnasioRootMenu2Model gimnasioRootMenu2Model : gimnasioRootMenu2ModelList) {
-            gimnasioModelList.add(findById(gimnasioRootMenu2Model.getIdGimnasioRoot()));
+        GimnasioModel gimnasioModel;
+        for (GimnasioMenu2Model gimnasioMenu2Model : gimnasioMenu2ModelList) {
+            gimnasioModel = findById(gimnasioMenu2Model.getIdGimnasio());
+            if(gimnasioModel.isEnabled()) {
+                gimnasioModelList.add(gimnasioModel);
+            }
         }
         return gimnasioModelList;
     }

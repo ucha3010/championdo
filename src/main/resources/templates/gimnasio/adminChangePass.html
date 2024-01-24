@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+	<meta th:replace="static/cabeceraMeta :: meta">
+	<link th:replace="static/cabeceraLink :: link">
+	<script th:replace="static/cabeceraScript :: script"></script>
+	
+	<title>Cambiar contraseña</title>
+
+	<script type="text/javascript">
+		function validar(){
+
+			var campo = ['nuevaClave','nuevaClaveRepeticion'];
+			restablecer();
+			var validado = true;
+			for(var i=0; i < campo.length; i++){
+			    var nombreRol = document.getElementById(campo[i]);
+			    var nombreRolError = document.getElementById(campo[i]+'Error');
+				if(nombreRol.value==''){
+					nombreRolError.innerHTML = "Campo obligatorio";
+					nombreRol.style.borderColor="red";
+					validado = false;
+				}
+			}
+
+    		var pass1 = document.getElementById('nuevaClave').value;
+	    	var pass2 = document.getElementById('nuevaClaveRepeticion').value;
+	    	if(pass1.length > 0 && pass1 != pass2){
+	    		document.getElementById('nuevaClaveError').innerHTML = "Claves no iguales";
+	    		document.getElementById('nuevaClave').style.borderColor="red";
+	    		document.getElementById('nuevaClaveRepeticion').style.borderColor="red";
+	    		validado = false;
+	    	}
+
+			if(validado){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		function restablecer(){
+			var errorSpan = document.getElementsByName('errorSpan');
+			for (var i = 0; i < errorSpan.length; i++) {
+				errorSpan[i].innerHTML='';
+			}
+			var campos = document.getElementsByClassName("form-control");
+			for (var i = 0; i < campos.length; i++) {
+				campos[i].style.borderColor="#ced4da";
+			}
+		}
+	</script>
+</head>
+<body>
+	<div th:replace="static/barraUsuario :: div"></div>
+	<div th:replace="static/barraNav :: nav"></div>
+	
+	<div class="container">
+
+		<section class="margenArribaAbajo3Porc text-center">
+			<div th:if="${claveModificada != null}" class="alert alert-success" role="alert">Contraseña modificada correctamente</div>
+		</section>
+
+		<form sec:authorize="hasRole('ROLE_ADMIN')" action="#" th:action="@{/adminGimnasio/updateEmail}" th:object="${gimnasioModel}" method="post" onsubmit="return validar()">
+		
+			<input type="hidden" th:field="*{id}"/>
+
+			<div class="row mb-1">
+				<div class="col-md-3">
+				</div>
+				<div class="col-3 col-md-2">
+					<label for="nuevaClave">Nueva contraseña:</label>
+				</div>
+				<div class="col-9 col-md-3">
+					<input type="password" th:field="*{emailPassword}" id="nuevaClave" class="form-control" placeholder="Nueva contraseña"/>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-md-3">
+				</div>
+				<div class="col-3 col-md-2">
+				</div>
+				<div class="col-9 col-md-3 colorRed">
+					<span id="nuevaClaveError" name="errorSpan"></span>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-md-3">
+				</div>
+				<div class="col-3 col-md-2">
+					<label for="nuevaClaveRepeticion">Repetir nueva contraseña:</label>
+				</div>
+				<div class="col-9 col-md-3">
+					<input type="password" id="nuevaClaveRepeticion" class="form-control" placeholder="Repetir nueva contraseña"/>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-2 col-md-3">
+				</div>
+				<div class="col-2">
+					<button class="btn btn-primary" type="submit"><span th:text="#{actualizar}"></span></button>
+				</div>
+				<div class="col-4 col-md-3">
+				</div>
+				<div class="col-2">
+					<a class="btn btn-info" href="#" th:href="@{/adminUtil/utilList}"><span th:text="#{volver}"></span></a>
+				</div>
+				<div class="col-2">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-6">
+					<span id="hayError" name="errorSpan" class="colorRed"></span>
+				</div>
+				<div class="col-6">
+				</div>
+			</div>
+
+		</form>
+	</div>
+</body>
+
+<footer th:replace="static/footer :: footer"></footer>
+</html>

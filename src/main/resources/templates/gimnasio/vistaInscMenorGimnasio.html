@@ -7,6 +7,18 @@
 
 	<title>Autorización</title>
 
+	<script>
+		function confirmDelete(id){
+			if(confirm("¿Seguro que desea eliminar la inscripción?")){
+				var relativeUrl = "gimnasio/eliminarInscripcion/" + id;
+				var domain = getDomain(location.href);
+				location.href = domain + relativeUrl;
+				return true;
+			}
+			return false;
+		}
+	</script>
+
 </head>
 <body>
 	<div th:replace="static/barraUsuario :: div"></div>
@@ -292,6 +304,19 @@
 			<div class="col-md-2">
 			</div>
 			<div class="col-3 col-md-2">
+				<label for="idGimnasio">Gimnasio</label>
+			</div>
+			<div class="col-5 col-md-4">
+				<input type="text" th:field="*{inscripcion.nombreGimnasio}" id="idGimnasio" class="form-control" disabled />
+			</div>
+			<div class="col-4">
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-md-2">
+			</div>
+			<div class="col-3 col-md-2">
 				<label for="idCinturon">Cinturón actual</label>
 			</div>
 			<div class="col-5 col-md-4">
@@ -354,6 +379,11 @@
 		</div>
 
 		<div class="row align-items-center justify-content-end">
+			<div class="col-5">
+				<button th:if="${deleteEnable}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${inscripcion.id}')|">Borrar Inscripción</button>
+			</div>
+			<div class="col-3">
+			</div>
 			<div class="col-3 col-md-2">
 				<a class="btn btn-info" href="#" th:href="@{/gimnasio/tipoInscripcion}">Volver</a>
 			</div>

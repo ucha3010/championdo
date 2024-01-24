@@ -41,16 +41,9 @@ public class Constantes {
 	public static final String ERROR_DATOS_BANCARIOS = "Error en datos bancarios";
 
 	// claves sección administración
-	public static final String FECHA_CAMPEONATO = "campeonato.fecha";
-	public static final String DIRECCION_CAMPEONATO = "campeonato.direccion";
-	public static final String NOMBRE_CAMPEONATO = "campeonato.nombre";
 	public static final String HABILITAR_BORRAR_INSCRIPCIONES_CAMPEONATO = "inscripciones.campeonato.borrar";
 	public static final String HABILITAR_BORRAR_INSCRIPCIONES_TAEKWONDO = "inscripciones.taekwondo.borrar";
 	public static final String HABILITAR_CUENTA_BANCARIA = "inscripciones.cuenta.bancaria";
-	public static final String CORREO_GIMNASIO = "gimnasio.correo";
-	public static final String CLAVE_CORREO = "clave.correo";
-	public static final String HOST_CORREO = "host.email";
-	public static final String PORT_CORREO = "port.email";
 
 	// códigos de avisos
 	public static final String ERROR_BORRAR_TORNEO = "100";

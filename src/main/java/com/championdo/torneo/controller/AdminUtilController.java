@@ -9,6 +9,7 @@ import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,13 +44,11 @@ public class AdminUtilController {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
-        modelAndView.addObject("gimnasioModel", gimnasioService.findById(sessionData.getGimnasioModel().getId()));
-        modelAndView.addObject("utilListCorreo", utilService.findAllEndWith(".correo", sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("gimnasioModel", sessionData.getGimnasioModel());
+        modelAndView.addObject("emptyPass", StringUtils.isNullOrEmpty(sessionData.getGimnasioModel().getEmailPassword()));
         modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", sessionData.getGimnasioModel().getId()));
-        modelAndView.addObject("utilHost", utilService.findAllEndWith("host.email", sessionData.getGimnasioModel().getId()).get(0));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
         gimnasioService.fillMenu2Checked(modelAndView, sessionData.getGimnasioModel().getId());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -67,7 +66,7 @@ public class AdminUtilController {
         return utilList(modelAndView);
     }
 
-    @PostMapping("/updateHost")
+   /* @PostMapping("/updateHost")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateHost(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
@@ -85,7 +84,7 @@ public class AdminUtilController {
         modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return utilList(modelAndView);
-    }
+    }*/
 
     @GetMapping("/root-util")
     @PreAuthorize("hasRole('ROLE_ROOT')")
