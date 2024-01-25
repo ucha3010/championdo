@@ -5,7 +5,6 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.UtilManagerModel;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.*;
-import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;

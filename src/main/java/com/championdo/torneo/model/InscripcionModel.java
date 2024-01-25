@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class InscripcionModel {
+public class InscripcionModel {//TODO DAMIAN modificar nombre a TournamentRegistration
 
     private int id;
     private boolean inscripcionPropia;

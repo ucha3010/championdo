@@ -131,7 +131,7 @@ public class LoginController {
 			return modelAndView;
 		}
 		userModel.setPassword(userService.encodePassword(tokenModel.getPassword()));
-		userModel.setUsernameModificacione(tokenModel.getUsername());
+		userModel.setUsernameModificacion(tokenModel.getUsername());
 		try {
 			userService.updatePass(userModel);
 			tokenService.delete(tokenModel.getId());

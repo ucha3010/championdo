@@ -100,20 +100,6 @@ public class UsuarioController {
 		return formularioCambioClave(modelAndView);
 	}
 
-	@GetMapping("/remove/{username}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ModelAndView eliminarUsuario(ModelAndView modelAndView, @PathVariable String username) {
-		com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/remove/"+username);
-		if (userService.delete(username)) {//TODO DAMIAN los admin sólo deben poder eliminar a un usuario de todas las inscripciones en su gimnasio
-			modelAndView.addObject("eliminacionCorrecta","Elmiminación del usuario " + username + " realiazada correctamente");
-		} else {
-			modelAndView.addObject("eliminacionError","Hubo un error al eliminar el usuario " + username);
-		}
-		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-		return users(modelAndView);
-	}
-
 	@GetMapping("/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView users(ModelAndView modelAndView) {
@@ -151,7 +137,7 @@ public class UsuarioController {
 		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/enabled/" + username);
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
-		usuario.setUsernameModificacione(user.getUsername());
+		usuario.setUsernameModificacion(user.getUsername());
 		userService.addOrUpdate(usuario);
 		modelAndView.addObject("updateOK", "Habilitación de " + usuario.getName()
 				+ " " + usuario.getLastname()

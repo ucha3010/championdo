@@ -20,8 +20,8 @@
 				}
 			}
 
-			var hiddenMenor = document.getElementById('hiddenMenor');
-			if(hiddenMenor && document.getElementById('fechaNacimiento').value != '' && edadCumpleEstaAnio() >= 16){
+			var hiddenMenor = document.getElementById('hiddenMenor').value;
+			if(hiddenMenor == 'true' && document.getElementById('fechaNacimiento').value != '' && edadCumpleEstaAnio() >= 16){
 				document.getElementById('fechaNacimiento').style.borderColor="red";
 				document.getElementById('fechaNacimientoError').innerHTML = "El usuario debe tener menos de 16 años";
 				validado = false;
@@ -75,8 +75,8 @@
 
 		function confirmarPreInfantilOMenor(){
 			var menorEntreCategorias = document.getElementById('menorEntreCategorias');
-			var hiddenMenor = document.getElementById('hiddenMenor');
-			if(hiddenMenor && evaluarEdad()) {
+			var hiddenMenor = document.getElementById('hiddenMenor').value;
+			if(hiddenMenor == 'true' && evaluarEdad()) {
 				menorEntreCategorias.className = 'form-select';
 			} else {
 				menorEntreCategorias.className = 'form-select displayNone';
@@ -129,7 +129,7 @@
 			<input type="hidden" th:field="*{mayorAutorizador.correo}"/>
 			<input type="hidden" th:field="*{mayorAutorizador.idTorneo}" />
 			<input type="hidden" th:field="*{mayorAutorizador.idTorneoGimnasio}" />
-			<input type="hidden" name="autorizado.menor" id="hiddenMenor" th:value="*{autorizado.menor}"/>
+			<input type="hidden" name="autorizado.menor" id="hiddenMenor" th:value="${userAutorizacionModel.autorizado.menor}"/>
 			<input type="hidden" th:field="*{autorizado.inclusivo}"/>
 
 			<div class="row mt-2 mb-1 mt-2">

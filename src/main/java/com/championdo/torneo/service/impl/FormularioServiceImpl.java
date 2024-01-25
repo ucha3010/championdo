@@ -91,13 +91,10 @@ public class FormularioServiceImpl implements FormularioService {
     @Override
     public void fillObjects(UserModel userModel) {
         if (userModel != null) {
-            if (userModel.getGimnasio() != null && userModel.getGimnasio().getId() != 0) { //TODO DAMIAN ver si se usa en algún lado
-                userModel.setGimnasio(gimnasioService.findById(userModel.getGimnasio().getId()));
-            }
             if (userModel.getPais() != null && userModel.getPais().getId() != 0) {
                 userModel.setPais(paisService.findById(userModel.getPais().getId()));
             }
-            if (userModel.getCinturon() != null && userModel.getCinturon().getId() != 0) { //TODO DAMIAN ver si se usa en algún lado
+            if (userModel.getCinturon() != null && userModel.getCinturon().getId() != 0) {
                 userModel.setCinturon(cinturonService.findById(userModel.getCinturon().getId()));
             }
             if (userModel.getCalidad() != null && userModel.getCalidad().getId() != 0 && userModel.getCalidad().getOtro().isEmpty()) {

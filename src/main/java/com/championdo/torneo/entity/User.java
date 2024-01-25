@@ -43,8 +43,8 @@ public class User {
 	private Date fechaAlta;
 	private Date fechaModificacion;
 
-	@Column(name = "usernameModificacione", length = 45)
-	private String usernameModificacione;
+	@Column(name = "usernameModificacion", length = 45)
+	private String usernameModificacion;
 
 	@Column(name = "correo", length = 100)
 	private String correo;
@@ -84,7 +84,7 @@ public class User {
 				", idPais=" + idPais +
 				", fechaAlta=" + fechaAlta +
 				", fechaModificacion=" + fechaModificacion +
-				", usernameModificacione='" + usernameModificacione + '\'' +
+				", usernameModificacion='" + usernameModificacion + '\'' +
 				", correo='" + correo + '\'' +
 				", domicilioCalle='" + domicilioCalle + '\'' +
 				", domicilioNumero='" + domicilioNumero + '\'' +

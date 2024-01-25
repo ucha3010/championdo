@@ -13,16 +13,6 @@
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;
         }
-
-		function confirmDelete(id,nombre){
-			if(confirm("¿Seguro que desea eliminar a " + nombre + " en lugar de deshabilitarlo? Se perderá toda la información")){
-				var relativeUrl = "usuario/remove/" + id;
-				var domain = getDomain(location.href);
-				location.href = domain + relativeUrl;
-				return true;
-			}
-			return false;
-		}
 	</script>
 </head>
 <body>
@@ -270,7 +260,6 @@
 
 			<div class="row align-items-center justify-content-end">
 				<div class="col-5">
-					<button th:if="${!loggedUser}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${user.username}','${user.name}')|">Borrar Usuario</button>
 				</div>
 				<div class="col-3">
 				</div>

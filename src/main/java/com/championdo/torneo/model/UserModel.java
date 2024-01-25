@@ -29,7 +29,7 @@ public class UserModel {
 	private CinturonModel cinturon;
 	private Date fechaAlta;
 	private Date fechaModificacion;
-	private String usernameModificacione;
+	private String usernameModificacion;
 	private String correo;
 	private boolean menor;
 	private String dniMenor;
@@ -66,7 +66,7 @@ public class UserModel {
 				", cinturon=" + cinturon +
 				", fechaAlta=" + fechaAlta +
 				", fechaModificacion=" + fechaModificacion +
-				", usernameModificacione='" + usernameModificacione + '\'' +
+				", usernameModificacione='" + usernameModificacion + '\'' +
 				", correo='" + correo + '\'' +
 				", menor=" + menor +
 				", dniMenor='" + dniMenor + '\'' +

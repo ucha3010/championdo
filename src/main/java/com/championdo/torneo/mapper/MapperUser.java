@@ -41,7 +41,7 @@ public class MapperUser {
             localObject.setPais(paisService.findById(externObject.getIdPais()));
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setFechaModificacion(externObject.getFechaModificacion());
-            localObject.setUsernameModificacione(externObject.getUsernameModificacione());
+            localObject.setUsernameModificacion(externObject.getUsernameModificacion());
             localObject.setCorreo(externObject.getCorreo());
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
@@ -74,7 +74,7 @@ public class MapperUser {
             }
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setFechaModificacion(externObject.getFechaModificacion());
-            localObject.setUsernameModificacione(externObject.getUsernameModificacione());
+            localObject.setUsernameModificacion(externObject.getUsernameModificacion());
             localObject.setCorreo(externObject.getCorreo());
             localObject.setDomicilioCalle(externObject.getDomicilioCalle());
             localObject.setDomicilioNumero(externObject.getDomicilioNumero());
