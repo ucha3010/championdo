@@ -137,12 +137,8 @@ public class UserService implements UserDetailsService {
 		UserModel userModel = new UserModel();
 		userModel.setUsername(gimnasioModel.getCifNif().toUpperCase());
 		userModel.setPassword(encodePassword(gimnasioModel.getCifNif().toUpperCase()));
-		userModel.setName(gimnasioModel.getNombreResponsable());
-		userModel.setLastname(gimnasioModel.getApellido1Responsable());
-		userModel.setSecondLastname(gimnasioModel.getApellido2Responsable());
 		userModel.setCorreo(gimnasioModel.getCorreo());
 		userModel.setTelefono(gimnasioModel.getTelefono());
-		userModel.setFechaNacimiento(gimnasioModel.getFechaNacimiento());
 		userModel.setEnabled(true);
 		userModel.setFechaAlta(new Date());
 		userModel.setCodigoGimnasio(gimnasioModel.getId());
@@ -153,6 +149,19 @@ public class UserService implements UserDetailsService {
 	public com.championdo.torneo.entity.User getLoggedUser() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return findByUsername(user.getUsername());
+	}
+
+	public Boolean isLoggedUser(String loggerUser, String foundUser) {
+		return loggerUser.equals(foundUser);
+	}
+
+	public List<UserModel> findByRole(String role) {
+		List<UserRole> userRoleList = userRoleRepository.findByRole(role);
+		List<UserModel> userModelList = new ArrayList<>();
+		for (UserRole userRole: userRoleList) {
+			userModelList.add(findModelByUsername(userRole.getUser().getUsername()));
+		}
+		return userModelList;
 	}
 	
 	private User buildUser(com.championdo.torneo.entity.User user, List<GrantedAuthority> authorities) {
@@ -175,9 +184,5 @@ public class UserService implements UserDetailsService {
 			userModelList.add(mapperUser.entity2Model(user));
 		}
 		return userModelList;
-	}
-
-	public Boolean isLoggedUser(String loggerUser, String foundUser) {
-		return loggerUser.equals(foundUser);
 	}
 }

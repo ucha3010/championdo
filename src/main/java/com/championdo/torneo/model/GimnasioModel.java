@@ -15,11 +15,6 @@ public class GimnasioModel {
     private int id;
     private boolean enabled;
     private String nombreGimnasio;
-    private String nombreResponsable;
-    private String apellido1Responsable;
-    private String apellido2Responsable;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date fechaNacimiento;
     private String domicilioCalle;
     private String domicilioNumero;
     private String domicilioOtros;
@@ -46,10 +41,6 @@ public class GimnasioModel {
                 "id=" + id +
                 ", enabled=" + enabled +
                 ", nombreGimnasio='" + nombreGimnasio + '\'' +
-                ", nombreResponsable='" + nombreResponsable + '\'' +
-                ", apellido1Responsable='" + apellido1Responsable + '\'' +
-                ", apellido2Responsable='" + apellido2Responsable + '\'' +
-                ", fechaNacimiento=" + fechaNacimiento +
                 ", domicilioCalle='" + domicilioCalle + '\'' +
                 ", domicilioNumero='" + domicilioNumero + '\'' +
                 ", domicilioOtros='" + domicilioOtros + '\'' +

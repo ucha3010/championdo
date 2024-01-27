@@ -45,9 +45,6 @@ public class GimnasioController {
     private SessionData sessionData;
     @Autowired
     private MapperUser mapperUser;
-
-
-
     @Autowired
     private CargasInicialesClienteService cargasInicialesClienteService;
     @Autowired
@@ -256,6 +253,7 @@ public class GimnasioController {
         modelAndView.setViewName("management/updateCustomer");
         principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customer", gimnasioService.findById(id));
+        modelAndView.addObject("adminUsers", userService.findByRole(Constantes.ROLE_ADMIN));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

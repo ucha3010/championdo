@@ -99,20 +99,6 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public List<UserRole> findDistinctByRole() {
-        List<UserRole> userRoleList = userRoleRepository.findAll();
-        List<String> roles = new ArrayList<>();
-        List<UserRole> userRoleListExit = new ArrayList<>();
-        for(UserRole userRole : userRoleList) {
-            if(!roles.contains(userRole.getRole())) {
-                roles.add(userRole.getRole());
-                userRoleListExit.add(userRole);
-            }
-        }
-        return userRoleListExit;
-    }
-
-    @Override
     public List<UserRole> adminAvailableRoles() {
          return Arrays.asList(new UserRole(null, Constantes.ROLE_USER), new UserRole(null, Constantes.ROLE_ADMIN));
     }

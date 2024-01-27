@@ -24,8 +24,6 @@ public interface UserRoleService {
 
     void actualizarRoles(UserRoleModel userRoleModel);
 
-    List<UserRole> findDistinctByRole();
-
     List<UserRole> adminAvailableRoles();
 
 }

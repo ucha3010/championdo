@@ -136,6 +136,10 @@ public class Utils {
 
     public static List<String> obtenerNombresArchivos(String rutaCarpeta) {
         File directorio = new File(rutaCarpeta);
-        return Arrays.asList(Objects.requireNonNull(directorio.list()));
+        if (directorio.list() != null) {
+            return Arrays.asList(directorio.list());
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

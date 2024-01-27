@@ -39,8 +39,10 @@ public class PrincipalController {
                 + "static" + File.separator + "imgs" + File.separator + File.separator + "principal";
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<String> fotosList = new ArrayList<>(Utils.obtenerNombresArchivos(ruta));
-        modelAndView.addObject("fotoPrincipal", fotosList.get(0));
-        fotosList.remove(0);
+        if (!fotosList.isEmpty()) {
+            modelAndView.addObject("fotoPrincipal", fotosList.get(0));
+            fotosList.remove(0);
+        }
         modelAndView.addObject("listaFotos", fotosList);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;

@@ -22,13 +22,6 @@ public class Gimnasio {
     private boolean enabled;
     @Column(name = "nombreGimnasio", length = 100)
     private String nombreGimnasio;
-    @Column(name = "nombreResponsable", length = 60)
-    private String nombreResponsable;
-    @Column(name = "apellido1Responsable", length = 60)
-    private String apellido1Responsable;
-    @Column(name = "apellido2Responsable", length = 60)
-    private String apellido2Responsable;
-    private Date fechaNacimiento;
     @Column(name = "domicilioCalle", length = 100)
     private String domicilioCalle;
     @Column(name = "domicilioNumero", length = 30)
@@ -64,10 +57,6 @@ public class Gimnasio {
                 "id=" + id +
                 ", enabled=" + enabled +
                 ", nombreGimnasio='" + nombreGimnasio + '\'' +
-                ", nombreResponsable='" + nombreResponsable + '\'' +
-                ", apellido1Responsable='" + apellido1Responsable + '\'' +
-                ", apellido2Responsable='" + apellido2Responsable + '\'' +
-                ", fechaNacimiento=" + fechaNacimiento +
                 ", domicilioCalle='" + domicilioCalle + '\'' +
                 ", domicilioNumero='" + domicilioNumero + '\'' +
                 ", domicilioOtros='" + domicilioOtros + '\'' +

@@ -54,13 +54,10 @@
             <tr>
                 <th class="d-none d-lg-table-cell"><button>ID<span aria-hidden="true"></span></button></th>
                 <th>Habilitado</th>
-                <th class="d-none d-lg-table-cell"><button>NIF/CIF<span aria-hidden="true"></span></button></th>
+                <th><button>NIF/CIF<span aria-hidden="true"></span></button></th>
                 <th><button>Nombre Gimnasio<span aria-hidden="true"></span></button></th>
-                <th><button>Nombre Responsable<span aria-hidden="true"></span></button></th>
-                <th><button>Primer apellido Responsable<span aria-hidden="true"></span></button></th>
-                <th class="d-none d-lg-table-cell"><button>Segundo apellido Responsable<span aria-hidden="true"></span></button></th>
                 <th class="d-none d-lg-table-cell"><button>Correo<span aria-hidden="true"></span></button></th>
-                <th class="d-none d-lg-table-cell">Teléfono</th>
+                <th>Teléfono</th>
                 <th class="d-none d-lg-table-cell"><button>Visib. contratada<span aria-hidden="true"></span></button></th>
                 <th class="d-none d-lg-table-cell"><button>Reg. contratados<span aria-hidden="true"></span></button></th>
                 <th class="d-none d-lg-table-cell"><button>Fecha alta<span aria-hidden="true"></span></button></th>
@@ -74,13 +71,10 @@
                     <img th:if="${customer.enabled}" class="check-img" src="#" th:src="@{/imgs/ok.png}" alt="Habilitado">
                     <img th:if="${!customer.enabled}" class="check-img" src="#" th:src="@{/imgs/ko.png}" alt="Deshabilitado">
                 </td>
-                <td th:text="${customer.cifNif}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${customer.cifNif}"></td>
                 <td th:text="${customer.nombreGimnasio}"></td>
-                <td th:text="${customer.nombreResponsable}"></td>
-                <td th:text="${customer.apellido1Responsable}"></td>
-                <td th:text="${customer.apellido2Responsable}" class="d-none d-lg-table-cell"></td>
                 <td th:text="${customer.correo}" class="d-none d-lg-table-cell"></td>
-                <td th:text="${customer.telefono}" class="d-none d-lg-table-cell"></td>
+                <td th:text="${customer.telefono}"></td>
                 <td th:text="${customer.visibilidadContratada}" class="d-none d-lg-table-cell"></td>
                 <td th:text="${customer.cantidadRegistrosContratados}" class="d-none d-lg-table-cell"></td>
                 <td th:text="${#calendars.format(customer.fechaAlta,'dd/MM/yyyy')}" class="d-none d-lg-table-cell"></td>
