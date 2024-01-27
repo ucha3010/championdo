@@ -101,29 +101,24 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/users")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView users(ModelAndView modelAndView) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/users");
-		modelAndView.setViewName("gimnasio/adminUsers");
-		//TODO DAMIAN la búsqueda de usuarios inscriptos en algo de un gimnasio se debe hacer de otra forma
-//		modelAndView.addObject("userList", userService.findAll(sessionData.getGimnasioModel().getId()));
+		modelAndView.setViewName("management/users");
+		modelAndView.addObject("userList", userService.findAll());
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
-		modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
 
 	@GetMapping("/users/{username}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView userDetail(ModelAndView modelAndView, @PathVariable String username) {
 		LoggerMapper.methodIn(Level.INFO, "/users/"+username, username, this.getClass());
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/users/"+username);
-		modelAndView.setViewName("gimnasio/adminUser");
+		modelAndView.setViewName("management/user");
 		UserModel userModel = userService.findModelByUsername(username);
 		modelAndView.addObject("user", userModel);
-		//TODO DAMIAN el rol se lo deberían cambiar sólo para el gimnasio del Admin, para los demás gimnasios no
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
 		modelAndView.addObject("loggedUser", userService.isLoggedUser(user.getUsername(), userModel.getUsername()));
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -131,10 +126,9 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/enabled/{username}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/enabled/" + username);
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
 		usuario.setUsernameModificacion(user.getUsername());
@@ -148,10 +142,9 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/rol/{username}/{rol}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView update(ModelAndView modelAndView, @PathVariable String username, @PathVariable String rol) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
-		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/rol/" + username + "/" + rol);
 		UserRole userRole = new UserRole();
 		com.championdo.torneo.entity.User usuario = userService.findByUsername(username);
 		userRole.setUser(usuario);

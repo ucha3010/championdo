@@ -38,7 +38,7 @@
 			</div>
 		</section>
 
-		<section sec:authorize="hasRole('ROLE_ADMIN')">
+		<section sec:authorize="hasRole('ROLE_ROOT')">
 			<div class="row mb-1">
 				<div class="col-3 col-md-2 text-center">
 					<label for="dni">DNI:</label>
@@ -231,28 +231,6 @@
 				</div>
 				<div class="col-4 col-md-3">
 					<input type="text" th:value="${user.pais.nombre}" id="pais" class="form-control" size="40" disabled/>
-				</div>
-				<div class="col-5 col-md-7">
-				</div>
-			</div>
-
-			<div class="row mb-1">
-				<div class="col-3 col-md-2 text-center">
-					<label for="gimnasio">Gimnasio:</label>
-				</div>
-				<div class="col-4 col-md-3">
-					<input type="text" th:value="${user.gimnasio.nombre}" id="gimnasio" class="form-control" size="40" disabled/>
-				</div>
-				<div class="col-5 col-md-7">
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<div class="col-3 col-md-2 text-center">
-					<label for="cinturon">Cinturón actual:</label>
-				</div>
-				<div class="col-4 col-md-3">
-					<input type="text" th:value="${user.cinturon.color}" id="cinturon" class="form-control" size="40" disabled/>
 				</div>
 				<div class="col-5 col-md-7">
 				</div>

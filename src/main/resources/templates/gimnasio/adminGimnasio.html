@@ -25,11 +25,11 @@
 				</div>
 			</section>
 
-			<section sec:authorize="hasRole('ROLE_ADMIN')">
+<!--			<section sec:authorize="hasRole('ROLE_ADMIN')">
 				<a href="#" th:href="@{/usuario/users}" class="textDecoration-none">
 					<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Usuarios</button>
 				</a>
-			</section>
+			</section>-->
 			<section sec:authorize="hasRole('ROLE_ADMIN')">
 				<a href="#" th:href="@{/adminMandato/}" class="textDecoration-none">
 					<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Mandatos Licencia Federativa</button>

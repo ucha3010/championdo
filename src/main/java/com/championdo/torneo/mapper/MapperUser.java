@@ -11,12 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapperUser {
 
-/*    @Autowired
-    private CinturonService cinturonService;
-
-    @Autowired
-    private CalidadService calidadService;*/
-
     @Autowired
     private GimnasioService gimnasioService;
 
@@ -37,7 +31,7 @@ public class MapperUser {
             localObject.setSecondLastname(externObject.getSecondLastname());
             localObject.setSexo(externObject.getSexo());
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
-            localObject.setGimnasio(gimnasioService.findById(externObject.getIdGimnasio()));
+//            localObject.setGimnasio(gimnasioService.findById(externObject.getIdGimnasio()));
             localObject.setPais(paisService.findById(externObject.getIdPais()));
             localObject.setFechaAlta(externObject.getFechaAlta());
             localObject.setFechaModificacion(externObject.getFechaModificacion());
@@ -66,9 +60,6 @@ public class MapperUser {
             localObject.setSecondLastname(externObject.getSecondLastname());
             localObject.setSexo(externObject.getSexo());
             localObject.setFechaNacimiento(externObject.getFechaNacimiento());
-            if (externObject.getGimnasio() != null) {
-                localObject.setIdGimnasio(externObject.getGimnasio().getId());
-            }
             if (externObject.getPais() != null) {
                 localObject.setIdPais(externObject.getPais().getId());
             }

@@ -23,7 +23,6 @@ public class UserModel {
 	private String sexo;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
-	private GimnasioModel gimnasio;
 	private CalidadModel calidad;
 	private PaisModel pais;
 	private CinturonModel cinturon;
@@ -60,7 +59,6 @@ public class UserModel {
 				", secondLastname='" + secondLastname + '\'' +
 				", sexo='" + sexo + '\'' +
 				", fechaNacimiento=" + fechaNacimiento +
-				", gimnasio=" + gimnasio +
 				", calidad=" + calidad +
 				", pais=" + pais +
 				", cinturon=" + cinturon +

@@ -38,7 +38,6 @@ public class User {
 	@Column(name = "sexo", length = 9)
 	private String sexo;
 	private Date fechaNacimiento;
-	private int idGimnasio;
 	private int idPais;
 	private Date fechaAlta;
 	private Date fechaModificacion;
@@ -80,7 +79,6 @@ public class User {
 				", secondLastname='" + secondLastname + '\'' +
 				", sexo='" + sexo + '\'' +
 				", fechaNacimiento=" + fechaNacimiento +
-				", idGimnasio=" + idGimnasio +
 				", idPais=" + idPais +
 				", fechaAlta=" + fechaAlta +
 				", fechaModificacion=" + fechaModificacion +
