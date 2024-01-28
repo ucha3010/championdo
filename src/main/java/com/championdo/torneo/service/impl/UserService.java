@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.UserRole;
 import com.championdo.torneo.mapper.MapperUser;
 import com.championdo.torneo.model.GimnasioModel;
+import com.championdo.torneo.model.UserGymModel;
 import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
@@ -160,6 +161,14 @@ public class UserService implements UserDetailsService {
 		List<UserModel> userModelList = new ArrayList<>();
 		for (UserRole userRole: userRoleList) {
 			userModelList.add(findModelByUsername(userRole.getUser().getUsername()));
+		}
+		return userModelList;
+	}
+
+	public List<UserModel> getUserModelList(List<UserGymModel> userGymModelList) {
+		List<UserModel> userModelList = new ArrayList<>();
+		for (UserGymModel userGymModel: userGymModelList) {
+			userModelList.add(findModelByUsername(userGymModel.getUsername()));
 		}
 		return userModelList;
 	}

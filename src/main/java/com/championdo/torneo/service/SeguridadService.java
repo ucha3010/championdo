@@ -16,5 +16,7 @@ public interface SeguridadService {
 
     void validarIntentos(int idOperacion) throws ValidationException;
 
-    void gimnasioHabilitadoAdministracion(int codigoGimnasio, String uri) throws AccessDeniedException;
+    void gimnasioHabilitadoAdministracion(int idGimnasio, String uri) throws AccessDeniedException;
+
+    void usuarioGimnasioHabilitadoAdministracion(String username, int idGimnasio, String uri) throws AccessDeniedException;
 }

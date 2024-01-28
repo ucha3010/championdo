@@ -4,11 +4,10 @@ import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.GimnasioMenu2;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.GimnasioModel;
-import com.championdo.torneo.model.UtilModel;
-import com.championdo.torneo.service.GimnasioMenu2Service;
-import com.championdo.torneo.service.GimnasioService;
-import com.championdo.torneo.service.PrincipalService;
-import com.championdo.torneo.service.SeguridadService;
+import com.championdo.torneo.model.UserGymModel;
+import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.service.*;
+import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
@@ -41,57 +40,29 @@ public class AdminGimnasioController {
     private AdminUtilController adminUtilController;
     @Autowired
     private SessionData sessionData;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserGymService userGymService;
 // TODO DAMIAN en la administración del gimnasio se debe separar los usuarios de la plataforma dados de alta a los usuarios inscritos en taekwondo
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gymAdministration(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/");
         modelAndView.setViewName("gimnasio/adminGimnasio");
         modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-/*    @GetMapping("/gimnasioList")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView gimnasioList(ModelAndView modelAndView) {
-        User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/gimnasioList");
-        modelAndView.setViewName("adminGimnasio");
-        modelAndView.addObject("gimnasioModel", new GimnasioModel());
-        modelAndView.addObject("gimnasioList", gimnasioService.findAll(sessionData.getGimnasioModel().getId()));
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return modelAndView;
-    }*/
-
-/*    @GetMapping("/gimnasio/{oldIndex}/{newIndex}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView dragGimnasio(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
-        User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/gimnasio/" + oldIndex + "/" + newIndex);
-        gimnasioService.dragOfPosition(sessionData.getGimnasioModel().getId(), oldIndex, newIndex);
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return gimnasioList(modelAndView);
-    }*/
-
-/*    @PostMapping("/addGimnasio")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView addGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
-        User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/addGimnasio");
-        gimnasioModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
-        gimnasioModel.setPosition(gimnasioService.findMaxPosition(sessionData.getGimnasioModel().getId()) + 1);
-        gimnasioService.add(gimnasioModel);
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return gimnasioList(modelAndView);
-    }*/
-
     @PostMapping("/updateGimnasio")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView updateGimnasio(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateGimnasio");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateGimnasio");
         GimnasioModel gimnasioModelBBDD = gimnasioService.findById(gimnasioModel.getId());
         gimnasioModelBBDD.setNombreGimnasio(gimnasioModel.getNombreGimnasio());
         gimnasioModelBBDD.setDomicilioCalle(gimnasioModel.getDomicilioCalle());
@@ -112,6 +83,7 @@ public class AdminGimnasioController {
     public ModelAndView updateEmail(ModelAndView modelAndView, @ModelAttribute("gimnasioModel") GimnasioModel gimnasioModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateEmail");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateEmail");
         GimnasioModel gimnasioModelBBDD = gimnasioService.findById(gimnasioModel.getId());
         if (!StringUtils.isNullOrEmpty(gimnasioModel.getCorreo())) {
             gimnasioModelBBDD.setCorreo(gimnasioModel.getCorreo());
@@ -140,6 +112,7 @@ public class AdminGimnasioController {
     public ModelAndView changePass(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/changePass");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/changePass");
         modelAndView.setViewName("gimnasio/adminChangePass");
         modelAndView.addObject("gimnasioModel", sessionData.getGimnasioModel());
         return modelAndView;
@@ -150,6 +123,7 @@ public class AdminGimnasioController {
     public ModelAndView updateMenu(ModelAndView modelAndView, @RequestParam(name = "selectedData", required = false) List<Integer> selectedData) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/procesar");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/procesar");
         gimnasioMenu2Service.deleteByIdGimnasio(sessionData.getGimnasioModel().getId());
         List<GimnasioMenu2> gimnasioMenu2List = new ArrayList<>();
         if (selectedData != null) {
@@ -162,6 +136,53 @@ public class AdminGimnasioController {
         adminUtilController.utilList(modelAndView);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
+    }
+
+    @GetMapping("/adminsGym")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView adminsGym(ModelAndView modelAndView) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/adminsGym");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/adminsGym");
+        modelAndView.setViewName("gimnasio/usersAdmin");
+        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
+        modelAndView.addObject("adminUsersAssigned", userService.getUserModelList(userGymService.findByIdGym(sessionData.getGimnasioModel().getId())));
+        if(modelAndView.getModel().get("userModel") == null) {
+            modelAndView.addObject("userModel", new UserModel());
+        }
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @PostMapping("/addAdminGym")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("userModel") UserModel userModel) {
+        User user = userService.getLoggedUser();
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/addAdminGym");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/addAdminGym");
+        User userAdmin = userService.findByUsername(userModel.getUsername().toUpperCase());
+        if (userAdmin != null && userAdmin.getCorreo().equalsIgnoreCase(userModel.getCorreo())) {
+            UserGymModel userGymModel = new UserGymModel(0, userAdmin.getUsername(), sessionData.getGimnasioModel().getId(), user.getUsername(), new Date());
+            userGymService.add(userGymModel);
+            modelAndView.addObject("addAdmin", "Nuevo administrador asignado correctamente");
+        } else {
+            modelAndView.addObject("addAdminKO", "Problemas con los datos ingresados, por favor verifique los mismos");
+            modelAndView.addObject("userModel", userModel);
+        }
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return adminsGym(modelAndView);
+    }
+
+    @GetMapping("/deleteAdminGym/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView deleteAdminGym(ModelAndView modelAndView, @PathVariable String username) {
+        User user = userService.getLoggedUser();
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/deleteAdminGym/" + username);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/deleteAdminGym/" + username);
+        userGymService.deleteByUsernameAndIdGym(username, sessionData.getGimnasioModel().getId());
+        modelAndView.addObject("deleteAdmin", "Administrador eliminado correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return adminsGym(modelAndView);
     }
 
 }

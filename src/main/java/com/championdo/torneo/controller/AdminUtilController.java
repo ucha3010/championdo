@@ -42,6 +42,7 @@ public class AdminUtilController {
         modelAndView.setViewName("gimnasio/adminUtil");
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/utilList");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
         modelAndView.addObject("gimnasioModel", sessionData.getGimnasioModel());
         modelAndView.addObject("emptyPass", StringUtils.isNullOrEmpty(sessionData.getGimnasioModel().getEmailPassword()));
@@ -58,56 +59,25 @@ public class AdminUtilController {
     public ModelAndView updateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/updateUtil");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminUtil/updateUtil");
         utilModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
         utilService.update(utilModel);
         modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return utilList(modelAndView);
     }
-
-   /* @PostMapping("/updateHost")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView updateHost(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
-        User user = principalService.cargaBasicaCompleta(modelAndView);
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminUtil/updateHost");
-        UtilModel utilPort = new UtilModel();
-        for (EmailEnum emailEnum : EmailEnum.values()) {
-            if (emailEnum.getHost().equals(utilModel.getValor())) {
-                utilPort = new UtilModel(Constantes.PORT_CORREO, emailEnum.getPort(), sessionData.getGimnasioModel().getId());
-                break;
-            }
-        }
-        utilModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
-        utilService.update(utilModel);
-        utilService.update(utilPort);
-        modelAndView.addObject("updateOK", "Proovedor de correo actualizado con éxito");
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return utilList(modelAndView);
-    }*/
 
     @GetMapping("/root-util")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView rootUtil(ModelAndView modelAndView) {
         modelAndView.setViewName("management/adminUtil");
         principalService.cargaBasicaCompleta(modelAndView);
-//        modelAndView.addObject("utilModel", utilService.findByClave(Constantes.HOST_PAGE_NAME,0));
         UtilManagerModel utilManagerModel = utilManagerService.get();
         modelAndView.addObject("utilManagerModel", utilManagerModel);
         modelAndView.addObject("existsPass", utilManagerModel.getPassword() != null);
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
-    }
-
-    //TODO DAMIAN para borrar una vez adaptada la página util del root
-    @PostMapping("/root-update-util")
-    @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView rootUpdateUtil(ModelAndView modelAndView, @ModelAttribute("utilModel") UtilModel utilModel) {
-        principalService.cargaBasicaCompleta(modelAndView);
-        utilService.update(utilModel);
-        modelAndView.addObject("updateOK", "Campo " + utilModel.getClave() + " actualizado con éxito");
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return rootUtil(modelAndView);
     }
 
     @PostMapping("/update-util-manager")

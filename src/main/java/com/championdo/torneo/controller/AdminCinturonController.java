@@ -35,6 +35,7 @@ public class AdminCinturonController {
     public ModelAndView cinturonList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturonList");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturonList");
         modelAndView.setViewName("gimnasio/adminCinturon");
         modelAndView.addObject("cinturonModel", new CinturonModel());
         modelAndView.addObject("cinturonList", cinturonService.findAll(sessionData.getGimnasioModel().getId()));
@@ -48,6 +49,7 @@ public class AdminCinturonController {
     public ModelAndView dragCinturon(ModelAndView modelAndView, @PathVariable int oldIndex, @PathVariable int newIndex) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturon/" + oldIndex + "/" + newIndex);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturon/" + oldIndex + "/" + newIndex);
         try {
             cinturonService.verifyDragOfPositionAvailable(sessionData.getGimnasioModel().getId(), oldIndex, newIndex);
             cinturonService.dragOfPosition(sessionData.getGimnasioModel().getId(), oldIndex, newIndex);
@@ -63,6 +65,7 @@ public class AdminCinturonController {
     public ModelAndView addCinturon(ModelAndView modelAndView, @ModelAttribute("cinturonModel") CinturonModel cinturonModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/addCinturon");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminCinturon/addCinturon");
         cinturonModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
         cinturonModel.setPosition(cinturonService.findMaxPosition(sessionData.getGimnasioModel().getId()) + 1);
         cinturonService.add(cinturonModel);
@@ -75,6 +78,7 @@ public class AdminCinturonController {
     public ModelAndView removeCinturon(ModelAndView modelAndView, @PathVariable int id) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturon/remove/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminCinturon/cinturon/remove/" + id);
         try {
             cinturonService.delete(id);
         } catch (RemoveException re) {

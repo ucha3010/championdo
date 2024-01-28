@@ -28,6 +28,8 @@ public class SeguridadServiceImpl implements SeguridadService {
     private EmailService emailService;
     @Autowired
     private GimnasioService gimnasioService;
+    @Autowired
+    private UserGymService userGymService;
 
     @Override
     public String obtenerCodigo() {
@@ -98,8 +100,15 @@ public class SeguridadServiceImpl implements SeguridadService {
     }
 
     @Override
-    public void gimnasioHabilitadoAdministracion(int codigoGimnasio, String uri) throws AccessDeniedException {
-        if (!gimnasioService.verifyEnable(codigoGimnasio)) {
+    public void gimnasioHabilitadoAdministracion(int idGimnasio, String uri) throws AccessDeniedException {
+        if (!gimnasioService.verifyEnable(idGimnasio)) {
+            throw new AccessDeniedException(uri);
+        }
+    }
+
+    @Override
+    public void usuarioGimnasioHabilitadoAdministracion(String username, int idGimnasio, String uri) throws AccessDeniedException {
+        if(userGymService.findByUsernameAndIdGym(username, idGimnasio) == null) {
             throw new AccessDeniedException(uri);
         }
     }

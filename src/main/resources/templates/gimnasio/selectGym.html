@@ -25,13 +25,18 @@
 					<div class="col-md-2">
 					</div>
 					<div class="col-6 col-md-8 colorGreen">
-						<h1>Selección de gimnasio</h1>
+						<h1 th:if="${not #lists.isEmpty(gyms)}">Selección de gimnasio</h1>
 					</div>
 					<div class="col-3 col-md-2">
 						<a class="btn btn-info" href="#" th:href="@{/principal/}">Volver</a>
 					</div>
 				</div>
 			</section>
+
+			<section class="margenArribaAbajo3Porc text-center">
+				<div th:if="${#lists.isEmpty(gyms)}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${noGymsAssigned}"></span></div>
+			</section>
+
 			<section sec:authorize="hasRole('ROLE_ADMIN')" th:each="unit : ${gyms}">
 				<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button" th:text="${unit.nombreGimnasio}" th:attr="onclick=|goDetail('${unit.id}')|"></button>
 			</section>

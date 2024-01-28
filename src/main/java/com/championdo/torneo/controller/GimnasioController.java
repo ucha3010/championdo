@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -53,6 +54,8 @@ public class GimnasioController {
     private TorneoGimnasioService torneoGimnasioService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserGymService userGymService;
     @Autowired
     private UtilService utilService;
 
@@ -253,9 +256,31 @@ public class GimnasioController {
         modelAndView.setViewName("management/updateCustomer");
         principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("customer", gimnasioService.findById(id));
-        modelAndView.addObject("adminUsers", userService.findByRole(Constantes.ROLE_ADMIN));
+        modelAndView.addObject("adminUsersNotAssigned", userGymService.deleteUsersAssignedToGym(userService.findByRole(Constantes.ROLE_ADMIN), id));
+        modelAndView.addObject("adminUsersAssigned", userService.getUserModelList(userGymService.findByIdGym(id)));
+        modelAndView.addObject("userGymModel", new UserGymModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
+    }
+
+    @PostMapping("/addAdminGym")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("userGymModel") UserGymModel userGymModel) {
+        userGymModel.setDateAdd(new Date());
+        userGymModel.setUsernameAdd(userService.getLoggedUser().getUsername());
+        userGymService.add(userGymModel);
+        modelAndView.addObject("addAdmin", "Nuevo administrador asignado correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return customersId(modelAndView, userGymModel.getIdGym());
+    }
+
+    @GetMapping("/deleteAdminGym/{username}/{id}")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView deleteAdminGym(ModelAndView modelAndView, @PathVariable String username, @PathVariable int id) {
+        userGymService.deleteByUsernameAndIdGym(username, id);
+        modelAndView.addObject("deleteAdmin", "Administrador eliminado correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return customersId(modelAndView, id);
     }
 
     @PostMapping("/updateCustomer")

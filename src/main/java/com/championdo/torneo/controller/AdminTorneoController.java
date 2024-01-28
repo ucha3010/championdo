@@ -38,9 +38,10 @@ public class AdminTorneoController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView torneoList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminTorneo/torneoList");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminTorneo/torneoList");
         modelAndView.setViewName("torneo/adminTorneoList");
         modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminTorneo/torneoList");
         modelAndView.addObject("torneoList", torneoService.findAll(sessionData.getGimnasioModel().getId()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -52,6 +53,7 @@ public class AdminTorneoController {
         modelAndView.setViewName("torneo/adminTorneo");
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminTorneo/torneo/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminTorneo/torneo/" + id);
         TorneoModel torneoModel = torneoService.findById(id);
         if(torneoModel.getId() == 0) {
             modelAndView.addObject("buttonAddUpdate", "Crear");
@@ -75,6 +77,7 @@ public class AdminTorneoController {
     public ModelAndView addTorneo(ModelAndView modelAndView, @ModelAttribute("torneoModel") TorneoModel torneoModel) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminTorneo/addTorneo");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminTorneo/addTorneo");
         torneoModel.setCodigoGimnasio(sessionData.getGimnasioModel().getId());
         if (torneoModel.getId() == 0) {
             torneoService.add(torneoModel);
@@ -93,6 +96,7 @@ public class AdminTorneoController {
     public ModelAndView removeTorneo(ModelAndView modelAndView, @PathVariable int id) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminTorneo/torneo/remove/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminTorneo/torneo/remove/" + id);
         try {
             torneoService.delete(id);
         } catch (RemoveException re) {

@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserGym {
 
     @Id
-    @SequenceGenerator(name = "userGimGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+    @SequenceGenerator(name = "userGymGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userGymGenerator")
     private int id;
     @Column(name = "username", nullable = false, length = 45)

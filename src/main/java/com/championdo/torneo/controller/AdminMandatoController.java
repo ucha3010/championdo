@@ -6,6 +6,7 @@ import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.PrincipalService;
+import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -26,13 +27,17 @@ public class AdminMandatoController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
+    private SeguridadService seguridadService;
+    @Autowired
     private SessionData sessionData;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView mandatos(ModelAndView modelAndView) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminMandato/");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminMandato/");
         modelAndView.setViewName("gimnasio/adminMandatoList");
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModelList", mandatoService.findAll(sessionData.getGimnasioModel().getId()));
         modelAndView.addObject("mandatoModel", new MandatoModel());
         modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
@@ -43,8 +48,10 @@ public class AdminMandatoController {
     @GetMapping("/mandato/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView mandato(ModelAndView modelAndView, @PathVariable int id) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminMandato/mandato/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminMandato/mandato/" + id);
         modelAndView.setViewName("gimnasio/adminMandato");
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         modelAndView.addObject("mandatoModel", mandatoService.findById(id));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -53,7 +60,9 @@ public class AdminMandatoController {
     @GetMapping("/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminMandato/remove/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminMandato/remove/" + id);
         mandatoService.delete(id);
         modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -64,7 +73,9 @@ public class AdminMandatoController {
     @GetMapping("/pay/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView pay(ModelAndView modelAndView, @PathVariable int id) throws ValidationException {
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminMandato/pay/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminMandato/pay/" + id);
         MandatoModel mandatoModel = mandatoService.findById(id);
         mandatoModel.setLicenciaAbonada(!mandatoModel.isLicenciaAbonada());
         mandatoService.update(mandatoModel);

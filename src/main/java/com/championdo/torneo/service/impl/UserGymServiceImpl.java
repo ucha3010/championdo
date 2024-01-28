@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.UserGym;
 import com.championdo.torneo.mapper.MapperUserGym;
 import com.championdo.torneo.model.UserGymModel;
+import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserGymRepository;
 import com.championdo.torneo.service.UserGymService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class UserGymServiceImpl implements UserGymService {
         userGymRepository.deleteByUsername(username);
     }
 
+    @Override
+    public UserGymModel add(UserGymModel userGymModel) {
+        return mapperUserGym.entity2Model(userGymRepository.save(mapperUserGym.model2Entity(userGymModel)));
+    }
+
     public void addList(List<UserGym> userGymList) {
         userGymRepository.saveAll(userGymList);
     }
@@ -47,6 +53,31 @@ public class UserGymServiceImpl implements UserGymService {
     @Override
     public UserGym findByUsernameAndIdGym(String username, int idGym) {
         return userGymRepository.findByUsernameAndIdGym(username, idGym);
+    }
+
+    @Override
+    public void deleteByUsernameAndIdGym(String username, int idGym) {
+        userGymRepository.delete(userGymRepository.findByUsernameAndIdGym(username, idGym));
+    }
+
+    @Override
+    public List<UserModel> deleteUsersAssignedToGym(List<UserModel> userModelList, int idGym) {
+        List<UserGym> userGymList = userGymRepository.findByIdGym(idGym);
+        List<UserModel> userModelListReturn = new ArrayList<>();
+        boolean delteUser;
+        for (UserModel userModel : userModelList) {
+            delteUser = false;
+            for (UserGym userGym : userGymList) {
+                if (userModel.getUsername().equalsIgnoreCase(userGym.getUsername())) {
+                    delteUser = true;
+                    break;
+                }
+            }
+            if (!delteUser) {
+                userModelListReturn.add(userModel);
+            }
+        }
+        return userModelListReturn;
     }
 
     private List<UserGymModel> fillList(List<UserGym> userGymList) {
