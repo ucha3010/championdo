@@ -19,5 +19,7 @@ public interface TorneoService {
 
     void delete(int id) throws RemoveException;
 
+    void deleteByCodigoGimnasio(int codigoGimnasio);
+
     List<TorneoModel> findAllowed(Date date, String tournamentType);
 }

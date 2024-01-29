@@ -88,6 +88,11 @@ public class TorneoServiceImpl implements TorneoService {
     }
 
     @Override
+    public void deleteByCodigoGimnasio(int codigoGimnasio) {
+        torneoRepository.deleteByCodigoGimnasio(codigoGimnasio);
+    }
+
+    @Override
     public List<TorneoModel> findAllowed(Date date, String tournamentType) {
         List<Torneo> torneoList;
         List<TorneoModel> torneoModelList = new ArrayList<>();

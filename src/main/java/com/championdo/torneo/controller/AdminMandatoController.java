@@ -69,7 +69,6 @@ public class AdminMandatoController {
         return mandatos(modelAndView);
     }
 
-    //TODO DAMIAN revisar que no funciona
     @GetMapping("/pay/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView pay(ModelAndView modelAndView, @PathVariable int id) throws ValidationException {

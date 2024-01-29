@@ -14,5 +14,6 @@ public interface TorneoRepository extends JpaRepository<Torneo, Integer> {
     List<Torneo> findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndAdultoTrue(Date fechaComienzoInscripcion, Date fechaFinInscripcion);
     List<Torneo> findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndMenorTrue(Date fechaComienzoInscripcion, Date fechaFinInscripcion);
     List<Torneo> findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndInclusivoTrue(Date fechaComienzoInscripcion, Date fechaFinInscripcion);
+    void deleteByCodigoGimnasio(int codigoGimnasio);
 
 }

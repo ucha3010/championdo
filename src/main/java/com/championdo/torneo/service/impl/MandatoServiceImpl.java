@@ -72,7 +72,7 @@ public class MandatoServiceImpl implements MandatoService {
 
     @Override
     public MandatoModel update(MandatoModel mandatoModel) throws ValidationException {
-        return add(mandatoModel);
+        return mapperMandato.entity2Model(mandatoRepository.save(mapperMandato.model2Entity(mandatoModel)));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class MandatoServiceImpl implements MandatoService {
         File pdfMandato = pdfService.generarPdfMandato(pdfModel);
         files.add(pdfMandato);
         mandatoModel.setMandatoFirmado(Boolean.TRUE);
-        update(mandatoModel);
+        add(mandatoModel);
         emailService.sendNewMandato(mandatoModel, files);
         emailService.confirmAdminNewMandato(mandatoModel);
     }

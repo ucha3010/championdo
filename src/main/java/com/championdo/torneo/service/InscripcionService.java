@@ -5,7 +5,7 @@ import com.championdo.torneo.model.*;
 
 import java.util.List;
 
-public interface InscripcionService {
+public interface InscripcionService {//TODO DAMIAN modificar nombre a TournamentRegistrationService
 
     List<InscripcionModel> findAll();
 

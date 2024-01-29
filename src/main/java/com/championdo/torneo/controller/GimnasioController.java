@@ -33,8 +33,6 @@ public class GimnasioController {
     @Autowired
     private InscripcionTaekwondoService inscripcionTaekwondoService;
     @Autowired
-    private Menu2Service menu2Service;
-    @Autowired
     private PdfService pdfService;
     @Autowired
     private SeguridadService seguridadService;
@@ -50,6 +48,8 @@ public class GimnasioController {
     private CargasInicialesClienteService cargasInicialesClienteService;
     @Autowired
     private GimnasioService gimnasioService;
+    @Autowired
+    private TorneoService torneoService;
     @Autowired
     private TorneoGimnasioService torneoGimnasioService;
     @Autowired
@@ -369,9 +369,10 @@ public class GimnasioController {
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
         torneoGimnasioService.deleteByCodigoGimnasio(id);
-        gimnasioService.enableDisable(id, Boolean.FALSE);
-        //Deshabilito el cliente pero no lo borro ya que Torneo (que tampoco se borran los torneos) tira del id y para que no se eliminen las inscripciones a los usuarios
-        //TODO DAMIAN esto está mal pensado. Primero creo que se borran los torneos arriba. Segundo, si llego a volver a habilitar el gimnasio se eliminaron sus CatPoomCint
+        torneoService.deleteByCodigoGimnasio(id);
+        gimnasioMenu2Service.deleteByIdGimnasio(id);
+        userGymService.deleteByIdGym(id);
+        gimnasioService.delete(id);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return customers(modelAndView);
     }
