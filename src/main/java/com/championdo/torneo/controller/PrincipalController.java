@@ -1,9 +1,9 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.service.EmailService;
-import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -27,7 +27,7 @@ public class PrincipalController {
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private InscripcionService inscripcionService;
+    private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
     private EmailService emailService;
     // TODO DAMIAN hacer la validación de usuario
@@ -63,10 +63,10 @@ public class PrincipalController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        InscripcionModel inscripcionModel = inscripcionService.findById(id);
-        principalService.deleteInscripcion(inscripcionModel);
-        emailService.confirmAdminDelete(inscripcionModel.getCodigoGimnasio(), "torneo",
-                usuario, !inscripcionModel.isInscripcionPropia() ? inscripcionModel.getNombreInscripto() : null);
+        TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.findById(id);
+        principalService.deleteTournamentRegistration(tournamentRegistrationModel);
+        emailService.confirmAdminDelete(tournamentRegistrationModel.getIdGym(), "torneo",
+                usuario, !tournamentRegistrationModel.isRegistrationAdult() ? tournamentRegistrationModel.getRegisteredName() : null);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return paginaPrincipalTorneo(modelAndView);
     }

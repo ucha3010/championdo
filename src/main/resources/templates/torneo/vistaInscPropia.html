@@ -34,10 +34,10 @@
 
 		<div class="row mt-2 mb-1">
 			<div class="col-3 col-md-2">
-				<label for="nombre">Nombre</label>
+				<label for="registeredName">Nombre</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.nombreInscripto}" id="nombre" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredName}" id="registeredName" class="form-control" disabled/>
 			</div>
 			<div class="col-md-2">
 			</div>
@@ -45,10 +45,10 @@
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="apellido1">Primer apellido</label>
+				<label for="registered1Lastname">Primer apellido</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.apellido1Inscripto}" id="apellido1" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registered1Lastname}" id="registered1Lastname" class="form-control" disabled/>
 			</div>
 			<div class="col-12 col-md-2 d-flex justify-content-end">
 				<form action="#" th:action="@{/formulario/descargarPdf}" th:object="${pdfModel}" method="POST">
@@ -64,10 +64,10 @@
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="apellido2">Segundo apellido</label>
+				<label for="registered2Lastname">Segundo apellido</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.apellido2Inscripto}" id="apellido2" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registered2Lastname}" id="registered2Lastname" class="form-control" disabled/>
 			</div>
 			<div class="col-md-2">
 			</div>
@@ -75,10 +75,10 @@
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="sexo">Sexo</label>
+				<label for="registeredSex">Sexo</label>
 			</div>
 			<div class="col-4 col-md-3">
-				<input type="text" th:field="*{inscripcion.sexoInscripto}" id="sexo" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredSex}" id="registeredSex" class="form-control" disabled/>
 			</div>
 			<div class="col-5 col-md-7">
 			</div>
@@ -88,10 +88,10 @@
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="dni">DNI</label>
+				<label for="registeredIdCard">DNI</label>
 			</div>
 			<div class="col-4 col-md-3">
-				<input type="text" th:field="*{inscripcion.dniInscripto}" id="dni" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredIdCard}" id="registeredIdCard" class="form-control" disabled/>
 			</div>
 			<div class="col-5 col-md-7">
 			</div>
@@ -99,10 +99,10 @@
 
 		<div class="row mb-3">
 			<div class="col-3 col-md-2">
-				<label for="fechaNacimiento">Fecha de nacimiento</label>
+				<label for="registeredBirthdate">Fecha de nacimiento</label>
 			</div>
 			<div class="col-9 col-md-3">
-				<span th:text="${#calendars.format(inscripcion.fechaNacimientoInscripto,'dd/MM/yyyy')}" id="fechaNacimiento"></span>
+				<span th:text="${#calendars.format(tournamentRegistration.registeredBirthdate,'dd/MM/yyyy')}" id="registeredBirthdate"></span>
 			</div>
 			<div class="col-md-7">
 			</div>
@@ -113,10 +113,10 @@
 				<strong>Domicilio</strong>
 			</div>
 			<div class="col-3 col-md-2">
-				<label for="domicilioCalle">Tipo y nombre vía</label>
+				<label for="registeredAddressStreet">Tipo y nombre vía</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.domicilioCalleInscripto}" id="domicilioCalle" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredAddressStreet}" id="registeredAddressStreet" class="form-control" disabled/>
 			</div>
 		</div>
 
@@ -124,10 +124,10 @@
 			<div class="col-md-2">
 			</div>
 			<div class="col-3 col-md-2">
-				<label for="domicilioNumero">Número</label>
+				<label for="registeredAddressNumber">Número</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.domicilioNumeroInscripto}" id="domicilioNumero" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredAddressNumber}" id="registeredAddressNumber" class="form-control" disabled/>
 			</div>
 		</div>
 
@@ -135,10 +135,10 @@
 			<div class="col-md-2">
 			</div>
 			<div class="col-3 col-md-2">
-				<label for="domicilioOtros">Otros datos</label>
+				<label for="registeredAddressOther">Otros datos</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.domicilioOtrosInscripto}" id="domicilioOtros" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredAddressOther}" id="registeredAddressOther" class="form-control" disabled/>
 			</div>
 		</div>
 
@@ -146,10 +146,10 @@
 			<div class="col-md-2">
 			</div>
 			<div class="col-3 col-md-2">
-				<label for="domicilioLocalidad">Localidad</label>
+				<label for="registeredAddressCity">Localidad</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.domicilioLocalidadInscripto}" id="domicilioLocalidad" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredAddressCity}" id="registeredAddressCity" class="form-control" disabled/>
 			</div>
 		</div>
 
@@ -157,19 +157,19 @@
 			<div class="col-md-2">
 			</div>
 			<div class="col-3 col-md-2">
-				<label for="domicilioCp">Código postal</label>
+				<label for="registeredAddressPostcode">Código postal</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.domicilioCpInscripto}" id="domicilioCp" class="form-control" disabled/>
+				<input type="text" th:field="*{tournamentRegistration.registeredAddressPostcode}" id="registeredAddressPostcode" class="form-control" disabled/>
 			</div>
 		</div>
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="idPais">País</label>
+				<label for="country">País</label>
 			</div>
 			<div class="col-4 col-md-3">
-				<input type="text" th:field="*{inscripcion.pais}" id="idPais" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.country}" id="country" class="form-control" disabled />
 			</div>
 			<div class="col-5 col-md-7">
 			</div>
@@ -177,10 +177,10 @@
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="idGimnasio">Gimnasio</label>
+				<label for="gym">Gimnasio</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.gimnasio}" id="idGimnasio" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.gym}" id="gym" class="form-control" disabled />
 			</div>
 			<div class="col-md-2">
 			</div>
@@ -188,10 +188,10 @@
 
 		<div class="row mb-1">
 			<div class="col-3 col-md-2">
-				<label for="idCinturon">Cinturón actual</label>
+				<label for="belt">Cinturón actual</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.cinturon}" id="idCinturon" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.belt}" id="belt" class="form-control" disabled />
 			</div>
 			<div class="col-md-2">
 			</div>
@@ -199,10 +199,10 @@
 
 		<div class="row mb-3">
 			<div class="col-3 col-md-2">
-				<label for="fecha">Fecha de inscripción</label>
+				<label for="registrationDate">Fecha de inscripción</label>
 			</div>
 			<div class="col-9 col-md-3">
-				<span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy HH:mm')}" id="fecha"></span>
+				<span th:text="${#calendars.format(tournamentRegistration.registrationDate,'dd/MM/yyyy HH:mm')}" id="registrationDate"></span>
 			</div>
 			<div class="col-md-7">
 			</div>
@@ -210,10 +210,10 @@
 
 		<div class="row mb-3">
 			<div class="col-3 col-md-2">
-				<label for="torneo">Nombre del torneo</label>
+				<label for="tournamentName">Nombre del torneo</label>
 			</div>
 			<div class="col-9 col-md-8">
-				<input type="text" th:field="*{inscripcion.nombreCampeonato}" id="torneo" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.tournamentName}" id="tournamentName" class="form-control" disabled />
 			</div>
 			<div class="col-md-2">
 			</div>
@@ -221,10 +221,10 @@
 
 		<div class="row mb-3">
 			<div class="col-3 col-md-2">
-				<label for="fechaCampeonato">Fecha del torneo</label>
+				<label for="tournamentDate">Fecha del torneo</label>
 			</div>
 			<div class="col-9 col-md-3">
-				<input type="text" th:field="*{inscripcion.fechaCampeonato}" id="fechaCampeonato" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.tournamentDate}" id="tournamentDate" class="form-control" disabled />
 			</div>
 			<div class="col-md-7">
 			</div>
@@ -232,22 +232,22 @@
 
 		<div class="row mb-3">
 			<div class="col-3 col-md-2">
-				<label for="idCategoria">Categoría</label>
+				<label for="category">Categoría</label>
 			</div>
 			<div class="col-2 col-md-3">
-				<input type="text" th:field="*{inscripcion.categoria}" id="idCategoria" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.category}" id="category" class="form-control" disabled />
 			</div>
 			<div class="col-3 col-md-2">
 				<label for="idPoomsae">Poomsae</label>
 			</div>
 			<div class="col-4 col-md-5">
-				<input type="text" th:field="*{inscripcion.poomsae}" id="idPoomsae" class="form-control" disabled />
+				<input type="text" th:field="*{tournamentRegistration.poomsae}" id="idPoomsae" class="form-control" disabled />
 			</div>
 		</div>
 
 		<div class="row align-items-center justify-content-end">
 			<div class="col-5">
-				<button th:if="${deleteEnable}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${inscripcion.id}')|">Borrar Inscripción</button>
+				<button th:if="${deleteEnable}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${tournamentRegistration.id}')|">Borrar Inscripción</button>
 			</div>
 			<div class="col-3">
 			</div>

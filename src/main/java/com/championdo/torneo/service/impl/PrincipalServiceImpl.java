@@ -1,12 +1,13 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.model.PrincipalUserModel;
-import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.List;
 public class PrincipalServiceImpl implements PrincipalService {
 
     @Autowired
-    private InscripcionService inscripcionService;
+    private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
     private Menu1Service menu1Service;
     @Autowired
@@ -30,32 +31,32 @@ public class PrincipalServiceImpl implements PrincipalService {
     public List<PrincipalUserModel> findByDni(String dni) {
 
         PrincipalUserModel principalUserModel;
-        List<InscripcionModel> inscripcionList = inscripcionService.findByDniInscripto(dni);
-        inscripcionList.addAll(inscripcionService.findByDniAutorizador(dni));
+        List<TournamentRegistrationModel> inscripcionList = tournamentRegistrationService.findByRegisteredIdCard(dni);
+        inscripcionList.addAll(tournamentRegistrationService.findByAuthorizerIdCard(dni));
         List<PrincipalUserModel> principalUserModelList = new ArrayList<>();
         if (!inscripcionList.isEmpty()) {
-            inscripcionList.sort(Comparator.comparing(InscripcionModel::getFechaInscripcion).reversed());
-            for (InscripcionModel inscripcionModel : inscripcionList) {
+            inscripcionList.sort(Comparator.comparing(TournamentRegistrationModel::getRegistrationDate).reversed());
+            for (TournamentRegistrationModel tournamentRegistrationModel : inscripcionList) {
                 principalUserModel = new PrincipalUserModel();
-                principalUserModel.setId(inscripcionModel.getId());
-                principalUserModel.setNombre(inscripcionModel.getNombreInscripto());
-                principalUserModel.setApellido1(inscripcionModel.getApellido1Inscripto());
-                principalUserModel.setApellido2(inscripcionModel.getApellido2Inscripto());
-                principalUserModel.setFechaInscripcion(inscripcionModel.getFechaInscripcion());
-                principalUserModel.setNombreTorneo(inscripcionModel.getNombreCampeonato());
-                principalUserModel.setFechaTorneo(inscripcionModel.getFechaCampeonato());
-                principalUserModel.setInscripcionPropia(inscripcionModel.isInscripcionPropia());
+                principalUserModel.setId(tournamentRegistrationModel.getId());
+                principalUserModel.setNombre(tournamentRegistrationModel.getRegisteredName());
+                principalUserModel.setApellido1(tournamentRegistrationModel.getRegistered1Lastname());
+                principalUserModel.setApellido2(tournamentRegistrationModel.getRegistered2Lastname());
+                principalUserModel.setFechaInscripcion(tournamentRegistrationModel.getRegistrationDate());
+                principalUserModel.setNombreTorneo(tournamentRegistrationModel.getTournamentName());
+                principalUserModel.setFechaTorneo(tournamentRegistrationModel.getTournamentDate());
+                principalUserModel.setInscripcionPropia(tournamentRegistrationModel.isRegistrationAdult());
                 principalUserModelList.add(principalUserModel);
             }
         }
-        LoggerMapper.methodOut(Level.INFO, "findByDni", principalUserModelList, getClass());
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), principalUserModelList, getClass());
         return principalUserModelList;
     }
 
     @Override
-    public void deleteInscripcion(InscripcionModel inscripcionModel) {
-        inscripcionService.delete(inscripcionModel);
-        LoggerMapper.methodOut(Level.INFO, "deleteInscripcion", inscripcionModel, getClass());
+    public void deleteTournamentRegistration(TournamentRegistrationModel tournamentRegistrationModel) {
+        tournamentRegistrationService.delete(tournamentRegistrationModel);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), tournamentRegistrationModel, getClass());
     }
 
     @Override

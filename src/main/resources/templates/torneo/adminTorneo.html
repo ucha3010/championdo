@@ -232,13 +232,13 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr th:each="inscripcion : ${inscripcionList}">
-					<td><span th:text="${inscripcion.nombreInscripto}"></span></td>
-					<td><span th:text="${inscripcion.apellido1Inscripto}"></span></td>
-					<td><span th:text="${inscripcion.apellido2Inscripto}"></span></td>
-					<td><span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy')}"></span></td>
-					<td><span th:text="${inscripcion.categoria}"></span></td>
-					<td><span th:attr="class=${inscripcion.inscripcionInclusiva ? 'colorGreen' : ''}" th:text="${inscripcion.poomsae}"></span></td>
+				<tr th:each="tournamentRegistration : ${tournamentRegistrationList}">
+					<td><span th:text="${tournamentRegistration.registeredName}"></span></td>
+					<td><span th:text="${tournamentRegistration.registered1Lastname}"></span></td>
+					<td><span th:text="${tournamentRegistration.registered2Lastname}"></span></td>
+					<td><span th:text="${#calendars.format(tournamentRegistration.registrationDate,'dd/MM/yyyy')}"></span></td>
+					<td><span th:text="${tournamentRegistration.category}"></span></td>
+					<td><span th:attr="class=${tournamentRegistration.registrationInclusive ? 'colorGreen' : ''}" th:text="${tournamentRegistration.poomsae}"></span></td>
 				</tr>
 				</tbody>
 			</table>

@@ -67,11 +67,11 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr th:each="inscripcion : ${inscripciones}" th:attr="onclick=|goDetail('${inscripcion.id}','${inscripcion.inscripcionPropia}')|">
-					<td><span th:text="${#calendars.format(inscripcion.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span></td>
-					<td><span th:text="${inscripcion.nombre+' '+inscripcion.apellido1+' '+inscripcion.apellido2}"></span></td>
-					<td><span th:text="${inscripcion.nombreTorneo}"></span></td>
-					<td><span th:text="${inscripcion.fechaTorneo}"></span></td>
+				<tr th:each="tournamentRegistration : ${inscripciones}" th:attr="onclick=|goDetail('${tournamentRegistration.id}','${tournamentRegistration.inscripcionPropia}')|">
+					<td><span th:text="${#calendars.format(tournamentRegistration.fechaInscripcion,'dd/MM/yyyy HH:mm')}"></span></td>
+					<td><span th:text="${tournamentRegistration.nombre+' '+tournamentRegistration.apellido1+' '+tournamentRegistration.apellido2}"></span></td>
+					<td><span th:text="${tournamentRegistration.nombreTorneo}"></span></td>
+					<td><span th:text="${tournamentRegistration.fechaTorneo}"></span></td>
 				</tr>
 				</tbody>
 			</table>

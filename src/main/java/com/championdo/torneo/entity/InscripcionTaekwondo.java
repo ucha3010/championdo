@@ -23,6 +23,8 @@ public class InscripcionTaekwondo {
     private int codigoGimnasio;
     @Column(name = "nombreGimnasio", length = 100)
     private String nombreGimnasio;
+    @Column(name = "notas", columnDefinition = "TEXT")
+    private String notas;
 
     //Mayor
     @Column(name = "mayorDni", nullable = false, length = 45)
@@ -40,8 +42,6 @@ public class InscripcionTaekwondo {
     private String mayorCalidad;
     @Column(name = "mayorPais", length = 20)
     private String mayorPais;
-    @Column(name = "mayorCinturon", length = 40)
-    private String mayorCinturon;
     @Column(name = "mayorCorreo", length = 100)
     private String mayorCorreo;
     @Column(name = "mayorDomicilioCalle", length = 100)
@@ -59,6 +59,10 @@ public class InscripcionTaekwondo {
     private String mayorTelefono;
     private boolean mayorAutorizaWhatsApp;
 
+    //Artes marciales mayor
+    @Column(name = "mayorCinturon", length = 40)
+    private String mayorCinturon;
+
     //Autorizado
     private boolean autorizadoMenor;
     @Column(name = "autorizadoNombre", length = 60)
@@ -72,23 +76,22 @@ public class InscripcionTaekwondo {
     private Date autorizadoFechaNacimiento;
     @Column(name = "autorizadoPais", length = 20)
     private String autorizadoPais;
-    @Column(name = "autorizadoCinturon", length = 40)
-    private String autorizadoCinturon;
     @Column(name = "autorizadoDni", length = 45)
     private String autorizadoDni;
     private boolean autorizadoLicencia;
     private boolean domiciliacionSEPA;
+    private boolean domiciliacionSEPAFirmada;
+    @Column(name = "extensionSEPAFirmado", length = 10)
+    private String extensionSEPAFirmado;
+    private boolean inscripcionFirmada;
     @Column(name = "titularCuenta", length = 100)
     private String titularCuenta;
     @Column(name = "iban", length = 34)
     private String iban;
     @Column(name = "swift", length = 11)
     private String swift;
-    @Column(name = "notas", columnDefinition = "TEXT")
-    private String notas;
-    private boolean inscripcionFirmada;
-    private boolean domiciliacionSEPAFirmada;
-    @Column(name = "extensionSEPAFirmado", length = 10)
-    private String extensionSEPAFirmado;
 
+    //Artes marciales autorizado
+    @Column(name = "autorizadoCinturon", length = 40)
+    private String autorizadoCinturon;
 }

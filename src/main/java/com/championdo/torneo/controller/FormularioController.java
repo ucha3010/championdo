@@ -32,7 +32,7 @@ public class FormularioController {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private InscripcionService inscripcionService;
+    private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
     private PdfService pdfService;
     @Autowired
@@ -122,13 +122,13 @@ public class FormularioController {
         try {
             formularioService.fillObjects(userModel);
             pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
-            InscripcionModel inscripcionModel = inscripcionService.addPropia(userModel, pdfModel, sessionData.getGimnasioModel().getId());
-            pdfModel.setIdInscripcion(inscripcionModel.getId());
-            pdfModel.setCategoria(inscripcionModel.getCategoria());
-            pdfModel.setPoomsae(inscripcionModel.getPoomsae());
+            TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.addAdult(userModel, pdfModel, sessionData.getGimnasioModel().getId());
+            pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
+            pdfModel.setCategoria(tournamentRegistrationModel.getCategory());
+            pdfModel.setPoomsae(tournamentRegistrationModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendTournamentRegistration(userModel, file, inscripcionModel);
-            emailService.confirmAdminTournamentRegistration(new UserAutorizacionModel(userModel), inscripcionModel);
+            emailService.sendTournamentRegistration(userModel, file, tournamentRegistrationModel);
+            emailService.confirmAdminTournamentRegistration(new UserAutorizacionModel(userModel), tournamentRegistrationModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -148,10 +148,10 @@ public class FormularioController {
     public ModelAndView getPropia(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/vistaInscPropia");
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        InscripcionModel inscripcionModel = inscripcionService.findById(id);
-        modelAndView.addObject("inscripcion", inscripcionModel);
-        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(inscripcionModel.getCodigoGimnasio()).getValor()));
+        TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.findById(id);
+        modelAndView.addObject("tournamentRegistration", tournamentRegistrationModel);
+        modelAndView.addObject("pdfModel", pdfService.getImpresion(tournamentRegistrationModel));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(tournamentRegistrationService.getDeleteEnable(tournamentRegistrationModel.getIdGym()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -166,13 +166,13 @@ public class FormularioController {
         try {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
-            InscripcionModel inscripcionModel = inscripcionService.addMenorOInclusivo(userAutorizacionModel, pdfModel, sessionData.getGimnasioModel().getId());
-            pdfModel.setIdInscripcion(inscripcionModel.getId());
-            pdfModel.setCategoria(inscripcionModel.getCategoria());
-            pdfModel.setPoomsae(inscripcionModel.getPoomsae());
+            TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.addYoungOrInclusive(userAutorizacionModel, pdfModel, sessionData.getGimnasioModel().getId());
+            pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
+            pdfModel.setCategoria(tournamentRegistrationModel.getCategory());
+            pdfModel.setPoomsae(tournamentRegistrationModel.getPoomsae());
             File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file, inscripcionModel);
-            emailService.confirmAdminTournamentRegistration(userAutorizacionModel, inscripcionModel);
+            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file, tournamentRegistrationModel);
+            emailService.confirmAdminTournamentRegistration(userAutorizacionModel, tournamentRegistrationModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
             pdfModel = null;
@@ -193,11 +193,11 @@ public class FormularioController {
     public ModelAndView getMenorOInclisivo(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/vistaInscMenorOInclisivo");
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        InscripcionModel inscripcionModel = inscripcionService.findById(id);
-        TorneoModel torneoModel = torneoService.findById(inscripcionModel.getIdTorneo());
-        modelAndView.addObject("inscripcion", inscripcionModel);
-        modelAndView.addObject("pdfModel", pdfService.getImpresion(inscripcionModel));
-        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionService.getDeleteEnable(torneoModel.getCodigoGimnasio()).getValor()));
+        TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.findById(id);
+        TorneoModel torneoModel = torneoService.findById(tournamentRegistrationModel.getIdTournament());
+        modelAndView.addObject("tournamentRegistration", tournamentRegistrationModel);
+        modelAndView.addObject("pdfModel", pdfService.getImpresion(tournamentRegistrationModel));
+        modelAndView.addObject("deleteEnable", Boolean.parseBoolean(tournamentRegistrationService.getDeleteEnable(torneoModel.getCodigoGimnasio()).getValor()));
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

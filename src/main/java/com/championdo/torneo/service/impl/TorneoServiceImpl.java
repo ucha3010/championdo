@@ -7,7 +7,7 @@ import com.championdo.torneo.model.TorneoGimnasioModel;
 import com.championdo.torneo.model.TorneoModel;
 import com.championdo.torneo.repository.TorneoRepository;
 import com.championdo.torneo.service.GimnasioService;
-import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
 import com.championdo.torneo.util.Constantes;
@@ -30,7 +30,7 @@ public class TorneoServiceImpl implements TorneoService {
     @Autowired
     private MapperTorneo mapperTorneo;
     @Autowired
-    private InscripcionService inscripcionService;
+    private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
@@ -73,7 +73,7 @@ public class TorneoServiceImpl implements TorneoService {
     @Override
     public void delete(int id) throws RemoveException {
         try {
-            if(!inscripcionService.findByIdTorneo(id).isEmpty()) {
+            if(!tournamentRegistrationService.findByIdTournament(id).isEmpty()) {
                 throw new RemoveException(Constantes.ERROR_BORRAR_TORNEO_CON_INSCRIPCIONES, "Se está intentando eliminar un torneo que tiene inscripciones");
             }
             torneoRepository.deleteById(id);

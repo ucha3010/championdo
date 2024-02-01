@@ -41,11 +41,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendTournamentRegistration(UserModel userModel, File inscripcion, InscripcionModel inscripcionModel) throws SenderException {// envía gimnasio
+    public void sendTournamentRegistration(UserModel userModel, File inscripcion, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException {// envía gimnasio
         List<File> files = new ArrayList<>();
         files.add(inscripcion);
         try {
-            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionModel.getCodigoGimnasio());
+            GimnasioModel gimnasioModel = gimnasioService.findById(tournamentRegistrationModel.getIdGym());
             sendMessage.enviarCorreo(new EmailModel(gimnasioModel.getCorreo(), userModel.getCorreo(), "Confirmación inscripción torneo taekwondo"
                     , textMessageTournamentRegistration(userModel), files, gimnasioModel.getEmailHost(), gimnasioModel.getEmailPort(), gimnasioModel.getEmailPassword()));
         } catch (Exception e) {
@@ -54,10 +54,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void confirmAdminTournamentRegistration(UserAutorizacionModel userAutorizacionModel, InscripcionModel inscripcionModel) throws SenderException {// envía plataforma
+    public void confirmAdminTournamentRegistration(UserAutorizacionModel userAutorizacionModel, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
-            GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionModel.getCodigoGimnasio());
+            GimnasioModel gimnasioModel = gimnasioService.findById(tournamentRegistrationModel.getIdGym());
             sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), gimnasioModel.getCorreo(), "Nueva inscripción en torneo",
                     textMessageConfirmAdminTournamentRegistration(userAutorizacionModel), null, utilManagerModel.getEmailHost(),
                     utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));

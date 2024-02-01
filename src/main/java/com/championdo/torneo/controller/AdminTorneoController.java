@@ -3,7 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.RemoveException;
-import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.model.TorneoModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.LoggerMapper;
@@ -26,7 +26,7 @@ public class AdminTorneoController {
     @Autowired
     private TorneoGimnasioService torneoGimnasioService;
     @Autowired
-    private InscripcionService inscripcionService;
+    private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
     private SeguridadService seguridadService;
     @Autowired
@@ -49,7 +49,7 @@ public class AdminTorneoController {
 
     @GetMapping("/torneo/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView getTorneo(ModelAndView modelAndView, @PathVariable int id) {
+    public ModelAndView getTournamentRegistration(ModelAndView modelAndView, @PathVariable int id) {
         modelAndView.setViewName("torneo/adminTorneo");
         User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminTorneo/torneo/" + id);
@@ -60,11 +60,11 @@ public class AdminTorneoController {
         } else {
             modelAndView.addObject("buttonAddUpdate", "Actualizar");
             modelAndView.addObject("buttonGyms",true);
-            List<InscripcionModel> inscripcionList = inscripcionService.findByIdTorneo(torneoModel.getId());
-            if (inscripcionList.isEmpty()) {
+            List<TournamentRegistrationModel> tournamentRegistrationList = tournamentRegistrationService.findByIdTournament(torneoModel.getId());
+            if (tournamentRegistrationList.isEmpty()) {
                 modelAndView.addObject("buttonDelete",true);
             } else {
-                modelAndView.addObject("inscripcionList", inscripcionList);
+                modelAndView.addObject("tournamentRegistrationList", tournamentRegistrationList);
             }
         }
         modelAndView.addObject("torneoModel", torneoModel);
@@ -87,7 +87,7 @@ public class AdminTorneoController {
             torneoService.update(torneoModel);
             modelAndView.addObject("updateOK", "Actualización realizada con éxito");
             LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-            return getTorneo(modelAndView, torneoModel.getId());
+            return getTournamentRegistration(modelAndView, torneoModel.getId());
         }
     }
 

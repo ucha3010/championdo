@@ -837,20 +837,20 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public PdfModel getImpresion(InscripcionModel inscripcionModel) {
+    public PdfModel getImpresion(TournamentRegistrationModel tournamentRegistrationModel) {
 
         PdfModel pdfModel = new PdfModel();
-        if (inscripcionModel != null){
-            if (inscripcionModel.getDniAutorizador() != null) {
+        if (tournamentRegistrationModel != null){
+            if (tournamentRegistrationModel.getAuthorizerIdCard() != null) {
                 pdfModel.setMayorEdad(false);
-                pdfModel.setDni(inscripcionModel.getDniAutorizador());
-                pdfModel.setDniMenor(inscripcionModel.getDniInscripto());
+                pdfModel.setDni(tournamentRegistrationModel.getAuthorizerIdCard());
+                pdfModel.setDniMenor(tournamentRegistrationModel.getRegisteredIdCard());
             } else {
                 pdfModel.setMayorEdad(true);
-                pdfModel.setDni(inscripcionModel.getDniInscripto());
+                pdfModel.setDni(tournamentRegistrationModel.getRegisteredIdCard());
             }
-            pdfModel.setIdInscripcion(inscripcionModel.getId());
-            pdfModel.setFechaCampeonato(inscripcionModel.getFechaCampeonato());
+            pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
+            pdfModel.setFechaCampeonato(tournamentRegistrationModel.getTournamentDate());
         }
         return pdfModel;
     }

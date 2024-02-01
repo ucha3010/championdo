@@ -1,6 +1,6 @@
 package com.championdo.torneo.service;
 
-import com.championdo.torneo.model.InscripcionModel;
+import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.model.InscripcionTaekwondoModel;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.model.PdfModel;
@@ -25,7 +25,7 @@ public interface PdfService {
 
     boolean subirArchivo(PdfModel pdfModel, MultipartFile file, String seccion);
 
-    PdfModel getImpresion(InscripcionModel inscripcionModel);
+    PdfModel getImpresion(TournamentRegistrationModel tournamentRegistrationModel);
 
     PdfModel getPdfInscripcionTaekwondo (InscripcionTaekwondoModel inscripcionTaekwondoModel);
 

@@ -8,7 +8,7 @@ import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
 import com.championdo.torneo.service.GimnasioService;
-import com.championdo.torneo.service.InscripcionService;
+import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
 import com.championdo.torneo.util.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private GimnasioService gimnasioService;
 	@Autowired
-	private InscripcionService inscripcionService;
+	private TournamentRegistrationService tournamentRegistrationService;
 	@Autowired
 	private InscripcionTaekwondoService inscripcionTaekwondoService;
 
@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
 		boolean respuesta = true;
 		try {
 			com.championdo.torneo.entity.User user = userRepository.findByUsername(username);
-			inscripcionService.deleteByDni(username);
+			tournamentRegistrationService.deleteByIdCard(username);
 			inscripcionTaekwondoService.deleteByDni(username);
 			Set<UserRole> userRoles = userRoleRepository.findByUser(user);
 			for (UserRole userRole : userRoles) {
