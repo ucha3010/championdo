@@ -1,11 +1,11 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.model.PrincipalUserModel;
-import com.championdo.torneo.service.TournamentRegistrationService;
+import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.PrincipalService;
+import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;

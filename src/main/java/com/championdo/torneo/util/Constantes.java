@@ -13,6 +13,9 @@ public class Constantes {
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 	public static final String ROLE_ROOT = "ROLE_ROOT";
 
+	// inscripciones actividades físicas
+	public static final String ACTIVITY_TAEKWONDO = "Taekwondo";
+
 	// poomsaes
 	public static final String INCLUSIVO = "INCLUSIVO";
 	public static final String KICHO = "KICHO";

@@ -110,6 +110,8 @@ public class FormularioController {
         return modelAndView;
     }
 
+    //TODO DAMIAN tendría que permitir al usuario ver lo que va a firmar
+    //TODO DAMIAN los procesos pesados, como creación de archivos, deberían hacerse con un hilo aparte
     @PostMapping("/gaurdarPropia")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarPropia(@ModelAttribute("userModel") UserModel userModel) {

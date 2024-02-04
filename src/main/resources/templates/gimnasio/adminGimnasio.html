@@ -25,24 +25,26 @@
 				</div>
 			</section>
 
-			<section sec:authorize="hasRole('ROLE_ADMIN')">
+
+			<section sec:authorize="hasRole('ROLE_ADMIN')" class="margenArribaAbajo3Porc">
+				<a href="#" th:href="@{/usuario/gymUsers}" class="textDecoration-none">
+					<button class="btn btn-primary btn-lg" type="button">Usuarios</button>
+				</a>
 				<a href="#" th:href="@{/adminGimnasio/adminsGym}" class="textDecoration-none">
-					<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Administradores</button>
+					<button class="btn btn-success btn-lg" type="button">Administradores</button>
 				</a>
 			</section>
-			<section sec:authorize="hasRole('ROLE_ADMIN')">
+			<section sec:authorize="hasRole('ROLE_ADMIN')" class="margenArribaAbajo3Porc">
 				<a href="#" th:href="@{/adminMandato/}" class="textDecoration-none">
-					<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Mandatos Licencia Federativa</button>
+					<button class="btn btn-info btn-lg" type="button">Mandatos Licencia Federativa</button>
 				</a>
 			</section>
-			<section sec:authorize="hasRole('ROLE_ADMIN')">
+			<section sec:authorize="hasRole('ROLE_ADMIN')" class="margenArribaAbajo3Porc">
 				<a href="#" th:href="@{/adminUtil/utilList}" class="textDecoration-none">
-					<button class="btn btn-success btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Parámetros</button>
+					<button class="btn btn-success btn-lg" type="button">Parámetros</button>
 				</a>
-			</section>
-			<section sec:authorize="hasRole('ROLE_ADMIN')">
 				<a href="#" th:href="@{/adminCinturon/cinturonList}" class="textDecoration-none">
-					<button class="btn btn-info btn-lg anchoMinimo40 margenArribaAbajo3Porc" type="button">Cinturones</button>
+					<button class="btn btn-info btn-lg" type="button">Cinturones</button>
 				</a>
 			</section>
 

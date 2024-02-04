@@ -47,7 +47,18 @@ public class UserModel {
 	private int idTorneo;
 	private int idTorneoGimnasio;
 	private int codigoGimnasio;
+	private String gymName;
 	private List<String> userRoles = new ArrayList<>();
+	private List<String> registrations = new ArrayList<>();
+
+	public UserModel(String name, String lastname, String secondLastname, Date fechaNacimiento, boolean menor, String usernameACargo) {
+		this.name = name;
+		this.lastname = lastname;
+		this.secondLastname = secondLastname;
+		this.fechaNacimiento = fechaNacimiento;
+		this.menor = menor;
+		this.usernameACargo = usernameACargo;
+	}
 
 	@Override
 	public String toString() {
@@ -84,6 +95,7 @@ public class UserModel {
 				", idTorneoGimnasio=" + idTorneoGimnasio +
 				", codigoGimnasio=" + codigoGimnasio +
 				", userRoles=" + userRoles +
+				", registrations=" + registrations +
 				'}';
 	}
 }

@@ -9,6 +9,7 @@ import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,13 +33,13 @@ public class UsuarioController {
 	@Autowired
 	private UserRoleService userRoleService;
 	@Autowired
-	private EmailService emailService;
-	@Autowired
 	private FormularioService formularioService;
 	@Autowired
 	private PrincipalService principalService;
 	@Autowired
 	private SeguridadService seguridadService;
+	@Autowired
+	private UserRegistrationService userRegistrationService;
 	@Autowired
 	private SessionData sessionData;
 	
@@ -157,6 +158,76 @@ public class UsuarioController {
 				+ " actualizado correctamente");
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return userDetail(modelAndView, username);
+	}
+
+	@GetMapping("/registrations")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
+	public ModelAndView registrations(ModelAndView modelAndView) {
+		User user = principalService.cargaBasicaCompleta(modelAndView);
+		modelAndView.setViewName("management/registrations");
+		modelAndView.addObject("activities", userRegistrationService.getActivities());
+		modelAndView.addObject("userRegistrationList", userRegistrationService.findAll());
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+		return modelAndView;
+	}
+
+	@GetMapping("/registrations/{activity}")
+	@PreAuthorize("hasRole('ROLE_ROOT')")
+	public ModelAndView registrations(ModelAndView modelAndView, @PathVariable String activity) {
+		User user = principalService.cargaBasicaCompleta(modelAndView);
+		modelAndView.setViewName("management/registrations");
+		modelAndView.addObject("activities", userRegistrationService.getActivities());
+		if (!StringUtils.isNullOrEmpty(activity)) {
+			modelAndView.addObject("selectedActivity", activity);
+			modelAndView.addObject("userRegistrationList", userRegistrationService.findByActivity(activity));
+		} else {
+			modelAndView.addObject("userRegistrationList", userRegistrationService.findAll());
+		}
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+		return modelAndView;
+	}
+
+	@GetMapping("/gymUsers")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView gymUsers(ModelAndView modelAndView) {
+		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/gymUsers");
+		seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/usuario/gymUsers");
+		modelAndView.setViewName("gimnasio/adminUsers");
+		modelAndView.addObject("activities", userRegistrationService.getActivities());
+		modelAndView.addObject("userRegistrationList", userRegistrationService.findByGym(sessionData.getGimnasioModel().getId()));
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+		return modelAndView;
+	}
+
+	@GetMapping("/gymUsers/activity/{activity}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView gymUsersActivity(ModelAndView modelAndView, @PathVariable String activity) {
+		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/gymUsers/activity/" + activity);
+		seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/usuario/gymUsers/activity/" + activity);
+		modelAndView.setViewName("gimnasio/adminUsers");
+		modelAndView.addObject("activities", userRegistrationService.getActivities());
+		if (!StringUtils.isNullOrEmpty(activity)) {
+			modelAndView.addObject("selectedActivity", activity);
+			modelAndView.addObject("userRegistrationList", userRegistrationService.findByActivityAndGym(activity, sessionData.getGimnasioModel().getId()));
+		} else {
+			modelAndView.addObject("userRegistrationList", userRegistrationService.findByGym(sessionData.getGimnasioModel().getId()));
+		}
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+		return modelAndView;
+	}
+
+	@GetMapping("/gymUsers/{username}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView gymUserDetail(ModelAndView modelAndView, @PathVariable String username) {
+		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/usuario/gymUsers/" + username);
+		seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/usuario/gymUsers/" + username);
+		modelAndView.setViewName("gimnasio/userAdmin");
+		modelAndView.addObject("user", userService.findModelByUsername(username));
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+		return modelAndView;
 	}
 
 }

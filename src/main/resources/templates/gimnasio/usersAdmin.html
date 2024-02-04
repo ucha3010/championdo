@@ -94,6 +94,9 @@
                     <div class="col-12">
                         <h2>Agregar nuevo administrador</h2>
                     </div>
+                    <div class="col-12">
+                        <h6>Para poder administrar el usuario debe tener perfil de Administrador. Este perfil se lo asigna el administrador de la plataforma.</h6>
+                    </div>
                 </div>
                 <div class="row mt-2 mb-1">
                     <div class="col-3 col-md-2">
@@ -142,6 +145,7 @@
                 <thead>
                 <tr>
                     <th scope="col">DNI</th>
+                    <th class="text-center" scope="col">Perfil Admin</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Primer apellido</th>
                     <th scope="col">Segundo apellido</th>
@@ -153,6 +157,10 @@
                 <tbody>
                 <tr th:each="user : ${adminUsersAssigned}">
                     <td><span th:text="${user.username}"></span></td>
+                    <td class="text-center">
+                        <img th:if="${'ROLE_ADMIN'==user.userRoles[0]}" class="check-img" src="#" th:src="@{/imgs/ok.png}" alt="Admin">
+                        <img th:if="${'ROLE_ADMIN'!=user.userRoles[0]}" class="check-img" src="#" th:src="@{/imgs/ko.png}" alt="User">
+                    </td>
                     <td><span th:text="${user.name}"></span></td>
                     <td><span th:text="${user.lastname}"></span></td>
                     <td><span th:text="${user.secondLastname}"></span></td>

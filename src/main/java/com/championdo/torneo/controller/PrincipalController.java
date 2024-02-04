@@ -30,7 +30,7 @@ public class PrincipalController {
     private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
     private EmailService emailService;
-    // TODO DAMIAN hacer la validación de usuario
+    //TODO DAMIAN hacer la validación de usuario
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView mainPage(ModelAndView modelAndView) {
@@ -59,6 +59,7 @@ public class PrincipalController {
     }
 
     //TODO DAMIAN este método (y lo que tenga que ver con las inscripciones) deberían irse a otro controlador
+    //TODO DAMIAN al eliminar una inscripción (a torneo, a actividad, un mandato, etc) debería mover los archivos correspondientes a una carpeta genérica con fecha de eliminación para luego borrarlos con algún batch
     @GetMapping("/eliminarInscripcion/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {

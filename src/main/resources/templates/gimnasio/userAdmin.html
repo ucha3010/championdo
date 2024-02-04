@@ -6,28 +6,17 @@
 	<script th:replace="static/cabeceraScript :: script"></script>
 
 	<title>Usuario</title>
-	
-	<script type="text/javascript">
-        function changeRole(username){
-            var relativeUrl = "usuario/rol/" + username + "/" + document.getElementById("rolSelect" + username).value;
-            var domain = getDomain(location.href);
-            location.href = domain + relativeUrl;
-        }
-	</script>
 </head>
 <body>
 	<div th:replace="static/barraUsuario :: div"></div>
 	<div th:replace="static/barraNav :: nav"></div>
 	
 	<div class="container">
-		<section class="margenArribaAbajo3Porc text-center">
-			<div th:if="${updateOK != null}" class="alert alert-success" role="alert"><span th:text="${updateOK}"></span></div>
-		</section>
 
 		<section>
 			<div class="row align-items-center justify-content-end">
 				<div class="col-3 col-md-2">
-					<a class="btn btn-info" href="#" th:href="@{/usuario/users}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/usuario/gymUsers}">Volver</a>
 				</div>
 			</div>
 			<div class="row mb-1 text-center">
@@ -36,9 +25,14 @@
 					<h1><span th:text="${user.name}"></span> <span th:text="${user.lastname}"></span> <span th:text="${user.secondLastname}"></span></h1>
 				</div>
 			</div>
+			<div class="row mb-1 text-center">
+				<div class="col-12">
+					<h6>El detalle siempre es del usuario adulto autorizador.</h6>
+				</div>
+			</div>
 		</section>
 
-		<section sec:authorize="hasRole('ROLE_ROOT')">
+		<section sec:authorize="hasRole('ROLE_ADMIN')">
 			<div class="row mb-1">
 				<div class="col-3 col-md-2 text-center">
 					<label for="dni">DNI:</label>
@@ -95,17 +89,13 @@
 				</div>
 			</div>
 
-			<div th:if="${!loggedUser}" class="row mb-1">
+			<div class="row mb-1">
 				<div class="col-3 col-md-2 text-center">
 					<label for="secondLastname">Habilitado:</label>
 				</div>
 				<div class="col-9 col-md-8">
-					<label class="containercheckbox">
-						<a href="#" th:href="@{/usuario/enabled/__${user.username}__}">
-							<input type="checkbox" th:checked="${user.enabled}">
-							<span class="checkmark"></span>
-						</a>
-					</label>
+					<img th:if="${user.enabled}" class="check-img" src="#" th:src="@{/imgs/ok.png}" alt="Ok">
+					<img th:if="${!user.enabled}" class="check-img" src="#" th:src="@{/imgs/ko.png}" alt="Ko">
 				</div>
 				<div class="col-md-2">
 				</div>
@@ -146,15 +136,10 @@
 
 			<div class="row mb-1">
 				<div class="col-3 col-md-2 text-center">
-					<label  th:attr="for=|rolSelect${user.username}|">Rol del usuario:</label>
+					<label for="rol">Rol del usuario:</label>
 				</div>
 				<div class="col-6 col-md-3">
-					<select th:attr="id=|rolSelect${user.username}|" class="form-select">
-						<option th:each="unit : ${userRoleList}" th:value="${unit.role}" th:text="${unit.role}" th:selected="${unit.role==user.userRoles[0]}"></option>
-					</select>
-				</div>
-				<div class="col-3 col-md-7">
-					<button th:if="${!loggedUser}" class="btn btn-success" th:attr="onclick=|changeRole('${user.username}')|">Guardar rol</button>
+					<input type="text" th:value="${user.userRoles[0].substring(5)}" id="rol" class="form-control" size="60" disabled/>
 				</div>
 			</div>
 
@@ -242,7 +227,7 @@
 				<div class="col-3">
 				</div>
 				<div class="col-3 col-md-2">
-					<a class="btn btn-info" href="#" th:href="@{/usuario/users}">Volver</a>
+					<a class="btn btn-info" href="#" th:href="@{/usuario/gymUsers}">Volver</a>
 				</div>
 			</div>
 		</section>
