@@ -10,7 +10,7 @@
 	<script>
 		function confirmDelete(id){
 			if(confirm("¿Seguro que desea eliminar la inscripción?")){
-				var relativeUrl = "principal/eliminarInscripcion/" + id;
+				var relativeUrl = "tournamentRegistration/delete/" + id;
 				var domain = getDomain(location.href);
 				location.href = domain + relativeUrl;
 				return true;
@@ -28,7 +28,7 @@
 
 		<div class="row align-items-center justify-content-end mt-2">
 			<div class="col-3 col-md-2">
-				<a class="btn btn-info" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
+				<a class="btn btn-info" href="#" th:href="@{/tournamentRegistration/mainPage}">Volver</a>
 			</div>
 		</div>
 
@@ -335,7 +335,7 @@
 			<div class="col-3">
 			</div>
 			<div class="col-3 col-md-2">
-				<a class="btn btn-info" href="#" th:href="@{/principal/principalTorneo}">Volver</a>
+				<a class="btn btn-info" href="#" th:href="@{/tournamentRegistration/mainPage}">Volver</a>
 			</div>
 		</div>
 		

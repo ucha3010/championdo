@@ -818,7 +818,7 @@ CREATE TABLE `menu2` (
 
 INSERT INTO `menu2` (`id`, `aviso`, `enabled`, `id_menu1`, `nombre`, `position`, `url`) VALUES
 (582, 'inscripcionTaekwondo', b'1', 579, 'Inscripción Taekwondo', 0, '/gimnasio/tipoInscripcion'),
-(583, 'inscripcionTorneo', b'1', 581, 'Inscripción Torneo Taekwondo', 0, '/principal/principalTorneo'),
+(583, 'inscripcionTorneo', b'1', 581, 'Inscripción Torneo Taekwondo', 0, '/tournamentRegistration/mainPage'),
 (584, 'licenciaTaekwondo', b'1', 581, 'Mandato de Licencia Taekwondo', 1, '/mandato/mandatos'),
 (594, 'avisoGimnasio', b'1', 580, 'Gimnasio Algete', 1, '/gimnasio/detalle/102'),
 (595, 'avisoGimnasio', b'1', 580, 'Gimnasio Alcobendas', 0, '/gimnasio/detalle/385'),
