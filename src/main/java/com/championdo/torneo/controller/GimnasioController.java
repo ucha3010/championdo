@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -226,6 +228,7 @@ public class GimnasioController {
         }
         formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioModel().getId());
+        //TODO DAMIAN acá tengo que crear los archivos sin firmar, guardarlos en una carpeta genérica y pasar los id para que se muestren en la pantalla de firma
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                 seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
                 "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, sessionData.getGimnasioModel().getId());
@@ -375,6 +378,62 @@ public class GimnasioController {
         gimnasioService.delete(id);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return customers(modelAndView);
+    }
+
+    @GetMapping("/testFormulario")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView testFormulario(ModelAndView modelAndView) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        modelAndView.setViewName("testFormulario");
+        modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(mapperUser.entity2Model(user)));
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @PostMapping("/testGuardar")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView gaurdarTest(ModelAndView modelAndView, @ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/testGuardar", userAutorizacionModel, getClass());
+
+        User userLogged = principalService.cargaBasicaCompleta(modelAndView);
+        //formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
+        //InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioModel().getId());
+
+
+        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoService.findById(412));
+        File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+
+        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(412,
+                seguridadService.obtenerCodigo(), "31390063P",
+                "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, 7);
+
+
+        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+
+
+
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+    }
+
+    @GetMapping("/testDownload")
+    public void testDownload(HttpServletResponse response) throws IOException {
+
+        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoService.findById(412));
+        File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment;filename=" + pdfAutorizacionMenor18.getName());
+        response.setContentLength((int) pdfAutorizacionMenor18.length());
+
+        try (FileInputStream inputStream = new FileInputStream(pdfAutorizacionMenor18);
+             OutputStream outputStream = response.getOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }
     }
 
 }

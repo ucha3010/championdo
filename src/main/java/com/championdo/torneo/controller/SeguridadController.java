@@ -48,6 +48,7 @@ public class SeguridadController {
 
             // INFORMACIÓN FIRMA Acá se agregan los procesos para generar y enviar archivos firmados
             if (Constantes.INSCRIPCION_TAEKWONDO.equals(firmaCodigoModel.getOperativaOriginal())) {
+                //TODO DAMIAN acá debería recuperar los archivos sin firmar, agregarles la firma y moverlos a la carpeta que les corresponde
                 inscripcionTaekwondoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
             } else if (Constantes.INSCRIPCION_MANDATO.equals(firmaCodigoModel.getOperativaOriginal())) {
                 mandatoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
