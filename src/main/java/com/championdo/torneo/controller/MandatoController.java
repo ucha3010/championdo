@@ -2,6 +2,7 @@ package com.championdo.torneo.controller;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.ValidationException;
+import com.championdo.torneo.model.DocumentManagerModel;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.MandatoModel;
 import com.championdo.torneo.model.PdfModel;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/mandato")
@@ -171,10 +175,14 @@ public class MandatoController {
     private void commonMandato(ModelAndView modelAndView, MandatoModel mandatoModel, User userLogged) throws ValidationException{
         mandatoModel.setCorreoMandante(userLogged.getCorreo());
         mandatoModel = mandatoService.add(mandatoModel);
+        List<File> files = new ArrayList<>();
+        PdfModel pdfModel = pdfService.getPdfMandato(mandatoModel);
+        DocumentManagerModel documentManagerModel = pdfService.createPdfFederativeLicenseMandate(pdfModel, false);
+        files.add(new File(documentManagerModel.getFullPath()));
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(mandatoModel.getId(),
                 seguridadService.obtenerCodigo(), mandatoModel.getDniMandante(),
                 "formularioInscFinalizada", Constantes.INSCRIPCION_MANDATO, mandatoModel.getCodigoGimnasio());
-        seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+        seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged, files);
     }
 
 }

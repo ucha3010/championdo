@@ -14,6 +14,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.util.List;
 import java.util.Random;
 
 
@@ -44,11 +46,11 @@ public class SeguridadServiceImpl implements SeguridadService {
     }
 
     @Override
-    public ModelAndView enviarCodigoFirma(ModelAndView modelAndView, FirmaCodigoModel firmaCodigoModel, User userLogged) {
+    public ModelAndView enviarCodigoFirma(ModelAndView modelAndView, FirmaCodigoModel firmaCodigoModel, User userLogged, List<File> files) {
         modelAndView.setViewName("firma/envioCodigo");
         try {
             firmaCodigoModel = firmaCodigoService.add(firmaCodigoModel);
-            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo());
+            emailService.sendCodeValidation(userLogged, firmaCodigoModel.getCodigo(), files);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR, firmaCodigoModel.getOperativaOriginal(), e.getMessage(), getClass());
         }

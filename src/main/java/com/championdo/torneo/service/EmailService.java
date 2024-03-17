@@ -11,7 +11,7 @@ public interface EmailService {
 
     void sendChangePassword(UserModel userModel, TokenModel tokenModel) throws SenderException;
 
-    void sendTournamentRegistration(UserModel userModel, File inscripcion, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException;
+    void sendTournamentRegistration(UserModel userModel, DocumentManagerModel documentManagerModel, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException;
 
     void confirmAdminTournamentRegistration(UserAutorizacionModel userAutorizacionModel, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException;
 
@@ -19,7 +19,7 @@ public interface EmailService {
 
     void confirmAdminGymJoining(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException;
 
-    void sendCodeValidation(User userModel, String code) throws SenderException;
+    void sendCodeValidation(User userModel, String code, List<File> files) throws SenderException;
 
     void confirmAdminSepaSigned(InscripcionTaekwondoModel inscripcionTaekwondoModel) throws SenderException;
 

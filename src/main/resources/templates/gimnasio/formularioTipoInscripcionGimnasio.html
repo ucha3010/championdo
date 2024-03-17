@@ -10,9 +10,9 @@
 		<script>
 			function seleccionTipoInscripcion(){
 				var value1 = document.querySelector('input[name="infantilAdultoRadio"]:checked').value;
-				var value2 = document.querySelector('input[name="licenciaRadio"]:checked').value;
+				//var value2 = document.querySelector('input[name="licenciaRadio"]:checked').value;
 				var iGimnasio = document.getElementById('idGimnasio').value;
-				var relativeUrl = "gimnasio/formularioInscripcion/" + idGimnasio.value + "/" + value1 + "/" + value2;
+				var relativeUrl = "gimnasio/formularioInscripcion/" + idGimnasio.value + "/" + value1 + "/sin licencia";
 				var domain = getDomain(location.href);
 				location.href = domain + relativeUrl;
 			}
@@ -48,7 +48,8 @@
 								Infantil (hasta 13 años)
 							</label>
 						</div>
-						<div th:if="${ocultarAdulto == null}" class="form-check">
+						<!--<div th:if="${ocultarAdulto == null}" class="form-check">-->
+						<div class="form-check">
 							<input class="form-check-input" type="radio" name="infantilAdultoRadio" id="adulto" value="adulto">
 							<label class="form-check-label" for="adulto">
 								Adulto (14 años o más)
@@ -58,6 +59,7 @@
 				</div>
 			</section>
 
+			<!--
 			<section class="text-center radioOption2 margenArribaAbajo3Porc">
 				<div class="row justify-content-center">
 					<div class="col-8 col-md-4">
@@ -76,6 +78,7 @@
 					</div>
 				</div>
 			</section>
+			-->
 
 			<section class="text-center margenArribaAbajo3Porc">
 				<div class="row justify-content-center">

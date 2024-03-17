@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.SenderException;
 import com.championdo.torneo.model.*;
+import com.championdo.torneo.service.DocumentManagerService;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.UtilManagerService;
@@ -23,6 +24,8 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private SendMessage sendMessage;
     @Autowired
+    private DocumentManagerService documentManagerService;
+    @Autowired
     private GimnasioService gimnasioService;
     @Autowired
     private UtilManagerService utilManagerService;
@@ -41,9 +44,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendTournamentRegistration(UserModel userModel, File inscripcion, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException {// envía gimnasio
+    public void sendTournamentRegistration(UserModel userModel, DocumentManagerModel documentManagerModel, TournamentRegistrationModel tournamentRegistrationModel) throws SenderException {// envía gimnasio
         List<File> files = new ArrayList<>();
-        files.add(inscripcion);
+        files.add(new File(documentManagerModel.getFullPath()));
         try {
             GimnasioModel gimnasioModel = gimnasioService.findById(tournamentRegistrationModel.getIdGym());
             sendMessage.enviarCorreo(new EmailModel(gimnasioModel.getCorreo(), userModel.getCorreo(), "Confirmación inscripción torneo taekwondo"
@@ -92,11 +95,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendCodeValidation(User user, String code) throws SenderException {// envía plataforma
+    public void sendCodeValidation(User user, String code, List<File> files) throws SenderException {// envía plataforma
         try {
             UtilManagerModel utilManagerModel = utilManagerService.get();
             sendMessage.enviarCorreo(new EmailModel(utilManagerModel.getEmail(), user.getCorreo(),
-                    "Código de validación", textMessageCodeValidation(user, code), null,
+                    "Código de validación", textMessageCodeValidation(user, code), files,
                     utilManagerModel.getEmailHost(), utilManagerModel.getEmailPort(), utilManagerModel.getPassword()));
         } catch (Exception e) {
             throw new SenderException(Constantes.AVISO_EMAIL,e.getMessage());
@@ -286,6 +289,9 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<h2>").append(code).append("</h2>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>Este código tiene una validez de 15 minutos.</p>");
+        stringBuilder.append("<br><br>");
+        stringBuilder.append("<p>Al firmar con este código, estarás firmando todos los documentos que requieran " +
+                "firma y estén adjuntos en este correo.</p>");
         stringBuilder.append("<br><br>");
         stringBuilder.append("<p>¡Que pases un buen día!</p>");
         stringBuilder.append("</BODY></HTML>");

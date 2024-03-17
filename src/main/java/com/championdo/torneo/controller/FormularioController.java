@@ -110,7 +110,6 @@ public class FormularioController {
         return modelAndView;
     }
 
-    //TODO DAMIAN tendría que permitir al usuario ver lo que va a firmar
     //TODO DAMIAN los procesos pesados, como creación de archivos, deberían hacerse con un hilo aparte
     @PostMapping("/gaurdarPropia")
     @PreAuthorize("isAuthenticated()")
@@ -128,8 +127,8 @@ public class FormularioController {
             pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
             pdfModel.setCategoria(tournamentRegistrationModel.getCategory());
             pdfModel.setPoomsae(tournamentRegistrationModel.getPoomsae());
-            File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendTournamentRegistration(userModel, file, tournamentRegistrationModel);
+            DocumentManagerModel documentManagerModel = pdfService.generarPdfTorneo(pdfModel, true);
+            emailService.sendTournamentRegistration(userModel, documentManagerModel, tournamentRegistrationModel);
             emailService.confirmAdminTournamentRegistration(new UserAutorizacionModel(userModel), tournamentRegistrationModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());
@@ -172,8 +171,8 @@ public class FormularioController {
             pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
             pdfModel.setCategoria(tournamentRegistrationModel.getCategory());
             pdfModel.setPoomsae(tournamentRegistrationModel.getPoomsae());
-            File file = pdfService.generarPdfTorneo(pdfModel);
-            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), file, tournamentRegistrationModel);
+            DocumentManagerModel documentManagerModel = pdfService.generarPdfTorneo(pdfModel, true);
+            emailService.sendTournamentRegistration(userAutorizacionModel.getMayorAutorizador(), documentManagerModel, tournamentRegistrationModel);
             emailService.confirmAdminTournamentRegistration(userAutorizacionModel, tournamentRegistrationModel);
         } catch (Exception e) {
             LoggerMapper.log(Level.ERROR,"gaurdarPropia", e.getMessage(), getClass());

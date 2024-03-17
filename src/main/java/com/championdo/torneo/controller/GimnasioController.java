@@ -86,11 +86,13 @@ public class GimnasioController {
         sessionData.setGimnasioModel(gimnasioService.findById(id));
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
+            /*
             for (InscripcionTaekwondoModel inscripcionTaekwondoModel : inscripcionTaekwondoModelList) {
                 if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
                     modelAndView.addObject("ocultarAdulto", "ocultarAdulto");
                 }
             }
+            */
             modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
         }
         modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
@@ -228,11 +230,29 @@ public class GimnasioController {
         }
         formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioModel().getId());
-        //TODO DAMIAN acá tengo que crear los archivos sin firmar, guardarlos en una carpeta genérica y pasar los id para que se muestren en la pantalla de firma
+        List<File> files = new ArrayList<>();
+        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
+        String tempFolder = pdfService.getTempFolder();
+        if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
+            DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfAutorizacionMenor18.getFilename()).concat(pdfAutorizacionMenor18.getExtension())));
+        } else {
+            DocumentManagerModel pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfAutorizacionMayor18.getFilename()).concat(pdfAutorizacionMayor18.getExtension())));
+        }
+        if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
+            DocumentManagerModel pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfNormativaSEPA.getFilename()).concat(pdfNormativaSEPA.getExtension())));
+        }
+        if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
+            DocumentManagerModel pdfAutorizaWhatsApp = pdfService.generarPdfAutorizaWhatsApp(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfAutorizaWhatsApp.getFilename()).concat(pdfAutorizaWhatsApp.getExtension())));
+        }
+
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
                 seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
                 "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, sessionData.getGimnasioModel().getId());
-        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged, files);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
 
@@ -401,14 +421,16 @@ public class GimnasioController {
 
 
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoService.findById(412));
-        File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+        DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, true);
 
         FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(412,
                 seguridadService.obtenerCodigo(), "31390063P",
                 "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, 7);
 
-
-        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged);
+        String tempFolder = pdfService.getTempFolder();
+        List<File> files = new ArrayList<>();
+        files.add(new File(tempFolder.concat(pdfAutorizacionMenor18.getFilename()).concat(pdfAutorizacionMenor18.getExtension())));
+        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged, files);
 
 
 
@@ -420,7 +442,8 @@ public class GimnasioController {
     public void testDownload(HttpServletResponse response) throws IOException {
 
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoService.findById(412));
-        File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
+        DocumentManagerModel documentManagerModel = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, true);
+        File pdfAutorizacionMenor18 = new File(documentManagerModel.getFullPath());
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment;filename=" + pdfAutorizacionMenor18.getName());

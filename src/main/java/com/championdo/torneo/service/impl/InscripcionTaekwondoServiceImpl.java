@@ -139,6 +139,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         List<File> files = new ArrayList<>();
         InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
+        /*
         if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
             MandatoModel mandatoModel = mandatoService.fromInscripcionTaekwondoToMandato(inscripcionTaekwondoModel);
             try {
@@ -151,20 +152,21 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
                 LoggerMapper.log(Level.ERROR, "crearEnviarArchivosInscripcionTaekwondo", e.getMessage(), this.getClass());
             }
         }
+        */
         if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
-            File pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral);
-            files.add(pdfAutorizacionMenor18);
+            DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, true);
+            files.add(new File(pdfAutorizacionMenor18.getFullPath()));
         } else {
-            File pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral);
-            files.add(pdfAutorizacionMayor18);
+            DocumentManagerModel pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral, true);
+            files.add(new File(pdfAutorizacionMayor18.getFullPath()));
         }
         if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
-            File pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral);
-            files.add(pdfNormativaSEPA);
+            DocumentManagerModel pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral, true);
+            files.add(new File(pdfNormativaSEPA.getFullPath()));
         }
         if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
-            File pdfAutorizaWhatsApp = pdfService.generarPdfAutorizaWhatsApp(pdfModelGeneral);
-            files.add(pdfAutorizaWhatsApp);
+            DocumentManagerModel pdfAutorizaWhatsApp = pdfService.generarPdfAutorizaWhatsApp(pdfModelGeneral, true);
+            files.add(new File(pdfAutorizaWhatsApp.getFullPath()));
         }
         inscripcionTaekwondoModel.setInscripcionFirmada(Boolean.TRUE);
         update(inscripcionTaekwondoModel);

@@ -1,5 +1,6 @@
 package com.championdo.torneo;
 
+import com.championdo.torneo.model.DocumentManagerModel;
 import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PdfService;
@@ -34,9 +35,9 @@ class TorneoApplicationTests {
 
 	private PdfModel pdfModel;
 	@Test
-	File testGenerarPdf() {
+	DocumentManagerModel testGenerarPdf() {
 		cargarPDF();
-		return pdfService.generarPdfTorneo(pdfModel);
+		return pdfService.generarPdfTorneo(pdfModel,true);
 	}
 
 
