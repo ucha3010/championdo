@@ -22,7 +22,7 @@ public class PrincipalController {
 
     @Autowired
     private PrincipalService principalService;
-    //TODO DAMIAN hacer la validación de usuario
+    // TODO DAMIAN hacer la validación de usuario
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView mainPage(ModelAndView modelAndView) {

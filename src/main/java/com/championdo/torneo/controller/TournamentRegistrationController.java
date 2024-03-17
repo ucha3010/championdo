@@ -36,7 +36,7 @@ public class TournamentRegistrationController {
         return modelAndView;
     }
 
-    //TODO DAMIAN al eliminar una inscripción (a torneo, a actividad, un mandato, etc) debería mover los archivos correspondientes a una carpeta genérica con fecha de eliminación para luego borrarlos con algún batch
+    // TODO DAMIAN al eliminar una inscripción (a torneo, a actividad, un mandato, etc) debería mover los archivos correspondientes a una carpeta genérica con fecha de eliminación para luego borrarlos con algún batch
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView delete(ModelAndView modelAndView, @PathVariable int id) {

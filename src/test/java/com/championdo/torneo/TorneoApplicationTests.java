@@ -88,10 +88,11 @@ class TorneoApplicationTests {
 
 	@Test
 	public void eliminarTodoLosArchivos() {
-		// CUIDADO QUE ESTE TEST ELIMINA TODOS LOS ARCHIVOS!!!!!!!!
+		// CUIDADO QUE ESTE TEST ELIMINA TODOS LOS ARCHIVOS!!!!!!!! Hay que descomentar la línea Path
 		String ruta = getAbsolutePath() + "src" + File.separator + "main" + File.separator + "resources" + File.separator
 				+ "static" + File.separator + "files" ;
-		Path directorioAEliminar = Paths.get(ruta);
+		//Path directorioAEliminar = Paths.get(ruta);
+		Path directorioAEliminar = null;
 
 		try {
 			eliminarDirectorioRecursivamente(directorioAEliminar);
@@ -123,7 +124,7 @@ class TorneoApplicationTests {
 	}
 
 	private static void eliminarDirectorioRecursivamente(Path directorio) throws IOException {
-		if (Files.exists(directorio)) {
+		if (directorio != null && Files.exists(directorio)) {
 			Files.walkFileTree(directorio, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
