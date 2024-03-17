@@ -39,9 +39,9 @@ public class PdfServiceImpl implements PdfService {
     private DocumentManagerService documentManagerService;
 
     @Override
-    public DocumentManagerModel generarPdfTorneo(PdfModel pdfModel, boolean withSignatureOrFinalDocument) {
+    public DocumentManagerModel generarPdfTorneo(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument) {
 
-        LoggerMapper.methodIn(Level.INFO, "generarPdfTorneo", pdfModel, this.getClass());
+        LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo(), pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -156,16 +156,16 @@ public class PdfServiceImpl implements PdfService {
             contentStream.close();
             DocumentManagerModel documentManagerModel = new DocumentManagerModel();
             nombreArchivo(documentManagerModel, pdfModel, true, Constantes.SECCION_TORNEO);
-            return createFileAndSaveDM(document, documentManagerModel, withSignatureOrFinalDocument);
+            return createFileAndSaveDM(document, documentManagerModel, createWithSignatureOrCreateFinalDocument);
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "generarPdfTorneo", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
         return null;
 
     }
 
     @Override
-    public DocumentManagerModel createPdfFederativeLicenseMandate(PdfModel pdfModel, boolean withSignatureOrFinalDocument) {
+    public DocumentManagerModel createPdfFederativeLicenseMandate(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument) {
 
         LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo(), pdfModel, getClass());
         try (PDDocument document = new PDDocument()) {
@@ -176,7 +176,7 @@ public class PdfServiceImpl implements PdfService {
 
             int heightStartParagraph = commonFederativeLicenseMandate(pdfModel, contentStream, page);
 
-            if(withSignatureOrFinalDocument) {
+            if(createWithSignatureOrCreateFinalDocument) {
                 commonSignature(contentStream, page, heightStartParagraph);
                 heightStartParagraph += 85;
 
@@ -222,28 +222,28 @@ public class PdfServiceImpl implements PdfService {
             DocumentManagerModel documentManagerModel = new DocumentManagerModel();
             documentManagerModel.setNeedsSignature(Boolean.TRUE);
             nombreArchivo(documentManagerModel, pdfModel, true, Constantes.SECCION_MANDATO);
-            return createFileAndSaveDM(document, documentManagerModel, withSignatureOrFinalDocument);
+            return createFileAndSaveDM(document, documentManagerModel, createWithSignatureOrCreateFinalDocument);
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "createPdfFederativeLicenseMandate", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
         return null;
 
     }
 
     @Override
-    public DocumentManagerModel generarPdfAutorizacionMayor18(PdfModel pdfModel, boolean withSignatureOrFinalDocument) {
-        return commonCreateDocument(pdfModel, withSignatureOrFinalDocument, Constantes.SECCION_AUTORIZACION_MAYOR_18);
+    public DocumentManagerModel generarPdfAutorizacionMayor18(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument) {
+        return commonCreateDocument(pdfModel, createWithSignatureOrCreateFinalDocument, Constantes.SECCION_AUTORIZACION_MAYOR_18);
     }
 
     @Override
-    public DocumentManagerModel generarPdfAutorizacionMenor18(PdfModel pdfModel, boolean withSignatureOrFinalDocument) {
-        return commonCreateDocument(pdfModel, withSignatureOrFinalDocument, Constantes.SECCION_AUTORIZACION_MENOR_18);
+    public DocumentManagerModel generarPdfAutorizacionMenor18(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument) {
+        return commonCreateDocument(pdfModel, createWithSignatureOrCreateFinalDocument, Constantes.SECCION_AUTORIZACION_MENOR_18);
     }
 
     @Override
-    public DocumentManagerModel generarPdfNormativaSEPA(PdfModel pdfModel, boolean withSignatureOrFinalDocument) {
+    public DocumentManagerModel generarPdfNormativaSEPA(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument) {
 
-        LoggerMapper.methodIn(Level.INFO, "generarPdfNormativaSEPA", pdfModel, this.getClass());
+        LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo(), pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -431,24 +431,23 @@ public class PdfServiceImpl implements PdfService {
 
             DocumentManagerModel documentManagerModel = new DocumentManagerModel();
             nombreArchivo(documentManagerModel, pdfModel, true, Constantes.SECCION_NORMATIVA_SEPA);
-            return createFileAndSaveDM(document, documentManagerModel, withSignatureOrFinalDocument);
+            return createFileAndSaveDM(document, documentManagerModel, createWithSignatureOrCreateFinalDocument);
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "generarPdfNormativaSEPA", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
         return null;
     }
 
     @Override
-    public DocumentManagerModel generarPdfAutorizaWhatsApp(PdfModel pdfModel, boolean withSignatureOrFinalDocument) {
-        return commonCreateDocument(pdfModel, withSignatureOrFinalDocument, Constantes.SECCION_WHATSAPP);
+    public DocumentManagerModel generarPdfAutorizaWhatsApp(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument) {
+        return commonCreateDocument(pdfModel, createWithSignatureOrCreateFinalDocument, Constantes.SECCION_WHATSAPP);
     }
 
     /**
      *
      * @param seccion
      *
-     * valores:
-     *
+     * INFORMACIÓN valores:
      * Constantes.SECCION_TORNEO
      * Constantes.SECCION_MANDATO
      * Constantes.SECCION_AUTORIZACION_MAYOR_18
@@ -468,7 +467,7 @@ public class PdfServiceImpl implements PdfService {
             outputStream.write(file, 0, file.length);
             outputStream.close();
         } catch (IOException e) {
-            LoggerMapper.log(Level.ERROR, "descargarPdf", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
     }
     @Override
@@ -483,7 +482,7 @@ public class PdfServiceImpl implements PdfService {
                 file.transferTo(new File(basePath + File.separator + documentManagerModel.getFullPath()));
                 answer = true;
             } catch (IOException e) {
-                LoggerMapper.log(Level.ERROR, "subirArchivo", e.getMessage(), PdfServiceImpl.class);
+                LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
             }
         }
         return answer;
@@ -599,7 +598,7 @@ public class PdfServiceImpl implements PdfService {
         File tempDirectory = new File(tempFolder);
         if (!tempDirectory.exists()) {
             if(!tempDirectory.mkdirs()) {
-                LoggerMapper.methodIn(Level.ERROR, "getTempForlder", "Problemas creando carpeta ".concat(tempDirectory.getName()), this.getClass());
+                LoggerMapper.methodIn(Level.ERROR, Utils.obtenerNombreMetodo(), "Problemas creando carpeta ".concat(tempDirectory.getName()), this.getClass());
             }
         }
         tempFolder+=File.separator;
@@ -608,7 +607,7 @@ public class PdfServiceImpl implements PdfService {
 
     private DocumentManagerModel commonCreateDocument (PdfModel pdfModel, boolean withSignature, String section) {
 
-        LoggerMapper.methodIn(Level.INFO, "commonCreateDocument ".concat(section), pdfModel, this.getClass());
+        LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo().concat(" ").concat(section), pdfModel, this.getClass());
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             int heightStartParagraph;
@@ -637,7 +636,7 @@ public class PdfServiceImpl implements PdfService {
             nombreArchivo(documentManagerModel, pdfModel, true, section);
             return createFileAndSaveDM(document, documentManagerModel, withSignature);
         } catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "commonCreateDocument ".concat(section), e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo().concat(" ").concat(section), e.getMessage(), PdfServiceImpl.class);
         }
         return null;
     }
@@ -653,7 +652,7 @@ public class PdfServiceImpl implements PdfService {
             File directorio = new File(getAbsolutePath() + ruta);
             if (!directorio.exists()) {
                 if(!directorio.mkdirs()) {
-                    LoggerMapper.methodIn(Level.ERROR, "getTempForlder", "Problemas creando carpeta ".concat(directorio.getName()), this.getClass());
+                    LoggerMapper.methodIn(Level.ERROR, Utils.obtenerNombreMetodo(), "Problemas creando carpeta ".concat(directorio.getName()), this.getClass());
                 }
             }
         }
@@ -698,18 +697,18 @@ public class PdfServiceImpl implements PdfService {
             absolute = f.getAbsolutePath().split(f.getName());
         }
         catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, "getAbsolutePath", e.getMessage(), PdfServiceImpl.class);
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
         return absolute[0];
     }
 
-    private DocumentManagerModel createFileAndSaveDM(PDDocument document, DocumentManagerModel documentManagerModel, boolean withSignatureOrFinalDocument) throws Exception {
-        if (!withSignatureOrFinalDocument) {
+    private DocumentManagerModel createFileAndSaveDM(PDDocument document, DocumentManagerModel documentManagerModel, boolean createWithSignatureOrCreateFinalDocument) throws Exception {
+        if (!createWithSignatureOrCreateFinalDocument) {
             documentManagerModel.setPath(getTempFolder());
         }
         document.save(documentManagerModel.getFullPath());
         new File(documentManagerModel.getFullPath());
-        if (withSignatureOrFinalDocument) {
+        if (createWithSignatureOrCreateFinalDocument) {
             documentManagerModel = documentManagerService.add(documentManagerModel);
         }
         return documentManagerModel;

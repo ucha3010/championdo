@@ -46,7 +46,7 @@ public class SeguridadController {
             firmaCodigoModel = firmaCodigoService.findByIdOperacion(firmaCodigoModel.getIdOperacion());
             seguridadService.validarCodigo(codigoEnviadoPorUsuario, userLogged.getUsername(), firmaCodigoModel);
 
-            // INFORMACIÓN FIRMA Acá se agregan los procesos para generar y enviar archivos firmados
+            //INFORMACIÓN FIRMA Acá se agregan los procesos para generar y enviar archivos firmados
             if (Constantes.INSCRIPCION_TAEKWONDO.equals(firmaCodigoModel.getOperativaOriginal())) {
                 inscripcionTaekwondoService.crearEnviarArchivosInscripcionTaekwondo(firmaCodigoModel);
             } else if (Constantes.INSCRIPCION_MANDATO.equals(firmaCodigoModel.getOperativaOriginal())) {

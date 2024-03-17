@@ -18,7 +18,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     @Autowired
     private InscripcionTaekwondoRepository inscripcionTaekwondoRepository;
-    //TODO cada vez que se agregue una actividad para inscribirse, hay que agregarla en este Service
+    //INFORMACIÓN cada vez que se agregue una actividad para inscribirse, hay que agregarla en este Service
 
     @Autowired
     private UserService userService;

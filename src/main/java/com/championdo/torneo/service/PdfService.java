@@ -6,12 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 public interface PdfService {
-    DocumentManagerModel generarPdfTorneo(PdfModel pdfModel, boolean withSignatureOrFinalDocument);
-    DocumentManagerModel createPdfFederativeLicenseMandate(PdfModel pdfModel, boolean withSignatureOrFinalDocument);
-    DocumentManagerModel generarPdfAutorizacionMayor18(PdfModel pdfModel, boolean withSignatureOrFinalDocument);
-    DocumentManagerModel generarPdfAutorizacionMenor18(PdfModel pdfModel, boolean withSignatureOrFinalDocument);
-    DocumentManagerModel generarPdfNormativaSEPA(PdfModel pdfModel, boolean withSignatureOrFinalDocument);
-    DocumentManagerModel generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral, boolean withSignatureOrFinalDocument);
+    DocumentManagerModel generarPdfTorneo(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument);
+    DocumentManagerModel createPdfFederativeLicenseMandate(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument);
+    DocumentManagerModel generarPdfAutorizacionMayor18(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument);
+    DocumentManagerModel generarPdfAutorizacionMenor18(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument);
+    DocumentManagerModel generarPdfNormativaSEPA(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument);
+    DocumentManagerModel generarPdfAutorizaWhatsApp(PdfModel pdfModelGeneral, boolean createWithSignatureOrCreateFinalDocument);
     void descargarArchivo(PdfModel pdfModel, HttpServletResponse response, String section);
     boolean subirArchivo(PdfModel pdfModel, MultipartFile file, String section);
     PdfModel getImpresion(TournamentRegistrationModel tournamentRegistrationModel);
