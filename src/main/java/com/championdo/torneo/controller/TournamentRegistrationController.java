@@ -1,10 +1,13 @@
 package com.championdo.torneo.controller;
 
+import com.championdo.torneo.entity.DocumentManager;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.TournamentRegistrationModel;
+import com.championdo.torneo.service.DocumentManagerService;
 import com.championdo.torneo.service.EmailService;
 import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.TournamentRegistrationService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -22,6 +25,8 @@ public class TournamentRegistrationController {
     @Autowired
     private TournamentRegistrationService tournamentRegistrationService;
     @Autowired
+    private DocumentManagerService documentManagerService;
+    @Autowired
     private EmailService emailService;
     @Autowired
     private PrincipalService principalService;
@@ -36,14 +41,14 @@ public class TournamentRegistrationController {
         return modelAndView;
     }
 
-    // TODO DAMIAN al eliminar una inscripción (a torneo, a actividad, un mandato, etc) debería mover los archivos correspondientes a una carpeta genérica con fecha de eliminación para luego borrarlos con algún batch
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ModelAndView delete(ModelAndView modelAndView, @PathVariable int id) {
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
         TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.findById(id);
         principalService.deleteTournamentRegistration(tournamentRegistrationModel);
-        emailService.confirmAdminDelete(tournamentRegistrationModel.getIdGym(), "torneo",
+        documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(id, Constantes.SECCION_TORNEO, usuario.getUsername());
+        emailService.confirmAdminDelete(tournamentRegistrationModel.getIdGym(), Constantes.SECCION_TORNEO,
                 usuario, !tournamentRegistrationModel.isRegistrationAdult() ? tournamentRegistrationModel.getRegisteredName() : null);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return tournamentMainPage(modelAndView);

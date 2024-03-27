@@ -1,5 +1,6 @@
 package com.championdo.torneo.service.impl;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.DocumentManagerService;
@@ -478,8 +479,8 @@ public class PdfServiceImpl implements PdfService {
                 pdfModel.setExtension(getFileExtension(file));
                 DocumentManagerModel documentManagerModel = new DocumentManagerModel();
                 nombreArchivo(documentManagerModel, pdfModel, true, seccion);
-                String basePath = System.getProperty("user.dir");
-                file.transferTo(new File(basePath + File.separator + documentManagerModel.getFullPath()));
+                file.transferTo(new File(documentManagerService.getAbsolutePath() + documentManagerModel.getFullPath()));
+                documentManagerService.add(documentManagerModel);
                 answer = true;
             } catch (IOException e) {
                 LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
@@ -605,6 +606,30 @@ public class PdfServiceImpl implements PdfService {
         return tempFolder;
     }
 
+    @Override
+    public void deleteFilesTaekwondoRegistration(InscripcionTaekwondoModel inscripcionTaekwondoModel, User usuario) {
+        if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
+            documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(inscripcionTaekwondoModel.getId(), Constantes.SECCION_AUTORIZACION_MENOR_18, usuario.getUsername());
+        } else {
+            documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(inscripcionTaekwondoModel.getId(), Constantes.SECCION_AUTORIZACION_MAYOR_18, usuario.getUsername());
+        }
+        if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
+            if (inscripcionTaekwondoModel.isDomiciliacionSEPAFirmada()) {
+                documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(inscripcionTaekwondoModel.getId(), Constantes.SECCION_NORMATIVA_SEPA_FIRMADO, usuario.getUsername());
+            } else {
+                documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(inscripcionTaekwondoModel.getId(), Constantes.SECCION_NORMATIVA_SEPA, usuario.getUsername());
+            }
+        }
+        if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
+            documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(inscripcionTaekwondoModel.getId(), Constantes.SECCION_WHATSAPP, usuario.getUsername());
+        }
+    }
+
+    @Override
+    public void eraseByIdOriginalOperativeAndSectionAndIdCard(Integer idOriginalOperative, String section, String idCard) {
+        documentManagerService.eraseByIdOriginalOperativeAndSectionAndIdCard(idOriginalOperative, section, idCard);
+    }
+
     private DocumentManagerModel commonCreateDocument (PdfModel pdfModel, boolean withSignature, String section) {
 
         LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo().concat(" ").concat(section), pdfModel, this.getClass());
@@ -649,7 +674,7 @@ public class PdfServiceImpl implements PdfService {
         String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
                 + "static" + File.separator + "files" + File.separator + section + tounamentDate(pdfModel) : "");
         if(rutaCompleta) {
-            File directorio = new File(getAbsolutePath() + ruta);
+            File directorio = new File(documentManagerService.getAbsolutePath() + ruta);
             if (!directorio.exists()) {
                 if(!directorio.mkdirs()) {
                     LoggerMapper.methodIn(Level.ERROR, Utils.obtenerNombreMetodo(), "Problemas creando carpeta ".concat(directorio.getName()), this.getClass());
@@ -688,18 +713,6 @@ public class PdfServiceImpl implements PdfService {
         }
         dateFolder.append(File.separator);
         return dateFolder.toString();
-    }
-
-    private String getAbsolutePath() {
-        String[] absolute = new String[1];
-        try {
-            File f = new File("program.txt");
-            absolute = f.getAbsolutePath().split(f.getName());
-        }
-        catch (Exception e) {
-            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
-        }
-        return absolute[0];
     }
 
     private DocumentManagerModel createFileAndSaveDM(PDDocument document, DocumentManagerModel documentManagerModel, boolean createWithSignatureOrCreateFinalDocument) throws Exception {

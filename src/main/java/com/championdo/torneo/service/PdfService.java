@@ -1,5 +1,6 @@
 package com.championdo.torneo.service;
 
+import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +20,6 @@ public interface PdfService {
     PdfModel getPdfMandato(MandatoModel mandatoModel);
     String getFileExtension(MultipartFile file);
     String getTempFolder();
+    void deleteFilesTaekwondoRegistration(InscripcionTaekwondoModel inscripcionTaekwondoModel, User usuario);
+    void eraseByIdOriginalOperativeAndSectionAndIdCard(Integer idOriginalOperative, String section, String idCard);
 }

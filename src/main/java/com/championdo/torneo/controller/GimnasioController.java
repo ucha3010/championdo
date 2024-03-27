@@ -166,6 +166,7 @@ public class GimnasioController {
         inscripcionTaekwondoService.delete(inscripcionTaekwondoModel);
         emailService.confirmAdminDelete(inscripcionTaekwondoModel.getCodigoGimnasio(), "gimnasio",
                 usuario, inscripcionTaekwondoModel.getAutorizadoNombre());
+        pdfService.deleteFilesTaekwondoRegistration(inscripcionTaekwondoModel, usuario);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return tipoInscripcion(modelAndView);
     }
@@ -187,8 +188,10 @@ public class GimnasioController {
     public ModelAndView normativaSepaFirmado(ModelAndView modelAndView, @RequestParam("idInscripcion") Integer idInscripcion, @RequestParam("file") MultipartFile file) {
 
         LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", idInscripcion, getClass());
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(idInscripcion);
         if(pdfService.subirArchivo(pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel), file, Constantes.SECCION_NORMATIVA_SEPA_FIRMADO)) {
+            pdfService.eraseByIdOriginalOperativeAndSectionAndIdCard(idInscripcion, Constantes.SECCION_NORMATIVA_SEPA, usuario.getUsername());
             inscripcionTaekwondoModel.setDomiciliacionSEPAFirmada(Boolean.TRUE);
             inscripcionTaekwondoModel.setExtensionSEPAFirmado(pdfService.getFileExtension(file));
             inscripcionTaekwondoService.update(inscripcionTaekwondoModel);

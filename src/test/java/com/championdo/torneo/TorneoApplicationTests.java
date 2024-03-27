@@ -88,11 +88,11 @@ class TorneoApplicationTests {
 
 	@Test
 	public void eliminarTodoLosArchivos() {
-		// CUIDADO QUE ESTE TEST ELIMINA TODOS LOS ARCHIVOS!!!!!!!! Hay que descomentar la línea Path
+		// CUIDADO QUE ESTE TEST ELIMINA TODOS LOS ARCHIVOS!!!!!!!! Hay que descomentar la línea que asigno valor a directorioAEliminar
 		String ruta = getAbsolutePath() + "src" + File.separator + "main" + File.separator + "resources" + File.separator
 				+ "static" + File.separator + "files" ;
-		//Path directorioAEliminar = Paths.get(ruta);
 		Path directorioAEliminar = null;
+		//directorioAEliminar = Paths.get(ruta);
 
 		try {
 			eliminarDirectorioRecursivamente(directorioAEliminar);

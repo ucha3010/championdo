@@ -9,6 +9,7 @@ import com.championdo.torneo.service.PrincipalService;
 import com.championdo.torneo.service.SeguridadService;
 import com.championdo.torneo.service.TorneoGimnasioService;
 import com.championdo.torneo.service.TorneoService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -43,7 +44,7 @@ public class AdminTorneoGimnasioController {
         modelAndView.setViewName("torneo/adminTorneoGimnasio");
         modelAndView.addObject("torneoGimnasioModel", new TorneoGimnasioModel());
         modelAndView.addObject("torneoGimnasioList", torneoGimnasioService.findAll(idTorneo));
-        modelAndView.addObject("torneo", torneo);
+        modelAndView.addObject(Constantes.SECCION_TORNEO, torneo);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }

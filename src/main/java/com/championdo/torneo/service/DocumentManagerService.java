@@ -12,9 +12,12 @@ public interface DocumentManagerService {
     List<DocumentManagerModel> findByIdGymAndSection(int idGym, String section);
     List<DocumentManagerModel> findByIdCard(String idCard);
     DocumentManagerModel findById(int id);
-    DocumentManagerModel findByIdOriginalOperativeAndSection(int idOriginalOperative, String section);
+    List<DocumentManagerModel> findByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
     DocumentManagerModel add(DocumentManagerModel documentManagerModel);
     void update(DocumentManagerModel documentManagerModel);
     void delete(int idDocumentManager);
     void deleteByIdCard(String idCard);
+    void deleteByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
+    void eraseByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
+    String getAbsolutePath();
 }
