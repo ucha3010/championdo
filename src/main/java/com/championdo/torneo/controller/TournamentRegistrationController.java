@@ -1,6 +1,5 @@
 package com.championdo.torneo.controller;
 
-import com.championdo.torneo.entity.DocumentManager;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.service.DocumentManagerService;
