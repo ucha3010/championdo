@@ -21,5 +21,6 @@ public interface PdfService {
     String getFileExtension(MultipartFile file);
     String getTempFolder();
     void deleteFilesTaekwondoRegistration(InscripcionTaekwondoModel inscripcionTaekwondoModel, User usuario);
+    void deleteByIdOriginalOperativeAndSectionAndIdCard(Integer idOriginalOperative, String section, String idCard);
     void eraseByIdOriginalOperativeAndSectionAndIdCard(Integer idOriginalOperative, String section, String idCard);
 }

@@ -7,6 +7,7 @@ import com.championdo.torneo.mapper.MapperMandato;
 import com.championdo.torneo.model.*;
 import com.championdo.torneo.repository.MandatoRepository;
 import com.championdo.torneo.service.EmailService;
+import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
@@ -31,6 +32,8 @@ public class MandatoServiceImpl implements MandatoService {
     private MapperMandato mapperMandato;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private GimnasioService gimnasioService;
     @Autowired
     private PdfService pdfService;
 
@@ -83,6 +86,7 @@ public class MandatoServiceImpl implements MandatoService {
         mandatoModel.setFechaAlta(calendar.getTime());
         mandatoModel.setTemporada(Utils.calculateSeason(calendar.getTime()));
         mandatoModel.setAdulto(adulto);
+        mandatoModel.setNombreGimnasio(gimnasioService.findById(mandatoModel.getCodigoGimnasio()).getNombreGimnasio());
     }
 
     @Override
@@ -132,30 +136,34 @@ public class MandatoServiceImpl implements MandatoService {
 
     private void validarMandato(MandatoModel mandatoModel, List<Mandato> mandatoList) throws ValidationException{
         for (Mandato mandato : mandatoList) {
-            if (mandatoModel.isAdulto() && mandato.isAdulto()) {
+            if (mandatoModel.isAdulto() && mandato.isAdulto() && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_ADULTO_YA_EXISTE, "Ya existe un mandato de " + mandatoModel.getNombreMandante()
                         + " " + mandatoModel.getApellido1Mandante() + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : "")
-                        + " para la temporada " + mandatoModel.getTemporada());
-            } else if (mandatoModel.isAdulto() && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())) {
+                        + " para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio());
+            } else if (mandatoModel.isAdulto() && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
+                    && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_UN_MENOR, "Con el DNI " + mandatoModel.getDniMandante()
-                        + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " para un menor o inclusivo."
-                        + " Es necesario que cada mandato vaya asociado a un DNI diferente.");
+                        + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio()
+                        + " para un menor o inclusivo. Es necesario que cada mandato vaya asociado a un DNI diferente.");
             } else if (!mandatoModel.isAdulto() && StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado())
-                    && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())) {
+                    && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
+                    && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_OTRO_MENOR, "Con el DNI " + mandatoModel.getDniMandante()
-                        + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " para otro menor o inclusivo."
-                        + " Por favor rellene el DNI del autorizado o contacte con el gimnasio para realizar la modificación necesaria.");
-            } else if (!mandatoModel.isAdulto() && StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && mandato.isAdulto()) {
+                        + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio()
+                        + " para otro menor o inclusivo. Por favor rellene el DNI del autorizado o contacte con el gimnasio para realizar la modificación"
+                        + " necesaria.");
+            } else if (!mandatoModel.isAdulto() && StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && mandato.isAdulto()
+                    && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_EN_INSCRIPCION_ADULTO, "Con el DNI " + mandatoModel.getDniMandante()
-                        + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " para "
-                        + mandatoModel.getNombreMandante() + " " + mandatoModel.getApellido1Mandante()
+                        + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio()
+                        + " para " + mandatoModel.getNombreMandante() + " " + mandatoModel.getApellido1Mandante()
                         + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : "")
                         + ". Es necesario que cada mandato vaya asociado a un DNI diferente.");
             } else if (!StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && !StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
-                    && mandatoModel.getDniAutorizado().equals(mandato.getDniAutorizado())) {
+                    && mandatoModel.getDniAutorizado().equals(mandato.getDniAutorizado()) && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_MENOR_YA_EXISTE, "Ya existe un mandato de menor o inclusivo con el DNI "
-                        + " " + mandatoModel.getDniAutorizado() + " para la temporada " + mandatoModel.getTemporada()
-                        + ". Es necesario que cada mandato vaya asociado a un DNI diferente.");
+                        + " " + mandatoModel.getDniAutorizado() + " para la temporada " + mandatoModel.getTemporada() + " en el gimnasio "
+                        + mandatoModel.getNombreGimnasio() + ". Es necesario que cada mandato vaya asociado a un DNI diferente.");
             }
         }
     }

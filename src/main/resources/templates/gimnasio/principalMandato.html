@@ -89,6 +89,7 @@
 					<th scope="col">Mandante</th>
 					<th scope="col">Autorizado (menor o inclusivo)</th>
 					<th scope="col">Temporada</th>
+					<th scope="col">Gimnasio</th>
 					<th class="d-none d-sm-table-cell"></th>
 					<th class="d-none d-sm-table-cell"></th>
 				</tr>
@@ -98,7 +99,8 @@
 					<td th:class="${!mandato.mandatoFirmado} ? 'backgroundColorRed' : ''"><span th:text="${#calendars.format(mandato.fechaAlta,'dd/MM/yyyy HH:mm')}"></span></td>
 					<td th:class="${!mandato.mandatoFirmado} ? 'backgroundColorRed' : ''"><span th:text="${mandato.nombreMandante+' '+mandato.apellido1Mandante+' '+mandato.apellido2Mandante}"></span></td>
 					<td th:class="${!mandato.mandatoFirmado} ? 'backgroundColorRed' : ''"><span th:if="${mandato.nombreAutorizado != null}" th:text="${mandato.nombreAutorizado+' '+mandato.apellido1Autorizado+' '+mandato.apellido2Autorizado}"></span></td>
-					<td th:class="${!mandato.mandatoFirmado} ? 'backgroundColorRed' : ''"><span th:text="${mandato.temporada}"></span> <a class="d-table-cell d-sm-none colorGreen" th:if="${!mandato.mandatoFirmado}" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionMandato/__${mandato.id}__}">¡Mandato no firmado!</a></td>
+					<td th:class="${!mandato.mandatoFirmado} ? 'backgroundColorRed' : ''"><span th:text="${mandato.temporada}"></span></td>
+					<td th:class="${!mandato.mandatoFirmado} ? 'backgroundColorRed' : ''"><span th:text="${mandato.nombreGimnasio}"></span> <a class="d-table-cell d-sm-none colorGreen" th:if="${!mandato.mandatoFirmado}" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionMandato/__${mandato.id}__}">¡Mandato no firmado!</a></td>
 					<td class="d-none d-sm-table-cell">
 						<form th:if="${mandato.mandatoFirmado}" action="#" method="POST" th:action="@{/mandato/descargarPdf}" th:object="${mandatoModel}">
 							<input type="hidden" name="id" th:value="${mandato.id}"/>
@@ -107,7 +109,7 @@
 						<a th:if="${!mandato.mandatoFirmado}" class="colorRed" href="#" th:href="@{/seguridad/nuevoEnvioCodigo/inscripcionMandato/__${mandato.id}__}">¡Mandato no firmado! Toque aquí para firmar</a>
 					</td>
 					<td class="d-none d-sm-table-cell">
-						<button th:if="${!mandato.mandatoFirmado}" class="btn btn-danger" th:attr="onclick=|confirmDelete('${mandato.id}')|">Borrar mandato</button>
+						<button class="btn btn-danger" th:attr="onclick=|confirmDelete('${mandato.id}')|">Borrar mandato</button>
 					</td>
 				</tr>
 				</tbody>

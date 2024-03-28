@@ -94,6 +94,7 @@ public class MandatoController {
             modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
             modelAndView.addObject("addKO", e.getMessage());
             modelAndView.addObject("mandatoModel", mandatoModel);
+            modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/mandato/mandatos"));
             formularioService.cargarDesplegablesBasicos(modelAndView);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -113,6 +114,7 @@ public class MandatoController {
             titulo(modelAndView, mandatoModel.isMenor());
             modelAndView.addObject("addKO", e.getMessage());
             modelAndView.addObject("mandatoModel", mandatoModel);
+            modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/mandato/mandatos"));
             formularioService.cargarDesplegablesBasicos(modelAndView);
         }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -139,10 +141,9 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        if (!mandatoService.findById(id).isMandatoFirmado()) {
-            mandatoService.delete(id);
-            modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
-        }
+        mandatoService.delete(id);
+        pdfService.deleteByIdOriginalOperativeAndSectionAndIdCard(id, Constantes.SECCION_MANDATO, usuario.getUsername());
+        modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return mandatos(modelAndView);
     }

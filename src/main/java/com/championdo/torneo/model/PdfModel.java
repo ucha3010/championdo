@@ -33,5 +33,6 @@ public class PdfModel {
     private String poomsae;
     private String seccion;
     private String extension;
+    private int codigoGimnasio;
     private CuentaBancariaModel cuentaBancaria;
 }

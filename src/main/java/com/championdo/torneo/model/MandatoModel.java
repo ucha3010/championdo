@@ -35,6 +35,7 @@ public class MandatoModel {
     private String domicilioCp;
     private String pais;
     private int codigoGimnasio;
+    private String nombreGimnasio;
     private boolean mandatoFirmado;
     private boolean licenciaAbonada;
     private boolean menor;

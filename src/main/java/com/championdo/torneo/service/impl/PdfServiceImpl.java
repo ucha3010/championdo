@@ -8,6 +8,7 @@ import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
+import com.championdo.torneo.util.SectionEnum;
 import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
 import com.sun.istack.NotNull;
@@ -513,6 +514,7 @@ public class PdfServiceImpl implements PdfService {
 
         PdfModel pdfModel = new PdfModel();
         GimnasioModel gimnasioModel = gimnasioService.findById(inscripcionTaekwondoModel.getCodigoGimnasio());
+        pdfModel.setCodigoGimnasio(inscripcionTaekwondoModel.getCodigoGimnasio());
         pdfModel.setIdInscripcion(inscripcionTaekwondoModel.getId());
         pdfModel.setNombre(inscripcionTaekwondoModel.getMayorNombre() + " " + inscripcionTaekwondoModel.getMayorApellido1()
                 + (inscripcionTaekwondoModel.getMayorApellido2() != null ? " " + inscripcionTaekwondoModel.getMayorApellido2() : ""));
@@ -559,6 +561,7 @@ public class PdfServiceImpl implements PdfService {
         pdfModel.setDni(mandatoModel.getDniMandante());
         pdfModel.setCorreo(mandatoModel.getCorreoMandante());
         pdfModel.setGimnasio(gimnasioModel.getNombreGimnasio());
+        pdfModel.setCodigoGimnasio(mandatoModel.getCodigoGimnasio());
         pdfModel.setDireccionGimnasio(gimnasioModel.getDomicilioCalle() + " "
                 + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
                 + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
@@ -623,6 +626,11 @@ public class PdfServiceImpl implements PdfService {
         if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
             documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(inscripcionTaekwondoModel.getId(), Constantes.SECCION_WHATSAPP, usuario.getUsername());
         }
+    }
+
+    @Override
+    public void deleteByIdOriginalOperativeAndSectionAndIdCard(Integer idOriginalOperative, String section, String idCard) {
+        documentManagerService.deleteByIdOriginalOperativeAndSectionAndIdCard(idOriginalOperative, section, idCard);
     }
 
     @Override
@@ -693,10 +701,20 @@ public class PdfServiceImpl implements PdfService {
 
         documentManagerModel.setExtension(pdfModel.getExtension());
         documentManagerModel.setSection(section);
+        for(SectionEnum sectionEnum : SectionEnum.values()) {
+            if(sectionEnum.getName().equals(section)) {
+                documentManagerModel.setSectionDescription(sectionEnum.getDescription());
+                break;
+            }
+        }
         documentManagerModel.setPath(ruta);
         documentManagerModel.setIdCard(pdfModel.getDni());
         documentManagerModel.setIdOriginalOperative(pdfModel.getIdInscripcion());
         documentManagerModel.setCreationDate(new Date());
+        documentManagerModel.setIdGym(pdfModel.getCodigoGimnasio());
+        if(pdfModel.getCodigoGimnasio() != 0) {
+            documentManagerModel.setNameGym(gimnasioService.findById(pdfModel.getCodigoGimnasio()).getNombreGimnasio());
+        }
 
         return documentManagerModel.getFullPath();
     }
@@ -722,6 +740,10 @@ public class PdfServiceImpl implements PdfService {
         document.save(documentManagerModel.getFullPath());
         new File(documentManagerModel.getFullPath());
         if (createWithSignatureOrCreateFinalDocument) {
+            if (documentManagerModel.isNeedsSignature()) {
+                documentManagerModel.setSignature(true);
+                documentManagerModel.setSignatureDate(new Date());
+            }
             documentManagerModel = documentManagerService.add(documentManagerModel);
         }
         return documentManagerModel;

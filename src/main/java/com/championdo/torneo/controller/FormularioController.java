@@ -123,6 +123,7 @@ public class FormularioController {
             formularioService.fillObjects(userModel);
             pdfModel = formularioService.getPdfModelTorneo(new UserAutorizacionModel(userModel));
             TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.addAdult(userModel, pdfModel, sessionData.getGimnasioModel().getId());
+            pdfModel.setCodigoGimnasio(tournamentRegistrationModel.getIdGym());
             pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
             pdfModel.setCategoria(tournamentRegistrationModel.getCategory());
             pdfModel.setPoomsae(tournamentRegistrationModel.getPoomsae());
@@ -167,6 +168,7 @@ public class FormularioController {
             formularioService.fillObjects(userAutorizacionModel.getAutorizado());
             pdfModel = formularioService.getPdfModelTorneo(userAutorizacionModel);
             TournamentRegistrationModel tournamentRegistrationModel = tournamentRegistrationService.addYoungOrInclusive(userAutorizacionModel, pdfModel, sessionData.getGimnasioModel().getId());
+            pdfModel.setCodigoGimnasio(tournamentRegistrationModel.getIdGym());
             pdfModel.setIdInscripcion(tournamentRegistrationModel.getId());
             pdfModel.setCategoria(tournamentRegistrationModel.getCategory());
             pdfModel.setPoomsae(tournamentRegistrationModel.getPoomsae());

@@ -139,20 +139,6 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
         List<File> files = new ArrayList<>();
         InscripcionTaekwondoModel inscripcionTaekwondoModel = findById(firmaCodigoModel.getIdOperacion());
         PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
-        /*
-        if (inscripcionTaekwondoModel.isMayorLicencia() || inscripcionTaekwondoModel.isAutorizadoLicencia()) {
-            MandatoModel mandatoModel = mandatoService.fromInscripcionTaekwondoToMandato(inscripcionTaekwondoModel);
-            try {
-                mandatoModel = mandatoService.add(mandatoModel);
-                pdfModelGeneral.setIdInscripcion(mandatoModel.getId());
-                File pdfMandato = pdfService.generarPdfMandato(pdfModelGeneral);
-                files.add(pdfMandato);
-                pdfModelGeneral.setIdInscripcion(inscripcionTaekwondoModel.getId());
-            } catch (ValidationException e) {
-                LoggerMapper.log(Level.ERROR, "crearEnviarArchivosInscripcionTaekwondo", e.getMessage(), this.getClass());
-            }
-        }
-        */
         if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
             DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, true);
             files.add(new File(pdfAutorizacionMenor18.getFullPath()));

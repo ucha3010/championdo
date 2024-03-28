@@ -58,6 +58,8 @@ public class Mandato {
     @Column(name = "pais", length = 20)
     private String pais;
     private int codigoGimnasio;
+    @Column(name = "nombreGimnasio", length = 100)
+    private String nombreGimnasio;
     private boolean mandatoFirmado;
     private boolean licenciaAbonada;
 

@@ -32,6 +32,7 @@ public class MapperMandato {
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setPais(externObject.getPais());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setNombreGimnasio(externObject.getNombreGimnasio());
             localObject.setMandatoFirmado(externObject.isMandatoFirmado());
             localObject.setLicenciaAbonada(externObject.isLicenciaAbonada());
         }
@@ -62,6 +63,7 @@ public class MapperMandato {
             localObject.setDomicilioCp(externObject.getDomicilioCp());
             localObject.setPais(externObject.getPais());
             localObject.setCodigoGimnasio(externObject.getCodigoGimnasio());
+            localObject.setNombreGimnasio(externObject.getNombreGimnasio());
             localObject.setMandatoFirmado(externObject.isMandatoFirmado());
             localObject.setLicenciaAbonada(externObject.isLicenciaAbonada());
         }
