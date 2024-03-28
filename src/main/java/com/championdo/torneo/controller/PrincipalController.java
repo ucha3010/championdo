@@ -23,6 +23,7 @@ public class PrincipalController {
     @Autowired
     private PrincipalService principalService;
     // TODO DAMIAN hacer la validación de usuario
+    // TODO DAMIAN acceso a documentos de su gimnasio a los admin
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView mainPage(ModelAndView modelAndView) {
