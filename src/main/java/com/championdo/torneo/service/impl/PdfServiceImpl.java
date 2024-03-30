@@ -799,8 +799,8 @@ public class PdfServiceImpl implements PdfService {
         final double puntoEnMilimetros = (negrita ? 0.33 : 0.30);
         List<String> letrasTamanio1 = Arrays.asList("i_í_I_Í_l_._-_:_\"_'_,_;_¡_!_º_ª_(_)".split("_"));
         List<String> letrasTamanio4 = Arrays.asList("m_w_M_W".split("_"));
-        if(anchoParrafoMlimetros == null || anchoParrafoMlimetros <= 0.0 || anchoParrafoMlimetros > 180.0) {
-            anchoParrafoMlimetros = 180.0;
+        if(anchoParrafoMlimetros == null || anchoParrafoMlimetros <= 0.0 || anchoParrafoMlimetros > 175.0) {
+            anchoParrafoMlimetros = 175.0;
         }
         if (parrafo == null || parrafo.isEmpty()) {
             throw new EmptyException("EMPTY", "organizaRenglones - Objeto parrafo sin datos");
@@ -952,7 +952,7 @@ public class PdfServiceImpl implements PdfService {
         // Text
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 18);
-        contentStream.newLineAtOffset( 130, page.getMediaBox().getHeight() - 50);
+        contentStream.newLineAtOffset( 110, page.getMediaBox().getHeight() - 50);
         contentStream.showText("AUTORIZACIÓN DE MAYORES DE 18 AÑOS");
         contentStream.endText();
 
@@ -975,8 +975,8 @@ public class PdfServiceImpl implements PdfService {
 
         //salto = 15;tamanioFuente = 14;
         parrafo = new StringBuilder();
-        parrafo.append("INFORMO QUE ENTRENO EN ".concat(pdfModel.getGimnasio()).concat(" Y PARTICIPO VOLUNTARIAMENTE EN LOS CAMPEONATOS Y "));
-        parrafo.append("ENTRENAMIENTOS QUE PARTICIPEN LOS ALUMNOS DE ".concat(pdfModel.getGimnasio()).concat("."));
+        parrafo.append("INFORMO QUE ENTRENO EN ".concat(pdfModel.getGimnasio().toUpperCase()).concat(" Y PARTICIPO VOLUNTARIAMENTE EN LOS CAMPEONATOS Y "));
+        parrafo.append("ENTRENAMIENTOS QUE PARTICIPEN LOS ALUMNOS DE ".concat(pdfModel.getGimnasio().toUpperCase()).concat("."));
         parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, true, false);
         generoParrafo(contentStream, page, parrafoList, heightStartParagraph, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
         heightStartParagraph += (parrafoList.size() * salto + Constantes.SALTO_PARRAFO);
@@ -1019,7 +1019,7 @@ public class PdfServiceImpl implements PdfService {
         // Text
         contentStream.beginText();
         contentStream.setFont(PDType1Font.TIMES_BOLD, 18);
-        contentStream.newLineAtOffset( 130, page.getMediaBox().getHeight() - 50);
+        contentStream.newLineAtOffset( 110, page.getMediaBox().getHeight() - 50);
         contentStream.showText("AUTORIZACIÓN DE MENORES DE 18 AÑOS");
         contentStream.endText();
 
