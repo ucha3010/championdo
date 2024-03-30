@@ -12,4 +12,5 @@ public interface InscripcionTaekwondoRepository extends JpaRepository<Inscripcio
     List<InscripcionTaekwondo> findAllByOrderByIdDesc();
     List<InscripcionTaekwondo> findAllByOrderByMayorApellido1Desc();
     List<InscripcionTaekwondo> findByCodigoGimnasioOrderByMayorApellido1Desc(int codigoGimnasio);
+    List<InscripcionTaekwondo> findByCodigoGimnasioAndInscripcionFirmadaTrueOrderByMayorApellido1Desc(int codigoGimnasio);
 }

@@ -1,12 +1,13 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
+import com.championdo.torneo.entity.DocumentManager;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
-import com.championdo.torneo.model.ClaveUsuarioModel;
-import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import com.mysql.cj.util.StringUtils;
@@ -16,6 +17,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/usuario")
@@ -32,6 +38,8 @@ public class UsuarioController {
 	private UserService userService;
 	@Autowired
 	private UserRoleService userRoleService;
+	@Autowired
+	private DocumentManagerService documentManagerService;
 	@Autowired
 	private FormularioService formularioService;
 	@Autowired
@@ -195,7 +203,7 @@ public class UsuarioController {
 		seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/usuario/gymUsers");
 		modelAndView.setViewName("gimnasio/adminUsers");
 		modelAndView.addObject("activities", userRegistrationService.getActivities());
-		modelAndView.addObject("userRegistrationList", userRegistrationService.findByGym(sessionData.getGimnasioModel().getId()));
+		modelAndView.addObject("userRegistrationList", userRegistrationService.findByGymSigned(sessionData.getGimnasioModel().getId()));
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
 	}
@@ -226,8 +234,18 @@ public class UsuarioController {
 		seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/usuario/gymUsers/" + username);
 		modelAndView.setViewName("gimnasio/userAdmin");
 		modelAndView.addObject("user", userService.findModelByUsername(username));
+		modelAndView.addObject("documentManagerModel", new DocumentManagerModel());
+		modelAndView.addObject("documentManagerList", documentManagerService.findByIdGymAndIdCardAndSections(sessionData.getGimnasioModel().getId(),username,
+				Arrays.asList(Constantes.SECCION_AUTORIZACION_MENOR_18, Constantes.SECCION_AUTORIZACION_MAYOR_18)));
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
+	}
+
+	@PostMapping("/descargarPdf")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public void descargarPdf(@ModelAttribute("documentManagerModel") DocumentManagerModel documentManagerModel, HttpServletResponse response) {
+		documentManagerService.downloadFile(documentManagerModel.getId(), response);
+		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
 	}
 
 }

@@ -59,6 +59,13 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         return utilModelList;
     }
 
+    @Override
+    public List<UserModel> findByGymSigned(int idGym) {
+        List<UserModel> userModelList = new ArrayList<>();
+        fillUsers(userModelList, inscripcionTaekwondoRepository.findByCodigoGimnasioAndInscripcionFirmadaTrueOrderByMayorApellido1Desc(idGym), Constantes.ACTIVITY_TAEKWONDO);
+        return sortList(userModelList);
+    }
+
     private void fillUsers(List<UserModel> userModelList, List<InscripcionTaekwondo> inscripcionTaekwondoList, String registration) {
         UserModel userModelAux;
         for (InscripcionTaekwondo inscripcionTaekwondo : inscripcionTaekwondoList) {

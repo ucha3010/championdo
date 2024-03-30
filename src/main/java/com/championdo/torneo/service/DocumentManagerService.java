@@ -1,8 +1,10 @@
 package com.championdo.torneo.service;
 
 
+import com.championdo.torneo.entity.DocumentManager;
 import com.championdo.torneo.model.DocumentManagerModel;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface DocumentManagerService {
@@ -20,4 +22,6 @@ public interface DocumentManagerService {
     void deleteByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
     void eraseByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
     String getAbsolutePath();
+    List<DocumentManagerModel> findByIdGymAndIdCardAndSections(int idGym, String idCard, List<String> sections);
+    void downloadFile(int id, HttpServletResponse response);
 }

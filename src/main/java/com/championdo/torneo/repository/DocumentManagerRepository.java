@@ -11,6 +11,7 @@ public interface DocumentManagerRepository extends JpaRepository<DocumentManager
     List<DocumentManager> findAllByOrderByCreationDateDesc();
     List<DocumentManager> findByIdGymOrderByCreationDateDesc(int idGym);
     List<DocumentManager> findByIdGymAndSectionOrderByCreationDateDesc(int idGym, String section);
+    List<DocumentManager> findByIdGymAndIdCardAndSectionOrderByCreationDateDesc(int idGym, String idCard, String section);
     List<DocumentManager> findByIdCardOrderByCreationDateDesc(String idCard);
     List<DocumentManager> findByIdOriginalOperativeAndSectionAndIdCardOrderByCreationDateDesc(int idOriginalOperative, String section, String idCard);
     void deleteByIdCard(String idCard);

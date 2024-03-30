@@ -12,5 +12,5 @@ public interface UserRegistrationService {
     List<UserModel> findByGym(int idGym);
     List<UserModel> findByActivityAndGym(String activity, int idGym);
     List<UtilModel> getActivities();
-
+    List<UserModel> findByGymSigned(int idGym);
 }

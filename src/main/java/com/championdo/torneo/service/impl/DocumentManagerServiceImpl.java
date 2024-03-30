@@ -3,6 +3,7 @@ package com.championdo.torneo.service.impl;
 import com.championdo.torneo.entity.DocumentManager;
 import com.championdo.torneo.mapper.MapperDocumentManager;
 import com.championdo.torneo.model.DocumentManagerModel;
+import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.repository.DocumentManagerRepository;
 import com.championdo.torneo.service.DocumentManagerService;
 import com.championdo.torneo.util.LoggerMapper;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -147,6 +150,32 @@ public class DocumentManagerServiceImpl implements DocumentManagerService {
             LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
         return absolute[0];
+    }
+
+    @Override
+    public List<DocumentManagerModel> findByIdGymAndIdCardAndSections(int idGym, String idCard, List<String> sections) {
+        List<DocumentManager> documentManagerList = new ArrayList<>();
+        for (String section: sections) {
+            documentManagerList.addAll(documentManagerRepository.findByIdGymAndIdCardAndSectionOrderByCreationDateDesc(idGym, idCard, section));
+        }
+        return getModelList(documentManagerList);
+    }
+    @Override
+    public void downloadFile(int id, HttpServletResponse response) {
+
+        DocumentManagerModel documentManagerModel = findById(id);
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + documentManagerModel.getFilename() + documentManagerModel.getExtension();
+        response.setHeader(headerKey, headerValue);
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            byte[] file = Files.readAllBytes(Paths.get(documentManagerModel.getFullPath()));
+            outputStream.write(file, 0, file.length);
+            outputStream.close();
+        } catch (IOException e) {
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
+        }
     }
 
     private List<DocumentManagerModel> getModelList(List<DocumentManager> documentManagerList) {
