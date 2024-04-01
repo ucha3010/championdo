@@ -539,6 +539,8 @@ public class PdfServiceImpl implements PdfService {
                     + (inscripcionTaekwondoModel.getAutorizadoApellido2() != null ? " " + inscripcionTaekwondoModel.getAutorizadoApellido2() : ""));
             pdfModel.setDniMenor(inscripcionTaekwondoModel.getAutorizadoDni());
             pdfModel.setFechaNacimientoMenor(Utils.date2String(inscripcionTaekwondoModel.getAutorizadoFechaNacimiento()));
+        } else {
+            pdfModel.setMayorEdad(Boolean.TRUE);
         }
         if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getIban())) {
             CuentaBancariaModel cuentaBancaria = new CuentaBancariaModel();
@@ -694,9 +696,11 @@ public class PdfServiceImpl implements PdfService {
         }
         if (pdfModel.isMayorEdad()) {
             documentManagerModel.setFilename(section + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion());
+            documentManagerModel.setName(pdfModel.getNombre());
         } else {
             documentManagerModel.setFilename(section + pdfModel.getDni() + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ?
                     "-" + pdfModel.getDniMenor().trim() : "") + "-" + pdfModel.getIdInscripcion());
+            documentManagerModel.setName(pdfModel.getNombreMenor());
         }
 
         documentManagerModel.setExtension(pdfModel.getExtension());

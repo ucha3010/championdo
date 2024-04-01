@@ -34,6 +34,8 @@ public class DocumentManager {
     private boolean signature;
     @Column(name = "idCard", length = 45)
     private String idCard;
+    @Column(name = "name", length = 60)
+    private String name;
     private Date creationDate;
     private Date signatureDate;
     private int idOriginalOperative;

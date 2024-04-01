@@ -23,6 +23,7 @@ public class DocumentManagerModel {
     private boolean needsSignature;
     private boolean signature;
     private String idCard;//
+    private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date creationDate;//
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -40,6 +40,11 @@
 				</a>
 			</section>
 			<section sec:authorize="hasRole('ROLE_ADMIN')" class="margenArribaAbajo3Porc">
+				<a href="#" th:href="@{/adminGimnasio/filesGym/__${gimnasio.id}__}" class="textDecoration-none">
+					<button class="btn btn-info btn-lg" type="button">Autorizaciones</button>
+				</a>
+			</section>
+			<section sec:authorize="hasRole('ROLE_ADMIN')" class="margenArribaAbajo3Porc">
 				<a href="#" th:href="@{/adminUtil/utilList}" class="textDecoration-none">
 					<button class="btn btn-success btn-lg" type="button">Parámetros</button>
 				</a>

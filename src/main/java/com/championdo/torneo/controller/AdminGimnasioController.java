@@ -183,4 +183,13 @@ public class AdminGimnasioController {
         return adminsGym(modelAndView);
     }
 
+    @GetMapping("/filesGym/{gymCode}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView deleteAdminGym(ModelAndView modelAndView, @PathVariable int gymCode) {
+        User user = userService.getLoggedUser();
+        //TODO DAMIAN hacer (con username recuperar userGym y ver si este usuario tiene permiso para gymCode - hacerlo en seguridadService)
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return adminsGym(modelAndView);
+    }
+
 }

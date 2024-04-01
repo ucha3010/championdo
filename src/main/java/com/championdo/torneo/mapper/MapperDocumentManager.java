@@ -19,6 +19,7 @@ public class MapperDocumentManager {
             localObject.setNeedsSignature(externObject.isNeedsSignature());
             localObject.setSignature(externObject.isSignature());
             localObject.setIdCard(externObject.getIdCard());
+            localObject.setName(externObject.getName());
             localObject.setCreationDate(externObject.getCreationDate());
             localObject.setSignatureDate(externObject.getSignatureDate());
             localObject.setIdOriginalOperative(externObject.getIdOriginalOperative());
@@ -41,6 +42,7 @@ public class MapperDocumentManager {
             localObject.setNeedsSignature(externObject.isNeedsSignature());
             localObject.setSignature(externObject.isSignature());
             localObject.setIdCard(externObject.getIdCard());
+            localObject.setName(externObject.getName());
             localObject.setCreationDate(externObject.getCreationDate());
             localObject.setSignatureDate(externObject.getSignatureDate());
             localObject.setIdOriginalOperative(externObject.getIdOriginalOperative());
