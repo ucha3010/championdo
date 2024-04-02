@@ -3,11 +3,10 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.GimnasioMenu2;
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.GimnasioModel;
-import com.championdo.torneo.model.UserGymModel;
-import com.championdo.torneo.model.UserModel;
+import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,19 +30,21 @@ public class AdminGimnasioController {
     @Autowired
     private GimnasioService gimnasioService;
     @Autowired
-    private GimnasioMenu2Service gimnasioMenu2Service;
+    private AdminUtilController adminUtilController;
     @Autowired
-    private SeguridadService seguridadService;
+    private DocumentManagerService documentManagerService;
+    @Autowired
+    private GimnasioMenu2Service gimnasioMenu2Service;
     @Autowired
     private PrincipalService principalService;
     @Autowired
-    private AdminUtilController adminUtilController;
+    private SeguridadService seguridadService;
     @Autowired
     private SessionData sessionData;
     @Autowired
-    private UserService userService;
-    @Autowired
     private UserGymService userGymService;
+    @Autowired
+    private UserService userService;
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView gymAdministration(ModelAndView modelAndView) {
@@ -50,7 +52,7 @@ public class AdminGimnasioController {
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/");
         seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/");
         modelAndView.setViewName("gimnasio/adminGimnasio");
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
+        modelAndView.addObject("gymName", sessionData.getGimnasioModel().getNombreGimnasio());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -143,7 +145,7 @@ public class AdminGimnasioController {
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/adminsGym");
         seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/adminsGym");
         modelAndView.setViewName("gimnasio/usersAdmin");
-        modelAndView.addObject("gimnasio", sessionData.getGimnasioModel());
+        modelAndView.addObject("gymName", sessionData.getGimnasioModel().getNombreGimnasio());
         modelAndView.addObject("adminUsersAssigned", userService.getUserModelList(userGymService.findByIdGym(sessionData.getGimnasioModel().getId())));
         if(modelAndView.getModel().get("userModel") == null) {
             modelAndView.addObject("userModel", new UserModel());
@@ -183,13 +185,29 @@ public class AdminGimnasioController {
         return adminsGym(modelAndView);
     }
 
-    @GetMapping("/filesGym/{gymCode}")
+    @GetMapping("/filesGym")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView deleteAdminGym(ModelAndView modelAndView, @PathVariable int gymCode) {
+    public ModelAndView filesGym(ModelAndView modelAndView) {
         User user = userService.getLoggedUser();
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/filesGym");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/filesGym");
+        modelAndView.addObject("gymFiles", documentManagerService.findByIdGym(sessionData.getGimnasioModel().getId()));
+        modelAndView.addObject("gymName", sessionData.getGimnasioModel().getNombreGimnasio());
+        modelAndView.setViewName("gimnasio/adminFiles");
         //TODO DAMIAN hacer (con username recuperar userGym y ver si este usuario tiene permiso para gymCode - hacerlo en seguridadService)
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return adminsGym(modelAndView);
+        return modelAndView;
+    }
+
+    @PostMapping("/download")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void downloadAuthorization(@ModelAttribute("ocumentManagerModel") DocumentManagerModel documentManagerModel, HttpServletResponse response) {
+        User user = userService.getLoggedUser();
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/download");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/download");
+        documentManagerModel = documentManagerService.findByIdAndIdGym(documentManagerModel.getId(), sessionData.getGimnasioModel().getId());
+        documentManagerService.downloadFile(documentManagerModel.getId(), response);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
 }

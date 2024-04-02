@@ -63,6 +63,15 @@ public class DocumentManagerServiceImpl implements DocumentManagerService {
     }
 
     @Override
+    public DocumentManagerModel findByIdAndIdGym(int id, int idGym) {
+        try {
+            return mapperDocumentManager.entity2Model(documentManagerRepository.findByIdAndIdGym(id, idGym));
+        } catch (EntityNotFoundException e) {
+            return new DocumentManagerModel();
+        }
+    }
+
+    @Override
     public List<DocumentManagerModel> findByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard) {
        return getModelList(documentManagerRepository.findByIdOriginalOperativeAndSectionAndIdCardOrderByCreationDateDesc(idOriginalOperative, section, idCard));
     }

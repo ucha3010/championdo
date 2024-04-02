@@ -14,6 +14,7 @@ public interface DocumentManagerService {
     List<DocumentManagerModel> findByIdGymAndSection(int idGym, String section);
     List<DocumentManagerModel> findByIdCard(String idCard);
     DocumentManagerModel findById(int id);
+    DocumentManagerModel findByIdAndIdGym(int id, int idGym);
     List<DocumentManagerModel> findByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
     DocumentManagerModel add(DocumentManagerModel documentManagerModel);
     void update(DocumentManagerModel documentManagerModel);
