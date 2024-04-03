@@ -36,6 +36,7 @@
                     <th scope="col">Fecha creación</th>
                     <th scope="col">DNI autorizador</th>
                     <th scope="col">Nombre autorizado</th>
+                    <th scope="col">Sección</th>
                     <th class="col"></th>
                 </tr>
                 </thead>
@@ -44,8 +45,9 @@
                     <td><span th:text="${#calendars.format(gymFile.creationDate,'dd/MM/yyyy')}"></span></td>
                     <td><span th:text="${gymFile.idCard}"></span></td>
                     <td><span th:text="${gymFile.name}"></span></td>
+                    <td><span th:text="${gymFile.section}"></span></td>
                     <td>
-                        <form action="#" method="POST" th:action="@{/mandato/download}" th:object="${documentManagerModel}">
+                        <form action="#" method="POST" th:action="@{/adminGimnasio/download}" th:object="${documentManagerModel}">
                             <input type="hidden" name="id" th:value="${gymFile.id}"/>
                             <button class="btn btn-success" type="submit">Descarga</button>
                         </form>

@@ -3,10 +3,12 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.GimnasioMenu2;
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.DocumentManagerModel;
+import com.championdo.torneo.model.GimnasioModel;
+import com.championdo.torneo.model.UserGymModel;
+import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
-import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -188,13 +190,13 @@ public class AdminGimnasioController {
     @GetMapping("/filesGym")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView filesGym(ModelAndView modelAndView) {
-        User user = userService.getLoggedUser();
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/filesGym");
         seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/filesGym");
         modelAndView.addObject("gymFiles", documentManagerService.findByIdGym(sessionData.getGimnasioModel().getId()));
         modelAndView.addObject("gymName", sessionData.getGimnasioModel().getNombreGimnasio());
         modelAndView.setViewName("gimnasio/adminFiles");
-        //TODO DAMIAN hacer (con username recuperar userGym y ver si este usuario tiene permiso para gymCode - hacerlo en seguridadService)
+        //TODO DAMIAN poner checkbox para seleccionar varios archivos y descargarlos como un solo zip
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
