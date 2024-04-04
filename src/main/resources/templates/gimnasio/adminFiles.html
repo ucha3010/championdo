@@ -29,32 +29,34 @@
         </section>
 
         <section sec:authorize="hasRole('ROLE_ADMIN')">
-
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Fecha creación</th>
-                    <th scope="col">DNI autorizador</th>
-                    <th scope="col">Nombre autorizado</th>
-                    <th scope="col">Sección</th>
-                    <th class="col"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="gymFile : ${gymFiles}">
-                    <td><span th:text="${#calendars.format(gymFile.creationDate,'dd/MM/yyyy')}"></span></td>
-                    <td><span th:text="${gymFile.idCard}"></span></td>
-                    <td><span th:text="${gymFile.name}"></span></td>
-                    <td><span th:text="${gymFile.section}"></span></td>
-                    <td>
-                        <form action="#" method="POST" th:action="@{/adminGimnasio/download}" th:object="${documentManagerModel}">
-                            <input type="hidden" name="id" th:value="${gymFile.id}"/>
-                            <button class="btn btn-success" type="submit">Descarga</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <form th:id="formMenu2" action="#" th:action="@{/adminGimnasio/updateMenu}" method="post">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col"></th>
+                        <th scope="col">Fecha creación</th>
+                        <th scope="col">DNI autorizador</th>
+                        <th scope="col">Nombre autorizado</th>
+                        <th scope="col">Sección</th>
+                        <th class="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="gymFile : ${gymFiles}">
+                        <td><input type="checkbox" th:id="${'checkbox_' + gymFile.id}" th:name="selectedData" th:value="${gymFile.id}"></td>
+                        <td><span th:text="${#calendars.format(gymFile.creationDate,'dd/MM/yyyy')}"></span></td>
+                        <td><span th:text="${gymFile.idCard}"></span></td>
+                        <td><span th:text="${gymFile.name}"></span></td>
+                        <td><span th:text="${gymFile.section}"></span></td>
+                        <td>
+                            <a href="#" th:href="@{/adminGimnasio/download/__${gymFile.id}__}" class="textDecoration-none">
+                                <button class="btn btn-success" type="button">Descarga</button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
         </section>
 
         <div class="row align-items-center justify-content-end">

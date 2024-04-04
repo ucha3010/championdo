@@ -196,19 +196,29 @@ public class AdminGimnasioController {
         modelAndView.addObject("gymFiles", documentManagerService.findByIdGym(sessionData.getGimnasioModel().getId()));
         modelAndView.addObject("gymName", sessionData.getGimnasioModel().getNombreGimnasio());
         modelAndView.setViewName("gimnasio/adminFiles");
-        //TODO DAMIAN poner checkbox para seleccionar varios archivos y descargarlos como un solo zip
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-    @PostMapping("/download")
+    @GetMapping("/download/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void downloadAuthorization(@ModelAttribute("ocumentManagerModel") DocumentManagerModel documentManagerModel, HttpServletResponse response) {
+    public void downloadAuthorization(@PathVariable int id, HttpServletResponse response) {
         User user = userService.getLoggedUser();
-        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/download");
-        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/download");
-        documentManagerModel = documentManagerService.findByIdAndIdGym(documentManagerModel.getId(), sessionData.getGimnasioModel().getId());
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/download/" + id);
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/download/" + id);
+        DocumentManagerModel documentManagerModel = documentManagerService.findByIdAndIdGym(id, sessionData.getGimnasioModel().getId());
         documentManagerService.downloadFile(documentManagerModel.getId(), response);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
+    }
+
+    @PostMapping("/download-zip")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void downloadZip(@RequestParam(name = "selectedData", required = false) List<Integer> selectedData, HttpServletResponse response) {
+        User user = userService.getLoggedUser();
+        seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/download-zip");
+        seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/download-zip");
+        //TODO DAMIAN lo que viene en selectedData son los id de los documentmanager seleccionados. Debo recuperarlos y crear un zip
+        //TODO DAMIAN si voy a usar el documentmanager tengo que guardar path (la carpeta temp), filename y extention (.zip). Luego puedo llamar a downloadFile
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
 
