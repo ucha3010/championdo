@@ -14,6 +14,9 @@
     <div th:replace="static/barraNav :: nav"></div>
 
     <div class="container">
+        <section class="margenArribaAbajo3Porc text-center">
+            <div th:if="${selectDataWarn != null}" class="alert alert-warning" role="alert"><span th:text="${selectDataWarn}"></span></div>
+        </section>
 
         <section>
             <div class="row align-items-center justify-content-end">
@@ -29,13 +32,19 @@
         </section>
 
         <section sec:authorize="hasRole('ROLE_ADMIN')">
-            <form th:id="formMenu2" action="#" th:action="@{/adminGimnasio/updateMenu}" method="post">
+            <form th:id="formMenu2" action="#" th:action="@{/adminGimnasio/download-zip}" method="post">
+
+                <div class="row align-items-center">
+                    <div class="col-3 col-md-2">
+                        <button class="btn btn-success" type="submit">Descarga selección</button>
+                    </div>
+                </div>
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
                         <th class="col"></th>
-                        <th scope="col">Fecha creación</th>
-                        <th scope="col">DNI autorizador</th>
+                        <th scope="col" class="d-none d-lg-table-cell">Fecha creación</th>
+                        <th scope="col" class="d-none d-lg-table-cell">DNI autorizador</th>
                         <th scope="col">Nombre autorizado</th>
                         <th scope="col">Sección</th>
                         <th class="col"></th>
@@ -44,8 +53,8 @@
                     <tbody>
                     <tr th:each="gymFile : ${gymFiles}">
                         <td><input type="checkbox" th:id="${'checkbox_' + gymFile.id}" th:name="selectedData" th:value="${gymFile.id}"></td>
-                        <td><span th:text="${#calendars.format(gymFile.creationDate,'dd/MM/yyyy')}"></span></td>
-                        <td><span th:text="${gymFile.idCard}"></span></td>
+                        <td class="d-none d-lg-table-cell"><span th:text="${#calendars.format(gymFile.creationDate,'dd/MM/yyyy')}"></span></td>
+                        <td class="d-none d-lg-table-cell"><span th:text="${gymFile.idCard}"></span></td>
                         <td><span th:text="${gymFile.name}"></span></td>
                         <td><span th:text="${gymFile.section}"></span></td>
                         <td>

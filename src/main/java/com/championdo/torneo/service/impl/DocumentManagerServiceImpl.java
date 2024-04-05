@@ -1,11 +1,12 @@
 package com.championdo.torneo.service.impl;
 
 import com.championdo.torneo.entity.DocumentManager;
+import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.mapper.MapperDocumentManager;
 import com.championdo.torneo.model.DocumentManagerModel;
-import com.championdo.torneo.model.PdfModel;
 import com.championdo.torneo.repository.DocumentManagerRepository;
 import com.championdo.torneo.service.DocumentManagerService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -16,13 +17,19 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service()
 public class DocumentManagerServiceImpl implements DocumentManagerService {
@@ -162,6 +169,21 @@ public class DocumentManagerServiceImpl implements DocumentManagerService {
     }
 
     @Override
+    public String getTempFolder() {
+        String tempFolder = "src".concat(File.separator).concat("main").concat(File.separator)
+                .concat("resources").concat(File.separator).concat("static").concat(File.separator)
+                .concat("files").concat(File.separator).concat("temp");
+        File tempDirectory = new File(tempFolder);
+        if (!tempDirectory.exists()) {
+            if(!tempDirectory.mkdirs()) {
+                LoggerMapper.methodIn(Level.ERROR, Utils.obtenerNombreMetodo(), "Problemas creando carpeta ".concat(tempDirectory.getName()), this.getClass());
+            }
+        }
+        tempFolder+=File.separator;
+        return tempFolder;
+    }
+
+    @Override
     public List<DocumentManagerModel> findByIdGymAndIdCardAndSections(int idGym, String idCard, List<String> sections) {
         List<DocumentManager> documentManagerList = new ArrayList<>();
         for (String section: sections) {
@@ -171,17 +193,44 @@ public class DocumentManagerServiceImpl implements DocumentManagerService {
     }
     @Override
     public void downloadFile(int id, HttpServletResponse response) {
-
         DocumentManagerModel documentManagerModel = findById(id);
+        downloadFile(documentManagerModel.getFullPath(), documentManagerModel.getFilename().concat(documentManagerModel.getExtension()), response);
+    }
+    @Override
+    public void downloadFile(String localFullPathWithFilenameWithExt, String filenameWithExtention, HttpServletResponse response) {
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + documentManagerModel.getFilename() + documentManagerModel.getExtension();
+        String headerValue = "attachment; filename = " + filenameWithExtention;
         response.setHeader(headerKey, headerValue);
         try {
             ServletOutputStream outputStream = response.getOutputStream();
-            byte[] file = Files.readAllBytes(Paths.get(documentManagerModel.getFullPath()));
+            byte[] file = Files.readAllBytes(Paths.get(localFullPathWithFilenameWithExt));
             outputStream.write(file, 0, file.length);
             outputStream.close();
+        } catch (IOException e) {
+            LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
+        }
+    }
+
+    @Override
+    public void downloadZipFile(List<Integer> idList, HttpServletResponse response) throws EmptyException {
+        try {
+            if(idList != null) {
+                LocalDateTime now = LocalDateTime.now();
+                String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).concat(".zip");
+                FileOutputStream fos = new FileOutputStream(getAbsolutePath().concat(getTempFolder()).concat(File.separator).concat(fileName));
+                ZipOutputStream zos = new ZipOutputStream(fos);
+                for (Integer id : idList) {
+                    DocumentManagerModel documentManagerModel = findById(id);
+                    File file = new File(getAbsolutePath().concat(documentManagerModel.getFullPath()));
+                    addToZipFile(file, zos);
+                }
+                zos.close();
+                fos.close();
+                downloadFile(getTempFolder().concat(File.separator).concat(fileName), fileName, response);
+            } else {
+                throw new EmptyException(Constantes.AVISO_SELECCION_NO_VALIDA, "Debe seleccionar archivos");
+            }
         } catch (IOException e) {
             LoggerMapper.log(Level.ERROR, Utils.obtenerNombreMetodo(), e.getMessage(), PdfServiceImpl.class);
         }
@@ -193,5 +242,18 @@ public class DocumentManagerServiceImpl implements DocumentManagerService {
             documentManagerModelList.add(mapperDocumentManager.entity2Model(documentManager));
         }
         return documentManagerModelList;
+    }
+
+    private static void addToZipFile(File file, ZipOutputStream zos) throws IOException {
+        ZipEntry zipEntry = new ZipEntry(file.getName());
+        zos.putNextEntry(zipEntry);
+        FileInputStream fis = new FileInputStream(file);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer)) > 0) {
+            zos.write(buffer, 0, length);
+        }
+        fis.close();
+        zos.closeEntry();
     }
 }

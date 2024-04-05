@@ -2,6 +2,7 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.entity.DocumentManager;
+import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.model.DocumentManagerModel;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,9 @@ public interface DocumentManagerService {
     void deleteByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
     void eraseByIdOriginalOperativeAndSectionAndIdCard(int idOriginalOperative, String section, String idCard);
     String getAbsolutePath();
+    String getTempFolder();
     List<DocumentManagerModel> findByIdGymAndIdCardAndSections(int idGym, String idCard, List<String> sections);
     void downloadFile(int id, HttpServletResponse response);
+    void downloadFile(String localFullPathWithFilenameWithExt, String filenameWithExtention, HttpServletResponse response);
+    void downloadZipFile(List<Integer> idList, HttpServletResponse response) throws EmptyException;
 }

@@ -3,6 +3,7 @@ package com.championdo.torneo.controller;
 import com.championdo.torneo.configuration.SessionData;
 import com.championdo.torneo.entity.GimnasioMenu2;
 import com.championdo.torneo.entity.User;
+import com.championdo.torneo.exception.EmptyException;
 import com.championdo.torneo.model.DocumentManagerModel;
 import com.championdo.torneo.model.GimnasioModel;
 import com.championdo.torneo.model.UserGymModel;
@@ -21,9 +22,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 @Controller
 @RequestMapping("/adminGimnasio")
@@ -213,13 +219,19 @@ public class AdminGimnasioController {
 
     @PostMapping("/download-zip")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void downloadZip(@RequestParam(name = "selectedData", required = false) List<Integer> selectedData, HttpServletResponse response) {
+    public ModelAndView downloadZip(@RequestParam(name = "selectedData", required = false) List<Integer> selectedData, HttpServletResponse response) {
         User user = userService.getLoggedUser();
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/download-zip");
         seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/download-zip");
-        //TODO DAMIAN lo que viene en selectedData son los id de los documentmanager seleccionados. Debo recuperarlos y crear un zip
-        //TODO DAMIAN si voy a usar el documentmanager tengo que guardar path (la carpeta temp), filename y extention (.zip). Luego puedo llamar a downloadFile
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
+        try {
+            documentManagerService.downloadZipFile(selectedData, response);
+            LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
+            return null;
+        } catch (EmptyException e) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("selectDataWarn", e.getMessage());
+            return filesGym(modelAndView);
+        }
     }
 
 }

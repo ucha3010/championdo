@@ -598,17 +598,7 @@ public class PdfServiceImpl implements PdfService {
 
     @Override
     public String getTempFolder() {
-        String tempFolder = "src".concat(File.separator).concat("main").concat(File.separator)
-                .concat("resources").concat(File.separator).concat("static").concat(File.separator)
-                .concat("files").concat(File.separator).concat("temp");
-        File tempDirectory = new File(tempFolder);
-        if (!tempDirectory.exists()) {
-            if(!tempDirectory.mkdirs()) {
-                LoggerMapper.methodIn(Level.ERROR, Utils.obtenerNombreMetodo(), "Problemas creando carpeta ".concat(tempDirectory.getName()), this.getClass());
-            }
-        }
-        tempFolder+=File.separator;
-        return tempFolder;
+        return documentManagerService.getTempFolder();
     }
 
     @Override

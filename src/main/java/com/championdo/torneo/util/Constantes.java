@@ -55,6 +55,7 @@ public class Constantes {
 	public static final String ERROR_BORRAR_MENU_CON_SUBMENU = "103";
     public static final String AVISO_EMAIL = "1000";
     public static final String AVISO_EMAIL_ARCHIVO_ADJUNTO = "1001";
+    public static final String AVISO_SELECCION_NO_VALIDA = "1002";
 	public static final String AVISO_MANDATO_ADULTO_YA_EXISTE = "2000";
 	public static final String AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_UN_MENOR = "2001";
 	public static final String AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_OTRO_MENOR = "2002";
