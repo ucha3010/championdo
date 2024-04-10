@@ -22,4 +22,8 @@ public interface SeguridadService {
     void gimnasioHabilitadoAdministracion(int idGimnasio, String uri) throws AccessDeniedException;
 
     void usuarioGimnasioHabilitadoAdministracion(String username, int idGimnasio, String uri) throws AccessDeniedException;
+
+    void userAccessValidation(String userLogged, String userInData, String uri) throws AccessDeniedException;
+
+    void roleValidation(String username, String role, String uri) throws AccessDeniedException;
 }

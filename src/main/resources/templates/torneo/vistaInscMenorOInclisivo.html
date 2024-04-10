@@ -67,7 +67,7 @@
 				<input type="text" th:field="*{tournamentRegistration.authorizer1Lastname}" id="authorizer1Lastname" class="form-control" disabled/>
 			</div>
 			<div class="col-12 col-md-2 d-flex justify-content-end">
-				<form action="#" th:action="@{/formulario/descargarPdf}" th:object="${pdfModel}" method="POST">
+				<form action="#" th:action="@{/tournamentRegistration/descargarPdf}" th:object="${pdfModel}" method="POST">
 					<input type="hidden" name="dni" th:value="*{dni}"/>
 					<input type="hidden" name="dniMenor" th:value="*{dniMenor}"/>
 					<input type="hidden" name="fechaCampeonato" th:value="*{fechaCampeonato}"/>

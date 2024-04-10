@@ -47,8 +47,13 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView mandatos(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/principalMandato");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("mandatoModelList", mandatoService.findByDniMandante(usuario.getUsername()));
+        com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
+        List<MandatoModel> mandatoModelList = mandatoService.findByDniMandante(user.getUsername());
+        if (mandatoModelList != null && !mandatoModelList.isEmpty()) {
+            MandatoModel mandatoModel = mandatoService.findById(mandatoModelList.get(0).getId());
+            seguridadService.userAccessValidation(user.getUsername(), mandatoModel.getDniMandante(), "/mandato/mandatos");
+        }
+        modelAndView.addObject("mandatoModelList", mandatoModelList);
         modelAndView.addObject("mandatoModel", new MandatoModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -58,8 +63,8 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView adulto(ModelAndView modelAndView) {
         modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("mandatoModel", fillMandatoModel(usuario));
+        com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
+        modelAndView.addObject("mandatoModel", fillMandatoModel(user));
         modelAndView.addObject("titulo", "Mandato para licencia mayor de edad");
         modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/mandato/mandatos"));
         formularioService.cargarDesplegablesBasicos(modelAndView);
@@ -71,8 +76,8 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView menorOInclisivo(ModelAndView modelAndView, @PathVariable boolean menor) {
         modelAndView.setViewName("gimnasio/formularioMandatoMenor");
-        com.championdo.torneo.entity.User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        MandatoModel mandatoModel = fillMandatoModel(usuario);
+        com.championdo.torneo.entity.User user = principalService.cargaBasicaCompleta(modelAndView);
+        MandatoModel mandatoModel = fillMandatoModel(user);
         mandatoModel.setMenor(menor);
         modelAndView.addObject("mandatoModel", mandatoModel);
         modelAndView.addObject("gimnasios", gimnasioService.findByMenu2Url("/mandato/mandatos"));
@@ -86,10 +91,10 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView gaurdarAdulto(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         mandatoService.fillMandato(mandatoModel, true);
         try {
-            commonMandato(modelAndView, mandatoModel, usuario);
+            commonMandato(modelAndView, mandatoModel, user);
         } catch (ValidationException e) {
             modelAndView.setViewName("gimnasio/formularioMandatoAdulto");
             modelAndView.addObject("addKO", e.getMessage());
@@ -105,10 +110,10 @@ public class MandatoController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView guardarMenor(ModelAndView modelAndView, @ModelAttribute("mandatoModel") MandatoModel mandatoModel) {
 
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
         mandatoService.fillMandato(mandatoModel, false);
         try {
-            commonMandato(modelAndView, mandatoModel, usuario);
+            commonMandato(modelAndView, mandatoModel, user);
         } catch (ValidationException e) {
             modelAndView.setViewName("gimnasio/formularioMandatoMenor");
             titulo(modelAndView, mandatoModel.isMenor());
@@ -124,7 +129,10 @@ public class MandatoController {
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("mandatoModel") MandatoModel mandatoModel, HttpServletResponse response) {
+
+        User user = principalService.cargaBasicaCompleta(new ModelAndView());
         mandatoModel = mandatoService.findById(mandatoModel.getId());
+        seguridadService.userAccessValidation(user.getUsername(), mandatoModel.getDniMandante(), "/mandato/descargarPdf");
         PdfModel pdfModel = new PdfModel();
         if(mandatoModel.isAdulto()) {
             pdfModel.setDni(mandatoModel.getDniMandante());
@@ -140,9 +148,11 @@ public class MandatoController {
     @GetMapping("/remove/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView removeMandato(ModelAndView modelAndView, @PathVariable int id) {
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        MandatoModel mandatoModel = mandatoService.findById(id);
+        seguridadService.userAccessValidation(user.getUsername(), mandatoModel.getDniMandante(), "/mandato/remove/" + id);
         mandatoService.delete(id);
-        pdfService.deleteByIdOriginalOperativeAndSectionAndIdCard(id, Constantes.SECCION_MANDATO, usuario.getUsername());
+        pdfService.deleteByIdOriginalOperativeAndSectionAndIdCard(id, Constantes.SECCION_MANDATO, user.getUsername());
         modelAndView.addObject("deleteOK", "Mandato eliminado correctamente");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return mandatos(modelAndView);
@@ -174,6 +184,7 @@ public class MandatoController {
     }
 
     private void commonMandato(ModelAndView modelAndView, MandatoModel mandatoModel, User userLogged) throws ValidationException{
+        seguridadService.userAccessValidation(userLogged.getUsername(), mandatoModel.getDniMandante(), "/mandato/guardar");
         mandatoModel.setCorreoMandante(userLogged.getCorreo());
         mandatoModel = mandatoService.add(mandatoModel);
         List<File> files = new ArrayList<>();

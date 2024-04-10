@@ -41,6 +41,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView adminList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ADMIN, "/admin/adminList");
         List<UserGymModel> userGymModelList = userGymService.findByUsername(user.getUsername());
         List<GimnasioModel> gimnasioModelList = new ArrayList<>();
         for (UserGymModel userGymModel : userGymModelList) {

@@ -55,7 +55,7 @@
 	
 	<div class="container">
 		
-		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/formulario/gaurdarPropia}" th:object="${userModel}" method="post" onsubmit="return validar()">
+		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/tournamentRegistration/gaurdarPropia}" th:object="${userModel}" method="post" onsubmit="return validar()">
 
 			<input type="hidden" th:field="*{username}" />
 			<input type="hidden" th:field="*{correo}" />

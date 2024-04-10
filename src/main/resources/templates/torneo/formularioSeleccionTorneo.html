@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 		function cargarGimnasios(tournamentType) {
 			var id = document.getElementById("torneo").value;
-			var relativeUrl = "formulario/selectTournament/" + tournamentType + "/" + id;
+			var relativeUrl = "tournamentRegistration/selectTournament/" + tournamentType + "/" + id;
 			var domain = getDomain(location.href);
 			location.href = domain + relativeUrl;
 		}
@@ -18,7 +18,7 @@
 		function cargarFormulario(tournamentType) {
 			var idTorneo = document.getElementById("torneo").value;
 			var idGimnasio = document.getElementById("gimnasio").value;
-			var relativeUrl = "formulario/cargar-formulario/" + tournamentType + "/" + idTorneo + "/" + idGimnasio;
+			var relativeUrl = "tournamentRegistration/cargar-formulario/" + tournamentType + "/" + idTorneo + "/" + idGimnasio;
 			var domain = getDomain(location.href);
 			location.href = domain + relativeUrl;
 		}
@@ -26,9 +26,9 @@
         function goDetail(id,propia){
             var relativeUrl;
             if(propia == 'true'){
-            	relativeUrl = "formulario/getPropia/" + id;
+            	relativeUrl = "tournamentRegistration/getPropia/" + id;
             } else {
-            	relativeUrl = "formulario/getMenorOInclisivo/" + id;
+            	relativeUrl = "tournamentRegistration/getMenorOInclisivo/" + id;
             }
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;

@@ -1,10 +1,11 @@
 package com.championdo.torneo.controller;
 
 import com.championdo.torneo.configuration.SessionData;
-import com.championdo.torneo.entity.DocumentManager;
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.entity.UserRole;
-import com.championdo.torneo.model.*;
+import com.championdo.torneo.model.ClaveUsuarioModel;
+import com.championdo.torneo.model.DocumentManagerModel;
+import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Controller
 @RequestMapping("/usuario")
@@ -56,7 +55,7 @@ public class UsuarioController {
 	public ModelAndView formularioUsuario(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioUsuario");
 		principalService.cargaBasicaCompleta(modelAndView);
-		UserModel userModel = userService.cargarUserModelCompleto(modelAndView);
+		userService.cargarUserModelCompleto(modelAndView);
 		formularioService.cargarDesplegablesBasicos(modelAndView);
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return modelAndView;
@@ -66,6 +65,7 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("usuario") UserModel usuario) {
 		ModelAndView modelAndView = new ModelAndView();
+		seguridadService.userAccessValidation(userService.getLoggedUser().getUsername(), usuario.getUsername(), "/usuario/actualizarUsuario");
 		try {
 			userService.addOrUpdate(usuario);
 			modelAndView.addObject("actualizacionCorrecta", "actualizacionCorrecta");
@@ -93,17 +93,18 @@ public class UsuarioController {
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarClaveUsuario(@ModelAttribute("claveUsuarioModel") ClaveUsuarioModel claveUsuarioModel ) {
 		ModelAndView modelAndView = new ModelAndView();
-		UserModel usuario = userService.findModelByUsername(claveUsuarioModel.getUsername());
-		if (userService.comparePassword(claveUsuarioModel.getAntiguaClave(), usuario.getPassword())) {
-			usuario.setPassword(userService.encodePassword(claveUsuarioModel.getNuevaClave()));
-			userService.updatePass(usuario);
+		UserModel userModel = userService.findModelByUsername(claveUsuarioModel.getUsername());
+		seguridadService.userAccessValidation(userModel.getUsername(), claveUsuarioModel.getUsername(), "/usuario/actualizarClaveUsuario");
+		if (userService.comparePassword(claveUsuarioModel.getAntiguaClave(), userModel.getPassword())) {
+			userModel.setPassword(userService.encodePassword(claveUsuarioModel.getNuevaClave()));
+			userService.updatePass(userModel);
 			modelAndView.addObject("claveModificada", "claveModificada");
 			LoggerMapper.log(Level.INFO, "actualizarUsuario", "Contraseña actualizada", getClass());
 		} else {
 			modelAndView.addObject("antiguaDistinta", "antiguaDistinta");
 			LoggerMapper.log(Level.INFO, "actualizarUsuario", "Contraseña antigua distinta", getClass());
 		}
-		modelAndView.addObject("usuario", usuario);
+		modelAndView.addObject("usuario", userModel);
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return formularioCambioClave(modelAndView);
@@ -113,6 +114,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView users(ModelAndView modelAndView) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/users");
 		modelAndView.setViewName("management/users");
 		modelAndView.addObject("userList", userService.findAll());
 		modelAndView.addObject("userRoleList", userRoleService.adminAvailableRoles());
@@ -125,6 +127,7 @@ public class UsuarioController {
 	public ModelAndView userDetail(ModelAndView modelAndView, @PathVariable String username) {
 		LoggerMapper.methodIn(Level.INFO, "/users/"+username, username, this.getClass());
 		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/users/" + username);
 		modelAndView.setViewName("management/user");
 		UserModel userModel = userService.findModelByUsername(username);
 		modelAndView.addObject("user", userModel);
@@ -138,6 +141,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView updatePay(ModelAndView modelAndView, @PathVariable String username) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/enabled/" + username);
 		UserModel usuario = userService.findModelByUsername(username);
 		usuario.setEnabled(!usuario.isEnabled());
 		usuario.setUsernameModificacion(user.getUsername());
@@ -154,6 +158,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView update(ModelAndView modelAndView, @PathVariable String username, @PathVariable String rol) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/rol/" + username + "/" + rol);
 		UserRole userRole = new UserRole();
 		com.championdo.torneo.entity.User usuario = userService.findByUsername(username);
 		userRole.setUser(usuario);
@@ -172,6 +177,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView registrations(ModelAndView modelAndView) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/registrations");
 		modelAndView.setViewName("management/registrations");
 		modelAndView.addObject("activities", userRegistrationService.getActivities());
 		modelAndView.addObject("userRegistrationList", userRegistrationService.findAll());
@@ -183,6 +189,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ROOT')")
 	public ModelAndView registrations(ModelAndView modelAndView, @PathVariable String activity) {
 		User user = principalService.cargaBasicaCompleta(modelAndView);
+		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/registrations/" + activity);
 		modelAndView.setViewName("management/registrations");
 		modelAndView.addObject("activities", userRegistrationService.getActivities());
 		if (!StringUtils.isNullOrEmpty(activity)) {
@@ -244,6 +251,7 @@ public class UsuarioController {
 	@PostMapping("/descargarPdf")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void descargarPdf(@ModelAttribute("documentManagerModel") DocumentManagerModel documentManagerModel, HttpServletResponse response) {
+		seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ADMIN, "/usuario/descargarPdf");
 		documentManagerService.downloadFile(documentManagerModel.getId(), response);
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
 	}

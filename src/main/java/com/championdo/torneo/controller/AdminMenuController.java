@@ -7,6 +7,9 @@ import com.championdo.torneo.model.Menu2Model;
 import com.championdo.torneo.service.Menu1Service;
 import com.championdo.torneo.service.Menu2Service;
 import com.championdo.torneo.service.PrincipalService;
+import com.championdo.torneo.service.SeguridadService;
+import com.championdo.torneo.service.impl.UserService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -28,11 +31,16 @@ public class AdminMenuController {
 
     @Autowired
     private PrincipalService principalService;
+    @Autowired
+    private SeguridadService seguridadService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/menuList")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView menuList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminMenu/menuList");
         modelAndView.setViewName("management/adminMenu");
         modelAndView.addObject("menu1Model", new Menu1Model());
         modelAndView.addObject("menu2Model", new Menu2Model());
@@ -59,6 +67,7 @@ public class AdminMenuController {
     @PostMapping("/menu1-add")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addMenu1(ModelAndView modelAndView, @ModelAttribute("menu1Model") Menu1Model menu1Model) {
+        seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ROOT, "/adminMenu/menu1-add");
         menu1Model.setPosition(menu1Service.findMaxPosition() + 1);
         menu1Model.setEnabled(true);
         menu1Service.add(menu1Model);
@@ -69,6 +78,7 @@ public class AdminMenuController {
     @PostMapping("/menu2-add")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addMenu2(ModelAndView modelAndView, @ModelAttribute("menu2Model") Menu2Model menu2Model) {
+        seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ROOT, "/adminMenu/menu2-add");
         menu2Model.setPosition(menu2Service.findMaxPosition(menu2Model.getIdMenu1()) + 1);
         menu2Model.setEnabled(true);
         menu2Service.add(menu2Model);
@@ -79,6 +89,7 @@ public class AdminMenuController {
     @GetMapping("/menu1-remove/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView removeMenu1(ModelAndView modelAndView, @PathVariable int id) {
+        seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ROOT, "/adminMenu/menu1-remove/" + id);
         try{
             menu1Service.delete(id);
         } catch (
@@ -92,12 +103,13 @@ public class AdminMenuController {
     @GetMapping("/menu2-remove/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView removeMenu2(ModelAndView modelAndView, @PathVariable int id) {
-    try{
-        menu2Service.delete(id);
-    } catch (
-    RemoveException re) {
-        modelAndView.addObject("removeProblem", re.getMessage());
-    }
+        seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ROOT, "/adminMenu/menu2-remove/" + id);
+        try{
+            menu2Service.delete(id);
+        } catch (
+        RemoveException re) {
+            modelAndView.addObject("removeProblem", re.getMessage());
+        }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return menuList(modelAndView);
     }

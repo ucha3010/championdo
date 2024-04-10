@@ -4,10 +4,12 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.exception.ValidationException;
 import com.championdo.torneo.model.FirmaCodigoModel;
 import com.championdo.torneo.model.FirmaModel;
+import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,6 +34,8 @@ public class SeguridadServiceImpl implements SeguridadService {
     private GimnasioService gimnasioService;
     @Autowired
     private UserGymService userGymService;
+    @Autowired
+    private UserService userService;
 
     @Override
     public String obtenerCodigo() {
@@ -112,6 +116,25 @@ public class SeguridadServiceImpl implements SeguridadService {
     public void usuarioGimnasioHabilitadoAdministracion(String username, int idGimnasio, String uri) throws AccessDeniedException {
         if(userGymService.findByUsernameAndIdGym(username, idGimnasio) == null) {
             throw new AccessDeniedException(uri);
+        }
+    }
+
+    @Override
+    public void userAccessValidation(String userLogged, String userInData, String uri) throws AccessDeniedException {
+        if (StringUtils.isNullOrEmpty(userLogged) || StringUtils.isNullOrEmpty(userInData) || !userLogged.equalsIgnoreCase(userInData)) {
+            throw new AccessDeniedException(uri);
+        }
+    }
+
+    @Override
+    public void roleValidation(String username, String role, String uri) throws AccessDeniedException {
+        if (StringUtils.isNullOrEmpty(username)) {
+            throw new AccessDeniedException(uri);
+        } else {
+            UserModel user = userService.findModelByUsername(username);
+            if(user.getUserRoles() == null || !user.getUserRoles().contains(role)) {
+                throw new AccessDeniedException(uri);
+            }
         }
     }
 }

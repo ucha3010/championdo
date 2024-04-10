@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +68,7 @@ public class GimnasioController {
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
+            seguridadService.userAccessValidation(usuario.getUsername(),inscripcionTaekwondoModelList.get(0).getMayorDni(), "/gimnasio/tipoInscripcion");
             modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
         }
         modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
@@ -86,13 +87,7 @@ public class GimnasioController {
         sessionData.setGimnasioModel(gimnasioService.findById(id));
         List<InscripcionTaekwondoModel> inscripcionTaekwondoModelList = inscripcionTaekwondoService.findByMayorDni(usuario.getUsername());
         if (!inscripcionTaekwondoModelList.isEmpty()) {
-            /*
-            for (InscripcionTaekwondoModel inscripcionTaekwondoModel : inscripcionTaekwondoModelList) {
-                if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
-                    modelAndView.addObject("ocultarAdulto", "ocultarAdulto");
-                }
-            }
-            */
+            seguridadService.userAccessValidation(usuario.getUsername(),inscripcionTaekwondoModelList.get(0).getMayorDni(), "/gimnasio/tipoInscripcionConGimnasio/" + id);
             modelAndView.addObject("inscripciones", inscripcionTaekwondoModelList);
         }
         modelAndView.addObject("operativaOriginal", Constantes.INSCRIPCION_TAEKWONDO);
@@ -106,6 +101,7 @@ public class GimnasioController {
     @GetMapping("/formularioInscripcion/{id}/{tipo}/{licencia}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView formularioInscripcion(ModelAndView modelAndView, @PathVariable Integer id, @PathVariable String tipo, @PathVariable String licencia) {
+        seguridadService.gimnasioHabilitadoAdministracion(id, "/gimnasio/formularioInscripcion/" + id + "/" + tipo + "/" + licencia);
         User user = principalService.cargaBasicaCompleta(modelAndView);
         UserModel userModel = mapperUser.entity2Model(user);
         modelAndView.addObject("accountBoxEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getAccountBoxEnable(sessionData.getGimnasioModel().getId()).getValor()));
@@ -137,8 +133,9 @@ public class GimnasioController {
     @GetMapping("/getInscripcion/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getInscripcion(ModelAndView modelAndView, @PathVariable int id) {
-        principalService.cargaBasicaCompleta(modelAndView);
+        User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+        seguridadService.userAccessValidation(usuario.getUsername(),inscripcionTaekwondoModel.getMayorDni(), "/gimnasio/getInscripcion/" + id);
         modelAndView.addObject("deleteEnable", Boolean.parseBoolean(inscripcionTaekwondoService.getDeleteEnable(inscripcionTaekwondoModel.getCodigoGimnasio()).getValor()));
         if (!inscripcionTaekwondoModel.isAutorizadoMenor()) {
             modelAndView.setViewName("gimnasio/vistaInscPropiaGimnasio");
@@ -154,6 +151,8 @@ public class GimnasioController {
     @PostMapping("/descargarPdf")
     @PreAuthorize("isAuthenticated()")
     public void descargarPdf(@ModelAttribute("pdfModel") PdfModel pdfModel, HttpServletResponse response) {
+        User user = userService.getLoggedUser();
+        seguridadService.userAccessValidation(user.getUsername(), pdfModel.getDni(), "/gimnasio/descargarPdf");
         pdfService.descargarArchivo(pdfModel, response, pdfModel.getSeccion());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), "Descarga de documento correcta", getClass());
     }
@@ -163,6 +162,7 @@ public class GimnasioController {
     public ModelAndView eliminarInscripcion(ModelAndView modelAndView, @PathVariable int id) {
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+        seguridadService.userAccessValidation(usuario.getUsername(),inscripcionTaekwondoModel.getMayorDni(), "/gimnasio/eliminarInscripcion/" + id);
         inscripcionTaekwondoService.delete(inscripcionTaekwondoModel);
         emailService.confirmAdminDelete(inscripcionTaekwondoModel.getCodigoGimnasio(), "gimnasio",
                 usuario, inscripcionTaekwondoModel.getAutorizadoNombre());
@@ -177,8 +177,9 @@ public class GimnasioController {
         LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", id, getClass());
         modelAndView.setViewName("gimnasio/normativaSepaGimnasio");
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
-        InscripcionTaekwondoModel inscripcion = inscripcionTaekwondoService.findById(id);
-        modelAndView.addObject("inscripcion", inscripcion);
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(id);
+        seguridadService.userAccessValidation(usuario.getUsername(),inscripcionTaekwondoModel.getMayorDni(), "/gimnasio/normativa-sepa/" + id);
+        modelAndView.addObject("inscripcion", inscripcionTaekwondoModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -190,6 +191,7 @@ public class GimnasioController {
         LoggerMapper.methodIn(Level.INFO, "gimnasio/normativa-sepa", idInscripcion, getClass());
         User usuario = principalService.cargaBasicaCompleta(modelAndView);
         InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.findById(idInscripcion);
+        seguridadService.userAccessValidation(usuario.getUsername(),inscripcionTaekwondoModel.getMayorDni(), "/gimnasio/normativa-sepa-firmado");
         if(pdfService.subirArchivo(pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel), file, Constantes.SECCION_NORMATIVA_SEPA_FIRMADO)) {
             pdfService.eraseByIdOriginalOperativeAndSectionAndIdCard(idInscripcion, Constantes.SECCION_NORMATIVA_SEPA, usuario.getUsername());
             inscripcionTaekwondoModel.setDomiciliacionSEPAFirmada(Boolean.TRUE);
@@ -212,64 +214,22 @@ public class GimnasioController {
     @GetMapping("/detalle/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView detalle(ModelAndView modelAndView, @PathVariable int id) {
+        seguridadService.gimnasioHabilitadoAdministracion(id, "/gimnasio/detalle/" + id);
         LoggerMapper.methodIn(Level.INFO, "gimnasio/detalle", id, getClass());
         modelAndView.setViewName("gimnasio/detalle");
-        User usuario = principalService.cargaBasicaCompleta(modelAndView);
+        principalService.cargaBasicaCompleta(modelAndView);
         GimnasioModel gimnasioModel = gimnasioService.findById(id);
         modelAndView.addObject("gimnasio", gimnasioModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-    private ModelAndView logicaComunGuardar (UserAutorizacionModel userAutorizacionModel, boolean menor) {
-
-        String recurso = (menor ? "guardarMenor" : "gaurdarPropia");
-        LoggerMapper.methodIn(Level.INFO, "gimnasio/" + recurso, userAutorizacionModel, getClass());
-
-        ModelAndView modelAndView = new ModelAndView();
-        User userLogged = principalService.cargaBasicaCompleta(modelAndView);
-        if (menor) {
-            formularioService.fillObjects(userAutorizacionModel.getAutorizado());
-        }
-        formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioModel().getId());
-        List<File> files = new ArrayList<>();
-        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
-        String tempFolder = pdfService.getTempFolder();
-        if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
-            DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, false);
-            files.add(new File(tempFolder.concat(pdfAutorizacionMenor18.getFilename()).concat(pdfAutorizacionMenor18.getExtension())));
-        } else {
-            DocumentManagerModel pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral, false);
-            files.add(new File(tempFolder.concat(pdfAutorizacionMayor18.getFilename()).concat(pdfAutorizacionMayor18.getExtension())));
-        }
-        if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
-            DocumentManagerModel pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral, false);
-            files.add(new File(tempFolder.concat(pdfNormativaSEPA.getFilename()).concat(pdfNormativaSEPA.getExtension())));
-        }
-        if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
-            DocumentManagerModel pdfAutorizaWhatsApp = pdfService.generarPdfAutorizaWhatsApp(pdfModelGeneral, false);
-            files.add(new File(tempFolder.concat(pdfAutorizaWhatsApp.getFilename()).concat(pdfAutorizaWhatsApp.getExtension())));
-        }
-
-        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
-                seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
-                "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, sessionData.getGimnasioModel().getId());
-        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged, files);
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return modelAndView;
-
-    }
-
-
-
-
-
     @GetMapping("/customers")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView customers(ModelAndView modelAndView) {
         modelAndView.setViewName("management/customers");
-        principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/customers");
         modelAndView.addObject("customerList", gimnasioService.findAllOrderByNombreGimnasioAsc());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
@@ -280,58 +240,12 @@ public class GimnasioController {
     public ModelAndView customersId(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "customersId", "id: " + id, this.getClass());
         modelAndView.setViewName("management/updateCustomer");
-        principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/customers/" + id);
         modelAndView.addObject("customer", gimnasioService.findById(id));
         modelAndView.addObject("adminUsersNotAssigned", userGymService.deleteUsersAssignedToGym(userService.findByRole(Constantes.ROLE_ADMIN), id));
         modelAndView.addObject("adminUsersAssigned", userService.getUserModelList(userGymService.findByIdGym(id)));
         modelAndView.addObject("userGymModel", new UserGymModel());
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return modelAndView;
-    }
-
-    @PostMapping("/addAdminGym")
-    @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("userGymModel") UserGymModel userGymModel) {
-        userGymModel.setDateAdd(new Date());
-        userGymModel.setUsernameAdd(userService.getLoggedUser().getUsername());
-        userGymService.add(userGymModel);
-        modelAndView.addObject("addAdmin", "Nuevo administrador asignado correctamente");
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return customersId(modelAndView, userGymModel.getIdGym());
-    }
-
-    @GetMapping("/deleteAdminGym/{username}/{id}")
-    @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView deleteAdminGym(ModelAndView modelAndView, @PathVariable String username, @PathVariable int id) {
-        userGymService.deleteByUsernameAndIdGym(username, id);
-        modelAndView.addObject("deleteAdmin", "Administrador eliminado correctamente");
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return customersId(modelAndView, id);
-    }
-
-    @PostMapping("/updateCustomer")
-    @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioModel customer) {
-        LoggerMapper.methodIn(Level.INFO, "updateCustomer", customer, this.getClass());
-        User user = principalService.cargaBasicaCompleta(modelAndView);
-        customer.setUsuarioModificacion(user.getUsername());
-        try {
-            gimnasioService.update(customer);
-            modelAndView.addObject("updateOk", "Actualización correcta");
-        } catch (Exception e) {
-            modelAndView.addObject("updateProblem", "Hubo un problema con la actualización");
-            LoggerMapper.log(Level.ERROR, "updateCustomer", e.getMessage(), this.getClass());
-        }
-        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return customersId(modelAndView, customer.getId());
-    }
-
-    @GetMapping("/formNewCustomer")
-    @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView formNewCustomer(ModelAndView modelAndView) {
-        modelAndView.setViewName("management/addCustomer");
-        principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.addObject("customer", new GimnasioModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
@@ -341,6 +255,7 @@ public class GimnasioController {
     public ModelAndView addCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioModel customer) {
         LoggerMapper.methodIn(Level.INFO, "addCustomer", customer, this.getClass());
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/customers");
         customer.setUsuarioModificacion(user.getUsername());
         int idCustomer = 0;
         try {
@@ -375,23 +290,30 @@ public class GimnasioController {
         return modelAndView;
     }
 
-    @GetMapping("/resetCintPoomCat/{id}")
+    @PostMapping("/updateCustomer")
     @PreAuthorize("hasRole('ROLE_ROOT')")
-    public ModelAndView resetCintPoomCat(ModelAndView modelAndView, @PathVariable int id) {
-        LoggerMapper.methodIn(Level.INFO, "resetCintPoomCat", "id: " + id, this.getClass());
-        principalService.cargaBasicaCompleta(modelAndView);
-        cargasInicialesClienteService.eliminacionesCatPoomCint(id);
-        cargasInicialesClienteService.cargasCintPoomCat(id);
-        modelAndView.addObject("resetOk", "Reseteo realizado con éxito");
+    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("customer") GimnasioModel customer) {
+        LoggerMapper.methodIn(Level.INFO, "updateCustomer", customer, this.getClass());
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/updateCustomer");
+        customer.setUsuarioModificacion(user.getUsername());
+        try {
+            gimnasioService.update(customer);
+            modelAndView.addObject("updateOk", "Actualización correcta");
+        } catch (Exception e) {
+            modelAndView.addObject("updateProblem", "Hubo un problema con la actualización");
+            LoggerMapper.log(Level.ERROR, "updateCustomer", e.getMessage(), this.getClass());
+        }
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return customersId(modelAndView, id);
+        return customersId(modelAndView, customer.getId());
     }
 
     @GetMapping("/deleteCustomer/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView deleteCustomer(ModelAndView modelAndView,@PathVariable int id) {
         LoggerMapper.methodIn(Level.INFO, "deleteCustomer", "id: " + id, this.getClass());
-        principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/deleteCustomer/" + id);
         cargasInicialesClienteService.eliminacionesCatPoomCint(id);
         utilService.deleteFromRoot(id);
         torneoGimnasioService.deleteByCodigoGimnasio(id);
@@ -403,63 +325,91 @@ public class GimnasioController {
         return customers(modelAndView);
     }
 
-    @GetMapping("/testFormulario")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView testFormulario(ModelAndView modelAndView) {
+    @PostMapping("/addAdminGym")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView updateCustomer(ModelAndView modelAndView, @ModelAttribute("userGymModel") UserGymModel userGymModel) {
+        seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ROOT, "/gimnasio/addAdminGym");
+        userGymModel.setDateAdd(new Date());
+        userGymModel.setUsernameAdd(userService.getLoggedUser().getUsername());
+        userGymService.add(userGymModel);
+        modelAndView.addObject("addAdmin", "Nuevo administrador asignado correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return customersId(modelAndView, userGymModel.getIdGym());
+    }
+
+    @GetMapping("/deleteAdminGym/{username}/{id}")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView deleteAdminGym(ModelAndView modelAndView, @PathVariable String username, @PathVariable int id) {
+        seguridadService.roleValidation(userService.getLoggedUser().getUsername(), Constantes.ROLE_ROOT, "/gimnasio/deleteAdminGym/" + username + "/" + id);
+        userGymService.deleteByUsernameAndIdGym(username, id);
+        modelAndView.addObject("deleteAdmin", "Administrador eliminado correctamente");
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return customersId(modelAndView, id);
+    }
+
+    @GetMapping("/formNewCustomer")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView formNewCustomer(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
-        modelAndView.setViewName("testFormulario");
-        modelAndView.addObject("userAutorizacionModel", formularioService.formularioInscPropiaGimnasio(mapperUser.entity2Model(user)));
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/formNewCustomer");
+        modelAndView.setViewName("management/addCustomer");
+        modelAndView.addObject("customer", new GimnasioModel());
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return modelAndView;
     }
 
-    @PostMapping("/testGuardar")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView gaurdarTest(ModelAndView modelAndView, @ModelAttribute("userAutorizacionModel") UserAutorizacionModel userAutorizacionModel) {
-        LoggerMapper.methodIn(Level.INFO, "gimnasio/testGuardar", userAutorizacionModel, getClass());
-
-        User userLogged = principalService.cargaBasicaCompleta(modelAndView);
-        //formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
-        //InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioModel().getId());
-
-
-        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoService.findById(412));
-        DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, true);
-
-        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(412,
-                seguridadService.obtenerCodigo(), "31390063P",
-                "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, 7);
-
-        String tempFolder = pdfService.getTempFolder();
-        List<File> files = new ArrayList<>();
-        files.add(new File(tempFolder.concat(pdfAutorizacionMenor18.getFilename()).concat(pdfAutorizacionMenor18.getExtension())));
-        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, userLogged, files);
-
-
-
+    @GetMapping("/resetCintPoomCat/{id}")
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    public ModelAndView resetCintPoomCat(ModelAndView modelAndView, @PathVariable int id) {
+        LoggerMapper.methodIn(Level.INFO, "resetCintPoomCat", "id: " + id, this.getClass());
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/gimnasio/resetCintPoomCat/" + id);
+        cargasInicialesClienteService.eliminacionesCatPoomCint(id);
+        cargasInicialesClienteService.cargasCintPoomCat(id);
+        modelAndView.addObject("resetOk", "Reseteo realizado con éxito");
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
-        return modelAndView;
+        return customersId(modelAndView, id);
     }
 
-    @GetMapping("/testDownload")
-    public void testDownload(HttpServletResponse response) throws IOException {
+    private ModelAndView logicaComunGuardar (UserAutorizacionModel userAutorizacionModel, boolean menor) {
 
-        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoService.findById(412));
-        DocumentManagerModel documentManagerModel = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, true);
-        File pdfAutorizacionMenor18 = new File(documentManagerModel.getFullPath());
+        String recurso = (menor ? "guardarMenor" : "gaurdarPropia");
+        LoggerMapper.methodIn(Level.INFO, "gimnasio/" + recurso, userAutorizacionModel, getClass());
 
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment;filename=" + pdfAutorizacionMenor18.getName());
-        response.setContentLength((int) pdfAutorizacionMenor18.length());
-
-        try (FileInputStream inputStream = new FileInputStream(pdfAutorizacionMenor18);
-             OutputStream outputStream = response.getOutputStream()) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
+        ModelAndView modelAndView = new ModelAndView();
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.userAccessValidation(user.getUsername(),userAutorizacionModel.getMayorAutorizador().getUsername(), "/gimnasio/" + recurso);
+        if (menor) {
+            formularioService.fillObjects(userAutorizacionModel.getAutorizado());
         }
+        formularioService.fillObjects(userAutorizacionModel.getMayorAutorizador());
+        InscripcionTaekwondoModel inscripcionTaekwondoModel = inscripcionTaekwondoService.add(userAutorizacionModel, sessionData.getGimnasioModel().getId());
+        List<File> files = new ArrayList<>();
+        PdfModel pdfModelGeneral = pdfService.getPdfInscripcionTaekwondo(inscripcionTaekwondoModel);
+        String tempFolder = pdfService.getTempFolder();
+        if (inscripcionTaekwondoModel.isAutorizadoMenor()) {
+            DocumentManagerModel pdfAutorizacionMenor18 = pdfService.generarPdfAutorizacionMenor18(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfAutorizacionMenor18.getFilename()).concat(pdfAutorizacionMenor18.getExtension())));
+        } else {
+            DocumentManagerModel pdfAutorizacionMayor18 = pdfService.generarPdfAutorizacionMayor18(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfAutorizacionMayor18.getFilename()).concat(pdfAutorizacionMayor18.getExtension())));
+        }
+        if (inscripcionTaekwondoModel.isDomiciliacionSEPA()) {
+            DocumentManagerModel pdfNormativaSEPA = pdfService.generarPdfNormativaSEPA(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfNormativaSEPA.getFilename()).concat(pdfNormativaSEPA.getExtension())));
+        }
+        if (inscripcionTaekwondoModel.isMayorAutorizaWhatsApp()) {
+            DocumentManagerModel pdfAutorizaWhatsApp = pdfService.generarPdfAutorizaWhatsApp(pdfModelGeneral, false);
+            files.add(new File(tempFolder.concat(pdfAutorizaWhatsApp.getFilename()).concat(pdfAutorizaWhatsApp.getExtension())));
+        }
+
+        FirmaCodigoModel firmaCodigoModel = new FirmaCodigoModel(inscripcionTaekwondoModel.getId(),
+                seguridadService.obtenerCodigo(), inscripcionTaekwondoModel.getMayorDni(),
+                "formularioInscFinalizada", Constantes.INSCRIPCION_TAEKWONDO, sessionData.getGimnasioModel().getId());
+        modelAndView = seguridadService.enviarCodigoFirma(modelAndView, firmaCodigoModel, user, files);
+        LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
+        return modelAndView;
+
     }
 
 }

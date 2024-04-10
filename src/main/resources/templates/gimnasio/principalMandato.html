@@ -11,9 +11,9 @@
         function goDetail(id,propia){
             var relativeUrl;
             if(propia == 'true'){
-            	relativeUrl = "formulario/getPropia/" + id;
+            	relativeUrl = "tournamentRegistration/getPropia/" + id;
             } else {
-            	relativeUrl = "formulario/getMenorOInclisivo/" + id;
+            	relativeUrl = "tournamentRegistration/getMenorOInclisivo/" + id;
             }
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;

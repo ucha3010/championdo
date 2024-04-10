@@ -123,7 +123,7 @@
 
 	<div class="container">
 		
-		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/formulario/guardarMenorOInclisivo}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
+		<form sec:authorize="isAuthenticated()" action="#" th:action="@{/tournamentRegistration/guardarMenorOInclisivo}" th:object="${userAutorizacionModel}" method="post" onsubmit="return validar()">
 		
 			<input type="hidden" th:field="*{mayorAutorizador.username}"/>
 			<input type="hidden" th:field="*{mayorAutorizador.correo}"/>

@@ -11,9 +11,9 @@
         function goDetail(id,propia){
             var relativeUrl;
             if(propia == 'true'){
-            	relativeUrl = "formulario/getPropia/" + id;
+            	relativeUrl = "tournamentRegistration/getPropia/" + id;
             } else {
-            	relativeUrl = "formulario/getMenorOInclisivo/" + id;
+            	relativeUrl = "tournamentRegistration/getMenorOInclisivo/" + id;
             }
             var domain = getDomain(location.href);
             location.href = domain + relativeUrl;
@@ -43,15 +43,15 @@
 		</div>
 
 		<section sec:authorize="isAuthenticated()" class="text-center">
-			<a href="#" th:href="@{/formulario/selectTournament/adulto}" class="textDecoration-none">
+			<a href="#" th:href="@{/tournamentRegistration/selectTournament/adulto}" class="textDecoration-none">
 				<button class="btn btn-primary backgroundColorLightViolet btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Inscripción propia</button><br>
 			</a>
 
-			<a href="#" th:href="@{/formulario/selectTournament/menor}" class="textDecoration-none">
+			<a href="#" th:href="@{/tournamentRegistration/selectTournament/menor}" class="textDecoration-none">
 				<button class="btn btn-primary backgroundColorLightViolet btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización menor de 16 años</button><br>
 			</a>
 
-			<a href="#" th:href="@{/formulario/selectTournament/inclusivo}" class="textDecoration-none">
+			<a href="#" th:href="@{/tournamentRegistration/selectTournament/inclusivo}" class="textDecoration-none">
 				<button class="btn btn-primary backgroundColorLightViolet btn-lg anchoMinimo50 margenArribaAbajo3Porc" type="button">Autorización inclusiva</button><br>
 			</a>
 		</section>

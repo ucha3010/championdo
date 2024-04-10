@@ -4,6 +4,8 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.CalidadModel;
 import com.championdo.torneo.service.CalidadService;
 import com.championdo.torneo.service.PrincipalService;
+import com.championdo.torneo.service.SeguridadService;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
@@ -22,11 +24,14 @@ public class AdminCalidadController {
 
     @Autowired
     private PrincipalService principalService;
+    @Autowired
+    private SeguridadService seguridadService;
 
     @GetMapping("/calidadList")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView calidadList(ModelAndView modelAndView) {
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminCalidad/calidadList");
         modelAndView.setViewName("management/adminCalidad");
         modelAndView.addObject("calidadModel", new CalidadModel());
         modelAndView.addObject("calidadList", calidadService.findAll());
@@ -45,8 +50,9 @@ public class AdminCalidadController {
     @PostMapping("/addCalidad")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView addCalidad(ModelAndView modelAndView, @ModelAttribute("calidadModel") CalidadModel calidadModel) {
-        calidadModel.setPosition(calidadService.findMaxPosition() + 1);
         User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminCalidad/addCalidad");
+        calidadModel.setPosition(calidadService.findMaxPosition() + 1);
         calidadService.add(calidadModel);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return calidadList(modelAndView);
@@ -55,6 +61,8 @@ public class AdminCalidadController {
     @GetMapping("/calidad/remove/{id}")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView removeCalidad(ModelAndView modelAndView, @PathVariable int id) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminCalidad/remove/" + id);
         calidadService.delete(id);
         LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
         return calidadList(modelAndView);

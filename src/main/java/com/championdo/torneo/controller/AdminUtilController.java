@@ -5,6 +5,7 @@ import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.UtilManagerModel;
 import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.service.*;
+import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
@@ -70,8 +71,9 @@ public class AdminUtilController {
     @GetMapping("/root-util")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView rootUtil(ModelAndView modelAndView) {
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminUtil/root-util");
         modelAndView.setViewName("management/adminUtil");
-        principalService.cargaBasicaCompleta(modelAndView);
         UtilManagerModel utilManagerModel = utilManagerService.get();
         modelAndView.addObject("utilManagerModel", utilManagerModel);
         modelAndView.addObject("existsPass", utilManagerModel.getPassword() != null);
@@ -84,7 +86,8 @@ public class AdminUtilController {
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView updateUtilManager(ModelAndView modelAndView, @ModelAttribute("utilManagerModel") UtilManagerModel utilManagerModel) {
         LoggerMapper.methodIn(Level.INFO, Utils.obtenerNombreMetodo(), utilManagerModel, getClass());
-        principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminUtil/update-util-manager");
         utilManagerModel.setPassword(utilManagerService.get().getPassword());
         for (EmailEnum emailEnum : EmailEnum.values()) {
             if (emailEnum.getHost().equals(utilManagerModel.getEmailHost())) {
@@ -101,7 +104,8 @@ public class AdminUtilController {
     @PostMapping("/update-util-manager/connection")
     @PreAuthorize("hasRole('ROLE_ROOT')")
     public ModelAndView updateUtilManagerConnection(ModelAndView modelAndView, @ModelAttribute("utilManagerModel") UtilManagerModel utilManagerModel) {
-        principalService.cargaBasicaCompleta(modelAndView);
+        User user = principalService.cargaBasicaCompleta(modelAndView);
+        seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/adminUtil/update-util-manager/connection");
         UtilManagerModel utilManagerModelAux = utilManagerService.get();
         utilManagerModelAux.setPassword(utilManagerModel.getPassword());
         utilManagerService.update(utilManagerModelAux);
