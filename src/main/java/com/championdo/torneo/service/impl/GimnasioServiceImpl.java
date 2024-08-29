@@ -12,12 +12,12 @@ import com.championdo.torneo.repository.Menu2Repository;
 import com.championdo.torneo.service.GimnasioMenu2Service;
 import com.championdo.torneo.service.GimnasioService;
 import com.championdo.torneo.util.LoggerMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -9,7 +9,6 @@ import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +45,7 @@ public class AdminUtilController {
         seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminUtil/utilList");
         modelAndView.addObject("utilModel", new UtilModel());
         modelAndView.addObject("gimnasioModel", sessionData.getGimnasioModel());
-        modelAndView.addObject("emptyPass", StringUtils.isNullOrEmpty(sessionData.getGimnasioModel().getEmailPassword()));
+        modelAndView.addObject("emptyPass", Utils.isNullOrEmpty(sessionData.getGimnasioModel().getEmailPassword()));
         modelAndView.addObject("utilListInscripciones", utilService.findAllStarsWith("inscripciones", sessionData.getGimnasioModel().getId()));
         modelAndView.addObject("utilListHost", Utils.cargarListaProveedoresHost());
         modelAndView.addObject("listaSiNo", Utils.cargarListaSiNo());

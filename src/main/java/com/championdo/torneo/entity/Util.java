@@ -1,9 +1,11 @@
 package com.championdo.torneo.entity;
 
 import com.championdo.torneo.util.Utils;
-import lombok.*;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @IdClass(UtilId.class)

@@ -10,11 +10,11 @@ import com.championdo.torneo.repository.CategoriaRepository;
 import com.championdo.torneo.repository.CinturonRepository;
 import com.championdo.torneo.service.CinturonService;
 import com.championdo.torneo.util.LoggerMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -13,7 +13,7 @@ import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.EmailEnum;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,15 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.ZipOutputStream;
 
 @Controller
 @RequestMapping("/adminGimnasio")
@@ -93,13 +87,13 @@ public class AdminGimnasioController {
         seguridadService.gimnasioHabilitadoAdministracion(sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateEmail");
         seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/adminGimnasio/updateEmail");
         GimnasioModel gimnasioModelBBDD = gimnasioService.findById(gimnasioModel.getId());
-        if (!StringUtils.isNullOrEmpty(gimnasioModel.getCorreo())) {
+        if (!Utils.isNullOrEmpty(gimnasioModel.getCorreo())) {
             gimnasioModelBBDD.setCorreo(gimnasioModel.getCorreo());
         }
-        if (!StringUtils.isNullOrEmpty(gimnasioModel.getEmailPassword())) {
+        if (!Utils.isNullOrEmpty(gimnasioModel.getEmailPassword())) {
             gimnasioModelBBDD.setEmailPassword(gimnasioModel.getEmailPassword());
         }
-        if (!StringUtils.isNullOrEmpty(gimnasioModel.getEmailHost())) {
+        if (!Utils.isNullOrEmpty(gimnasioModel.getEmailHost())) {
             gimnasioModelBBDD.setEmailHost(gimnasioModel.getEmailHost());
             for (EmailEnum emailEnum : EmailEnum.values()) {
                 if (emailEnum.getHost().equals(gimnasioModel.getEmailHost())) {

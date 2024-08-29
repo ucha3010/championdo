@@ -7,8 +7,7 @@ import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.repository.UtilRepository;
 import com.championdo.torneo.service.UtilService;
 import com.championdo.torneo.util.Constantes;
-import com.championdo.torneo.util.EmailEnum;
-import com.mysql.cj.util.StringUtils;
+import com.championdo.torneo.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,7 @@ public class UtilServiceImpl implements UtilService {
         List<UtilModel> utilModelList = new ArrayList<>();
         for (Util util: utilRepository.findByCodigoGimnasio(codigoGimnasio)) {
             if(util.getClave().endsWith(endWord)) {
-                if (util.getClave().startsWith("clave") && !StringUtils.isNullOrEmpty(util.getValor())) {
+                if (util.getClave().startsWith("clave") && !Utils.isNullOrEmpty(util.getValor())) {
                     util.setCodigoGimnasio(-1);
                     util.setValor("");
                 }
@@ -51,7 +50,7 @@ public class UtilServiceImpl implements UtilService {
 
     @Override
     public UtilModel findByClave(String clave, int codigoGimnasio) {
-        if (!StringUtils.isNullOrEmpty(clave)) {
+        if (!Utils.isNullOrEmpty(clave)) {
             return mapperUtil.entity2Model(utilRepository.findByClaveAndCodigoGimnasio(clave, codigoGimnasio));
         } else {
             return new UtilModel();

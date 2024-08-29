@@ -9,7 +9,6 @@ import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -121,14 +120,14 @@ public class SeguridadServiceImpl implements SeguridadService {
 
     @Override
     public void userAccessValidation(String userLogged, String userInData, String uri) throws AccessDeniedException {
-        if (StringUtils.isNullOrEmpty(userLogged) || StringUtils.isNullOrEmpty(userInData) || !userLogged.equalsIgnoreCase(userInData)) {
+        if (Utils.isNullOrEmpty(userLogged) || Utils.isNullOrEmpty(userInData) || !userLogged.equalsIgnoreCase(userInData)) {
             throw new AccessDeniedException(uri);
         }
     }
 
     @Override
     public void roleValidation(String username, String role, String uri) throws AccessDeniedException {
-        if (StringUtils.isNullOrEmpty(username)) {
+        if (Utils.isNullOrEmpty(username)) {
             throw new AccessDeniedException(uri);
         } else {
             UserModel user = userService.findModelByUsername(username);

@@ -5,10 +5,10 @@ import com.championdo.torneo.mapper.MapperPais;
 import com.championdo.torneo.model.PaisModel;
 import com.championdo.torneo.repository.PaisRepository;
 import com.championdo.torneo.service.PaisService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -10,7 +10,7 @@ import com.championdo.torneo.service.UtilManagerService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.SendMessage;
-import com.mysql.cj.util.StringUtils;
+import com.championdo.torneo.util.Utils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -234,11 +234,11 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String mayor = insc.getMayorNombre() + " " + insc.getMayorApellido1() +
-                (StringUtils.isNullOrEmpty(insc.getMayorApellido2()) ? "" : " " + insc.getMayorApellido2());
+                (Utils.isNullOrEmpty(insc.getMayorApellido2()) ? "" : " " + insc.getMayorApellido2());
         String autorizado = null;
-        if(!StringUtils.isNullOrEmpty(insc.getAutorizadoNombre())) {
+        if(!Utils.isNullOrEmpty(insc.getAutorizadoNombre())) {
             autorizado = insc.getAutorizadoNombre() + " " + insc.getAutorizadoApellido1() +
-                    (StringUtils.isNullOrEmpty(insc.getAutorizadoApellido2()) ? "" : " " + insc.getAutorizadoApellido2());
+                    (Utils.isNullOrEmpty(insc.getAutorizadoApellido2()) ? "" : " " + insc.getAutorizadoApellido2());
         }
         stringBuilder.append("<h1>Hola<b>").append("</b>!</h1><br>");
         if (autorizado == null) {
@@ -304,7 +304,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String mayor = insc.getMayorNombre() + " " + insc.getMayorApellido1() +
-                (StringUtils.isNullOrEmpty(insc.getMayorApellido2()) ? "" : " " + insc.getMayorApellido2());
+                (Utils.isNullOrEmpty(insc.getMayorApellido2()) ? "" : " " + insc.getMayorApellido2());
         stringBuilder.append("<h1>Hola<b>").append("</b>!</h1><br>");
         stringBuilder.append("<p>El cliente ").append(mayor).append(" acaba de subir un formulario de domiciliación bancaria firmado.</p>");
         stringBuilder.append("<br><br>");
@@ -319,7 +319,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<!DOCTYPE html>");
         stringBuilder.append("<HTML><BODY>");
         String mayor = user.getName() + " " + user.getLastname() +
-                (StringUtils.isNullOrEmpty(user.getSecondLastname()) ? "" : " " + user.getSecondLastname());
+                (Utils.isNullOrEmpty(user.getSecondLastname()) ? "" : " " + user.getSecondLastname());
         stringBuilder.append("<h1>Hola <b>").append(mayor).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te confirmamos que tu usuario ha sido dado de alta de forma exitosa en la plataforma.</p>");
         stringBuilder.append("<br><br>");
@@ -335,7 +335,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<HTML><BODY>");
         stringBuilder.append("<h1>Hola <b>").append(mandatoModel.getNombreMandante()).append("</b>!</h1><br>");
         stringBuilder.append("<p>Te confirmamos que tu solicitud de mandato para la licencia federativa");
-        if (!StringUtils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
+        if (!Utils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
             stringBuilder.append(" de ").append(mandatoModel.getNombreAutorizado());
         }
         stringBuilder.append(" ha sido enviada de forma exitosa en la plataforma.</p>");
@@ -352,7 +352,7 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<HTML><BODY>");
         stringBuilder.append("<h1>Hola!</h1><br>");
         stringBuilder.append("<p>El cliente ").append(mandatoModel.getNombreMandante()).append(" acaba de subir un mandato de licencia firmado.</p>");
-        if (!StringUtils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
+        if (!Utils.isNullOrEmpty(mandatoModel.getNombreAutorizado())) {
             stringBuilder.append("<p>El mandato es para ").append(mandatoModel.getNombreAutorizado()).append(".</p>");
         }
         stringBuilder.append("<br><br>");
@@ -368,11 +368,11 @@ public class EmailServiceImpl implements EmailService {
         stringBuilder.append("<HTML><BODY>");
         stringBuilder.append("<h1>Hola!</h1><br>");
         stringBuilder.append("<p>El usuario ").append(user.getName()).append(" ").append(user.getLastname());
-        if(!StringUtils.isNullOrEmpty(user.getSecondLastname())) {
+        if(!Utils.isNullOrEmpty(user.getSecondLastname())) {
             stringBuilder.append(" ").append(user.getSecondLastname());
         }
         stringBuilder.append(" acaba de eliminar la suscripción a ").append(actividad);
-        if (!StringUtils.isNullOrEmpty(nombreMenor)) {
+        if (!Utils.isNullOrEmpty(nombreMenor)) {
             stringBuilder.append(" a nombre de ").append(nombreMenor).append(".</p>");
         } else {
             stringBuilder.append(" que estaba a su nombre.</p>");

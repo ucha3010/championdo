@@ -2,8 +2,8 @@ package com.championdo.torneo.service;
 
 
 import com.championdo.torneo.entity.User;
-import com.championdo.torneo.model.TournamentRegistrationModel;
 import com.championdo.torneo.model.PrincipalUserModel;
+import com.championdo.torneo.model.TournamentRegistrationModel;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;

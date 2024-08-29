@@ -10,8 +10,9 @@ import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.SectionEnum;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
-import com.sun.istack.NotNull;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import org.apache.logging.log4j.Level;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -22,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -81,7 +80,7 @@ public class PdfServiceImpl implements PdfService {
             if (!pdfModel.isMayorEdad()) {
 
                 parrafo.append(" AUTORIZO A ");
-                parrafo.append(pdfModel.getNombreMenor()).append(!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? " con DNI " + pdfModel.getDniMenor() + " y" : "");
+                parrafo.append(pdfModel.getNombreMenor()).append(!Utils.isNullOrEmpty(pdfModel.getDniMenor()) ? " con DNI " + pdfModel.getDniMenor() + " y" : "");
                 parrafo.append(" con fecha de nacimiento ").append(pdfModel.getFechaNacimientoMenor());
             }
 
@@ -301,13 +300,13 @@ public class PdfServiceImpl implements PdfService {
             generoParrafo(contentStream, page, parrafoList, heightStartParagraph, PDType1Font.TIMES_BOLD, tamanioFuente, null, salto);
             heightStartParagraph += (parrafoList.size() * salto + dejoDeMargenPosterior);
 
-            if (!StringUtils.isNullOrEmpty(pdfModel.getNombreMenor())) {
+            if (!Utils.isNullOrEmpty(pdfModel.getNombreMenor())) {
 
                 //salto = 15;tamanioFuente = 14;
                 dejoDeMargenPosterior = 20;
                 parrafoList = new ArrayList<>();
                 parrafoList.add("Nombre: " + pdfModel.getNombreMenor());
-                if(!StringUtils.isNullOrEmpty(pdfModel.getDniMenor())) {
+                if(!Utils.isNullOrEmpty(pdfModel.getDniMenor())) {
                     parrafoList.add("DNI: " + pdfModel.getDniMenor() + "              " + "Fecha de nacimiento: " + pdfModel.getFechaNacimientoMenor());
                 } else {
                     parrafoList.add("Fecha de nacimiento: " + pdfModel.getFechaNacimientoMenor());
@@ -524,16 +523,16 @@ public class PdfServiceImpl implements PdfService {
         pdfModel.setFechaNacimiento(Utils.date2String(inscripcionTaekwondoModel.getMayorFechaNacimiento()));
         pdfModel.setGimnasio(gimnasioModel.getNombreGimnasio());
         pdfModel.setDireccionGimnasio(gimnasioModel.getDomicilioCalle() + " "
-                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
-                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
+                + (Utils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
+                + (Utils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
                 + gimnasioModel.getDomicilioLocalidad() + " (" + gimnasioModel.getDomicilioCp() + ")");
-        if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorDomicilioCalle())) {
+        if (!Utils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorDomicilioCalle())) {
             pdfModel.setDomicilio(inscripcionTaekwondoModel.getMayorDomicilioCalle() + " " + inscripcionTaekwondoModel.getMayorDomicilioNumero()
                     + " " + inscripcionTaekwondoModel.getMayorDomicilioOtros());
             pdfModel.setLocalidad(inscripcionTaekwondoModel.getMayorDomicilioLocalidad() + " (" + inscripcionTaekwondoModel.getMayorDomicilioCp()
                     + ")" + (inscripcionTaekwondoModel.getMayorPais() != null ? " - " + inscripcionTaekwondoModel.getMayorPais() : ""));
         }
-        if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorCalidad())) {
+        if (!Utils.isNullOrEmpty(inscripcionTaekwondoModel.getMayorCalidad())) {
             pdfModel.setCalidadDe(inscripcionTaekwondoModel.getMayorCalidad());
             pdfModel.setNombreMenor(inscripcionTaekwondoModel.getAutorizadoNombre() + " " + inscripcionTaekwondoModel.getAutorizadoApellido1()
                     + (inscripcionTaekwondoModel.getAutorizadoApellido2() != null ? " " + inscripcionTaekwondoModel.getAutorizadoApellido2() : ""));
@@ -542,7 +541,7 @@ public class PdfServiceImpl implements PdfService {
         } else {
             pdfModel.setMayorEdad(Boolean.TRUE);
         }
-        if (!StringUtils.isNullOrEmpty(inscripcionTaekwondoModel.getIban())) {
+        if (!Utils.isNullOrEmpty(inscripcionTaekwondoModel.getIban())) {
             CuentaBancariaModel cuentaBancaria = new CuentaBancariaModel();
             cuentaBancaria.setTitular(inscripcionTaekwondoModel.getTitularCuenta());
             cuentaBancaria.setIban(inscripcionTaekwondoModel.getIban());
@@ -565,18 +564,18 @@ public class PdfServiceImpl implements PdfService {
         pdfModel.setGimnasio(gimnasioModel.getNombreGimnasio());
         pdfModel.setCodigoGimnasio(mandatoModel.getCodigoGimnasio());
         pdfModel.setDireccionGimnasio(gimnasioModel.getDomicilioCalle() + " "
-                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
-                + (StringUtils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
+                + (Utils.isNullOrEmpty(gimnasioModel.getDomicilioNumero()) ? "" : gimnasioModel.getDomicilioNumero() + " ")
+                + (Utils.isNullOrEmpty(gimnasioModel.getDomicilioOtros()) ? "" : gimnasioModel.getDomicilioOtros() + " ")
                 + gimnasioModel.getDomicilioLocalidad() + " (" + gimnasioModel.getDomicilioCp() + ")");
         pdfModel.setMayorEdad(mandatoModel.isAdulto());
-        if (!StringUtils.isNullOrEmpty(mandatoModel.getDomicilioCalle())) {
+        if (!Utils.isNullOrEmpty(mandatoModel.getDomicilioCalle())) {
             pdfModel.setDomicilio(mandatoModel.getDomicilioCalle() + " " + mandatoModel.getDomicilioNumero()
                     + " " + mandatoModel.getDomicilioOtros());
             pdfModel.setLocalidad(mandatoModel.getDomicilioLocalidad() + " (" + mandatoModel.getDomicilioCp()
                     + ")" + (mandatoModel.getPais() != null ? " - " + mandatoModel.getPais() : ""));
         }
-        if (!StringUtils.isNullOrEmpty(mandatoModel.getCalidad()) || !StringUtils.isNullOrEmpty(mandatoModel.getCalidadOtro())) {
-            pdfModel.setCalidadDe(!StringUtils.isNullOrEmpty(mandatoModel.getCalidad()) ? mandatoModel.getCalidad() : mandatoModel.getCalidadOtro());
+        if (!Utils.isNullOrEmpty(mandatoModel.getCalidad()) || !Utils.isNullOrEmpty(mandatoModel.getCalidadOtro())) {
+            pdfModel.setCalidadDe(!Utils.isNullOrEmpty(mandatoModel.getCalidad()) ? mandatoModel.getCalidad() : mandatoModel.getCalidadOtro());
             pdfModel.setNombreMenor(mandatoModel.getNombreAutorizado() + " " + mandatoModel.getApellido1Autorizado()
                     + (mandatoModel.getApellido2Autorizado() != null ? " " + mandatoModel.getApellido2Autorizado() : ""));
             pdfModel.setDniMenor(mandatoModel.getDniAutorizado());
@@ -668,7 +667,7 @@ public class PdfServiceImpl implements PdfService {
 
     private String nombreArchivo(DocumentManagerModel documentManagerModel, PdfModel pdfModel, boolean rutaCompleta, @NotNull String section) {
 
-        if (StringUtils.isNullOrEmpty(pdfModel.getExtension())) {
+        if (Utils.isNullOrEmpty(pdfModel.getExtension())) {
             pdfModel.setExtension(Constantes.EXTENSION_PDF);
         }
         String ruta = (rutaCompleta ? "src" + File.separator + "main" + File.separator + "resources" + File.separator
@@ -688,7 +687,7 @@ public class PdfServiceImpl implements PdfService {
             documentManagerModel.setFilename(section + pdfModel.getDni() + "-" + pdfModel.getIdInscripcion());
             documentManagerModel.setName(pdfModel.getNombre());
         } else {
-            documentManagerModel.setFilename(section + pdfModel.getDni() + (!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ?
+            documentManagerModel.setFilename(section + pdfModel.getDni() + (!Utils.isNullOrEmpty(pdfModel.getDniMenor()) ?
                     "-" + pdfModel.getDniMenor().trim() : "") + "-" + pdfModel.getIdInscripcion());
             documentManagerModel.setName(pdfModel.getNombreMenor());
         }
@@ -715,7 +714,7 @@ public class PdfServiceImpl implements PdfService {
 
     private String tounamentDate(PdfModel pdfModel) {
         StringBuilder dateFolder = new StringBuilder();
-        if(pdfModel != null && !StringUtils.isNullOrEmpty(pdfModel.getFechaCampeonato())) {
+        if(pdfModel != null && !Utils.isNullOrEmpty(pdfModel.getFechaCampeonato())) {
             String[] folderNameArray = pdfModel.getFechaCampeonato().split("-");
             dateFolder.append(File.separator);
             dateFolder.append(Constantes.SECCION_TORNEO);
@@ -868,7 +867,7 @@ public class PdfServiceImpl implements PdfService {
         String nombreMenor = "";
         Calendar calendar = GregorianCalendar.getInstance();
 
-        if(!StringUtils.isNullOrEmpty(pdfModel.getCalidadDe())) {
+        if(!Utils.isNullOrEmpty(pdfModel.getCalidadDe())) {
             nombreMenor = " (" + pdfModel.getNombreMenor() + ")";
             salto = 15;
             tamanioFuente = 14;
@@ -1045,7 +1044,7 @@ public class PdfServiceImpl implements PdfService {
         //salto = 15;tamanioFuente = 14;
         parrafo = new StringBuilder();
         parrafo.append("D./Dña. ").append(pdfModel.getNombreMenor());
-        parrafo.append(!StringUtils.isNullOrEmpty(pdfModel.getDniMenor()) ? " con DNI " + pdfModel.getDniMenor() + " y " : " ");
+        parrafo.append(!Utils.isNullOrEmpty(pdfModel.getDniMenor()) ? " con DNI " + pdfModel.getDniMenor() + " y " : " ");
         parrafo.append("con fecha de nacimiento ").append(pdfModel.getFechaNacimientoMenor());
         parrafoList = organizaRenglones(parrafoList, parrafo.toString(), tamanioFuente, null, false, false);
         generoParrafo(contentStream, page, parrafoList, heightStartParagraph, PDType1Font.TIMES_ROMAN, tamanioFuente, null, salto);

@@ -4,7 +4,6 @@ import com.championdo.torneo.model.*;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -130,12 +129,12 @@ public class FormularioServiceImpl implements FormularioService {
         pdfModel.setTelefono(userModel.getTelefono());
         pdfModel.setCorreo(userModel.getCorreo());
         pdfModel.setFechaNacimiento(Utils.date2String(userModel.getFechaNacimiento()));
-        if (!StringUtils.isNullOrEmpty(userModel.getDomicilioCalle())) {
+        if (!Utils.isNullOrEmpty(userModel.getDomicilioCalle())) {
             pdfModel.setDomicilio(userModel.getDomicilioCalle() + " " + userModel.getDomicilioNumero() + " " + userModel.getDomicilioOtros());
             pdfModel.setLocalidad(userModel.getDomicilioLocalidad() + " (" + userModel.getDomicilioCp() + ")" + (userModel.getPais() != null ? " - " + userModel.getPais().getNombre() : ""));
         }
         if (userModel.getCalidad() != null) {
-            if (!StringUtils.isNullOrEmpty(userModel.getCalidad().getOtro())) {
+            if (!Utils.isNullOrEmpty(userModel.getCalidad().getOtro())) {
                 pdfModel.setCalidadDe(userModel.getCalidad().getOtro());
             } else {
                 CalidadModel calidad = calidadService.findById(userModel.getCalidad().getId());

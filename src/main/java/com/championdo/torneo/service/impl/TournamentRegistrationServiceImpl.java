@@ -7,12 +7,12 @@ import com.championdo.torneo.repository.TournamentRegistrationRepository;
 import com.championdo.torneo.service.*;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
-import com.mysql.cj.util.StringUtils;
+import com.championdo.torneo.util.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -189,7 +189,7 @@ public class TournamentRegistrationServiceImpl implements TournamentRegistration
             tournamentRegistrationModel.setAuthorizer1Lastname(usuarioAutorizador.getLastname());
             tournamentRegistrationModel.setAuthorizer2Lastname(usuarioAutorizador.getSecondLastname());
             tournamentRegistrationModel.setAuthorizerIdCard(usuarioAutorizador.getUsername());
-            if (StringUtils.isNullOrEmpty(usuarioAutorizador.getCalidad().getOtro())) {
+            if (Utils.isNullOrEmpty(usuarioAutorizador.getCalidad().getOtro())) {
                 tournamentRegistrationModel.setRelationship(calidadService.findById(usuarioAutorizador.getCalidad().getId()).getNombre());
             } else {
                 tournamentRegistrationModel.setRelationship(usuarioAutorizador.getCalidad().getOtro());

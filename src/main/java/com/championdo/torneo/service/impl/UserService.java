@@ -8,9 +8,11 @@ import com.championdo.torneo.model.UserModel;
 import com.championdo.torneo.repository.UserRepository;
 import com.championdo.torneo.repository.UserRoleRepository;
 import com.championdo.torneo.service.GimnasioService;
-import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.service.InscripcionTaekwondoService;
+import com.championdo.torneo.service.TournamentRegistrationService;
 import com.championdo.torneo.util.Constantes;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,8 +25,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import java.util.*;
 
 @Service("userService")

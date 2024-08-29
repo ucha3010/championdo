@@ -12,11 +12,10 @@ import com.championdo.torneo.service.MandatoService;
 import com.championdo.torneo.service.PdfService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -140,26 +139,26 @@ public class MandatoServiceImpl implements MandatoService {
                 throw new ValidationException(Constantes.AVISO_MANDATO_ADULTO_YA_EXISTE, "Ya existe un mandato de " + mandatoModel.getNombreMandante()
                         + " " + mandatoModel.getApellido1Mandante() + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : "")
                         + " para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio());
-            } else if (mandatoModel.isAdulto() && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
+            } else if (mandatoModel.isAdulto() && !mandato.isAdulto() && Utils.isNullOrEmpty(mandato.getDniAutorizado())
                     && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_UN_MENOR, "Con el DNI " + mandatoModel.getDniMandante()
                         + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio()
                         + " para un menor o inclusivo. Es necesario que cada mandato vaya asociado a un DNI diferente.");
-            } else if (!mandatoModel.isAdulto() && StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado())
-                    && !mandato.isAdulto() && StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
+            } else if (!mandatoModel.isAdulto() && Utils.isNullOrEmpty(mandatoModel.getDniAutorizado())
+                    && !mandato.isAdulto() && Utils.isNullOrEmpty(mandato.getDniAutorizado())
                     && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_PARA_OTRO_MENOR, "Con el DNI " + mandatoModel.getDniMandante()
                         + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio()
                         + " para otro menor o inclusivo. Por favor rellene el DNI del autorizado o contacte con el gimnasio para realizar la modificación"
                         + " necesaria.");
-            } else if (!mandatoModel.isAdulto() && StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && mandato.isAdulto()
+            } else if (!mandatoModel.isAdulto() && Utils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && mandato.isAdulto()
                     && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_DNI_ADULTO_YA_USADO_EN_INSCRIPCION_ADULTO, "Con el DNI " + mandatoModel.getDniMandante()
                         + " ya se hizo un mandato para la temporada " + mandatoModel.getTemporada() + " en el gimnasio " + mandatoModel.getNombreGimnasio()
                         + " para " + mandatoModel.getNombreMandante() + " " + mandatoModel.getApellido1Mandante()
                         + (mandatoModel.getApellido2Mandante() != null ? " " + mandatoModel.getApellido2Mandante() : "")
                         + ". Es necesario que cada mandato vaya asociado a un DNI diferente.");
-            } else if (!StringUtils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && !StringUtils.isNullOrEmpty(mandato.getDniAutorizado())
+            } else if (!Utils.isNullOrEmpty(mandatoModel.getDniAutorizado()) && !Utils.isNullOrEmpty(mandato.getDniAutorizado())
                     && mandatoModel.getDniAutorizado().equals(mandato.getDniAutorizado()) && mandatoModel.getCodigoGimnasio() == mandato.getCodigoGimnasio()) {
                 throw new ValidationException(Constantes.AVISO_MANDATO_MENOR_YA_EXISTE, "Ya existe un mandato de menor o inclusivo con el DNI "
                         + " " + mandatoModel.getDniAutorizado() + " para la temporada " + mandatoModel.getTemporada() + " en el gimnasio "

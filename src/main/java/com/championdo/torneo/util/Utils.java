@@ -1,6 +1,7 @@
 package com.championdo.torneo.util;
 
 import com.championdo.torneo.model.UtilModel;
+import org.apache.commons.lang3.StringUtils;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
@@ -141,5 +142,9 @@ public class Utils {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public static boolean isNullOrEmpty(String string) {
+        return StringUtils.isBlank(string);
     }
 }

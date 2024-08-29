@@ -11,7 +11,7 @@ import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
-import com.mysql.cj.util.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 @Controller
@@ -148,7 +147,7 @@ public class UsuarioController {
 		userService.addOrUpdate(usuario);
 		modelAndView.addObject("updateOK", "Habilitación de " + usuario.getName()
 				+ " " + usuario.getLastname()
-				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
+				+ (!Utils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizada correctamente");
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return userDetail(modelAndView, username);
@@ -167,7 +166,7 @@ public class UsuarioController {
 		userRoleService.save(userRole);
 		modelAndView.addObject("updateOK", "Rol de " + usuario.getName()
 				+ " " + usuario.getLastname()
-				+ (!com.mysql.cj.util.StringUtils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
+				+ (!Utils.isNullOrEmpty(usuario.getSecondLastname()) ? " " + usuario.getSecondLastname() : "")
 				+ " actualizado correctamente");
 		LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 		return userDetail(modelAndView, username);
@@ -192,7 +191,7 @@ public class UsuarioController {
 		seguridadService.roleValidation(user.getUsername(), Constantes.ROLE_ROOT, "/usuario/registrations/" + activity);
 		modelAndView.setViewName("management/registrations");
 		modelAndView.addObject("activities", userRegistrationService.getActivities());
-		if (!StringUtils.isNullOrEmpty(activity)) {
+		if (!Utils.isNullOrEmpty(activity)) {
 			modelAndView.addObject("selectedActivity", activity);
 			modelAndView.addObject("userRegistrationList", userRegistrationService.findByActivity(activity));
 		} else {
@@ -223,7 +222,7 @@ public class UsuarioController {
 		seguridadService.usuarioGimnasioHabilitadoAdministracion(user.getUsername(), sessionData.getGimnasioModel().getId(), "/usuario/gymUsers/activity/" + activity);
 		modelAndView.setViewName("gimnasio/adminUsers");
 		modelAndView.addObject("activities", userRegistrationService.getActivities());
-		if (!StringUtils.isNullOrEmpty(activity)) {
+		if (!Utils.isNullOrEmpty(activity)) {
 			modelAndView.addObject("selectedActivity", activity);
 			modelAndView.addObject("userRegistrationList", userRegistrationService.findByActivityAndGym(activity, sessionData.getGimnasioModel().getId()));
 		} else {

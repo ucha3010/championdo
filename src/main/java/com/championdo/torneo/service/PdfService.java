@@ -2,9 +2,8 @@ package com.championdo.torneo.service;
 
 import com.championdo.torneo.entity.User;
 import com.championdo.torneo.model.*;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
 
 public interface PdfService {
     DocumentManagerModel generarPdfTorneo(PdfModel pdfModel, boolean createWithSignatureOrCreateFinalDocument);

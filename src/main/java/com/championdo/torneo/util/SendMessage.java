@@ -1,18 +1,18 @@
 package com.championdo.torneo.util;
 
 import com.championdo.torneo.model.EmailModel;
+import jakarta.activation.DataHandler;
+import jakarta.activation.FileDataSource;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 import org.apache.logging.log4j.Level;
 import org.springframework.stereotype.Component;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.util.Properties;
 
@@ -46,7 +46,7 @@ public class SendMessage {
         Session session = Session.getDefaultInstance(props);
         MimeMessage email = new MimeMessage(session);
         email.setFrom(new InternetAddress(emailModel.getFromEmailAddress()));
-        email.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(emailModel.getToEmailAddress()));
+        email.setRecipient(jakarta.mail.Message.RecipientType.TO, new InternetAddress(emailModel.getToEmailAddress()));
         email.setSubject(emailModel.getMessageSubject());
         if (emailModel.getFiles() == null) {
             email.setText(emailModel.getBodyText(), "ISO-8859-1", "html");
@@ -68,7 +68,7 @@ public class SendMessage {
         //Enviar el correo
         Transport transport = session.getTransport("smtp");
         transport.connect(emailModel.getFromEmailAddress(), emailModel.getPassword());
-        transport.sendMessage(email, email.getRecipients(javax.mail.Message.RecipientType.TO));
+        transport.sendMessage(email, email.getRecipients(jakarta.mail.Message.RecipientType.TO));
         transport.close();
 
         LoggerMapper.methodOut(Level.INFO, "enviarCorreo", "Correo enviado", SendMessage.class);

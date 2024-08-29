@@ -9,11 +9,11 @@ import com.championdo.torneo.service.FirmaCodigoService;
 import com.championdo.torneo.service.FirmaService;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -6,10 +6,10 @@ import com.championdo.torneo.model.UtilModel;
 import com.championdo.torneo.repository.InscripcionTaekwondoRepository;
 import com.championdo.torneo.service.UserRegistrationService;
 import com.championdo.torneo.util.Constantes;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 

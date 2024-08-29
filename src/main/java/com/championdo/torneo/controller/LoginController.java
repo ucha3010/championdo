@@ -10,16 +10,15 @@ import com.championdo.torneo.service.impl.UserService;
 import com.championdo.torneo.util.Constantes;
 import com.championdo.torneo.util.LoggerMapper;
 import com.championdo.torneo.util.Utils;
+import jakarta.persistence.PersistenceException;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import com.mysql.cj.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.PersistenceException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.UUID;
@@ -87,7 +86,7 @@ public class LoginController {
 	@GetMapping("/pass-new")
 	@PreAuthorize("permitAll()")
 	public ModelAndView passNew(@RequestParam String username, @RequestParam String token, ModelAndView modelAndView) {
-		if (StringUtils.isNullOrEmpty(username) || StringUtils.isNullOrEmpty(token)) {
+		if (Utils.isNullOrEmpty(username) || Utils.isNullOrEmpty(token)) {
 			modelAndView.addObject("avisoKO", "Problemas con la redirección");
 			modelAndView.setViewName(Constantes.LOGIN);
 			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
@@ -114,8 +113,8 @@ public class LoginController {
 	@PreAuthorize("permitAll()")
 	public ModelAndView changePass(@ModelAttribute("tokenModel") TokenModel tokenModel, ModelAndView modelAndView) {
 		modelAndView.setViewName(Constantes.LOGIN);
-		if (StringUtils.isNullOrEmpty(tokenModel.getUsername()) || StringUtils.isNullOrEmpty(tokenModel.getId())
-				|| StringUtils.isNullOrEmpty(tokenModel.getPassword())) {
+		if (Utils.isNullOrEmpty(tokenModel.getUsername()) || Utils.isNullOrEmpty(tokenModel.getId())
+				|| Utils.isNullOrEmpty(tokenModel.getPassword())) {
 			modelAndView.addObject("avisoKO", "Problemas con la redirección");
 			LoggerMapper.methodOut(Level.INFO, Utils.obtenerNombreMetodo(), modelAndView, getClass());
 			return modelAndView;
