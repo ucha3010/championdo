@@ -49,7 +49,7 @@ public class TournamentRegistrationServiceImpl implements TournamentRegistration
     @Override
     public TournamentRegistrationModel findById(int id) {
         try {
-            return mapperTournamentRegistration.entity2Model(tournamentRegistrationRepository.getById(id));
+            return mapperTournamentRegistration.entity2Model(tournamentRegistrationRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new TournamentRegistrationModel();
         }

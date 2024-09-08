@@ -33,7 +33,7 @@ public class PaisServiceImpl implements PaisService {
     @Override
     public PaisModel findById(int id) {
         try {
-            return mapperPais.entity2Model(paisRepository.getById(id));
+            return mapperPais.entity2Model(paisRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new PaisModel();
         }

@@ -59,7 +59,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public CategoriaModel findById(int id) {
         try {
-            return mapperCategoria.entity2Model(categoriaRepository.getById(id));
+            return mapperCategoria.entity2Model(categoriaRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new CategoriaModel();
         }

@@ -44,7 +44,7 @@ public class Menu2ServiceImpl implements Menu2Service {
     @Override
     public Menu2Model findById(int id) {
         try {
-            Menu2Model menu2Model = mapperMenu2.entity2Model(menu2Repository.getById(id));
+            Menu2Model menu2Model = mapperMenu2.entity2Model(menu2Repository.findById(id).orElse(null));
             List<GimnasioModel> gimnasioModelList = new ArrayList<>();
             for(GimnasioMenu2Model gimnasioMenu2: gimnasioMenu2Service.findByIdMenu2(id)) {
                 gimnasioModelList.add(gimnasioService.findById(gimnasioMenu2.getIdGimnasio()));
@@ -68,14 +68,16 @@ public class Menu2ServiceImpl implements Menu2Service {
 
     @Override
     public void delete(int id) throws RemoveException {
-        Menu2 menu2 = menu2Repository.getById(id);
+        Menu2 menu2 = menu2Repository.findById(id).orElse(null);
         try {
             menu2Repository.deleteById(id);
-            List<Menu2> menu2List = menu2Repository.findByIdMenu1OrderByPositionAsc(menu2.getIdMenu1());
-            for (int i = 0; i < menu2List.size(); i++) {
-                if (menu2List.get(i).getPosition() != i) {
-                    menu2List.get(i).setPosition(i);
-                    menu2Repository.save(menu2List.get(i));
+            if (menu2 != null) {
+                List<Menu2> menu2List = menu2Repository.findByIdMenu1OrderByPositionAsc(menu2.getIdMenu1());
+                for (int i = 0; i < menu2List.size(); i++) {
+                    if (menu2List.get(i).getPosition() != i) {
+                        menu2List.get(i).setPosition(i);
+                        menu2Repository.save(menu2List.get(i));
+                    }
                 }
             }
             gimnasioMenu2Service.deleteByIdMenu2(id);
@@ -83,7 +85,7 @@ public class Menu2ServiceImpl implements Menu2Service {
             LoggerMapper.log(Level.ERROR, "delete", e.getMessage(), getClass());
             throw new RemoveException(Constantes.ERROR_BORRAR_MENU, "Error al borrar el menú secundario");
         }
-        LoggerMapper.methodOut(Level.INFO, "delete", menu2.getId(), getClass());
+        LoggerMapper.methodOut(Level.INFO, "delete", menu2 != null ? menu2.getId() : 0, getClass());
     }
 
     @Override

@@ -43,7 +43,7 @@ public class Menu1ServiceImpl implements Menu1Service {
     @Override
     public Menu1Model findById(int id) {
         try {
-            return mapperMenu1.entity2Model(menu1Repository.getById(id));
+            return mapperMenu1.entity2Model(menu1Repository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new Menu1Model();
         }

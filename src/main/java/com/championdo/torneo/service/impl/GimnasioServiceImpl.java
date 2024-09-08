@@ -68,10 +68,10 @@ public class GimnasioServiceImpl implements GimnasioService {
     @Override
     public GimnasioModel findById(int id) {
         try {
-            GimnasioModel gimnasioModel = mapperGimnasio.entity2Model(gimnasioRepository.getById(id));
+            GimnasioModel gimnasioModel = mapperGimnasio.entity2Model(gimnasioRepository.findById(id).orElse(null));
             List<Menu2Model> menu2ModelList = new ArrayList<>();
             for(GimnasioMenu2Model gimnasioMenu2: gimnasioMenu2Service.findByIdGimnasio(id)) {
-                menu2ModelList.add(mapperMenu2.entity2Model(menu2Repository.getById(gimnasioMenu2.getIdMenu2())));
+                menu2ModelList.add(mapperMenu2.entity2Model(menu2Repository.findById(gimnasioMenu2.getIdMenu2()).orElseThrow(() -> new EntityNotFoundException("Objeto no encontrado"))));
             }
             gimnasioModel.setMenu2ModelList(menu2ModelList);
             return gimnasioModel;

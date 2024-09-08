@@ -42,7 +42,7 @@ public class CinturonServiceImpl implements CinturonService {
     @Override
     public CinturonModel findById(int id) {
         try {
-            return mapperCinturon.entity2Model(cinturonRepository.getById(id));
+            return mapperCinturon.entity2Model(cinturonRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new CinturonModel();
         }
@@ -50,7 +50,7 @@ public class CinturonServiceImpl implements CinturonService {
 
     @Override
     public Cinturon findByIdEntity(int id) {
-        return cinturonRepository.getById(id);
+        return cinturonRepository.findById(id).orElse(null);
     }
 
     @Override

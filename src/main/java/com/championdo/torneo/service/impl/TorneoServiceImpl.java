@@ -48,7 +48,7 @@ public class TorneoServiceImpl implements TorneoService {
     @Override
     public TorneoModel findById(int id) {
         try {
-            return mapperTorneo.entity2Model(torneoRepository.getById(id));
+            return mapperTorneo.entity2Model(torneoRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new TorneoModel();
         }
@@ -96,19 +96,15 @@ public class TorneoServiceImpl implements TorneoService {
     public List<TorneoModel> findAllowed(Date date, String tournamentType) {
         List<Torneo> torneoList;
         List<TorneoModel> torneoModelList = new ArrayList<>();
-        switch (tournamentType) {
-            case Constantes.ADULTO:
-                torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndAdultoTrue(date, date);
-                break;
-            case Constantes.MENOR:
-                torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndMenorTrue(date, date);
-                break;
-            case Constantes.INCLUSIVO_MINUSCULAS:
-                torneoList = torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndInclusivoTrue(date, date);
-                break;
-            default:
-                torneoList = new ArrayList<>();
-        }
+        torneoList = switch (tournamentType) {
+            case Constantes.ADULTO ->
+                    torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndAdultoTrue(date, date);
+            case Constantes.MENOR ->
+                    torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndMenorTrue(date, date);
+            case Constantes.INCLUSIVO_MINUSCULAS ->
+                    torneoRepository.findByFechaComienzoInscripcionLessThanEqualAndFechaFinInscripcionGreaterThanEqualAndInclusivoTrue(date, date);
+            default -> new ArrayList<>();
+        };
         for (Torneo torneo : torneoList) {
             torneoModelList.add(mapperTorneo.entity2Model(torneo));
         }

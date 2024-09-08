@@ -44,7 +44,7 @@ public class MandatoServiceImpl implements MandatoService {
     @Override
     public MandatoModel findById(int id) {
         try {
-            return mapperMandato.entity2Model(mandatoRepository.getById(id));
+            return mapperMandato.entity2Model(mandatoRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new MandatoModel();
         }

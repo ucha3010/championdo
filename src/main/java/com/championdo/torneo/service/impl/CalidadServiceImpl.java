@@ -33,7 +33,7 @@ public class CalidadServiceImpl implements CalidadService {
     @Override
     public CalidadModel findById(int id) {
         try {
-            return mapperCalidad.entity2Model(calidadRepository.getById(id));
+            return mapperCalidad.entity2Model(calidadRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new CalidadModel();
         }

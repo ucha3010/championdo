@@ -63,7 +63,7 @@ public class DocumentManagerServiceImpl implements DocumentManagerService {
     @Override
     public DocumentManagerModel findById(int id) {
         try {
-            return mapperDocumentManager.entity2Model(documentManagerRepository.getById(id));
+            return mapperDocumentManager.entity2Model(documentManagerRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new DocumentManagerModel();
         }

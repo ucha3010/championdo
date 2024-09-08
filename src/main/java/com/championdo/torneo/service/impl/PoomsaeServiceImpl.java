@@ -39,7 +39,7 @@ public class PoomsaeServiceImpl implements PoomsaeService {
     @Override
     public PoomsaeModel findById(int id) {
         try {
-            return mapperPoomsae.entity2Model(poomsaeRepository.getById(id));
+            return mapperPoomsae.entity2Model(poomsaeRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new PoomsaeModel();
         }

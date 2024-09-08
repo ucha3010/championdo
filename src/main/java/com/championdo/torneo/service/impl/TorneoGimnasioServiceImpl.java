@@ -35,7 +35,7 @@ public class TorneoGimnasioServiceImpl implements TorneoGimnasioService {
     @Override
     public TorneoGimnasioModel findById(int id) {
         try {
-            return mapperTorneoGimnasio.entity2Model(torneoGimnasioRepository.getById(id));
+            return mapperTorneoGimnasio.entity2Model(torneoGimnasioRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new TorneoGimnasioModel();
         }

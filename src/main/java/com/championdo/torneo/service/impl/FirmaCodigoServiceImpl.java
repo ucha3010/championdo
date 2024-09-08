@@ -41,7 +41,7 @@ public class FirmaCodigoServiceImpl implements FirmaCodigoService {
     @Override
     public FirmaCodigoModel findById(int id) {
         try {
-            return mapperFirmaCodigo.entity2Model(firmaCodigoRepository.getById(id));
+            return mapperFirmaCodigo.entity2Model(firmaCodigoRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new FirmaCodigoModel();
         }
@@ -76,7 +76,7 @@ public class FirmaCodigoServiceImpl implements FirmaCodigoService {
     @Override
     public void delete(int idFirmaCodigo) {
         try {
-            FirmaCodigo firmaCodigo = firmaCodigoRepository.getById(idFirmaCodigo);
+            FirmaCodigo firmaCodigo = firmaCodigoRepository.findById(idFirmaCodigo).orElseThrow(() -> new EntityNotFoundException("Objeto no encontrado"));
             firmaCodigoRepository.delete(firmaCodigo);
             LoggerMapper.methodOut(Level.INFO, "delete", firmaCodigo, getClass());
         } catch (EntityNotFoundException e) {

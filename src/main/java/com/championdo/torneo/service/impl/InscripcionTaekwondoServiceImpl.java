@@ -49,7 +49,7 @@ public class InscripcionTaekwondoServiceImpl implements InscripcionTaekwondoServ
     @Override
     public InscripcionTaekwondoModel findById(int id) {
         try {
-            return mapperInscripcionTaekwondo.entity2Model(inscripcionTaekwondoRepository.getById(id));
+            return mapperInscripcionTaekwondo.entity2Model(inscripcionTaekwondoRepository.findById(id).orElse(null));
         } catch (EntityNotFoundException e) {
             return new InscripcionTaekwondoModel();
         }
