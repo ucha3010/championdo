@@ -8,7 +8,8 @@ import jakarta.persistence.*;
 public class UserRole {
 	
 	@Id
-	@GeneratedValue
+	@SequenceGenerator(name = "userRoleGenerator", sequenceName = "CHANGE_LOW_SEQUENCE", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userRoleGenerator")
 	@Column(name = "user_role_id", unique = true, nullable = false)
 	private Integer userRoleId;
 	
