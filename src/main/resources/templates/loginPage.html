@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <meta th:replace="static/cabeceraMeta :: meta">
-    <link th:replace="static/cabeceraLink :: link">
-    <script th:replace="static/cabeceraScript :: script"></script>
+    <meta th:replace="~{static/cabeceraMeta :: meta}">
+    <link th:replace="~{static/cabeceraLink :: link}">
+    <script th:replace="~{static/cabeceraScript :: script}"></script>
 
     <script async src='//www.google-analytics.com/analytics.js'></script>
     <link rel="stylesheet" href="#" th:href="@{/css/login.css}" />
@@ -12,7 +12,7 @@
   </head>
 
   <body>
-    <div th:replace="static/barraNavNotAuthenticated :: nav"></div>
+    <div th:replace="~{static/barraNavNotAuthenticated :: nav}"></div>
 
     <div class="container">
       <section class="mt-5 text-center">
@@ -53,5 +53,5 @@
     </div>
   </body>
 
-  <footer th:replace="static/footer :: footer"></footer>
+  <footer th:replace="~{static/footer :: footer}"></footer>
 </html>

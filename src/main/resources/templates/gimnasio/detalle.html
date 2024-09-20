@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta th:replace="static/cabeceraMeta :: meta">
-	<link th:replace="static/cabeceraLink :: link">
-	<script th:replace="static/cabeceraScript :: script"></script>
+	<meta th:replace="~{static/cabeceraMeta :: meta}">
+	<link th:replace="~{static/cabeceraLink :: link}">
+	<script th:replace="~{static/cabeceraScript :: script}"></script>
 
 	<title th:text="'Detalle ' + ${gimnasio.nombreGimnasio}"></title>
 
 </head>
 <body>
-	<div th:replace="static/barraUsuario :: div"></div>
-	<div th:replace="static/barraNav :: nav"></div>
+	<div th:replace="~{static/barraUsuario :: div}"></div>
+	<div th:replace="~{static/barraNav :: nav}"></div>
 
 	<div class="container">
 		<div class="row align-items-center justify-content-end">
@@ -117,5 +117,5 @@
 	</div>
 </body>
 
-<footer th:replace="static/footer :: footer"></footer>
+<footer th:replace="~{static/footer :: footer}"></footer>
 </html>

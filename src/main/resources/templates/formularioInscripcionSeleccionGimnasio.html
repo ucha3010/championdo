@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
 	<head>
-		<meta th:replace="static/cabeceraMeta :: meta">
-		<link th:replace="static/cabeceraLink :: link">
-		<script th:replace="static/cabeceraScript :: script"></script>
+		<meta th:replace="~{static/cabeceraMeta :: meta}">
+		<link th:replace="~{static/cabeceraLink :: link}">
+		<script th:replace="~{static/cabeceraScript :: script}"></script>
 
 		<title>Selección gimnasio</title>
 		<script>
@@ -21,8 +21,8 @@
 		</script>
 	</head>
 	<body>
-		<div th:replace="static/barraUsuario :: div"></div>
-		<div th:replace="static/barraNav :: nav"></div>
+		<div th:replace="~{static/barraUsuario :: div}"></div>
+		<div th:replace="~{static/barraNav :: nav}"></div>
 
 		<div class="container text-center">
 			<div class="row align-items-center justify-content-end">
@@ -106,5 +106,5 @@
 		</div>
 	</body>
 
-	<footer th:replace="static/footer :: footer"></footer>
+	<footer th:replace="~{static/footer :: footer}"></footer>
 </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-	<meta th:replace="static/cabeceraMeta :: meta">
-	<link th:replace="static/cabeceraLink :: link">
-	<script th:replace="static/cabeceraScript :: script"></script>
+	<meta th:replace="~{static/cabeceraMeta :: meta}">
+	<link th:replace="~{static/cabeceraLink :: link}">
+	<script th:replace="~{static/cabeceraScript :: script}"></script>
 
 	<title>Autorización</title>
 
@@ -21,8 +21,8 @@
 
 </head>
 <body>
-	<div th:replace="static/barraUsuario :: div"></div>
-	<div th:replace="static/barraNav :: nav"></div>
+	<div th:replace="~{static/barraUsuario :: div}"></div>
+	<div th:replace="~{static/barraNav :: nav}"></div>
 
 	<div sec:authorize="isAuthenticated()" class="container">
 
@@ -402,5 +402,5 @@
 	</div>
 </body>
 
-<footer th:replace="static/footer :: footer"></footer>
+<footer th:replace="~{static/footer :: footer}"></footer>
 </html>

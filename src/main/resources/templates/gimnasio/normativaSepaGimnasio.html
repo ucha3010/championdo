@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
-	<meta th:replace="static/cabeceraMeta :: meta">
-	<link th:replace="static/cabeceraLink :: link">
-	<script th:replace="static/cabeceraScript :: script"></script>
+	<meta th:replace="~{static/cabeceraMeta :: meta}">
+	<link th:replace="~{static/cabeceraLink :: link}">
+	<script th:replace="~{static/cabeceraScript :: script}"></script>
 
 	<title>Adjuntar archivo</title>
 
 </head>
 <body>
-	<div th:replace="static/barraUsuario :: div"></div>
-	<div th:replace="static/barraNav :: nav"></div>
+	<div th:replace="~{static/barraUsuario :: div}"></div>
+	<div th:replace="~{static/barraNav :: nav}"></div>
 
 	<section class="margenArribaAbajo3Porc text-center">
 		<div th:if="${subidaError != null}" class="alert alert-danger textAlignCenter" role="alert"><span th:text="${subidaError}"></span></div>
@@ -62,5 +62,5 @@
 	</div>
 </body>
 
-<footer th:replace="static/footer :: footer"></footer>
+<footer th:replace="~{static/footer :: footer}"></footer>
 </html>

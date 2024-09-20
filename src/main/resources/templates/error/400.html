@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta th:replace="static/cabeceraMeta :: meta">
-	<link th:replace="static/cabeceraLink :: link">
-	<script th:replace="static/cabeceraScript :: script"></script>
+	<meta th:replace="~{static/cabeceraMeta :: meta}">
+	<link th:replace="~{static/cabeceraLink :: link}">
+	<script th:replace="~{static/cabeceraScript :: script}"></script>
 
 	<title th:text="#{pagina.no.encontrada}"></title>
 </head>
 <body>
-<div th:replace="static/barraNavNotAuthenticated :: nav"></div>
+<div th:replace="~{static/barraNavNotAuthenticated :: nav}"></div>
 
 <div class="jumbotron">
 	<div class="container mt-5 mb-5">
@@ -30,5 +30,5 @@
 
 </body>
 
-<footer th:replace="static/footer :: footer"></footer>
+<footer th:replace="~{static/footer :: footer}"></footer>
 </html>
