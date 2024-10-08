@@ -1,5 +1,6 @@
 package com.championdo.torneo.entity;
 
+import com.championdo.torneo.model.UtilId;
 import com.championdo.torneo.util.Utils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

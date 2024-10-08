@@ -1,4 +1,4 @@
-package com.championdo.torneo.entity;
+package com.championdo.torneo.model;
 
 import lombok.*;
 
